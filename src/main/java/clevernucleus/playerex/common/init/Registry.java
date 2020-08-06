@@ -32,7 +32,7 @@ import net.minecraftforge.fml.network.simple.SimpleChannel;
 public class Registry {
 	
 	/** Holder for iterating over all elements. */
-	public static final Set<IElement<WritableElement>> WRITABLE_ELEMENTS = new HashSet<IElement<WritableElement>>();
+	public static final Set<IDataElement> DATA_ELEMENTS = new HashSet<IDataElement>();
 	
 	/** Network instance. */
 	public static final SimpleChannel NETWORK = NetworkRegistry.newSimpleChannel(new ResourceLocation(PlayerEx.MODID, "path"), () -> "1", "1"::equals, "1"::equals);
@@ -44,12 +44,12 @@ public class Registry {
 	/** Capability pass-through function. */
 	public static final Function<PlayerEntity, LazyOptional<IPlayerElements>> ELEMENTS = var -> var.getCapability(CAPABILITY, null);
 	
-	public static final IElement<WritableElement> CONSTITUTION = new WritableElement("Constitution", 6F, 1F, 10F, (par0, par1, par2) -> {
+	public static final IDataElement CONSTITUTION = new PropertyElement("Constitution", 0F, 1F, 10F, (par0, par1, par2) -> {
 		par1.add(par0, Registry.HEALTH, par2);
 	});
 	
-	public static final IElement<Element> HEALTH = new Element("Health", 1F, 10F, (par0, par1, par2) -> {
-		par0.getAttribute(SharedMonsterAttributes.MAX_HEALTH).setBaseValue(par2.doubleValue() + par0.getAttribute(SharedMonsterAttributes.MAX_HEALTH).getValue());
+	public static final IElement HEALTH = new BasicElement("Health", (par0, par1, par2) -> {
+		par0.getAttribute(SharedMonsterAttributes.MAX_HEALTH).setBaseValue(par2 + par0.getAttribute(SharedMonsterAttributes.MAX_HEALTH).getBaseValue());
 		
 		if(par2 < 0D) {
 			par0.setHealth((par0.getHealth() + par2) < par0.getMaxHealth() ? par0.getMaxHealth() : ((par0.getHealth() + par2) < 1F) ? 1F : par0.getHealth());

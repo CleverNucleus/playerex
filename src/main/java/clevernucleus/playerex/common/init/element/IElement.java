@@ -7,12 +7,23 @@ import net.minecraft.entity.player.PlayerEntity;
  * Accessing interface.
  * @param <T> Type.
  */
-public interface IElement<T> {
+public interface IElement {
 	
 	/**
-	 * @return The specific type of element.
+	 * The internal getter function.
+	 * @param par0 Player instance.
+	 * @param par1 Capability instance.
+	 * @return This elements getting function.
 	 */
-	T type();
+	double get(PlayerEntity par0, IPlayerElements par1);
+	
+	/**
+	 * The internal set function.
+	 * @param par0 Player instance.
+	 * @param par1 Capability instance.
+	 * @param par2 value to set.
+	 */
+	default void set(PlayerEntity par0, IPlayerElements par1, double par2) {}
 	
 	/**
 	 * The internal add function.
@@ -21,9 +32,4 @@ public interface IElement<T> {
 	 * @param par2 value to add.
 	 */
 	void add(PlayerEntity par0, IPlayerElements par1, double par2);
-	
-	/**
-	 * @return A float array containing {Minimum Value, Maximum Value}.
-	 */
-	float[] values();
 }

@@ -14,7 +14,15 @@ public interface IPlayerElements {
 	 * @param par1 IElement instance.
 	 * @return the element value.
 	 */
-	double get(PlayerEntity par0, IElement<?> par1);
+	double get(PlayerEntity par0, IElement par1);
+	
+	/**
+	 * Sets the input value for this element to its storage.
+	 * @param par0 Player instance.
+	 * @param par1 IElement instance.
+	 * @param par2 Value to set.
+	 */
+	void set(PlayerEntity par0, IElement par1, double par2);
 	
 	/**
 	 * Adds the input value for this element to its storage.
@@ -22,7 +30,7 @@ public interface IPlayerElements {
 	 * @param par1 IElement instance.
 	 * @param par2 Value to add.
 	 */
-	void add(PlayerEntity par0, IElement<?> par1, double par2);
+	void add(PlayerEntity par0, IElement par1, double par2);
 	
 	/**
 	 * Writes capability data to a tag.

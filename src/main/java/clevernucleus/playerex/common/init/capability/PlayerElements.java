@@ -1,9 +1,8 @@
 package clevernucleus.playerex.common.init.capability;
 
 import clevernucleus.playerex.common.init.Registry;
-import clevernucleus.playerex.common.init.element.Element;
+import clevernucleus.playerex.common.init.element.IDataElement;
 import clevernucleus.playerex.common.init.element.IElement;
-import clevernucleus.playerex.common.init.element.WritableElement;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.nbt.CompoundNBT;
@@ -19,21 +18,30 @@ public class PlayerElements implements IPlayerElements {
 		this.tag = new CompoundNBT();
 		this.tag.putBoolean("Initialised", false);
 		
-		for(IElement<WritableElement> var : Registry.WRITABLE_ELEMENTS) {
-			var.type().writeDefaultValue(this.tag);
+		for(IDataElement var : Registry.DATA_ELEMENTS) {
+			var.writeDefault(this.tag);
 		}
 	}
 	
 	@Override
-	public double get(final PlayerEntity par0, final IElement<?> par1) {
-		if(par1.type() instanceof WritableElement) return (double)this.tag.getFloat(par1.toString());
+	public double get(final PlayerEntity par0, final IElement par1) {
+		if(par1 instanceof IDataElement) return (double)this.tag.getFloat(par1.toString());
 		
-		return ((Element)par1.type()).get(par0, this);
+		return par1.get(par0, this);
 	}
 	
 	@Override
-	public void add(final PlayerEntity par0, final IElement<?> par1, final double par2) {
-		if(par1.type() instanceof WritableElement) {
+	public void set(final PlayerEntity par0, final IElement par1, final double par2) {
+		if(par1 instanceof IDataElement) {
+			this.tag.putFloat(par1.toString(), (float)par2);
+		}
+		
+		par1.set(par0, this, par2);
+	}
+	
+	@Override
+	public void add(final PlayerEntity par0, final IElement par1, final double par2) {
+		if(par1 instanceof IDataElement) {
 			this.tag.putFloat(par1.toString(), (float)(par2 + this.get(par0, par1)));
 		}
 		
