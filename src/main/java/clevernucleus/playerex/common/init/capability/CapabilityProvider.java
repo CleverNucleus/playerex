@@ -25,16 +25,16 @@ public class CapabilityProvider implements ICapabilitySerializable<INBT> {
 	@Nonnull
     @Override
     public <T> LazyOptional<T> getCapability(@Nullable Capability<T> par0, Direction par1) {
-    	return Registry.PLAYER_ELEMENTS.orEmpty(par0, optional);
+    	return Registry.CAPABILITY.orEmpty(par0, optional);
     }
     
     @Override
     public INBT serializeNBT() {
-    	return Registry.PLAYER_ELEMENTS.writeNBT(data, null);
+    	return Registry.CAPABILITY.writeNBT(data, null);
     }
     
     @Override
     public void deserializeNBT(INBT par0) {
-    	Registry.PLAYER_ELEMENTS.readNBT(data, null, par0);
+    	Registry.CAPABILITY.readNBT(data, null, par0);
     }
 }

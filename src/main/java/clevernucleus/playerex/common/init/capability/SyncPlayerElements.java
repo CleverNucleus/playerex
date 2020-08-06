@@ -57,7 +57,7 @@ public class SyncPlayerElements {
 				
 				if(par0.tag == null || var0 == null) return;
 				
-				Registry.PLAYER_ELEMENTS_FROM_PLAYER.apply(var0).ifPresent(var -> var.read(par0.tag));
+				Registry.ELEMENTS.apply(var0).ifPresent(var -> var.read(par0.tag));
 			});
 			
 			par1.get().setPacketHandled(true);

@@ -1,4 +1,4 @@
-package clevernucleus.playerex.common.init.event;
+package clevernucleus.playerex.common.event;
 
 import javax.annotation.Nonnull;
 
@@ -6,6 +6,7 @@ import clevernucleus.playerex.common.PlayerEx;
 import clevernucleus.playerex.common.init.Registry;
 import clevernucleus.playerex.common.init.capability.CapabilityProvider;
 import net.minecraft.entity.Entity;
+import net.minecraft.entity.SharedMonsterAttributes;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
@@ -25,7 +26,8 @@ public class CommonEvents {
 		if(par0 == null) return;
 		if(par0.world.isRemote) return;
 		
-		par0.getCapability(Registry.PLAYER_ELEMENTS, null).ifPresent(var -> {
+		Registry.ELEMENTS.apply(par0).ifPresent(var -> {
+			var.init(par0);
 			var.sync(par0);
 		});
 	}
@@ -37,7 +39,7 @@ public class CommonEvents {
 	@SubscribeEvent
     public static void onCapabilityAttachEntity(final net.minecraftforge.event.AttachCapabilitiesEvent<Entity> par0) {
 		if(par0.getObject() instanceof PlayerEntity) {
-			par0.addCapability(new ResourceLocation(PlayerEx.MODID, "PlayerElements"), new CapabilityProvider());
+			par0.addCapability(new ResourceLocation(PlayerEx.MODID, "playerelements"), new CapabilityProvider());
 		}
 	}
 	
@@ -48,18 +50,31 @@ public class CommonEvents {
 	@SubscribeEvent
     public static void onPlayerEntityCloned(net.minecraftforge.event.entity.player.PlayerEvent.Clone par0) {
 		PlayerEntity var0 = par0.getPlayer();
+		PlayerEntity var1 = par0.getOriginal();
 		
 		if(var0.world.isRemote) return;
 		
 		try {
-			Registry.PLAYER_ELEMENTS_FROM_PLAYER.apply(var0).ifPresent(var1 -> {
-				Registry.PLAYER_ELEMENTS_FROM_PLAYER.apply(par0.getOriginal()).ifPresent(var2 -> {
-					var1.read(var2.write());
+			Registry.ELEMENTS.apply(var0).ifPresent(par1 -> {
+				Registry.ELEMENTS.apply(var1).ifPresent(par2 -> {
+					var0.getAttribute(SharedMonsterAttributes.MAX_HEALTH).setBaseValue(var1.getAttribute(SharedMonsterAttributes.MAX_HEALTH).getBaseValue());
+					var0.getAttribute(SharedMonsterAttributes.KNOCKBACK_RESISTANCE).setBaseValue(var1.getAttribute(SharedMonsterAttributes.KNOCKBACK_RESISTANCE).getBaseValue());
+					var0.getAttribute(SharedMonsterAttributes.ATTACK_DAMAGE).setBaseValue(var1.getAttribute(SharedMonsterAttributes.ATTACK_DAMAGE).getBaseValue());
+					var0.getAttribute(SharedMonsterAttributes.ATTACK_SPEED).setBaseValue(var1.getAttribute(SharedMonsterAttributes.ATTACK_SPEED).getBaseValue());
+					var0.getAttribute(SharedMonsterAttributes.ARMOR).setBaseValue(var1.getAttribute(SharedMonsterAttributes.ARMOR).getBaseValue());
+					var0.getAttribute(SharedMonsterAttributes.ARMOR_TOUGHNESS).setBaseValue(var1.getAttribute(SharedMonsterAttributes.ARMOR_TOUGHNESS).getBaseValue());
+					var0.getAttribute(SharedMonsterAttributes.LUCK).setBaseValue(var1.getAttribute(SharedMonsterAttributes.LUCK).getBaseValue());
+					
+					par1.read(par2.write());
 				});
 			});
 		} catch(Exception parE) {}
 		
 		syncTag(var0);
+		
+		if(par0.isWasDeath()) {
+			var0.heal(var0.getMaxHealth());
+		}
 	}
 	
 	/**
