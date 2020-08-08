@@ -4,7 +4,9 @@ import javax.annotation.Nonnull;
 
 import org.apache.logging.log4j.util.TriConsumer;
 
+import clevernucleus.playerex.common.init.Registry;
 import clevernucleus.playerex.common.init.capability.IPlayerElements;
+import clevernucleus.playerex.common.util.BiValue;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.nbt.CompoundNBT;
 
@@ -14,7 +16,7 @@ import net.minecraft.nbt.CompoundNBT;
 public class PropertyElement implements IDataElement {
 	private String key;
 	private float defaultValue, minValue, maxValue;
-	private TriConsumer<PlayerEntity, IPlayerElements, Double> adder;
+	private TriConsumer<PlayerEntity, BiValue<IPlayerElements, IElement>, Double> adder;
 	
 	/**
 	 * Constructor.
@@ -24,26 +26,23 @@ public class PropertyElement implements IDataElement {
 	 * @param par3 Maximum value.
 	 * @param par4 Adder.
 	 */
-	public PropertyElement(final @Nonnull String par0, final @Nonnull float par1, final @Nonnull float par2, final @Nonnull float par3, final @Nonnull TriConsumer<PlayerEntity, IPlayerElements, Double> par4) {
+	public PropertyElement(final @Nonnull String par0, final @Nonnull float par1, final @Nonnull float par2, final @Nonnull float par3, final @Nonnull TriConsumer<PlayerEntity, BiValue<IPlayerElements, IElement>, Double> par4) {
 		this.key = par0;
 		this.defaultValue = par1;
 		this.minValue = par2;
 		this.maxValue = par3;
 		this.adder = par4;
 		
-		this.init(this);
+		this.init(Registry.DATA_ELEMENTS, this);
+		this.init(Registry.GAME_ELEMENTS, this);
 	}
 	
-	/**
-	 * @return This element's minimum value.
-	 */
+	@Override
 	public float minValue() {
 		return this.minValue;
 	}
 	
-	/**
-	 * @return This element's maximum value.
-	 */
+	@Override
 	public float maxValue() {
 		return this.maxValue;
 	}
@@ -60,12 +59,12 @@ public class PropertyElement implements IDataElement {
 	
 	@Override
 	public void add(final PlayerEntity par0, final IPlayerElements par1, final double par2) {
-		this.adder.accept(par0, par1, par2);
+		this.adder.accept(par0, BiValue.make(par1, this), par2);
 	}
-
+	
 	@Override
 	public void writeDefault(final CompoundNBT par0) {
-		par0.putFloat(this.key, this.defaultValue);
+		par0.putDouble(this.key, this.defaultValue);
 	}
 	
 	@Override

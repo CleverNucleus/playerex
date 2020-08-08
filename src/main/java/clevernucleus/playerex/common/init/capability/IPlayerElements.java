@@ -33,6 +33,13 @@ public interface IPlayerElements {
 	void add(PlayerEntity par0, IElement par1, double par2);
 	
 	/**
+	 * Puts the input element to storage with value from input.
+	 * @param par0 Element instance.
+	 * @param par1 Value.
+	 */
+	void put(IElement par0, double par1);
+	
+	/**
 	 * Writes capability data to a tag.
 	 * @return A tag with the capability data.
 	 */

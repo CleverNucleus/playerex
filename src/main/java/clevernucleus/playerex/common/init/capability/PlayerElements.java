@@ -32,20 +32,17 @@ public class PlayerElements implements IPlayerElements {
 	
 	@Override
 	public void set(final PlayerEntity par0, final IElement par1, final double par2) {
-		if(par1 instanceof IDataElement) {
-			this.tag.putFloat(par1.toString(), (float)par2);
-		}
-		
 		par1.set(par0, this, par2);
 	}
 	
 	@Override
 	public void add(final PlayerEntity par0, final IElement par1, final double par2) {
-		if(par1 instanceof IDataElement) {
-			this.tag.putFloat(par1.toString(), (float)(par2 + this.get(par0, par1)));
-		}
-		
 		par1.add(par0, this, par2);
+	}
+	
+	@Override
+	public void put(final IElement par0, final double par1) {
+		this.tag.putDouble(par0.toString(), par1);
 	}
 	
 	@Override
@@ -67,7 +64,7 @@ public class PlayerElements implements IPlayerElements {
 	}
 	
 	@Override
-	public void sync(PlayerEntity par0) {
+	public void sync(final PlayerEntity par0) {
 		if(par0.world.isRemote) return;
 		
 		Registry.NETWORK.sendTo(new SyncPlayerElements(this.tag), ((ServerPlayerEntity)par0).connection.getNetworkManager(), NetworkDirection.PLAY_TO_CLIENT);

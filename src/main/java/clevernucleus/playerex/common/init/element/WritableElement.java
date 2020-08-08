@@ -4,7 +4,9 @@ import javax.annotation.Nonnull;
 
 import org.apache.logging.log4j.util.TriConsumer;
 
+import clevernucleus.playerex.common.init.Registry;
 import clevernucleus.playerex.common.init.capability.IPlayerElements;
+import clevernucleus.playerex.common.util.BiValue;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.nbt.CompoundNBT;
 
@@ -14,7 +16,7 @@ import net.minecraft.nbt.CompoundNBT;
 public class WritableElement implements IDataElement {
 	private String key;
 	private float defaultValue;
-	private TriConsumer<PlayerEntity, IPlayerElements, Double> adder, setter;
+	private TriConsumer<PlayerEntity, BiValue<IPlayerElements, IElement>, Double> adder, setter;
 	
 	/**
 	 * Constructor.
@@ -23,13 +25,13 @@ public class WritableElement implements IDataElement {
 	 * @param par2 Adder.
 	 * @param par3 Setter.
 	 */
-	public WritableElement(final @Nonnull String par0, final @Nonnull float par1, final @Nonnull TriConsumer<PlayerEntity, IPlayerElements, Double> par2, final @Nonnull TriConsumer<PlayerEntity, IPlayerElements, Double> par3) {
+	public WritableElement(final @Nonnull String par0, final @Nonnull float par1, final @Nonnull TriConsumer<PlayerEntity, BiValue<IPlayerElements, IElement>, Double> par2, final @Nonnull TriConsumer<PlayerEntity, BiValue<IPlayerElements, IElement>, Double> par3) {
 		this.key = par0;
 		this.defaultValue = par1;
 		this.adder = par2;
 		this.setter = par3;
 		
-		this.init(this);
+		this.init(Registry.DATA_ELEMENTS, this);
 	}
 	
 	@Override
@@ -44,17 +46,17 @@ public class WritableElement implements IDataElement {
 	
 	@Override
 	public void set(final PlayerEntity par0, final IPlayerElements par1, final double par2) {
-		this.setter.accept(par0, par1, par2);
+		this.setter.accept(par0, BiValue.make(par1, this), par2);
 	}
 	
 	@Override
 	public void add(final PlayerEntity par0, final IPlayerElements par1, final double par2) {
-		this.adder.accept(par0, par1, par2);
+		this.adder.accept(par0, BiValue.make(par1, this), par2);
 	}
 
 	@Override
 	public void writeDefault(final CompoundNBT par0) {
-		par0.putFloat(this.key, this.defaultValue);
+		par0.putDouble(this.key, this.defaultValue);
 	}
 	
 	@Override

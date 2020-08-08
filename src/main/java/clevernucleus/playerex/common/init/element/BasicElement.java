@@ -6,7 +6,9 @@ import javax.annotation.Nonnull;
 
 import org.apache.logging.log4j.util.TriConsumer;
 
+import clevernucleus.playerex.common.init.Registry;
 import clevernucleus.playerex.common.init.capability.IPlayerElements;
+import clevernucleus.playerex.common.util.BiValue;
 import net.minecraft.entity.player.PlayerEntity;
 
 /**
@@ -14,19 +16,36 @@ import net.minecraft.entity.player.PlayerEntity;
  */
 public class BasicElement implements IElement {
 	private String key;
-	private TriConsumer<PlayerEntity, IPlayerElements, Double> adder;
+	private float minValue, maxValue;
+	private TriConsumer<PlayerEntity, BiValue<IPlayerElements, IElement>, Double> adder;
 	private BiFunction<PlayerEntity, IPlayerElements, Double> getter;
 	
 	/**
 	 * Constructor.
 	 * @param par0 Key.
-	 * @param par1 Adder.
-	 * @param par2 Getter.
+	 * @param par1 Minimum Value.
+	 * @param par2 Maximum Value.
+	 * @param par3 Adder.
+	 * @param par4 Getter.
 	 */
-	public BasicElement(final @Nonnull String par0, final @Nonnull TriConsumer<PlayerEntity, IPlayerElements, Double> par1, final @Nonnull BiFunction<PlayerEntity, IPlayerElements, Double> par2) {
+	public BasicElement(final @Nonnull String par0, final @Nonnull float par1, final @Nonnull float par2, final @Nonnull TriConsumer<PlayerEntity, BiValue<IPlayerElements, IElement>, Double> par3, final @Nonnull BiFunction<PlayerEntity, IPlayerElements, Double> par4) {
 		this.key = par0;
-		this.adder = par1;
-		this.getter = par2;
+		this.minValue = par1;
+		this.maxValue = par2;
+		this.adder = par3;
+		this.getter = par4;
+		
+		this.init(Registry.GAME_ELEMENTS, this);
+	}
+	
+	@Override
+	public float minValue() {
+		return this.minValue;
+	}
+	
+	@Override
+	public float maxValue() {
+		return this.maxValue;
 	}
 	
 	@Override
@@ -36,7 +55,7 @@ public class BasicElement implements IElement {
 	
 	@Override
 	public void add(final PlayerEntity par0, final IPlayerElements par1, final double par2) {
-		this.adder.accept(par0, par1, par2);
+		this.adder.accept(par0, BiValue.make(par1, this), par2);
 	}
 	
 	@Override

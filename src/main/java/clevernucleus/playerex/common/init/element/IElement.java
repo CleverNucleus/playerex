@@ -1,5 +1,7 @@
 package clevernucleus.playerex.common.init.element;
 
+import java.util.Set;
+
 import clevernucleus.playerex.common.init.capability.IPlayerElements;
 import net.minecraft.entity.player.PlayerEntity;
 
@@ -8,6 +10,20 @@ import net.minecraft.entity.player.PlayerEntity;
  * @param <T> Type.
  */
 public interface IElement {
+	
+	/**
+	 * @return This element's minimum value.
+	 */
+	default float minValue() {
+		return 0F;
+	}
+	
+	/**
+	 * @return This element's maximum value.
+	 */
+	default float maxValue() {
+		return 0F;
+	}
 	
 	/**
 	 * The internal getter function.
@@ -32,4 +48,13 @@ public interface IElement {
 	 * @param par2 value to add.
 	 */
 	void add(PlayerEntity par0, IPlayerElements par1, double par2);
+	
+	/**
+	 * Adds the input element to the input set.
+	 * @param par0 Input set.
+	 * @param par1 Input element.
+	 */
+	default <T extends IElement> void init(Set<T> par0, T par1) {
+		par0.add(par1);
+	}
 }
