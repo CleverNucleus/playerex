@@ -11,6 +11,7 @@ import clevernucleus.playerex.common.util.Calc;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.SharedMonsterAttributes;
 import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.util.DamageSource;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.eventbus.api.Event.Result;
 import net.minecraftforge.eventbus.api.EventPriority;
@@ -157,14 +158,14 @@ public class CommonEvents {
 	 * @param par0
 	 */
 	@SubscribeEvent(priority = EventPriority.HIGHEST)
-	public void onHeal(final net.minecraftforge.event.entity.living.LivingHealEvent par0) {
+	public static void onHeal(final net.minecraftforge.event.entity.living.LivingHealEvent par0) {
 		if(par0.getEntityLiving() instanceof PlayerEntity) {
 			PlayerEntity var0 = (PlayerEntity)par0.getEntityLiving();
 			
 			if(var0.world.isRemote) return;
 			
 			Registry.ELEMENTS.apply(var0).ifPresent(var -> {
-				par0.setAmount(par0.getAmount() * (1F * (float)var.get(var0, Registry.HEALTH_REGEN_AMP)));
+				par0.setAmount(par0.getAmount() * (1F + (float)var.get(var0, Registry.HEALTH_REGEN_AMP)));
 			});
 		}
 	}
@@ -174,7 +175,7 @@ public class CommonEvents {
 	 * @param par0
 	 */
 	@SubscribeEvent(priority = EventPriority.HIGHEST)
-	public void onCrit(final net.minecraftforge.event.entity.player.CriticalHitEvent par0) {
+	public static void onCrit(final net.minecraftforge.event.entity.player.CriticalHitEvent par0) {
 		PlayerEntity var0 = par0.getPlayer();
 		Random var1 = new Random();
 		
@@ -183,11 +184,104 @@ public class CommonEvents {
 		Registry.ELEMENTS.apply(var0).ifPresent(var -> {
 			par0.setDamageModifier(1F + (float)var.get(var0, Registry.MELEE_CRIT_DAMAGE));
 			
-			if(var1.nextInt(100) < (int)var.get(var0, Registry.MELEE_CRIT_CHANCE)) {
+			if(var1.nextInt(100) < (int)(100D * var.get(var0, Registry.MELEE_CRIT_CHANCE))) {
 				par0.setResult(Result.ALLOW);
 			} else {
 				par0.setResult(Result.DENY);
 			}
 		});
+	}
+	
+	/**
+	 * Event fired when a living entity is hurt.
+	 * @param par0
+	 */
+	@SubscribeEvent(priority = EventPriority.HIGHEST)
+	public static void onLivingHurt(final net.minecraftforge.event.entity.living.LivingHurtEvent par0) {
+		if(par0.getEntityLiving() instanceof PlayerEntity) {
+			PlayerEntity var0 = (PlayerEntity)par0.getEntityLiving();
+			Random var1 = new Random();
+			
+			if(var0.world.isRemote) return;
+			
+			Registry.ELEMENTS.apply(var0).ifPresent(var -> {
+				if(par0.getSource().equals(DamageSource.IN_FIRE) || par0.getSource().equals(DamageSource.ON_FIRE) || par0.getSource().equals(DamageSource.HOT_FLOOR)) {
+					par0.setAmount(par0.getAmount() * (1F - (float)var.get(var0, Registry.FIRE_RESISTANCE)));
+				}
+				
+				if(par0.getSource().equals(DamageSource.LAVA)) {
+					par0.setAmount(par0.getAmount() * (1F - (float)var.get(var0, Registry.LAVA_RESISTANCE)));
+				}
+				
+				if(par0.getSource().isExplosion()) {
+					par0.setAmount(par0.getAmount() * (1F - (float)var.get(var0, Registry.EXPLOSION_RESISTANCE)));
+				}
+				
+				if(par0.getSource().isMagicDamage()) {
+					par0.setAmount(par0.getAmount() * (1F - (float)var.get(var0, Registry.POISON_RESISTANCE)));
+				}
+				
+				if(par0.getSource().equals(DamageSource.WITHER)) {
+					par0.setAmount(par0.getAmount() * (1F - (float)var.get(var0, Registry.WITHER_RESISTANCE)));
+				}
+				
+				if(par0.getSource().equals(DamageSource.DROWN)) {
+					par0.setAmount(par0.getAmount() * (1F - (float)var.get(var0, Registry.DROWNING_RESISTANCE)));
+				}
+				
+				if(par0.getSource().equals(DamageSource.FALL)) {
+					par0.setAmount(par0.getAmount() * (1F - (float)var.get(var0, Registry.FALL_RESISTANCE)));
+				}
+				
+				if(par0.getSource().isUnblockable()) {
+					par0.setAmount(par0.getAmount() * (1F - (float)var.get(var0, Registry.DAMAGE_RESISTANCE)));
+				}
+				
+				if(par0.getSource().isProjectile()) {
+					if(var1.nextInt(100) < (int)(100D * var.get(var0, Registry.EVASION_CHANCE))) {
+						par0.setCanceled(true);
+					}
+				}
+			});
+		}
+	}
+	
+	/**
+	 * Event fired when a living entity takes an arrow up the ***.
+	 * @param par0
+	 */
+	@SubscribeEvent(priority = EventPriority.HIGHEST)
+	public static void onProjectileImpact(final net.minecraftforge.event.entity.ProjectileImpactEvent.Arrow par0) {
+		if(par0.getArrow().getShooter() instanceof PlayerEntity) {
+			PlayerEntity var0 = (PlayerEntity)par0.getArrow().getShooter();
+			Random var1 = new Random();
+			
+			if(var0.world.isRemote) return;
+			
+			Registry.ELEMENTS.apply(var0).ifPresent(var -> {
+				boolean var2 = var1.nextInt(100) > (int)(100F * var.get(var0, Registry.RANGED_CRIT_CHANCE));
+				double var3 = par0.getArrow().getDamage() + var.get(var0, Registry.RANGED_DAMAGE);
+				
+				par0.getArrow().setIsCritical(var2);
+				par0.getArrow().setDamage(var2 ? (var3 * (1D + var.get(var0, Registry.RANGED_CRIT_DAMAGE))) : var3);
+			});
+		}
+	}
+	
+	/**
+	 * Event fired on looting.
+	 * @param par0
+	 */
+	@SubscribeEvent(priority = EventPriority.HIGHEST)
+	public static void onLivingLoot(final net.minecraftforge.event.entity.living.LootingLevelEvent par0) {
+		if(par0.getDamageSource().getTrueSource() instanceof PlayerEntity) {
+			PlayerEntity var0 = (PlayerEntity)par0.getDamageSource().getTrueSource();
+			
+			if(var0.world.isRemote) return;
+			
+			Registry.ELEMENTS.apply(var0).ifPresent(var -> {
+				par0.setLootingLevel(par0.getLootingLevel() + (int)(var.get(var0, Registry.LUCK) / 5D));
+			});
+		}
 	}
 }
