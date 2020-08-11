@@ -20,4 +20,17 @@ public class Calc {
 		
 		return 0D;
 	}
+	
+	/**
+	 * @param par0 float current player level
+	 * @param par1 float current xp amount
+	 * @return The dynamic xp coefficient to level up (0 - 1).
+	 */
+	public static float expCoeff(final float par0, final float par1) {
+		int var0 = (int)par0 % 3;
+		
+		double var1 = -(((double)par1 + (double)var0) / (1.0D + (double)par0));
+		
+		return (float)(1.0D - Math.pow(Math.E, var1));
+	}
 }

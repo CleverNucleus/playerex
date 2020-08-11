@@ -3,6 +3,8 @@ package clevernucleus.playerex.common.init.capability;
 import clevernucleus.playerex.common.init.Registry;
 import clevernucleus.playerex.common.init.element.IDataElement;
 import clevernucleus.playerex.common.init.element.IElement;
+import clevernucleus.playerex.common.network.SyncPlayerElements;
+import net.minecraft.entity.SharedMonsterAttributes;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.nbt.CompoundNBT;
@@ -59,7 +61,8 @@ public class PlayerElements implements IPlayerElements {
 	public void init(final PlayerEntity par0) {
 		if(par0.world.isRemote || this.tag.getBoolean("Initialised")) return;
 		
-		this.add(par0, Registry.HEALTH, -14D);
+		this.add(par0, Registry.CONSTITUTION, 6);
+		this.add(par0, Registry.HEALTH, -20D);
 		this.tag.putBoolean("Initialised", true);
 	}
 	
@@ -67,6 +70,14 @@ public class PlayerElements implements IPlayerElements {
 	public void sync(final PlayerEntity par0) {
 		if(par0.world.isRemote) return;
 		
-		Registry.NETWORK.sendTo(new SyncPlayerElements(this.tag), ((ServerPlayerEntity)par0).connection.getNetworkManager(), NetworkDirection.PLAY_TO_CLIENT);
+		CompoundNBT var0 = new CompoundNBT();
+		
+		var0.put("elements", this.tag);
+		var0.putDouble("generic.knockbackResistance", par0.getAttribute(SharedMonsterAttributes.KNOCKBACK_RESISTANCE).getBaseValue());
+		var0.putDouble("generic.attackDamage", par0.getAttribute(SharedMonsterAttributes.ATTACK_DAMAGE).getBaseValue());
+		
+		
+		
+		Registry.NETWORK.sendTo(new SyncPlayerElements(var0), ((ServerPlayerEntity)par0).connection.getNetworkManager(), NetworkDirection.PLAY_TO_CLIENT);
 	}
 }

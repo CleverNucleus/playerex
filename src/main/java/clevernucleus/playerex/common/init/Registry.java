@@ -1,17 +1,23 @@
 package clevernucleus.playerex.common.init;
 
 import java.util.HashSet;
+import java.util.Optional;
 import java.util.Set;
 import java.util.function.Function;
+
+import javax.annotation.Nonnull;
 
 import clevernucleus.playerex.common.PlayerEx;
 import clevernucleus.playerex.common.init.capability.IPlayerElements;
 import clevernucleus.playerex.common.init.capability.PlayerElements;
-import clevernucleus.playerex.common.init.capability.SyncPlayerElements;
+import clevernucleus.playerex.common.init.container.PlayerElementsContainer;
 import clevernucleus.playerex.common.init.element.*;
+import clevernucleus.playerex.common.network.*;
 import clevernucleus.playerex.common.util.Calc;
 import net.minecraft.entity.SharedMonsterAttributes;
 import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.inventory.container.Container;
+import net.minecraft.inventory.container.ContainerType;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.nbt.INBT;
 import net.minecraft.util.Direction;
@@ -19,7 +25,9 @@ import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.common.capabilities.CapabilityInject;
 import net.minecraftforge.common.capabilities.CapabilityManager;
+import net.minecraftforge.common.extensions.IForgeContainerType;
 import net.minecraftforge.common.util.LazyOptional;
+import net.minecraftforge.event.RegistryEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
@@ -48,16 +56,66 @@ public class Registry {
 	/** Capability pass-through function. */
 	public static final Function<PlayerEntity, LazyOptional<IPlayerElements>> ELEMENTS = var -> var.getCapability(CAPABILITY, null);
 	
+	/** Gets the IElement instance in a safe format from its ID. */
+	public static final Function<String, Optional<IElement>> ELEMENT_FROM_ID = var0 -> {
+		Set<IElement> var1 = new HashSet<IElement>();
+		var1.addAll(DATA_ELEMENTS);
+		var1.addAll(GAME_ELEMENTS);
+		
+		return var1.stream().filter(var -> var0.equals(var.toString())).findFirst();
+	};
+	
+	/** Static identifier for the player elements container type. */
+	public static final ContainerType<PlayerElementsContainer> ELEMENTS_CONTAINER = register("elements", IForgeContainerType.create((var0, var1, var2) -> new PlayerElementsContainer(var0, var1)));
+	
+	public static final IDataElement EXPERIENCE = new WritableElement("Experience", 0F, (par0, par1, par2) -> {
+		IPlayerElements var0 = par1.one();
+		IElement var1 = par1.two();
+		
+		var0.put(var1, var0.get(par0, var1) + par2);
+	}, (par0, par1, par2) -> {
+		IPlayerElements var0 = par1.one();
+		IElement var1 = par1.two();
+		
+		var0.put(var1, par2);
+	});
+	
+	public static final IDataElement LEVEL = new WritableElement("Level", 0F, (par0, par1, par2) -> {
+		IPlayerElements var0 = par1.one();
+		IElement var1 = par1.two();
+		
+		var0.put(var1, var0.get(par0, var1) + par2);
+		var0.add(par0, Registry.SKILLPOINTS, par2);
+	}, (par0, par1, par2) -> {
+		IPlayerElements var0 = par1.one();
+		IElement var1 = par1.two();
+		
+		var0.put(var1, par2);
+		var0.set(par0, Registry.SKILLPOINTS, par2);
+	});
+	
+	public static final IDataElement SKILLPOINTS = new WritableElement("SkillPoints", 0F, (par0, par1, par2) -> {
+		IPlayerElements var0 = par1.one();
+		IElement var1 = par1.two();
+		
+		var0.put(var1, var0.get(par0, var1) + par2);
+	}, (par0, par1, par2) -> {
+		IPlayerElements var0 = par1.one();
+		IElement var1 = par1.two();
+		
+		var0.put(var1, par2);
+	});
+	
 	public static final IDataElement CONSTITUTION = new PropertyElement("Constitution", 0F, 1F, 10F, (par0, par1, par2) -> {
 		IPlayerElements var0 = par1.one();
 		IElement var1 = par1.two();
 		
 		var0.put(var1, var0.get(par0, var1) + par2);
 		var0.add(par0, Registry.HEALTH, par2);
-		var0.add(par0, Registry.ARMOUR_TOUGHNESS, par2 * 0.25D);
-		var0.add(par0, Registry.KNOCKBACK_RESISTANCE, par2 * 0.02D);
-		var0.add(par0, Registry.EXPLOSION_RESISTANCE, par2 * 0.02D);
-		var0.add(par0, Registry.DROWNING_RESISTANCE, par2 * 0.02D);
+		var0.add(par0, Registry.ARMOUR_TOUGHNESS, par2 * 0.2D);
+		var0.add(par0, Registry.KNOCKBACK_RESISTANCE, par2 * 0.01D);
+		var0.add(par0, Registry.EXPLOSION_RESISTANCE, par2 * 0.01D);
+		var0.add(par0, Registry.DROWNING_RESISTANCE, par2 * 0.01D);
 	});
 	
 	public static final IDataElement STRENGTH = new PropertyElement("Strength", 0F, 1F, 10F, (par0, par1, par2) -> {
@@ -66,9 +124,11 @@ public class Registry {
 		
 		var0.put(var1, var0.get(par0, var1) + par2);
 		var0.add(par0, Registry.HEALTH_REGEN, par2 * 0.0005D);
-		var0.add(par0, Registry.DAMAGE_RESISTANCE, par2 * 0.02D);
-		var0.add(par0, Registry.FALL_RESISTANCE, par2 * 0.02D);
+		var0.add(par0, Registry.DAMAGE_RESISTANCE, par2 * 0.01D);
+		var0.add(par0, Registry.FALL_RESISTANCE, par2 * 0.01D);
 		var0.add(par0, Registry.MELEE_DAMAGE, par2 * 0.25D);
+		var0.add(par0, Registry.EXPLOSION_RESISTANCE, par2 * 0.01D);
+		var0.add(par0, Registry.LAVA_RESISTANCE, par2 * 0.01D);
 	});
 	
 	public static final IDataElement DEXTERITY = new PropertyElement("Dexterity", 0F, 1F, 10F, (par0, par1, par2) -> {
@@ -77,9 +137,10 @@ public class Registry {
 		
 		var0.put(var1, var0.get(par0, var1) + par2);
 		var0.add(par0, Registry.ARMOUR, par2 * 0.5D);
-		var0.add(par0, Registry.MOVEMENT_SPEED, par2 * 0.02D);
+		var0.add(par0, Registry.FALL_RESISTANCE, par2 * 0.01D);
+		var0.add(par0, Registry.FIRE_RESISTANCE, par2 * 0.01D);
+		var0.add(par0, Registry.MOVEMENT_SPEED_AMP, par2 * 0.02D);
 		var0.add(par0, Registry.MELEE_CRIT_DAMAGE, par2 * 0.05D);
-		var0.add(par0, Registry.MELEE_KNOCKBACK, par2 * 0.05D);
 		var0.add(par0, Registry.ATTACK_SPEED, par2 * 0.25D);
 		var0.add(par0, Registry.RANGED_DAMAGE, par2 * 0.25D);
 	});
@@ -90,10 +151,11 @@ public class Registry {
 		
 		var0.put(var1, var0.get(par0, var1) + par2);
 		var0.add(par0, Registry.HEALTH_REGEN_AMP, par2 * 0.02D);
-		var0.add(par0, Registry.FIRE_RESISTANCE, par2 * 0.02D);
-		var0.add(par0, Registry.LAVA_RESISTANCE, par2 * 0.02D);
-		var0.add(par0, Registry.POISON_RESISTANCE, par2 * 0.02D);
-		var0.add(par0, Registry.WITHER_RESISTANCE, par2 * 0.02D);
+		var0.add(par0, Registry.FIRE_RESISTANCE, par2 * 0.01D);
+		var0.add(par0, Registry.LAVA_RESISTANCE, par2 * 0.01D);
+		var0.add(par0, Registry.POISON_RESISTANCE, par2 * 0.01D);
+		var0.add(par0, Registry.WITHER_RESISTANCE, par2 * 0.01D);
+		var0.add(par0, Registry.DROWNING_RESISTANCE, par2 * 0.01D);
 		var0.add(par0, Registry.RANGED_CRIT_DAMAGE, par2 * 0.05D);
 		var0.add(par0, Registry.LIFESTEAL, par2 * 0.02D);
 	});
@@ -107,6 +169,7 @@ public class Registry {
 		var0.add(par0, Registry.MELEE_CRIT_CHANCE, par2 * 0.02D);
 		var0.add(par0, Registry.EVASION_CHANCE, par2 * 0.02D);
 		var0.add(par0, Registry.RANGED_CRIT_CHANCE, par2 * 0.02D);
+		var0.add(par0, Registry.POISON_RESISTANCE, par2 * 0.01D);
 	});
 	
 	public static final IElement HEALTH = new BasicElement("Health", 1F, 10F, (par0, par1, par2) -> {
@@ -199,9 +262,12 @@ public class Registry {
 		var0.put(var1, Calc.dim(var0.get(par0, var1), par2, 1D));
 	});
 	
-	public static final IElement MOVEMENT_SPEED = new BasicElement("MovementSpeed", 0.01F, 0.2F, (par0, par1, par2) -> {
-		//TODO
-	}, (par0, par1) -> 0D);//TODO
+	public static final IDataElement MOVEMENT_SPEED_AMP = new PropertyElement("MovementSpeedAmp", 0F, 0.01F, 0.4F, (par0, par1, par2) -> {
+		IPlayerElements var0 = par1.one();
+		IElement var1 = par1.two();
+		
+		var0.put(var1, Calc.dim(var0.get(par0, var1), par2, 1D));
+	});
 	
 	public static final IElement MELEE_DAMAGE = new BasicElement("MeleeDamage", 0.25F, 4F, (par0, par1, par2) -> {
 		par0.getAttribute(SharedMonsterAttributes.ATTACK_DAMAGE).setBaseValue(par0.getAttribute(SharedMonsterAttributes.ATTACK_DAMAGE).getBaseValue() + par2);
@@ -220,10 +286,6 @@ public class Registry {
 		
 		var0.put(var1, Calc.dim(var0.get(par0, var1), par2, 1D));
 	});
-	
-	public static final IElement MELEE_KNOCKBACK = new BasicElement("MeleeKnockback", 0.1F, 2F, (par0, par1, par2) -> {
-		par0.getAttribute(SharedMonsterAttributes.ATTACK_KNOCKBACK).setBaseValue(Calc.dim(par0.getAttribute(SharedMonsterAttributes.ATTACK_KNOCKBACK).getBaseValue(), par2, 5D));
-	}, (par0, par1) -> par0.getAttribute(SharedMonsterAttributes.ATTACK_KNOCKBACK).getBaseValue());
 	
 	public static final IElement ATTACK_SPEED = new BasicElement("AttackSpeed", 0.25F, 4F, (par0, par1, par2) -> {
 		par0.getAttribute(SharedMonsterAttributes.ATTACK_SPEED).setBaseValue(par0.getAttribute(SharedMonsterAttributes.ATTACK_SPEED).getBaseValue() + par2);
@@ -269,6 +331,18 @@ public class Registry {
 	}, (par0, par1) -> par0.getAttribute(SharedMonsterAttributes.LUCK).getBaseValue());
 	
 	/**
+	 * Used to pass a container type and its registry name through to a list and returned again.
+	 * @param par0 The registry name.
+	 * @param par1 The container type object.
+	 * @return The container type object, with its registry name set.
+	 */
+	private static <T extends Container> ContainerType<T> register(final @Nonnull String par0, ContainerType<T> par1) {
+		par1.setRegistryName(new ResourceLocation(PlayerEx.MODID, par0));
+		
+		return par1;
+	}
+	
+	/**
 	 * Mod initialisation event.
 	 * @param par0
 	 */
@@ -288,5 +362,16 @@ public class Registry {
 		}, PlayerElements::new);
 		
 		NETWORK.registerMessage(0, SyncPlayerElements.class, SyncPlayerElements::encode, SyncPlayerElements::decode, SyncPlayerElements::handle);
+		NETWORK.registerMessage(1, SwitchScreens.class, SwitchScreens::encode, SwitchScreens::decode, SwitchScreens::handle);
+		NETWORK.registerMessage(2, AddPlayerElement.class, AddPlayerElement::encode, AddPlayerElement::decode, AddPlayerElement::handle);
+	}
+	
+	/**
+	 * Event handling the registration of container types.
+	 * @param par0
+	 */
+	@SubscribeEvent
+	public static void registerContainerTypes(final RegistryEvent.Register<ContainerType<?>> par0) {
+		par0.getRegistry().register(ELEMENTS_CONTAINER);
 	}
 }

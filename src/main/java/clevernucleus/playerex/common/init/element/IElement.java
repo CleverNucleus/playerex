@@ -4,12 +4,18 @@ import java.util.Set;
 
 import clevernucleus.playerex.common.init.capability.IPlayerElements;
 import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.util.text.ITextComponent;
+import net.minecraft.util.text.TranslationTextComponent;
 
 /**
  * Accessing interface.
  * @param <T> Type.
  */
 public interface IElement {
+	
+	default ITextComponent getDisplayName() {
+		return new TranslationTextComponent("attribute." + this.toString().toLowerCase());
+	}
 	
 	/**
 	 * @return This element's minimum value.

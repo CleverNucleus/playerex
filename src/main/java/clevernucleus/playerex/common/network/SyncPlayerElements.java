@@ -1,4 +1,4 @@
-package clevernucleus.playerex.common.init.capability;
+package clevernucleus.playerex.common.network;
 
 import java.util.function.Supplier;
 
@@ -6,6 +6,7 @@ import javax.annotation.Nonnull;
 
 import clevernucleus.playerex.common.PlayerEx;
 import clevernucleus.playerex.common.init.Registry;
+import net.minecraft.entity.SharedMonsterAttributes;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.network.PacketBuffer;
@@ -57,7 +58,10 @@ public class SyncPlayerElements {
 				
 				if(par0.tag == null || var0 == null) return;
 				
-				Registry.ELEMENTS.apply(var0).ifPresent(var -> var.read(par0.tag));
+				var0.getAttribute(SharedMonsterAttributes.KNOCKBACK_RESISTANCE).setBaseValue(par0.tag.getDouble("generic.knockbackResistance"));
+				var0.getAttribute(SharedMonsterAttributes.ATTACK_DAMAGE).setBaseValue(par0.tag.getDouble("generic.attackDamage"));
+				
+				Registry.ELEMENTS.apply(var0).ifPresent(var -> var.read(par0.tag.getCompound("elements")));
 			});
 			
 			par1.get().setPacketHandled(true);
