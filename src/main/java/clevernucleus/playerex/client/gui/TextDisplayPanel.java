@@ -1,4 +1,4 @@
-package clevernucleus.playerex.common.util;
+package clevernucleus.playerex.client.gui;
 
 import java.util.ArrayList;
 import java.util.List;

@@ -18,6 +18,12 @@ public interface IElement {
 	}
 	
 	/**
+	 * @return The tooltip to display.
+	 */
+	ITextComponent getTooltip(float par0);
+	
+	
+	/**
 	 * @return This element's minimum value.
 	 */
 	default float minValue() {

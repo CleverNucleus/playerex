@@ -9,6 +9,7 @@ import javax.annotation.Nonnull;
 
 import clevernucleus.playerex.common.init.Registry;
 import clevernucleus.playerex.common.init.element.IElement;
+import clevernucleus.playerex.common.util.BiValue;
 import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.nbt.ListNBT;
@@ -22,6 +23,28 @@ public class AddPlayerElement {
 	private CompoundNBT tag;
 	
 	public AddPlayerElement() {}
+	
+	/**
+	 * Constructor.
+	 * @param par0 BiValues containing the element to change and it's value.
+	 */
+	@SafeVarargs
+	public AddPlayerElement(final BiValue<IElement, Double> ... par0) {
+		this.tag = new CompoundNBT();
+		ListNBT var0 = new ListNBT();
+		
+		for(BiValue<IElement, Double> var : par0) {
+			CompoundNBT var1 = new CompoundNBT();
+			String var2 = var.one().toString();
+			double var3 = var.two().doubleValue();
+			
+			var1.putString("Name", var2);
+			var1.putDouble("Value", var3);
+			var0.add(var1);
+		}
+		
+		this.tag.put("Elements", var0);
+	}
 	
 	/**
 	 * Constructor.
@@ -59,8 +82,8 @@ public class AddPlayerElement {
 			ServerPlayerEntity var0 = par1.get().getSender();
 			
 			if(var0 != null && par0.tag != null) {
-				if(par0.tag.contains("elements")) {
-					ListNBT var1 = par0.tag.getList("elements", 10);
+				if(par0.tag.contains("Elements")) {
+					ListNBT var1 = par0.tag.getList("Elements", 10);
 					Map<IElement, Double> var2 = new HashMap<IElement, Double>();
 					
 					for(int var = 0; var < var1.size(); var++) {

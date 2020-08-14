@@ -4,15 +4,20 @@ import java.util.Random;
 
 import javax.annotation.Nonnull;
 
+import com.lazy.baubles.api.BaublesApi;
+import com.lazy.baubles.api.IBauble;
+
 import clevernucleus.playerex.common.PlayerEx;
 import clevernucleus.playerex.common.init.Registry;
 import clevernucleus.playerex.common.init.capability.CapabilityProvider;
-import clevernucleus.playerex.common.util.Calc;
+import clevernucleus.playerex.common.util.Util;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.SharedMonsterAttributes;
 import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.item.Item;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.ResourceLocation;
+import net.minecraft.world.GameRules;
 import net.minecraftforge.eventbus.api.Event.Result;
 import net.minecraftforge.eventbus.api.EventPriority;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
@@ -125,7 +130,7 @@ public class CommonEvents {
 		Registry.ELEMENTS.apply(var0).ifPresent(var -> {
 			var.add(var0, Registry.EXPERIENCE, var1);
 			
-			float var2 = Calc.expCoeff((float)var.get(var0, Registry.LEVEL), (float)var.get(var0, Registry.EXPERIENCE));
+			float var2 = Util.expCoeff((float)var.get(var0, Registry.LEVEL), (float)var.get(var0, Registry.EXPERIENCE));
 			
 			if(var2 > 0.95F) {
 				var.add(var0, Registry.LEVEL, 1);
@@ -281,6 +286,32 @@ public class CommonEvents {
 			
 			Registry.ELEMENTS.apply(var0).ifPresent(var -> {
 				par0.setLootingLevel(par0.getLootingLevel() + (int)(var.get(var0, Registry.LUCK) / 5D));
+			});
+		}
+	}
+	
+	/**
+	 * Event fired when baubles drop. This is a fix: for some reason unknown even to god, the baubles dev (azanor and the 
+	 * new guy) forget to make IBauble#onUnequipped fire when the player dies and drop's their baubles. This fires that method for them.
+	 * @param par0
+	 */
+	@SubscribeEvent(priority = EventPriority.HIGHEST)
+    public static void playerDeath(final net.minecraftforge.event.entity.living.LivingDropsEvent par0) {
+		if(par0.getEntityLiving() instanceof PlayerEntity) {
+			PlayerEntity var0 = (PlayerEntity)par0.getEntityLiving();
+			
+			if(var0.world.getGameRules().getBoolean(GameRules.KEEP_INVENTORY)) return;
+			
+			BaublesApi.getBaublesHandler(var0).ifPresent(var -> {
+				for(int var1 = 0; var1 < var.getSlots(); var1++) {
+					Item var2 = var.getStackInSlot(var1).getItem();
+					
+					if(var2 instanceof IBauble) {
+						IBauble var3 = (IBauble)var2;
+						
+						var3.onUnequipped(var0);
+					}
+				}
 			});
 		}
 	}

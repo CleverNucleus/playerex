@@ -27,3 +27,10 @@ A clever implementaton of a novel attributes system for players.
     versionRange="[1.15.2]"
     ordering="NONE"
     side="BOTH"
+
+[[dependencies.playerex]]
+    modId="baubles"
+    mandatory=true
+    versionRange="[1.7,]"
+    ordering="NONE"
+    side="BOTH"

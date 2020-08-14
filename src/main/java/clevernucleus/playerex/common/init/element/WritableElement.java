@@ -9,6 +9,8 @@ import clevernucleus.playerex.common.init.capability.IPlayerElements;
 import clevernucleus.playerex.common.util.BiValue;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.nbt.CompoundNBT;
+import net.minecraft.util.text.ITextComponent;
+import net.minecraft.util.text.StringTextComponent;
 
 /**
  * Basic implementation of IElement.
@@ -53,7 +55,12 @@ public class WritableElement implements IDataElement {
 	public void add(final PlayerEntity par0, final IPlayerElements par1, final double par2) {
 		this.adder.accept(par0, BiValue.make(par1, this), par2);
 	}
-
+	
+	@Override
+	public ITextComponent getTooltip(final float par0) {
+		return new StringTextComponent(this.toString() + ":" + par0);
+	}
+	
 	@Override
 	public void writeDefault(final CompoundNBT par0) {
 		par0.putDouble(this.key, this.defaultValue);

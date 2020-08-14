@@ -14,8 +14,6 @@ import clevernucleus.playerex.common.init.element.IElement;
 import clevernucleus.playerex.common.network.AddPlayerElement;
 import clevernucleus.playerex.common.network.SwitchScreens;
 import clevernucleus.playerex.common.util.BiValue;
-import clevernucleus.playerex.common.util.Calc;
-import clevernucleus.playerex.common.util.TextDisplayPanel;
 import clevernucleus.playerex.common.util.Util;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.screen.inventory.ContainerScreen;
@@ -23,7 +21,6 @@ import net.minecraft.client.gui.screen.inventory.InventoryScreen;
 import net.minecraft.entity.SharedMonsterAttributes;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.PlayerInventory;
-import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.StringTextComponent;
@@ -80,7 +77,7 @@ public class PlayerElementsScreen extends ContainerScreen<PlayerElementsContaine
 		this.player = Minecraft.getInstance().player;
 		this.display = Util.list(var0 -> {
 			Registry.ELEMENTS.apply(player).ifPresent(var1 -> {
-				var0.add(new TextDisplayPanel(new TranslationTextComponent("attribute.level", (int)var1.get(player, Registry.LEVEL), (int)(100 * Calc.expCoeff((float)var1.get(player, Registry.LEVEL), (float)var1.get(player, Registry.EXPERIENCE))), "%"), 14F, 36F, var2 -> {
+				var0.add(new TextDisplayPanel(new TranslationTextComponent("attribute.level", (int)var1.get(player, Registry.LEVEL), (int)(100 * Util.expCoeff((float)var1.get(player, Registry.LEVEL), (float)var1.get(player, Registry.EXPERIENCE))), "%"), 14F, 36F, var2 -> {
 					var2.add(new TranslationTextComponent("desc.level0", TextFormatting.GRAY));
 				}));
 				var0.add(new TextDisplayPanel(new TranslationTextComponent("attribute.skillpoints", (int)var1.get(player, Registry.SKILLPOINTS)), 14F, 45F, var2 -> {
@@ -223,9 +220,8 @@ public class PlayerElementsScreen extends ContainerScreen<PlayerElementsContaine
 		for(int var0 = 0; var0 < 5; var0++) {
 			this.addButton(this.attribute_button[var0] = new TexturedButton(this, 2, 61 + (var0 * 18), 11, 10, 204, 0, var0, (var1, var2) -> {
 				IElement[] var3 = new IElement[] {Registry.CONSTITUTION, Registry.STRENGTH, Registry.DEXTERITY, Registry.INTELLIGENCE, Registry.LUCK};
-				CompoundNBT var4 = Util.fromElements(BiValue.make(var3[var2], 1D), BiValue.make(Registry.SKILLPOINTS, -1D));
 				
-				Registry.NETWORK.sendToServer(new AddPlayerElement(var4));
+				Registry.NETWORK.sendToServer(new AddPlayerElement(BiValue.make(var3[var2], 1D), BiValue.make(Registry.SKILLPOINTS, -1D)));
 			}));
 		}
 		
