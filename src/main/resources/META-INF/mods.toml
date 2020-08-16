@@ -29,8 +29,8 @@ A clever implementaton of a novel attributes system for players.
     side="BOTH"
 
 [[dependencies.playerex]]
-    modId="baubles"
+    modId="curios"
     mandatory=true
-    versionRange="[1.7,]"
+    versionRange="[FORGE-1.15.2-2.0.2.6]"
     ordering="NONE"
     side="BOTH"

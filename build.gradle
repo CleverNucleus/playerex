@@ -90,8 +90,10 @@ dependencies {
     // that the dep is a ForgeGradle 'patcher' dependency. And it's patches will be applied.
     // The userdev artifact is a special name and will get all sorts of transformations applied to it.
     minecraft 'net.minecraftforge:forge:1.15.2-31.2.0'
-	compile name: 'baubles-1.7.1-1.15.2-deobf'
-	// compile name: 'baubles-1.7.1-1.15.2-api'
+	//compile name: 'baubles-1.7.1-1.15.2-deobf'
+	
+	runtimeOnly fg.deobf("top.theillusivec4.curios:curios:FORGE-1.15.2-2.0.2.6")
+    compileOnly fg.deobf("top.theillusivec4.curios:curios:FORGE-1.15.2-2.0.2.6:api")
 	
     // You may put jars on which you depend on in ./libs or you may define them like so..
     // compile "some.group:artifact:version:classifier"
@@ -114,8 +116,8 @@ dependencies {
 }
 
 repositories {
-    flatDir {
-        dirs 'lib'
+    maven {
+        url = "https://maven.theillusivec4.top/"
     }
 }
 

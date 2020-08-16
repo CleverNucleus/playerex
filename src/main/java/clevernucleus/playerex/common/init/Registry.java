@@ -9,8 +9,6 @@ import java.util.function.Function;
 
 import javax.annotation.Nonnull;
 
-import com.lazy.baubles.api.BaubleType;
-
 import clevernucleus.playerex.common.PlayerEx;
 import clevernucleus.playerex.common.init.capability.IPlayerElements;
 import clevernucleus.playerex.common.init.capability.PlayerElements;
@@ -36,10 +34,14 @@ import net.minecraftforge.common.extensions.IForgeContainerType;
 import net.minecraftforge.common.util.LazyOptional;
 import net.minecraftforge.event.RegistryEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
+import net.minecraftforge.fml.InterModComms;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
+import net.minecraftforge.fml.event.lifecycle.InterModEnqueueEvent;
 import net.minecraftforge.fml.network.NetworkRegistry;
 import net.minecraftforge.fml.network.simple.SimpleChannel;
+import top.theillusivec4.curios.api.CuriosAPI;
+import top.theillusivec4.curios.api.imc.CurioIMCMessage;
 
 /**
  * Mod registry. Holds all registry objects added by PlayerEx.
@@ -75,10 +77,13 @@ public class Registry {
 		return var1.stream().filter(var -> var0.equals(var.toString())).findFirst();
 	};
 	
-	public static final Item RELIC_AMULET = register("relic_amulet", new RelicItem(BaubleType.AMULET));
-	public static final Item RELIC_BODY = register("relic_body", new RelicItem(BaubleType.BODY));
-	public static final Item RELIC_HEAD = register("relic_head", new RelicItem(BaubleType.HEAD));
-	public static final Item RELIC_RING = register("relic_ring", new RelicItem(BaubleType.RING));
+	public static final Item RELIC_AMULET = register("relic_amulet", new RelicItem());
+	public static final Item RELIC_BODY = register("relic_body", new RelicItem());
+	public static final Item RELIC_HEAD = register("relic_head", new RelicItem());
+	public static final Item RELIC_RING = register("relic_ring", new RelicItem());
+	public static final Item SMALL_HEALTH_POTION = register("small_health_potion", new HealthPotionItem(1));
+	public static final Item MEDIUM_HEALTH_POTION = register("medium_health_potion", new HealthPotionItem(2));
+	public static final Item LARGE_HEALTH_POTION = register("large_health_potion", new HealthPotionItem(3));
 	
 	/** Static identifier for the player elements container type. */
 	public static final ContainerType<PlayerElementsContainer> ELEMENTS_CONTAINER = register("elements", IForgeContainerType.create((var0, var1, var2) -> new PlayerElementsContainer(var0, var1)));
@@ -413,5 +418,17 @@ public class Registry {
 		for(Item var : ITEMS) {
 			par0.getRegistry().register(var);
 		}
+	}
+	
+	/**
+	 * Event registering curios slots
+	 * @param par0
+	 */
+	@SubscribeEvent
+	public static void registerCurios(final InterModEnqueueEvent par0) {
+		InterModComms.sendTo(CuriosAPI.MODID, CuriosAPI.IMC.REGISTER_TYPE, () -> new CurioIMCMessage("necklace"));
+		InterModComms.sendTo(CuriosAPI.MODID, CuriosAPI.IMC.REGISTER_TYPE, () -> new CurioIMCMessage("body"));
+		InterModComms.sendTo(CuriosAPI.MODID, CuriosAPI.IMC.REGISTER_TYPE, () -> new CurioIMCMessage("head"));
+		InterModComms.sendTo(CuriosAPI.MODID, CuriosAPI.IMC.REGISTER_TYPE, () -> new CurioIMCMessage("ring"));
 	}
 }

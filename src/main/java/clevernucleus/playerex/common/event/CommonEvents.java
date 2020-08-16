@@ -4,20 +4,21 @@ import java.util.Random;
 
 import javax.annotation.Nonnull;
 
-import com.lazy.baubles.api.BaublesApi;
-import com.lazy.baubles.api.IBauble;
-
 import clevernucleus.playerex.common.PlayerEx;
 import clevernucleus.playerex.common.init.Registry;
 import clevernucleus.playerex.common.init.capability.CapabilityProvider;
+import clevernucleus.playerex.common.init.item.RelicItem;
 import clevernucleus.playerex.common.util.Util;
 import net.minecraft.entity.Entity;
+import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.SharedMonsterAttributes;
+import net.minecraft.entity.item.ItemEntity;
+import net.minecraft.entity.monster.IMob;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.Item;
+import net.minecraft.item.ItemStack;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.ResourceLocation;
-import net.minecraft.world.GameRules;
 import net.minecraftforge.eventbus.api.Event.Result;
 import net.minecraftforge.eventbus.api.EventPriority;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
@@ -249,6 +250,14 @@ public class CommonEvents {
 				}
 			});
 		}
+		
+		if(par0.getSource().getTrueSource() instanceof PlayerEntity) {
+			PlayerEntity var0 = (PlayerEntity)par0.getSource().getTrueSource();
+			
+			Registry.ELEMENTS.apply(var0).ifPresent(var -> {
+				var0.heal(par0.getAmount() * (float)var.get(var0, Registry.LIFESTEAL));
+			});
+		}
 	}
 	
 	/**
@@ -291,28 +300,25 @@ public class CommonEvents {
 	}
 	
 	/**
-	 * Event fired when baubles drop. This is a fix: for some reason unknown even to god, the baubles dev (azanor and the 
-	 * new guy) forget to make IBauble#onUnequipped fire when the player dies and drop's their baubles. This fires that method for them.
+	 * Event to add random drops to instances of IMobs.
 	 * @param par0
 	 */
-	@SubscribeEvent(priority = EventPriority.HIGHEST)
-    public static void playerDeath(final net.minecraftforge.event.entity.living.LivingDropsEvent par0) {
-		if(par0.getEntityLiving() instanceof PlayerEntity) {
-			PlayerEntity var0 = (PlayerEntity)par0.getEntityLiving();
+	@SubscribeEvent
+    public static void dropLoot(final net.minecraftforge.event.entity.living.LivingDropsEvent par0) {
+		LivingEntity var0 = par0.getEntityLiving();
+		
+		if(var0 instanceof IMob) {
+			Random var1 = new Random();
+			Item var2 = Registry.ITEMS.get(var1.nextInt(Registry.ITEMS.size()));
+			ItemStack var3 = new ItemStack(var2);
 			
-			if(var0.world.getGameRules().getBoolean(GameRules.KEEP_INVENTORY)) return;
+			if(var2 instanceof RelicItem) {
+				Util.createRandomRelic(var3);
+			}
 			
-			BaublesApi.getBaublesHandler(var0).ifPresent(var -> {
-				for(int var1 = 0; var1 < var.getSlots(); var1++) {
-					Item var2 = var.getStackInSlot(var1).getItem();
-					
-					if(var2 instanceof IBauble) {
-						IBauble var3 = (IBauble)var2;
-						
-						var3.onUnequipped(var0);
-					}
-				}
-			});
+			if(var1.nextInt(100) < 15) {
+				par0.getDrops().add(new ItemEntity(var0.world, var0.getPosX(), var0.getPosY(), var0.getPosZ(), var3));
+			}
 		}
 	}
 }

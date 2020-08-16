@@ -1,6 +1,9 @@
 {
 	"container.elements": "Player Attributes",
 	"itemGroup.playerex_tab": "PlayerEx Relics",
+	"item.playerex.small_health_potion": "Small Health Potion",
+	"item.playerex.medium_health_potion": "Medium Health Potion",
+	"item.playerex.large_health_potion": "Large Health Potion",
 	"tooltip.relic": "Relic",
 	"tooltip.relic_alt": "%s %s Relic",
 	"tooltip.common": "%sCommon",
