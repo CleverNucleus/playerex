@@ -15,10 +15,16 @@ import clevernucleus.playerex.common.init.element.IElement;
 import clevernucleus.playerex.common.rarity.Prefixes;
 import clevernucleus.playerex.common.rarity.Rareness;
 import clevernucleus.playerex.common.rarity.Suffixes;
+import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.nbt.ListNBT;
+import net.minecraft.util.math.MathHelper;
+import net.minecraft.util.math.RayTraceContext;
+import net.minecraft.util.math.RayTraceResult;
+import net.minecraft.util.math.Vec3d;
 import net.minecraft.util.text.TranslationTextComponent;
+import net.minecraft.world.World;
 
 /**
  * Util class for functions and utility methods.
@@ -26,7 +32,10 @@ import net.minecraft.util.text.TranslationTextComponent;
 public class Util {
 	
 	/** Formats floats to one decimal place. */
-	public static final Function<String, DecimalFormat> FORMAT = par0 -> new DecimalFormat(par0);
+	public static final Function<String, DecimalFormat> FORMAT = var -> new DecimalFormat(var);
+	
+	/** Returns randomly +/- the input value. */
+	public static final Function<Double, Double> RANDOM = var -> ((new Random()).nextBoolean() ? (-1D) : 1D) * var.doubleValue();
 	
 	/**
 	 * @param par0 List Consumer.
@@ -67,6 +76,33 @@ public class Util {
 		double var1 = -(((double)par1 + (double)var0) / (1.0D + (double)par0));
 		
 		return (float)(1.0D - Math.pow(Math.E, var1));
+	}
+	
+	/**
+	 * @param par0 World instance.
+	 * @param par1 Player instance.
+	 * @param par2 The distance that can be looked.
+	 * @return A RayTraceResult pointing to a block.
+	 */
+	public static RayTraceResult lookPos(World par0, PlayerEntity par1, double par2) {
+		float var0 = par1.rotationPitch;
+		float var1 = par1.rotationYaw;
+		double var2 = par1.getPosX();
+		double var3 = par1.getPosY() + (double)par1.getEyeHeight();
+		double var4 = par1.getPosZ();
+		
+		Vec3d var5 = new Vec3d(var2, var3, var4);
+		
+		float var6 = MathHelper.cos(-var1 * 0.017453292F - (float)Math.PI);
+        float var7 = MathHelper.sin(-var1 * 0.017453292F - (float)Math.PI);
+        float var8 = -MathHelper.cos(-var0 * 0.017453292F);
+        float var9 = MathHelper.sin(-var0 * 0.017453292F);
+        float var10 = var7 * var8;
+        float var11 = var6 * var8;
+		
+        Vec3d var12 = var5.add((double)var10 * par2, (double)var9 * par2, (double)var11 * par2);
+        
+		return par0.rayTraceBlocks(new RayTraceContext(var5, var12, RayTraceContext.BlockMode.COLLIDER, RayTraceContext.FluidMode.ANY, par1));
 	}
 	
 	/**

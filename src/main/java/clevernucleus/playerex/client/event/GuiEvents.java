@@ -22,6 +22,7 @@ import net.minecraft.util.text.TranslationTextComponent;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.client.event.GuiScreenEvent;
 import net.minecraftforge.event.entity.player.ItemTooltipEvent;
+import net.minecraftforge.eventbus.api.EventPriority;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 
@@ -40,7 +41,7 @@ public class GuiEvents {
 	 * Event drawing item tooltips.
 	 * @param par0
 	 */
-	@SubscribeEvent
+	@SubscribeEvent(priority = EventPriority.HIGHEST)
 	public static void onDrawTooltip(final ItemTooltipEvent par0) {
 		ItemStack var0 = par0.getItemStack();
 		

@@ -4,6 +4,7 @@
 	"item.playerex.small_health_potion": "Small Health Potion",
 	"item.playerex.medium_health_potion": "Medium Health Potion",
 	"item.playerex.large_health_potion": "Large Health Potion",
+	"item.playerex.subtle_knife": "Subtle Knife",
 	"tooltip.relic": "Relic",
 	"tooltip.relic_alt": "%s %s Relic",
 	"tooltip.common": "%sCommon",

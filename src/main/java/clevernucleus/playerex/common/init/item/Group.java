@@ -1,8 +1,8 @@
 package clevernucleus.playerex.common.init.item;
 
+import clevernucleus.playerex.common.init.Registry;
 import net.minecraft.item.ItemGroup;
 import net.minecraft.item.ItemStack;
-import net.minecraft.item.Items;
 
 /**
  * The creative tab object for this mod.
@@ -18,6 +18,6 @@ public class Group extends ItemGroup {
 	
 	@Override
 	public ItemStack createIcon() {
-		return new ItemStack(Items.GOLD_INGOT);
+		return new ItemStack(Registry.LARGE_HEALTH_POTION);
 	}
 }
