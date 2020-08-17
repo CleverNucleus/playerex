@@ -58,8 +58,6 @@ public class GuiEvents {
 					par0.getToolTip().add(new StringTextComponent(TextFormatting.GRAY + var.getKey().getTooltip(var.getValue()).getFormattedText()));
 				}
 			}
-		} else if(var0.getItem() == Registry.BOOM_STAFF) {
-			par0.getToolTip().add(new TranslationTextComponent("tooltip.explosion", TextFormatting.GRAY));
 		}
 	}
 	

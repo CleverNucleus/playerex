@@ -19,6 +19,8 @@ import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.nbt.ListNBT;
+import net.minecraft.util.math.AxisAlignedBB;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.RayTraceContext;
 import net.minecraft.util.math.RayTraceResult;
@@ -76,6 +78,19 @@ public class Util {
 		double var1 = -(((double)par1 + (double)var0) / (1.0D + (double)par0));
 		
 		return (float)(1.0D - Math.pow(Math.E, var1));
+	}
+	
+	/**
+	 * @param par0 Input x pos.
+	 * @param par1 Input y pos.
+	 * @param par2 Input z pos.
+	 * @param par3 Input radius r.
+	 * @return A bounding box from origin position x, y, z with radius r.
+	 */
+	public static AxisAlignedBB effectBounds(final double par0, final double par1, final double par2, final double par3) {
+		BlockPos var0 = new BlockPos(par0, par1, par2);
+		
+		return new AxisAlignedBB(var0.add(-par3, -par3, -par3), var0.add(par3, par3, par3));
 	}
 	
 	/**
