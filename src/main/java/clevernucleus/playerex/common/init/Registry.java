@@ -17,10 +17,12 @@ import clevernucleus.playerex.common.init.element.*;
 import clevernucleus.playerex.common.init.item.*;
 import clevernucleus.playerex.common.network.*;
 import clevernucleus.playerex.common.util.Util;
+import net.minecraft.block.Block;
 import net.minecraft.entity.SharedMonsterAttributes;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.inventory.container.Container;
 import net.minecraft.inventory.container.ContainerType;
+import net.minecraft.item.BlockItem;
 import net.minecraft.item.Item;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.nbt.INBT;
@@ -52,6 +54,9 @@ public class Registry {
 	/** List storing instances of every registered item. */
 	public static final List<Item> ITEMS = new ArrayList<Item>();
 	
+	/** List storing instances of every registered block. */
+	public static final List<Block> BLOCKS = new ArrayList<Block>();
+	
 	/** Holder for iterating over all nbt read/write elements. */
 	public static final Set<IDataElement> DATA_ELEMENTS = new HashSet<IDataElement>();
 	
@@ -77,6 +82,8 @@ public class Registry {
 		return var1.stream().filter(var -> var0.equals(var.toString())).findFirst();
 	};
 	
+	public static final Block MAGIC_ICE = register("magic_ice", new MagicIceBlock());
+	
 	public static final Item RELIC_AMULET = register("relic_amulet", new RelicItem());
 	public static final Item RELIC_BODY = register("relic_body", new RelicItem());
 	public static final Item RELIC_HEAD = register("relic_head", new RelicItem());
@@ -87,6 +94,7 @@ public class Registry {
 	public static final Item SUBTLE_KNIFE = register("subtle_knife", new SubtleKnifeItem());
 	public static final Item BOOM_STAFF = register("boom_staff", new BoomStaffItem());
 	public static final Item MJOLNIR = register("mjolnir", new MjolnirItem());
+	public static final Item ICE_AXE = register("ice_axe", new IceAxeItem());
 	
 	/** Static identifier for the player elements container type. */
 	public static final ContainerType<PlayerElementsContainer> ELEMENTS_CONTAINER = register("elements", IForgeContainerType.create((var0, var1, var2) -> new PlayerElementsContainer(var0, var1)));
@@ -368,6 +376,22 @@ public class Registry {
 	}
 	
 	/**
+	 * Used to pass an block object and its registry name through to a list and returned again.
+	 * @param par0 The registry name.
+	 * @param par1 The block object.
+	 * @return The block object, with its registry name set.
+	 */
+	private static Block register(final @Nonnull String par0, @Nonnull Block par1) {
+		par1.setRegistryName(new ResourceLocation(PlayerEx.MODID, par0));
+		
+		BLOCKS.add(par1);
+		
+		register(par0, new BlockItem(par1, new Item.Properties().group(Group.INSTANCE)));
+		
+		return par1;
+	}
+	
+	/**
 	 * Used to pass a container type and its registry name through to a list and returned again.
 	 * @param par0 The registry name.
 	 * @param par1 The container type object.
@@ -419,6 +443,17 @@ public class Registry {
 	@SubscribeEvent
 	public static void registerItems(final RegistryEvent.Register<Item> par0) {
 		for(Item var : ITEMS) {
+			par0.getRegistry().register(var);
+		}
+	}
+	
+	/**
+	 * Event handling the registration of items to the game.
+	 * @param par0
+	 */
+	@SubscribeEvent
+	public static void registerBlocks(final RegistryEvent.Register<Block> par0) {
+		for(Block var : BLOCKS) {
 			par0.getRegistry().register(var);
 		}
 	}

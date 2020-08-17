@@ -5,6 +5,8 @@ import clevernucleus.playerex.common.PlayerEx;
 import clevernucleus.playerex.common.init.Registry;
 import clevernucleus.playerex.common.rarity.Rareness;
 import net.minecraft.client.gui.ScreenManager;
+import net.minecraft.client.renderer.RenderType;
+import net.minecraft.client.renderer.RenderTypeLookup;
 import net.minecraft.item.IItemPropertyGetter;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.api.distmarker.Dist;
@@ -24,6 +26,7 @@ public class RegistryEvents {
 	 */
 	@SubscribeEvent
 	public static void onClientLoad(final FMLClientSetupEvent par0) {
+		RenderTypeLookup.setRenderLayer(Registry.MAGIC_ICE, RenderType.getTranslucent());
 		ScreenManager.registerFactory(Registry.ELEMENTS_CONTAINER, PlayerElementsScreen::new);
 		Registry.RELIC_AMULET.addPropertyOverride(new ResourceLocation(PlayerEx.MODID, "rareness"), RELIC);
 		Registry.RELIC_BODY.addPropertyOverride(new ResourceLocation(PlayerEx.MODID, "rareness"), RELIC);
