@@ -85,6 +85,7 @@ public class Registry {
 	public static final Item MEDIUM_HEALTH_POTION = register("medium_health_potion", new HealthPotionItem(2));
 	public static final Item LARGE_HEALTH_POTION = register("large_health_potion", new HealthPotionItem(3));
 	public static final Item SUBTLE_KNIFE = register("subtle_knife", new SubtleKnifeItem());
+	public static final Item BOOM_STAFF = register("boom_staff", new BoomStaffItem());
 	
 	/** Static identifier for the player elements container type. */
 	public static final ContainerType<PlayerElementsContainer> ELEMENTS_CONTAINER = register("elements", IForgeContainerType.create((var0, var1, var2) -> new PlayerElementsContainer(var0, var1)));

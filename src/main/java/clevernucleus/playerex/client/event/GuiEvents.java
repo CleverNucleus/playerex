@@ -22,7 +22,6 @@ import net.minecraft.util.text.TranslationTextComponent;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.client.event.GuiScreenEvent;
 import net.minecraftforge.event.entity.player.ItemTooltipEvent;
-import net.minecraftforge.eventbus.api.EventPriority;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 
@@ -41,7 +40,7 @@ public class GuiEvents {
 	 * Event drawing item tooltips.
 	 * @param par0
 	 */
-	@SubscribeEvent(priority = EventPriority.HIGHEST)
+	@SubscribeEvent
 	public static void onDrawTooltip(final ItemTooltipEvent par0) {
 		ItemStack var0 = par0.getItemStack();
 		
@@ -52,14 +51,15 @@ public class GuiEvents {
 			} else {
 				Rareness var2 = Rareness.read(var0.getTag());
 				
+				par0.getToolTip().add(new StringTextComponent(""));
 				par0.getToolTip().add(var2.getDisplayText());
 				
 				for(Map.Entry<IElement, Float> var : Util.attributeMap(var0.getTag()).entrySet()) {
 					par0.getToolTip().add(new StringTextComponent(TextFormatting.GRAY + var.getKey().getTooltip(var.getValue()).getFormattedText()));
 				}
-				
-				par0.getToolTip().add(new StringTextComponent(""));
 			}
+		} else if(var0.getItem() == Registry.BOOM_STAFF) {
+			par0.getToolTip().add(new TranslationTextComponent("tooltip.explosion", TextFormatting.GRAY));
 		}
 	}
 	
