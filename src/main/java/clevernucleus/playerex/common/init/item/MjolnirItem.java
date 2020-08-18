@@ -93,7 +93,7 @@ public class MjolnirItem extends Item {
 		Multimap<String, AttributeModifier> var0 = super.getAttributeModifiers(par0, par1);
 		
 		if(par0 == EquipmentSlotType.MAINHAND) {
-			var0.put(SharedMonsterAttributes.ATTACK_DAMAGE.getName(), new AttributeModifier(ATTACK_DAMAGE_MODIFIER, "Weapon modifier", 8.0D, AttributeModifier.Operation.ADDITION));
+			var0.put(SharedMonsterAttributes.ATTACK_DAMAGE.getName(), new AttributeModifier(ATTACK_DAMAGE_MODIFIER, "Weapon modifier", 6.0D, AttributeModifier.Operation.ADDITION));
 			var0.put(SharedMonsterAttributes.ATTACK_SPEED.getName(), new AttributeModifier(ATTACK_SPEED_MODIFIER, "Weapon modifier", -2.8D, AttributeModifier.Operation.ADDITION));
 		}
 		

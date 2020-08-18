@@ -1,5 +1,6 @@
 package clevernucleus.playerex.common.event;
 
+import java.util.Map;
 import java.util.Random;
 
 import javax.annotation.Nonnull;
@@ -8,6 +9,7 @@ import clevernucleus.playerex.common.PlayerEx;
 import clevernucleus.playerex.common.init.Registry;
 import clevernucleus.playerex.common.init.capability.CapabilityProvider;
 import clevernucleus.playerex.common.init.item.RelicItem;
+import clevernucleus.playerex.common.util.RandDistribution;
 import clevernucleus.playerex.common.util.Util;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.LivingEntity;
@@ -17,6 +19,7 @@ import net.minecraft.entity.monster.IMob;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
+import net.minecraft.item.Items;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.eventbus.api.Event.Result;
@@ -309,16 +312,23 @@ public class CommonEvents {
 		
 		if(var0 instanceof IMob) {
 			Random var1 = new Random();
-			Item var2 = Registry.ITEMS.get(var1.nextInt(Registry.ITEMS.size()));
-			ItemStack var3 = new ItemStack(var2);
 			
-			if(var2 instanceof RelicItem) {
-				Util.createRandomRelic(var3);
+			if(var1.nextInt(100) > 15) return;
+			
+			RandDistribution<Item> var2 = new RandDistribution<Item>(Items.AIR);
+			
+			for(Map.Entry<Item, Float> var : Registry.ITEM_MAP.entrySet()) {
+				var2.add(var.getKey(), var.getValue());
 			}
 			
-			if(var1.nextInt(100) < 15) {
-				par0.getDrops().add(new ItemEntity(var0.world, var0.getPosX(), var0.getPosY(), var0.getPosZ(), var3));
+			Item var3 = var2.getDistributedRandom();
+			ItemStack var4 = new ItemStack(var3);
+			
+			if(var3 instanceof RelicItem) {
+				Util.createRandomRelic(var4);
 			}
+			
+			par0.getDrops().add(new ItemEntity(var0.world, var0.getPosX(), var0.getPosY(), var0.getPosZ(), var4));
 		}
 	}
 }

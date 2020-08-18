@@ -1,8 +1,10 @@
 package clevernucleus.playerex.common.init;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 import java.util.Set;
 import java.util.function.Function;
@@ -13,9 +15,22 @@ import clevernucleus.playerex.common.PlayerEx;
 import clevernucleus.playerex.common.init.capability.IPlayerElements;
 import clevernucleus.playerex.common.init.capability.PlayerElements;
 import clevernucleus.playerex.common.init.container.PlayerElementsContainer;
-import clevernucleus.playerex.common.init.element.*;
-import clevernucleus.playerex.common.init.item.*;
-import clevernucleus.playerex.common.network.*;
+import clevernucleus.playerex.common.init.element.BasicElement;
+import clevernucleus.playerex.common.init.element.IDataElement;
+import clevernucleus.playerex.common.init.element.IElement;
+import clevernucleus.playerex.common.init.element.PropertyElement;
+import clevernucleus.playerex.common.init.element.WritableElement;
+import clevernucleus.playerex.common.init.item.BoomStaffItem;
+import clevernucleus.playerex.common.init.item.Group;
+import clevernucleus.playerex.common.init.item.HealthPotionItem;
+import clevernucleus.playerex.common.init.item.IceAxeItem;
+import clevernucleus.playerex.common.init.item.MagicIceBlock;
+import clevernucleus.playerex.common.init.item.MjolnirItem;
+import clevernucleus.playerex.common.init.item.RelicItem;
+import clevernucleus.playerex.common.init.item.SubtleKnifeItem;
+import clevernucleus.playerex.common.network.AddPlayerElement;
+import clevernucleus.playerex.common.network.SwitchScreens;
+import clevernucleus.playerex.common.network.SyncPlayerElements;
 import clevernucleus.playerex.common.util.Util;
 import net.minecraft.block.Block;
 import net.minecraft.entity.SharedMonsterAttributes;
@@ -51,6 +66,9 @@ import top.theillusivec4.curios.api.imc.CurioIMCMessage;
 @Mod.EventBusSubscriber(modid = PlayerEx.MODID, bus = Mod.EventBusSubscriber.Bus.MOD)
 public class Registry {
 	
+	/** Map storing instances of every registered item, and their drop chances. */
+	public static final Map<Item, Float> ITEM_MAP = new HashMap<Item, Float>();
+	
 	/** List storing instances of every registered item. */
 	public static final List<Item> ITEMS = new ArrayList<Item>();
 	
@@ -84,17 +102,17 @@ public class Registry {
 	
 	public static final Block MAGIC_ICE = register("magic_ice", new MagicIceBlock());
 	
-	public static final Item RELIC_AMULET = register("relic_amulet", new RelicItem());
-	public static final Item RELIC_BODY = register("relic_body", new RelicItem());
-	public static final Item RELIC_HEAD = register("relic_head", new RelicItem());
-	public static final Item RELIC_RING = register("relic_ring", new RelicItem());
-	public static final Item SMALL_HEALTH_POTION = register("small_health_potion", new HealthPotionItem(1));
-	public static final Item MEDIUM_HEALTH_POTION = register("medium_health_potion", new HealthPotionItem(2));
-	public static final Item LARGE_HEALTH_POTION = register("large_health_potion", new HealthPotionItem(3));
-	public static final Item SUBTLE_KNIFE = register("subtle_knife", new SubtleKnifeItem());
-	public static final Item BOOM_STAFF = register("boom_staff", new BoomStaffItem());
-	public static final Item MJOLNIR = register("mjolnir", new MjolnirItem());
-	public static final Item ICE_AXE = register("ice_axe", new IceAxeItem());
+	public static final Item RELIC_AMULET = register("relic_amulet", 0.7F, new RelicItem());
+	public static final Item RELIC_BODY = register("relic_body", 0.7F, new RelicItem());
+	public static final Item RELIC_HEAD = register("relic_head", 0.7F, new RelicItem());
+	public static final Item RELIC_RING = register("relic_ring", 0.7F, new RelicItem());
+	public static final Item SMALL_HEALTH_POTION = register("small_health_potion", 0.8F, new HealthPotionItem(1));
+	public static final Item MEDIUM_HEALTH_POTION = register("medium_health_potion", 0.7F, new HealthPotionItem(2));
+	public static final Item LARGE_HEALTH_POTION = register("large_health_potion", 0.6F, new HealthPotionItem(3));
+	public static final Item SUBTLE_KNIFE = register("subtle_knife", 0.1F, new SubtleKnifeItem());
+	public static final Item BOOM_STAFF = register("boom_staff", 0.1F, new BoomStaffItem());
+	public static final Item MJOLNIR = register("mjolnir", 0.2F, new MjolnirItem());
+	public static final Item ICE_AXE = register("ice_axe", 0.2F, new IceAxeItem());
 	
 	/** Static identifier for the player elements container type. */
 	public static final ContainerType<PlayerElementsContainer> ELEMENTS_CONTAINER = register("elements", IForgeContainerType.create((var0, var1, var2) -> new PlayerElementsContainer(var0, var1)));
@@ -367,12 +385,13 @@ public class Registry {
 	 * @param par1 The item object.
 	 * @return The item object, with its registry name set.
 	 */
-	private static Item register(final @Nonnull String par0, @Nonnull Item par1) {
-		par1.setRegistryName(new ResourceLocation(PlayerEx.MODID, par0));
+	private static Item register(final @Nonnull String par0, final float par1, @Nonnull Item par2) {
+		par2.setRegistryName(new ResourceLocation(PlayerEx.MODID, par0));
 		
-		ITEMS.add(par1);
+		ITEMS.add(par2);
+		ITEM_MAP.put(par2, par1);
 		
-		return par1;
+		return par2;
 	}
 	
 	/**
@@ -386,7 +405,7 @@ public class Registry {
 		
 		BLOCKS.add(par1);
 		
-		register(par0, new BlockItem(par1, new Item.Properties().group(Group.INSTANCE)));
+		register(par0, 0F, new BlockItem(par1, new Item.Properties().group(Group.INSTANCE)));
 		
 		return par1;
 	}
