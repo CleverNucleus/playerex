@@ -12,13 +12,20 @@ import net.minecraft.world.World;
 /**
  * Health potion item.
  */
-public class HealthPotionItem extends Item {
+public class HealthPotionItem extends Item implements ILoot {
 	private final int level;
+	private final float weight;
 	
-	public HealthPotionItem(final int par0) {
+	public HealthPotionItem(final int par0, final float par1) {
 		super(new Properties().group(Group.INSTANCE).maxStackSize(1));
 		
 		this.level = par0;
+		this.weight = par1;
+	}
+	
+	@Override
+	public float getWight() {
+		return this.weight;
 	}
 	
 	@Override

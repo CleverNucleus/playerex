@@ -21,9 +21,17 @@ import net.minecraft.world.World;
 /**
  * Boom staff item object.
  */
-public class BoomStaffItem extends Item {
-	public BoomStaffItem() {
+public class BoomStaffItem extends Item implements ILoot {
+	private final float weight;
+	
+	public BoomStaffItem(final float par0) {
 		super(new Properties().group(Group.INSTANCE).maxStackSize(1).maxDamage(25));
+		this.weight = par0;
+	}
+	
+	@Override
+	public float getWight() {
+		return this.weight;
 	}
 	
 	@Override

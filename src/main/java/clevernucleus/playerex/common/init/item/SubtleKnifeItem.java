@@ -2,18 +2,13 @@ package clevernucleus.playerex.common.init.item;
 
 import java.util.List;
 
-import com.google.common.collect.Multimap;
-
 import clevernucleus.playerex.common.util.Util;
 import net.minecraft.client.util.ITooltipFlag;
-import net.minecraft.entity.LivingEntity;
-import net.minecraft.entity.SharedMonsterAttributes;
-import net.minecraft.entity.ai.attributes.AttributeModifier;
 import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.inventory.EquipmentSlotType;
-import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
+import net.minecraft.item.ItemTier;
 import net.minecraft.item.Rarity;
+import net.minecraft.item.SwordItem;
 import net.minecraft.particles.ParticleTypes;
 import net.minecraft.util.ActionResult;
 import net.minecraft.util.Hand;
@@ -28,9 +23,17 @@ import net.minecraft.world.World;
 /**
  * Subtle knife item object.
  */
-public class SubtleKnifeItem extends Item {
-	public SubtleKnifeItem() {
-		super(new Properties().group(Group.INSTANCE).maxStackSize(1).maxDamage(250));
+public class SubtleKnifeItem extends SwordItem implements ILoot {
+	private final float weight;
+	
+	public SubtleKnifeItem(final float par0) {
+		super(ItemTier.IRON, 1, -2F, new Properties().group(Group.INSTANCE));
+		this.weight = par0;
+	}
+	
+	@Override
+	public float getWight() {
+		return this.weight;
 	}
 	
 	@Override
@@ -76,26 +79,5 @@ public class SubtleKnifeItem extends Item {
 		}
 		
 		return ActionResult.resultSuccess(var0);
-	}
-	
-	@Override
-	public boolean hitEntity(ItemStack par0, LivingEntity par1, LivingEntity par2) {
-		par0.damageItem(1, par2, var -> {
-			var.sendBreakAnimation(par2.getActiveHand());
-		});
-		
-		return true;
-	}
-	
-	@Override
-	public Multimap<String, AttributeModifier> getAttributeModifiers(EquipmentSlotType par0, ItemStack par1) {
-		Multimap<String, AttributeModifier> var0 = super.getAttributeModifiers(par0, par1);
-		
-		if(par0 == EquipmentSlotType.MAINHAND) {
-			var0.put(SharedMonsterAttributes.ATTACK_DAMAGE.getName(), new AttributeModifier(ATTACK_DAMAGE_MODIFIER, "Weapon modifier", 1.0D, AttributeModifier.Operation.ADDITION));
-			var0.put(SharedMonsterAttributes.ATTACK_SPEED.getName(), new AttributeModifier(ATTACK_SPEED_MODIFIER, "Weapon modifier", -2.0D, AttributeModifier.Operation.ADDITION));
-		}
-		
-		return var0;
 	}
 }

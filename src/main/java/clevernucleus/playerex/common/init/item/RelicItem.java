@@ -24,9 +24,17 @@ import top.theillusivec4.curios.api.capability.ICurio;
 /**
  * Tiered Relic bauble.
  */
-public class RelicItem extends Item {
-	public RelicItem() {
+public class RelicItem extends Item implements ILoot {
+	private final float weight;
+	
+	public RelicItem(final float par0) {
 		super(new Properties().group(Group.INSTANCE).maxStackSize(1));
+		this.weight = par0;
+	}
+	
+	@Override
+	public float getWight() {
+		return this.weight;
 	}
 	
 	@Override

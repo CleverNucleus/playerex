@@ -1,6 +1,5 @@
 package clevernucleus.playerex.common.event;
 
-import java.util.Map;
 import java.util.Random;
 
 import javax.annotation.Nonnull;
@@ -8,6 +7,7 @@ import javax.annotation.Nonnull;
 import clevernucleus.playerex.common.PlayerEx;
 import clevernucleus.playerex.common.init.Registry;
 import clevernucleus.playerex.common.init.capability.CapabilityProvider;
+import clevernucleus.playerex.common.init.item.ILoot;
 import clevernucleus.playerex.common.init.item.RelicItem;
 import clevernucleus.playerex.common.util.RandDistribution;
 import clevernucleus.playerex.common.util.Util;
@@ -317,8 +317,10 @@ public class CommonEvents {
 			
 			RandDistribution<Item> var2 = new RandDistribution<Item>(Items.AIR);
 			
-			for(Map.Entry<Item, Float> var : Registry.ITEM_MAP.entrySet()) {
-				var2.add(var.getKey(), var.getValue());
+			for(Item var : Registry.ITEMS) {
+				if(var instanceof ILoot) {
+					var2.add(var, ((ILoot)var).getWight());
+				}
 			}
 			
 			Item var3 = var2.getDistributedRandom();
