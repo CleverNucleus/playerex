@@ -9,6 +9,7 @@
 	"item.playerex.boom_staff": "Boom Staff",
 	"item.playerex.mjolnir": "Mjölnir",
 	"item.playerex.ice_axe": "Ullr's Ice Axe",
+	"item.playerex.excalibur": "Excalibur",
 	"tooltip.subtle_knife": "%sTeleports the user to the target location.",
 	"tooltip.boom_staff": "%sSummons a 10-block radius explosion at the target location.",
 	"tooltip.mjolnir": "%sSummons lightning for every entity within a 10-block radius of the target location.",

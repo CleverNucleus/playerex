@@ -117,8 +117,8 @@ dependencies {
 
 repositories {
     maven {
-        url = "https://maven.theillusivec4.top/"
-    }
+		url = "https://maven.theillusivec4.top/"
+	}
 }
 
 // Example for how to get properties into the manifest for reading by the runtime..

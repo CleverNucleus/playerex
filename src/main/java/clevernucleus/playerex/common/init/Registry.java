@@ -19,6 +19,7 @@ import clevernucleus.playerex.common.init.element.IElement;
 import clevernucleus.playerex.common.init.element.PropertyElement;
 import clevernucleus.playerex.common.init.element.WritableElement;
 import clevernucleus.playerex.common.init.item.BoomStaffItem;
+import clevernucleus.playerex.common.init.item.ExcaliburItem;
 import clevernucleus.playerex.common.init.item.Group;
 import clevernucleus.playerex.common.init.item.HealthPotionItem;
 import clevernucleus.playerex.common.init.item.IceAxeItem;
@@ -104,10 +105,11 @@ public class Registry {
 	public static final Item SMALL_HEALTH_POTION = register("small_health_potion", new HealthPotionItem(1, 0.8F));
 	public static final Item MEDIUM_HEALTH_POTION = register("medium_health_potion", new HealthPotionItem(2, 0.7F));
 	public static final Item LARGE_HEALTH_POTION = register("large_health_potion", new HealthPotionItem(3, 0.6F));
-	public static final Item SUBTLE_KNIFE = register("subtle_knife", new SubtleKnifeItem(0.1F));
+	public static final Item SUBTLE_KNIFE = register("subtle_knife", new SubtleKnifeItem(0.15F));
 	public static final Item BOOM_STAFF = register("boom_staff", new BoomStaffItem(0.1F));
 	public static final Item MJOLNIR = register("mjolnir", new MjolnirItem(0.2F));
 	public static final Item ICE_AXE = register("ice_axe", new IceAxeItem(0.3F));
+	public static final Item EXCALIBUR = register("excalibur", new ExcaliburItem(0.05F));
 	
 	/** Static identifier for the player elements container type. */
 	public static final ContainerType<PlayerElementsContainer> ELEMENTS_CONTAINER = register("elements", IForgeContainerType.create((var0, var1, var2) -> new PlayerElementsContainer(var0, var1)));
