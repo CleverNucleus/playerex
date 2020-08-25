@@ -14,6 +14,7 @@
 	"tooltip.boom_staff": "%sSummons a 10-block radius explosion at the target location.",
 	"tooltip.mjolnir": "%sSummons lightning for every entity within a 10-block radius of the target location.",
 	"tooltip.ice_axe": "%sEncases every entity within a 10-block radius of the target location in ice.",
+	"tooltip.excalibur": "%sUnleashes an intense ray of destruction towards the target location.",
 	"tooltip.relic": "Relic",
 	"tooltip.relic_alt": "%s %s Relic",
 	"tooltip.common": "%sCommon",

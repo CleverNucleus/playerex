@@ -40,6 +40,17 @@ public class Util {
 	public static final Function<Double, Double> RANDOM = var -> ((new Random()).nextBoolean() ? (-1D) : 1D) * var.doubleValue();
 	
 	/**
+	 * Loops the input consumer from 0 to input max.
+	 * @param par0 Input consumer.
+	 * @param par1 Input max.
+	 */
+	public static void loop(final Consumer<Integer> par0, final int par1) {
+		for(int var = 0; var < par1; var++) {
+			par0.accept(var);
+		}
+	}
+	
+	/**
 	 * @param par0 List Consumer.
 	 * @return An ArrayList of type <"E">.
 	 */
