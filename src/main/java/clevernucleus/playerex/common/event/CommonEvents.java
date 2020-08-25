@@ -313,7 +313,7 @@ public class CommonEvents {
 		if(var0 instanceof IMob) {
 			Random var1 = new Random();
 			
-			if(var1.nextInt(100) > 5) return;
+			if(var1.nextInt(100) > 10) return;
 			
 			RandDistribution<Item> var2 = new RandDistribution<Item>(Items.AIR);
 			
