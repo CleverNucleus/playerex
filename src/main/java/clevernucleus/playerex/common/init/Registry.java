@@ -26,6 +26,7 @@ import clevernucleus.playerex.common.init.item.HealthPotionItem;
 import clevernucleus.playerex.common.init.item.IceAxeItem;
 import clevernucleus.playerex.common.init.item.MagicIceBlock;
 import clevernucleus.playerex.common.init.item.MjolnirItem;
+import clevernucleus.playerex.common.init.item.MulagirItem;
 import clevernucleus.playerex.common.init.item.RelicItem;
 import clevernucleus.playerex.common.init.item.SubtleKnifeItem;
 import clevernucleus.playerex.common.network.AddPlayerElement;
@@ -112,6 +113,7 @@ public class Registry {
 	public static final Item ICE_AXE = register("ice_axe", new IceAxeItem(0.3F));
 	public static final Item EXCALIBUR = register("excalibur", new ExcaliburItem(0.05F));
 	public static final Item HEAL_BRANCH = register("heal_branch", new HealBranchItem(0.3F));
+	public static final Item MULAGIR = register("mulagir", new MulagirItem(0.4F));
 	
 	/** Static identifier for the player elements container type. */
 	public static final ContainerType<PlayerElementsContainer> ELEMENTS_CONTAINER = register("elements", IForgeContainerType.create((var0, var1, var2) -> new PlayerElementsContainer(var0, var1)));
