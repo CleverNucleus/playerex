@@ -25,6 +25,9 @@ import net.minecraft.world.Explosion;
 import net.minecraft.world.World;
 import net.minecraft.world.server.ServerWorld;
 
+/**
+ * Excalibur item object.
+ */
 public class ExcaliburItem extends SwordItem implements ILoot {
 	private final Function<Double, Double> positive = var -> var < 0D ? ((-1D) * var) : var;
 	private final float weight;

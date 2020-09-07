@@ -173,5 +173,11 @@
 	"desc.evasion0": "%sThe chance to completely dodge projectiles.",
 	"desc.lifesteal0": "%sThe percentage of melee attack damage dealt that is healed.",
 	"desc.luckiness0": "%sVanilla luck attribute.",
-	"desc.movement0": "%sHow much your movement speed is increased by."
+	"desc.movement0": "%sHow much your movement speed is increased by.",
+	"config.client.enablegui": "Set to false to disable the custom gui.",
+	"config.common.constitution": "Starting Constitution (also starting hp in half hearts) - cannot and should not be set to 0 or less than 0.",
+	"config.common.strength": "Starting Strength - cannot and should not be set to less than 0.",
+	"config.common.dexterity": "Starting Dexterity - cannot and should not be set to less than 0.",
+	"config.common.intelligence": "Starting Intelligence - cannot and should not be set to less than 0.",
+	"config.common.luck": "Starting Luck - cannot and should not be set to less than 0."
 }

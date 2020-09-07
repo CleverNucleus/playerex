@@ -33,7 +33,7 @@ import net.minecraft.world.World;
  */
 public class Util {
 	
-	/** Formats floats to one decimal place. */
+	/** Formats floats to the input string decimal places. */
 	public static final Function<String, DecimalFormat> FORMAT = var -> new DecimalFormat(var);
 	
 	/** Returns randomly +/- the input value. */

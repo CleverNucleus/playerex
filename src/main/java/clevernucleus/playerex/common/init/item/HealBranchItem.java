@@ -21,8 +21,11 @@ import net.minecraft.util.text.TranslationTextComponent;
 import net.minecraft.world.World;
 import net.minecraft.world.server.ServerWorld;
 
+/**
+ * Healbranch item object.
+ */
 public class HealBranchItem extends Item implements ILoot {
-private final float weight;
+	private final float weight;
 	
 	public HealBranchItem(final float par0) {
 		super(new Properties().group(Group.INSTANCE).maxStackSize(1).maxDamage(25));

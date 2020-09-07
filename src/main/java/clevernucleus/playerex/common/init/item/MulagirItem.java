@@ -19,7 +19,7 @@ import net.minecraft.util.text.TranslationTextComponent;
 import net.minecraft.world.World;
 
 /**
- * Boom staff item object.
+ * Mulagir item object.
  */
 public class MulagirItem extends Item implements ILoot {
 	private final float weight;
