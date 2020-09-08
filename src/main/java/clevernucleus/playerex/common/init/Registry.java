@@ -245,11 +245,11 @@ public class Registry {
 	}, (par0, par1) -> new TranslationTextComponent("tooltip." + par0.toString(), Util.FORMAT.apply("##.##").format(par1 * 100F), "%"));
 	
 	public static final IElement ARMOUR = new BasicElement("Armour", 1F, 10F, (par0, par1, par2) -> {
-		par0.getAttribute(SharedMonsterAttributes.ARMOR).setBaseValue(Util.dim(par0.getAttribute(SharedMonsterAttributes.ARMOR).getBaseValue(), par2, 50D));
+		par0.getAttribute(SharedMonsterAttributes.ARMOR).setBaseValue(Util.dim(par0.getAttribute(SharedMonsterAttributes.ARMOR).getBaseValue(), par2, 100D));
 	}, (par0, par1) -> par0.getAttribute(SharedMonsterAttributes.ARMOR).getBaseValue(), (par0, par1) -> new TranslationTextComponent("tooltip." + par0.toString(), par1.intValue()));
 	
 	public static final IElement ARMOUR_TOUGHNESS = new BasicElement("ArmourToughness", 0.25F, 4F, (par0, par1, par2) -> {
-		par0.getAttribute(SharedMonsterAttributes.ARMOR_TOUGHNESS).setBaseValue(Util.dim(par0.getAttribute(SharedMonsterAttributes.ARMOR_TOUGHNESS).getBaseValue(), par2, 50D));
+		par0.getAttribute(SharedMonsterAttributes.ARMOR_TOUGHNESS).setBaseValue(Util.dim(par0.getAttribute(SharedMonsterAttributes.ARMOR_TOUGHNESS).getBaseValue(), par2, 100D));
 	}, (par0, par1) -> par0.getAttribute(SharedMonsterAttributes.ARMOR_TOUGHNESS).getBaseValue(), (par0, par1) -> new TranslationTextComponent("tooltip." + par0.toString(), Util.FORMAT.apply("#.##").format(par1)));
 	
 	public static final IElement KNOCKBACK_RESISTANCE = new BasicElement("KnockbackResistance", 0.01F, 0.2F, (par0, par1, par2) -> {
@@ -316,7 +316,7 @@ public class Registry {
 		IPlayerElements var0 = par1.one();
 		IElement var1 = par1.two();
 		
-		var0.put(var1, Util.dim(var0.get(par0, var1), par2, 1D));
+		var0.put(var1, Util.dim(var0.get(par0, var1), par2, 2D));
 	}, (par0, par1) -> new TranslationTextComponent("tooltip." + par0.toString(), Util.FORMAT.apply("##.##").format(par1 * 100F), "%"));
 	
 	public static final IElement MELEE_DAMAGE = new BasicElement("MeleeDamage", 0.25F, 4F, (par0, par1, par2) -> {

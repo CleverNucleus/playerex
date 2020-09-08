@@ -107,10 +107,12 @@ public class OverlayScreen extends AbstractGui {
 			
 			this.blit((varX / 2) + 12, varY - 38, var3 ? 133 : 16, 27, 9, 9);
 			this.blit((varX / 2) + 12, varY - 38, var3 ? 88 : 52, 27, 9, 9);
-			this.blit((varX / 2) + 44, varY - 38, 34, 9, 9, 9);
+			this.blit((varX / 2) + (var4 < 100 ? 44 : 50), varY - 38, 34, 9, 9, 9);//+44 min left, +50 max left
+			
+			int p = var0.getTotalArmorValue();
 			
 			if(var4 < 100) {
-				this.blit((varX / 2) + 75, varY - 38, 16, 18, 9, 9);
+				this.blit((varX / 2) + (p < 10 ? 66 : (p < 100 ? 70 : 76)), varY - 38, 16, 18, 9, 9);//66 min, 70 med, 
 			}
 		} else {
 			FontRenderer var2 = this.mc.get().fontRenderer;
@@ -120,15 +122,17 @@ public class OverlayScreen extends AbstractGui {
 			int var6 = (int)(100F * Math.max((float)var0.getAir(), 0F) / (float)var0.getMaxAir());
 			int var7 = (varX - var2.getStringWidth(var3)) / 2;
 			
+			int p = var0.getTotalArmorValue();
+			
 			GL11.glPushMatrix();
 			GL11.glScalef(0.8F, 0.8F, 0.8F);
 			
 			var2.drawString(var3, 1.25F * (var7 - 48), 1.25F * (varY - 36F), 0xFFFFFF);
-			var2.drawString(var4, 1.25F * ((varX / 2) + 54), 1.25F * (varY - 36F), 0xFFFFFF);
+			var2.drawString(var4, 1.25F * ((varX / 2) + (var6 < 100 ? 54 : 60)), 1.25F * (varY - 36F), 0xFFFFFF);//+54 min left, + 60 max left
 			var2.drawString(var5, 1.25F * ((varX / 2) + 22), 1.25F * (varY - 36F), 0xFFFFFF);
 			
 			if(var6 < 100) {
-				var2.drawString(var6 + "%", 1.25F * ((varX / 2) + 85), 1.25F * (varY - 36F), 0xFFFFFF);
+				var2.drawString(var6 + "%", 1.25F * ((varX / 2) + (p < 10 ? 76 : (p < 100 ? 80 : 86))), 1.25F * (varY - 36F), 0xFFFFFF);//76 min, 80 med, 
 			}
 			
 			if(var0.isRidingHorse()) {
