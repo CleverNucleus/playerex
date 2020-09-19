@@ -28,7 +28,6 @@ import net.minecraftforge.client.event.RenderGameOverlayEvent.ElementType;
 import net.minecraftforge.event.entity.player.ItemTooltipEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
-import top.theillusivec4.curios.client.gui.CuriosScreen;
 
 /**
  * Events holder on the FORGE bus for client side hooks.
@@ -82,12 +81,12 @@ public class GuiEvents {
 	public static void onGuiInit(final GuiScreenEvent.InitGuiEvent.Post par0) {
 		Screen var0 = par0.getGui();
 		
-		if(var0 instanceof InventoryScreen || var0 instanceof CuriosScreen) {
+		if(var0 instanceof InventoryScreen) {
 			ContainerScreen<?> var1 = (ContainerScreen<?>)var0;
 			
 			if(par0.getWidgetList() != null) {
 				par0.addWidget(new TexturedButton(var1, 155, 7, 14, 13, 176, 0, 0, (var2, var3) -> {
-					if(var2 instanceof InventoryScreen || var2 instanceof CuriosScreen) {
+					if(var2 instanceof InventoryScreen) {
 						Registry.NETWORK.sendToServer(new SwitchScreens(false));
 					}
 				}));
