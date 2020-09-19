@@ -3,7 +3,7 @@ loaderVersion="[31,)"
 
 [[mods]]
 modId="playerex"
-version="0.0.1"
+version="1.0.0"
 displayName="Player Ex"
 displayURL="https://github.com/CleverNucleus/Crucible"
 logoFile="logo.png"
