@@ -7,8 +7,10 @@ import javax.annotation.Nonnull;
 import clevernucleus.playerex.common.PlayerEx;
 import clevernucleus.playerex.common.init.Registry;
 import clevernucleus.playerex.common.init.capability.CapabilityProvider;
+import clevernucleus.playerex.common.init.item.HealthPotionItem;
 import clevernucleus.playerex.common.init.item.ILoot;
 import clevernucleus.playerex.common.init.item.RelicItem;
+import clevernucleus.playerex.common.util.ConfigSetting;
 import clevernucleus.playerex.common.util.RandDistribution;
 import clevernucleus.playerex.common.util.Util;
 import net.minecraft.entity.Entity;
@@ -308,12 +310,15 @@ public class CommonEvents {
 	 */
 	@SubscribeEvent
     public static void dropLoot(final net.minecraftforge.event.entity.living.LivingDropsEvent par0) {
+		if(ConfigSetting.COMMON.dropChance.get() == 0) return;
+		if(!ConfigSetting.COMMON.enableCurioDrops.get() && !ConfigSetting.COMMON.enableDivineDrops.get() && !ConfigSetting.COMMON.enablePotionDrops.get()) return;
+		
 		LivingEntity var0 = par0.getEntityLiving();
 		
 		if(var0 instanceof IMob) {
 			Random var1 = new Random();
 			
-			if(var1.nextInt(100) > 10) return;
+			if(var1.nextInt(100) > ConfigSetting.COMMON.dropChance.get()) return;
 			
 			RandDistribution<Item> var2 = new RandDistribution<Item>(Items.AIR);
 			
@@ -327,7 +332,13 @@ public class CommonEvents {
 			ItemStack var4 = new ItemStack(var3);
 			
 			if(var3 instanceof RelicItem) {
+				if(!ConfigSetting.COMMON.enableCurioDrops.get()) return;
+				
 				Util.createRandomRelic(var4);
+			} else if(var3 instanceof HealthPotionItem) {
+				if(!ConfigSetting.COMMON.enablePotionDrops.get()) return;
+			} else {
+				if(!ConfigSetting.COMMON.enableDivineDrops.get()) return;
 			}
 			
 			par0.getDrops().add(new ItemEntity(var0.world, var0.getPosX(), var0.getPosY(), var0.getPosZ(), var4));

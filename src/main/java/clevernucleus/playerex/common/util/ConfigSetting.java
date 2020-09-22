@@ -62,6 +62,12 @@ public class ConfigSetting {
 		/** Starting attribute. */
 		public final IntValue constitution, strength, dexterity, intelligence, luck;
 		
+		/** Relic Drop Chance. */
+		public final IntValue dropChance;
+		
+		/** Enable/Disable relic/potion mob drops. */
+		public final BooleanValue enableDivineDrops, enableCurioDrops, enablePotionDrops;
+		
 		public Common(ForgeConfigSpec.Builder par0) {
 			par0.comment("These only have an affect when a player is first joining the world.").push("attributes");
 			
@@ -90,6 +96,18 @@ public class ConfigSetting {
 					.translation("config.common.luck")
 					.worldRestart()
 					.defineInRange("luck", 0, 0, 20);
+			
+			par0.pop();
+			par0.push("drops");
+			
+			this.dropChance = par0
+					.comment("Percentage chance for a mob to drop a relic or health potion - set to 0 to disable all drops.")
+					.translation("config.common.dropchance")
+					.defineInRange("dropChance", 10, 0, 100);
+			
+			this.enableDivineDrops = par0.comment("Set to false to disable mobs dropping divine relics.").translation("config.common.enabledivinedrops").define("enableDivineDrops", true);
+			this.enableCurioDrops = par0.comment("Set to false to disable mobs dropping curio relics.").translation("config.common.enablecuriodrops").define("enableCurioDrops", true);
+			this.enablePotionDrops = par0.comment("Set to false to disable mobs dropping health potions.").translation("config.common.enablepotiondrops").define("enablePotionDrops", true);
 			
 			par0.pop();
 		}

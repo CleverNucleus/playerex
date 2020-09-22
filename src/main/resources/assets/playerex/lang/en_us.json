@@ -179,5 +179,9 @@
 	"config.common.strength": "Starting Strength - cannot and should not be set to less than 0.",
 	"config.common.dexterity": "Starting Dexterity - cannot and should not be set to less than 0.",
 	"config.common.intelligence": "Starting Intelligence - cannot and should not be set to less than 0.",
-	"config.common.luck": "Starting Luck - cannot and should not be set to less than 0."
+	"config.common.luck": "Starting Luck - cannot and should not be set to less than 0.",
+	"config.common.dropchance": "Percentage chance for a mob to drop a relic or health potion - set to 0 to disable all drops.",
+	"config.common.enabledivinedrops": "Set to false to disable mobs dropping divine relics.",
+	"config.common.enablecuriodrops": "Set to false to disable mobs dropping curio relics.",
+	"config.common.enablepotiondrops": "Set to false to disable mobs dropping health potions."
 }
