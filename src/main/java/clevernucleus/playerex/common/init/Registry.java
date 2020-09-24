@@ -162,7 +162,7 @@ public class Registry {
 		
 		var0.put(var1, var0.get(par0, var1) + par2);
 		var0.add(par0, Registry.HEALTH, par2);
-		var0.add(par0, Registry.ARMOUR_TOUGHNESS, par2 * 0.2D);
+		var0.add(par0, Registry.HEALTH_REGEN_AMP, par2 * 0.01D);
 		var0.add(par0, Registry.KNOCKBACK_RESISTANCE, par2 * 0.01D);
 		var0.add(par0, Registry.EXPLOSION_RESISTANCE, par2 * 0.01D);
 		var0.add(par0, Registry.DROWNING_RESISTANCE, par2 * 0.01D);
@@ -200,7 +200,6 @@ public class Registry {
 		IElement var1 = par1.two();
 		
 		var0.put(var1, var0.get(par0, var1) + par2);
-		var0.add(par0, Registry.HEALTH_REGEN_AMP, par2 * 0.02D);
 		var0.add(par0, Registry.FIRE_RESISTANCE, par2 * 0.01D);
 		var0.add(par0, Registry.LAVA_RESISTANCE, par2 * 0.01D);
 		var0.add(par0, Registry.POISON_RESISTANCE, par2 * 0.01D);

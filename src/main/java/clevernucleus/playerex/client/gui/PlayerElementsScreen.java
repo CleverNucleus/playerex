@@ -85,7 +85,7 @@ public class PlayerElementsScreen extends ContainerScreen<PlayerElementsContaine
 				}));
 				var0.add(new TextDisplayPanel(new TranslationTextComponent("attribute.constitution", (int)var1.get(player, Registry.CONSTITUTION)), 14F, 63F, var2 -> {
 					var2.add(new TranslationTextComponent("desc.constitution0", TextFormatting.GRAY));
-					var2.add(new TranslationTextComponent("desc.constitution1", TextFormatting.GRAY));
+					var2.add(new TranslationTextComponent("desc.constitution1", TextFormatting.GRAY, "%"));
 					var2.add(new TranslationTextComponent("desc.constitution2", TextFormatting.GRAY, "%"));
 					var2.add(new TranslationTextComponent("desc.constitution3", TextFormatting.GRAY, "%"));
 					var2.add(new TranslationTextComponent("desc.constitution4", TextFormatting.GRAY, "%"));
@@ -115,7 +115,6 @@ public class PlayerElementsScreen extends ContainerScreen<PlayerElementsContaine
 					var2.add(new TranslationTextComponent("desc.intelligence4", TextFormatting.GRAY, "%"));
 					var2.add(new TranslationTextComponent("desc.intelligence5", TextFormatting.GRAY, "%"));
 					var2.add(new TranslationTextComponent("desc.intelligence6", TextFormatting.GRAY, "%"));
-					var2.add(new TranslationTextComponent("desc.intelligence7", TextFormatting.GRAY, "%"));
 				}));
 				var0.add(new TextDisplayPanel(new TranslationTextComponent("attribute.luck", (int)var1.get(player, Registry.LUCK)), 14F, 135F, var2 -> {
 					var2.add(new TranslationTextComponent("desc.luck0", TextFormatting.GRAY));
