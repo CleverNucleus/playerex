@@ -31,7 +31,7 @@ public class IceAxeItem extends AxeItem implements ILoot {
 	private final float weight;
 	
 	public IceAxeItem(final float par0) {
-		super(ItemTier.IRON, 6F, -2.4F, new Properties().group(Group.INSTANCE));
+		super(ItemTier.IRON, 4, -2.8F, new Properties().group(Group.INSTANCE));
 		this.weight = par0;
 	}
 	

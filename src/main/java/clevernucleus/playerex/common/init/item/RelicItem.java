@@ -62,8 +62,6 @@ public class RelicItem extends Item implements ILoot {
 				var.sync(var0);
 			}
 		});
-		
-		
 	}
 	
 	/**

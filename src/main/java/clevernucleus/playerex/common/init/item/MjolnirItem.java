@@ -28,7 +28,7 @@ public class MjolnirItem extends PickaxeItem implements ILoot {
 	private final float weight;
 	
 	public MjolnirItem(final float par0) {
-		super(ItemTier.IRON, 4, -3F, new Properties().group(Group.INSTANCE));
+		super(ItemTier.IRON, 5, -3.2F, new Properties().group(Group.INSTANCE));
 		this.weight = par0;
 	}
 	

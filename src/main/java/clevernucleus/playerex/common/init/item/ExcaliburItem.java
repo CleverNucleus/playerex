@@ -33,7 +33,7 @@ public class ExcaliburItem extends SwordItem implements ILoot {
 	private final float weight;
 	
 	public ExcaliburItem(final float par0) {
-		super(ItemTier.DIAMOND, 4, 4, new Properties().group(Group.INSTANCE));
+		super(ItemTier.DIAMOND, 4, -2.4F, new Properties().group(Group.INSTANCE));
 		this.weight = par0;
 	}
 	
