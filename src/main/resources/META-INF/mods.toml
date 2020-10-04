@@ -1,9 +1,10 @@
 modLoader="javafml"
-loaderVersion="[31,)"
+loaderVersion="[34,)"
+license="MIT License"
 
 [[mods]]
 modId="playerex"
-version="1.0.2"
+version="1.1.0"
 displayName="Player Ex"
 displayURL="https://github.com/CleverNucleus/PlayerEx"
 logoFile="logo.png"
@@ -17,20 +18,20 @@ A clever implementaton of a novel attributes system for players.
 [[dependencies.playerex]]
     modId="forge"
     mandatory=true
-    versionRange="[31,)"
+    versionRange="[34,)"
     ordering="NONE"
     side="BOTH"
 
 [[dependencies.playerex]]
     modId="minecraft"
     mandatory=true
-    versionRange="[1.15.2]"
+    versionRange="[1.16.3]"
     ordering="NONE"
     side="BOTH"
 
 [[dependencies.playerex]]
     modId="curios"
     mandatory=true
-    versionRange="[FORGE-1.15.2-2.0.2.6]"
-    ordering="NONE"
+    versionRange="[1.16.3-4.0,]"
+    ordering="AFTER"
     side="BOTH"
