@@ -62,8 +62,7 @@ public class PlayerElements implements IPlayerElements {
 		createTag(par0, par1);
 	}
 	
-	//@Override
-	protected double get(IElement par0) {//protected
+	protected double get(IElement par0) {
 		if(isEmpty()) return par0.getDefaultValue();
 		
 		for(INBT var : this.tag.getList("Elements", 10)) {
@@ -76,13 +75,11 @@ public class PlayerElements implements IPlayerElements {
 		return par0.getDefaultValue();
 	}
 	
-	//@Override
-	protected void set(IElement par0, double par1) {//protected
+	protected void set(IElement par0, double par1) {
 		putTag(par0, par1);
 	}
 	
-	//@Override
-	protected void add(IElement par0, double par1) {//protected
+	protected void add(IElement par0, double par1) {
 		putTag(par0, get(par0) + par1);
 	}
 	
