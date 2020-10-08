@@ -260,14 +260,14 @@ public class ElementRegistry {
 		
 		@Override
 		public void set(PlayerEntity par0, IPlayerElements par1, double par2) {
-			par0.getAttribute(Attributes.field_233818_a_).setBaseValue(Math.max(1.0D, par2));
+			par0.getAttribute(Attributes.MAX_HEALTH).setBaseValue(Math.max(1.0D, par2));
 			
 			EXTRA_SET_METHODS.get(getRegistryName()).stream().forEach(var -> var.accept(par0, par1, par2));
 		}
 		
 		@Override
 		public void add(PlayerEntity par0, IPlayerElements par1, double par2) {
-			par0.getAttribute(Attributes.field_233818_a_).setBaseValue(Math.max(0D, par0.getAttribute(Attributes.field_233818_a_).getBaseValue() + par2));
+			par0.getAttribute(Attributes.MAX_HEALTH).setBaseValue(Math.max(0D, par0.getAttribute(Attributes.MAX_HEALTH).getBaseValue() + par2));
 			
 			if(par2 < 0D) {
 				par0.setHealth((par0.getHealth() + par2) < par0.getMaxHealth() ? par0.getMaxHealth() : ((par0.getHealth() + par2) < 1F) ? 1F : par0.getHealth());
@@ -312,19 +312,19 @@ public class ElementRegistry {
 		
 		@Override
 		public double get(PlayerEntity par0, IPlayerElements par1) {
-			return par0.getAttribute(Attributes.field_233826_i_).getBaseValue();
+			return par0.getAttribute(Attributes.ARMOR).getBaseValue();
 		}
 		
 		@Override
 		public void set(PlayerEntity par0, IPlayerElements par1, double par2) {
-			par0.getAttribute(Attributes.field_233826_i_).setBaseValue(Math.max(0D, par2));
+			par0.getAttribute(Attributes.ARMOR).setBaseValue(Math.max(0D, par2));
 			
 			EXTRA_SET_METHODS.get(getRegistryName()).stream().forEach(var -> var.accept(par0, par1, par2));
 		}
 		
 		@Override
 		public void add(PlayerEntity par0, IPlayerElements par1, double par2) {
-			par0.getAttribute(Attributes.field_233826_i_).setBaseValue(Math.max(0D, Util.dim(par0.getAttribute(Attributes.field_233826_i_).getBaseValue(), par2, 100D)));
+			par0.getAttribute(Attributes.ARMOR).setBaseValue(Math.max(0D, Util.dim(par0.getAttribute(Attributes.ARMOR).getBaseValue(), par2, 100D)));
 			
 			EXTRA_ADD_METHODS.get(getRegistryName()).stream().forEach(var -> var.accept(par0, par1, par2));
 		}
@@ -333,19 +333,19 @@ public class ElementRegistry {
 		
 		@Override
 		public double get(PlayerEntity par0, IPlayerElements par1) {
-			return par0.getAttribute(Attributes.field_233827_j_).getBaseValue();
+			return par0.getAttribute(Attributes.ARMOR_TOUGHNESS).getBaseValue();
 		}
 		
 		@Override
 		public void set(PlayerEntity par0, IPlayerElements par1, double par2) {
-			par0.getAttribute(Attributes.field_233827_j_).setBaseValue(Math.max(0D, par2));
+			par0.getAttribute(Attributes.ARMOR_TOUGHNESS).setBaseValue(Math.max(0D, par2));
 			
 			EXTRA_SET_METHODS.get(getRegistryName()).stream().forEach(var -> var.accept(par0, par1, par2));
 		}
 		
 		@Override
 		public void add(PlayerEntity par0, IPlayerElements par1, double par2) {
-			par0.getAttribute(Attributes.field_233827_j_).setBaseValue(Math.max(0D, Util.dim(par0.getAttribute(Attributes.field_233827_j_).getBaseValue(), par2, 100D)));
+			par0.getAttribute(Attributes.ARMOR_TOUGHNESS).setBaseValue(Math.max(0D, Util.dim(par0.getAttribute(Attributes.ARMOR_TOUGHNESS).getBaseValue(), par2, 100D)));
 			
 			EXTRA_ADD_METHODS.get(getRegistryName()).stream().forEach(var -> var.accept(par0, par1, par2));
 		}
@@ -354,19 +354,19 @@ public class ElementRegistry {
 		
 		@Override
 		public double get(PlayerEntity par0, IPlayerElements par1) {
-			return par0.getAttribute(Attributes.field_233820_c_).getBaseValue();
+			return par0.getAttribute(Attributes.KNOCKBACK_RESISTANCE).getBaseValue();
 		}
 		
 		@Override
 		public void set(PlayerEntity par0, IPlayerElements par1, double par2) {
-			par0.getAttribute(Attributes.field_233820_c_).setBaseValue(Math.max(0D, par2));
+			par0.getAttribute(Attributes.KNOCKBACK_RESISTANCE).setBaseValue(Math.max(0D, par2));
 			
 			EXTRA_SET_METHODS.get(getRegistryName()).stream().forEach(var -> var.accept(par0, par1, par2));
 		}
 		
 		@Override
 		public void add(PlayerEntity par0, IPlayerElements par1, double par2) {
-			par0.getAttribute(Attributes.field_233820_c_).setBaseValue(Math.max(0D, Util.dim(par0.getAttribute(Attributes.field_233820_c_).getBaseValue(), par2, 1D)));
+			par0.getAttribute(Attributes.KNOCKBACK_RESISTANCE).setBaseValue(Math.max(0D, Util.dim(par0.getAttribute(Attributes.KNOCKBACK_RESISTANCE).getBaseValue(), par2, 1D)));
 			
 			EXTRA_ADD_METHODS.get(getRegistryName()).stream().forEach(var -> var.accept(par0, par1, par2));
 		}
@@ -519,19 +519,19 @@ public class ElementRegistry {
 		
 		@Override
 		public double get(PlayerEntity par0, IPlayerElements par1) {
-			return par0.getAttribute(Attributes.field_233823_f_).getBaseValue();
+			return par0.getAttribute(Attributes.ATTACK_DAMAGE).getBaseValue();
 		}
 		
 		@Override
 		public void set(PlayerEntity par0, IPlayerElements par1, double par2) {
-			par0.getAttribute(Attributes.field_233823_f_).setBaseValue(Math.max(0D, par2));
+			par0.getAttribute(Attributes.ATTACK_DAMAGE).setBaseValue(Math.max(0D, par2));
 			
 			EXTRA_SET_METHODS.get(getRegistryName()).stream().forEach(var -> var.accept(par0, par1, par2));
 		}
 		
 		@Override
 		public void add(PlayerEntity par0, IPlayerElements par1, double par2) {
-			par0.getAttribute(Attributes.field_233823_f_).setBaseValue(Math.max(0D, par0.getAttribute(Attributes.field_233823_f_).getBaseValue() + par2));
+			par0.getAttribute(Attributes.ATTACK_DAMAGE).setBaseValue(Math.max(0D, par0.getAttribute(Attributes.ATTACK_DAMAGE).getBaseValue() + par2));
 			
 			EXTRA_ADD_METHODS.get(getRegistryName()).stream().forEach(var -> var.accept(par0, par1, par2));
 		}
@@ -572,19 +572,19 @@ public class ElementRegistry {
 		
 		@Override
 		public double get(PlayerEntity par0, IPlayerElements par1) {
-			return par0.getAttribute(Attributes.field_233825_h_).getBaseValue();
+			return par0.getAttribute(Attributes.ATTACK_SPEED).getBaseValue();
 		}
 		
 		@Override
 		public void set(PlayerEntity par0, IPlayerElements par1, double par2) {
-			par0.getAttribute(Attributes.field_233825_h_).setBaseValue(Math.max(0D, par2));
+			par0.getAttribute(Attributes.ATTACK_SPEED).setBaseValue(Math.max(0D, par2));
 			
 			EXTRA_SET_METHODS.get(getRegistryName()).stream().forEach(var -> var.accept(par0, par1, par2));
 		}
 		
 		@Override
 		public void add(PlayerEntity par0, IPlayerElements par1, double par2) {
-			par0.getAttribute(Attributes.field_233825_h_).setBaseValue(Math.max(0D, par0.getAttribute(Attributes.field_233825_h_).getBaseValue() + par2));
+			par0.getAttribute(Attributes.ATTACK_SPEED).setBaseValue(Math.max(0D, par0.getAttribute(Attributes.ATTACK_SPEED).getBaseValue() + par2));
 			
 			EXTRA_ADD_METHODS.get(getRegistryName()).stream().forEach(var -> var.accept(par0, par1, par2));
 		}
@@ -673,19 +673,19 @@ public class ElementRegistry {
 		
 		@Override
 		public double get(PlayerEntity par0, IPlayerElements par1) {
-			return par0.getAttribute(Attributes.field_233828_k_).getBaseValue();
+			return par0.getAttribute(Attributes.LUCK).getBaseValue();
 		}
 		
 		@Override
 		public void set(PlayerEntity par0, IPlayerElements par1, double par2) {
-			par0.getAttribute(Attributes.field_233828_k_).setBaseValue(Math.max(0D, par2));
+			par0.getAttribute(Attributes.LUCK).setBaseValue(Math.max(0D, par2));
 			
 			EXTRA_SET_METHODS.get(getRegistryName()).stream().forEach(var -> var.accept(par0, par1, par2));
 		}
 		
 		@Override
 		public void add(PlayerEntity par0, IPlayerElements par1, double par2) {
-			par0.getAttribute(Attributes.field_233828_k_).setBaseValue(Math.max(0D, par0.getAttribute(Attributes.field_233828_k_).getBaseValue() + par2));
+			par0.getAttribute(Attributes.LUCK).setBaseValue(Math.max(0D, par0.getAttribute(Attributes.LUCK).getBaseValue() + par2));
 			
 			EXTRA_ADD_METHODS.get(getRegistryName()).stream().forEach(var -> var.accept(par0, par1, par2));
 		}

@@ -64,8 +64,8 @@ public class CommonEvents {
 			CompoundNBT var0 = new CompoundNBT();
 			
 			var0.put("Elements", var.write());
-			var0.putDouble("generic.knockbackResistance", par0.getAttribute(Attributes.field_233820_c_).getBaseValue());
-			var0.putDouble("generic.attackDamage", par0.getAttribute(Attributes.field_233823_f_).getBaseValue());
+			var0.putDouble("generic.knockbackResistance", par0.getAttribute(Attributes.KNOCKBACK_RESISTANCE).getBaseValue());
+			var0.putDouble("generic.attackDamage", par0.getAttribute(Attributes.ATTACK_DAMAGE).getBaseValue());
 			
 			Registry.NETWORK.sendTo(new SyncPlayerElements(var0), ((ServerPlayerEntity)par0).connection.getNetworkManager(), NetworkDirection.PLAY_TO_CLIENT);
 		});
@@ -96,13 +96,13 @@ public class CommonEvents {
 		try {
 			ElementRegistry.GET_PLAYER_ELEMENTS.apply(var0).ifPresent(par1 -> {
 				ElementRegistry.GET_PLAYER_ELEMENTS.apply(var1).ifPresent(par2 -> {
-					var0.getAttribute(Attributes.field_233818_a_).setBaseValue(var1.getAttribute(Attributes.field_233818_a_).getBaseValue());
-					var0.getAttribute(Attributes.field_233820_c_).setBaseValue(var1.getAttribute(Attributes.field_233820_c_).getBaseValue());
-					var0.getAttribute(Attributes.field_233823_f_).setBaseValue(var1.getAttribute(Attributes.field_233823_f_).getBaseValue());
-					var0.getAttribute(Attributes.field_233825_h_).setBaseValue(var1.getAttribute(Attributes.field_233825_h_).getBaseValue());
-					var0.getAttribute(Attributes.field_233826_i_).setBaseValue(var1.getAttribute(Attributes.field_233826_i_).getBaseValue());
-					var0.getAttribute(Attributes.field_233827_j_).setBaseValue(var1.getAttribute(Attributes.field_233827_j_).getBaseValue());
-					var0.getAttribute(Attributes.field_233828_k_).setBaseValue(var1.getAttribute(Attributes.field_233828_k_).getBaseValue());
+					var0.getAttribute(Attributes.MAX_HEALTH).setBaseValue(var1.getAttribute(Attributes.MAX_HEALTH).getBaseValue());
+					var0.getAttribute(Attributes.KNOCKBACK_RESISTANCE).setBaseValue(var1.getAttribute(Attributes.KNOCKBACK_RESISTANCE).getBaseValue());
+					var0.getAttribute(Attributes.ATTACK_DAMAGE).setBaseValue(var1.getAttribute(Attributes.ATTACK_DAMAGE).getBaseValue());
+					var0.getAttribute(Attributes.ATTACK_SPEED).setBaseValue(var1.getAttribute(Attributes.ATTACK_SPEED).getBaseValue());
+					var0.getAttribute(Attributes.ARMOR).setBaseValue(var1.getAttribute(Attributes.ARMOR).getBaseValue());
+					var0.getAttribute(Attributes.ARMOR_TOUGHNESS).setBaseValue(var1.getAttribute(Attributes.ARMOR_TOUGHNESS).getBaseValue());
+					var0.getAttribute(Attributes.LUCK).setBaseValue(var1.getAttribute(Attributes.LUCK).getBaseValue());
 					
 					par1.read(par2.write());
 				});
@@ -180,7 +180,7 @@ public class CommonEvents {
 		if(var0.world.isRemote) return;
 		
 		ElementRegistry.GET_PLAYER_ELEMENTS.apply(var0).ifPresent(var -> {
-			var0.getAttribute(Attributes.field_233821_d_).setBaseValue(0.1D + (0.1D * ElementRegistry.MOVEMENT_SPEED_AMP.get(var0, var)));
+			var0.getAttribute(Attributes.MOVEMENT_SPEED).setBaseValue(0.1D + (0.1D * ElementRegistry.MOVEMENT_SPEED_AMP.get(var0, var)));
 			
 			var0.heal((float)ElementRegistry.HEALTH_REGEN.get(var0, var));
 		});

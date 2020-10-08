@@ -58,8 +58,8 @@ public class SyncPlayerElements {
 				
 				if(par0.tag == null || var0 == null) return;
 				
-				var0.getAttribute(Attributes.field_233820_c_).setBaseValue(par0.tag.getDouble("generic.knockbackResistance"));
-				var0.getAttribute(Attributes.field_233823_f_).setBaseValue(par0.tag.getDouble("generic.attackDamage"));
+				var0.getAttribute(Attributes.KNOCKBACK_RESISTANCE).setBaseValue(par0.tag.getDouble("generic.knockbackResistance"));
+				var0.getAttribute(Attributes.ATTACK_DAMAGE).setBaseValue(par0.tag.getDouble("generic.attackDamage"));
 				
 				ElementRegistry.GET_PLAYER_ELEMENTS.apply(var0).ifPresent(var -> var.read(par0.tag.getCompound("Elements")));
 			});
