@@ -708,7 +708,7 @@ public class ElementRegistry {
 	}
 	
 	/**
-	 * Registers a new setter method to be run when the input element's setter is called.
+	 * Registers a new setter method to be run when the input element's setter is called. This should not be run on the client!
 	 * @param par0 Input Element.
 	 * @param par1 New setter method.
 	 */
@@ -720,15 +720,15 @@ public class ElementRegistry {
 	}
 	
 	/**
-	 * Registers a new adder method to be run when the input element's adder is called.
+	 * Registers a new adder method to be run when the input element's adder is called. This should not be run on the client!
 	 * @param par0 Input Element.
 	 * @param par1 New adder method.
 	 */
 	public static void registerNewAddMethod(final IElement par0, final TriConsumer<PlayerEntity, IPlayerElements, Double> par1) {
 		if(!ELEMENTS.containsKey(par0.getRegistryName())) return;
-		if(!EXTRA_SET_METHODS.containsKey(par0.getRegistryName())) return;
+		if(!EXTRA_ADD_METHODS.containsKey(par0.getRegistryName())) return;
 		
-		EXTRA_SET_METHODS.get(par0.getRegistryName()).add(par1);
+		EXTRA_ADD_METHODS.get(par0.getRegistryName()).add(par1);
 	}
 	
 	/**
