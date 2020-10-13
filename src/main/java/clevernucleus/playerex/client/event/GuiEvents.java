@@ -34,7 +34,7 @@ public class GuiEvents {
 					if(var2 instanceof InventoryScreen) {
 						Registry.NETWORK.sendToServer(new SwitchScreens(false));
 					}
-				}));
+				}, null));
 			}
 		}
 	}

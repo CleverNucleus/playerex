@@ -1,9 +1,12 @@
 package clevernucleus.playerex.client.event;
 
+import clevernucleus.playerex.api.client.ClientReg;
+import clevernucleus.playerex.client.gui.DefaultPage;
 import clevernucleus.playerex.client.gui.PlayerElementsScreen;
 import clevernucleus.playerex.common.PlayerEx;
 import clevernucleus.playerex.common.init.Registry;
 import net.minecraft.client.gui.ScreenManager;
+import net.minecraft.util.text.TranslationTextComponent;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
@@ -22,5 +25,6 @@ public class RegistryEvents {
 	@SubscribeEvent
 	public static void onClientLoad(final FMLClientSetupEvent par0) {
 		ScreenManager.registerFactory(Registry.ELEMENTS_CONTAINER, PlayerElementsScreen::new);
+		ClientReg.init(new DefaultPage(new TranslationTextComponent(PlayerEx.MODID + ".player_elements")));
 	}
 }

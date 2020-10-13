@@ -20,6 +20,6 @@ public class PlayerElementsContainerProvider implements INamedContainerProvider 
 	
 	@Override
 	public ITextComponent getDisplayName() {
-		return new TranslationTextComponent(PlayerEx.MODID + ".container.elements");
+		return new TranslationTextComponent(PlayerEx.MODID + ".player_elements");
 	}
 }
