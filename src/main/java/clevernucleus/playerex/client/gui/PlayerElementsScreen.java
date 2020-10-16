@@ -26,7 +26,7 @@ public class PlayerElementsScreen extends ContainerScreen<PlayerElementsContaine
 	/** Tab resources. */
 	public static final ResourceLocation TAB = new ResourceLocation(PlayerEx.MODID, "textures/gui/tab.png");
 	
-	public static final int[][] TAB_LOCATIONS = new int[][] {{0, -28}, {32, -28}, {61, -28}, {90, -28}, {119, -28}, {148, -28}, {3, 162}, {32, 162}, {61, 162}, {90, 162}, {119, 162}, {148, 162}};
+	private static final int[][] TAB_LOCATIONS = new int[][] {{0, -28}, {32, -28}, {61, -28}, {90, -28}, {119, -28}, {148, -28}, {3, 162}, {32, 162}, {61, 162}, {90, 162}, {119, 162}, {148, 162}};
 	
 	private Page currentPage;
 	
@@ -43,6 +43,16 @@ public class PlayerElementsScreen extends ContainerScreen<PlayerElementsContaine
 		super.render(par0, par1, par2, par3);
 		
 		this.currentPage.render(par0, par1, par2, par3);
+		
+		this.buttons.forEach(var -> {
+			if(var instanceof PageButton) {
+				PageButton var2 = (PageButton)var;
+				
+				if(var2.isHovered()) {
+					this.renderTooltip(par0, ClientReg.getPage(var2.getAdditionalData()).getTitle(), par1, par2);
+				}
+			}
+		});
 	}
 	
 	@Override

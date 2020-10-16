@@ -12,7 +12,7 @@ public class Page extends Screen {
 	}
 	
 	public ItemStack displayStack() {
-		return ItemStack.EMPTY;
+		return new ItemStack(net.minecraft.item.Items.ANVIL);//ItemStack.EMPTY;
 	}
 	
 	public void drawGuiContainerForegroundLayer(MatrixStack par0, int par1, int par2) {}

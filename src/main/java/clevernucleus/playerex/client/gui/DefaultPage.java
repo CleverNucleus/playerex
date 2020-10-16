@@ -21,5 +21,7 @@ public class DefaultPage extends Page {
 	@Override
 	public void drawGuiContainerForegroundLayer(MatrixStack par0, int par1, int par2) {
 		this.font.drawString(par0, this.title.getString(), 9F, 9F, 4210752);
+		
+		
 	}
 }

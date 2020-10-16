@@ -17,7 +17,7 @@ import net.minecraft.util.text.StringTextComponent;
  */
 public class PageButton extends AbstractButton {
 	private ContainerScreen<?> parentScreen;
-	private BiConsumer<ContainerScreen<?>, Integer> pressFunction;
+	private BiConsumer<ContainerScreen<?>, Integer> pressFunction; 
 	private int textureLat, textureLon, additionalData;
 	
 	/**
@@ -42,6 +42,14 @@ public class PageButton extends AbstractButton {
 		this.active = (par7 != 0);
 	}
 	
+	public boolean isHovered(int par0, int par1) {
+		return (par0 >= this.x && par1 >= this.y && par0 < this.x + this.width && par1 < this.y + this.height);
+	}
+	
+	public int getAdditionalData() {
+		return this.additionalData;
+	}
+	
 	@Override
 	public void onPress() {
 		this.pressFunction.accept(this.parentScreen, this.additionalData);
@@ -63,5 +71,6 @@ public class PageButton extends AbstractButton {
 		ItemRenderer var1 = var0.getItemRenderer();
 		
 		var1.renderItemAndEffectIntoGUI(ClientReg.getPage(this.additionalData).displayStack(), this.x + 6, this.y + (this.additionalData < 6 ? 8 : 6));
+		
 	}
 }

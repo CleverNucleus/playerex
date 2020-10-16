@@ -26,5 +26,6 @@ public class RegistryEvents {
 	public static void onClientLoad(final FMLClientSetupEvent par0) {
 		ScreenManager.registerFactory(Registry.ELEMENTS_CONTAINER, PlayerElementsScreen::new);
 		ClientReg.init(new DefaultPage(new TranslationTextComponent(PlayerEx.MODID + ".player_elements")));
+		ClientReg.registerPage(new clevernucleus.playerex.api.client.gui.Page(new TranslationTextComponent(PlayerEx.MODID + ".player_smithing")));
 	}
 }
