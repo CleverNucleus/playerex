@@ -1,4 +1,21 @@
 {
 	"playerex.player_elements": "Player Attributes",
-	"playerex.player_smithing": "Smithing"
+	"playerex.player_smithing": "Smithing",
+	"playerex.attribute.level": "Level: +%s (%s%s)",
+	"playerex.attribute.level.alt": "This is your player level; it represents how many Skill Points you have earned and how close you are to earning another. This attribute is increased everytime you gain xp, however the higher your level the more xp it takes to get to the next level.",
+	"playerex.attribute.skillpoints": "Skill Points: +%s",
+	"playerex.attribute.skillpoints.alt": "This shows how many available Skill Points you have; these can be spent on any of the five base attributes below.",
+	"playerex.attribute.constitution": "Constitution: +%s",
+	"playerex.attribute.constitution.alt0": "+1 to Health.",
+	"playerex.attribute.constitution.alt1": "+1%% to Health Regen. Amp. (diminishing).",
+	"playerex.attribute.constitution.alt2": "+1%% to Knockback Resist. (diminishing).",
+	"playerex.attribute.constitution.alt3": "+1%% to Explosion Damage Resist. (diminishing).",
+	"playerex.attribute.constitution.alt4": "+1%% to Drowning Damage Resist. (diminishing).",
+	"playerex.attribute.strength": "Strength: +%s",
+	"playerex.attribute.strength.alt0": "+0.01/s to Health Regen.",
+	"playerex.attribute.strength.alt1": "+1%% to Physical Damage Resist. (diminishing).",
+	"playerex.attribute.strength.alt2": "+1%% to Falling Damage Resist. (diminishing).",
+	"playerex.attribute.strength.alt3": "+1%% to Explosion Damage Resist. (diminishing).",
+	"playerex.attribute.strength.alt4": "+1%% to Lava Damage Resist. (diminishing).",
+	"playerex.attribute.strength.alt5": "+0.25 to Melee Attack Damage."
 }

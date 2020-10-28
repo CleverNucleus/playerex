@@ -71,6 +71,5 @@ public class PageButton extends AbstractButton {
 		ItemRenderer var1 = var0.getItemRenderer();
 		
 		var1.renderItemAndEffectIntoGUI(ClientReg.getPage(this.additionalData).displayStack(), this.x + 6, this.y + (this.additionalData < 6 ? 8 : 6));
-		
 	}
 }
