@@ -30,7 +30,9 @@ public class TexturedButton extends AbstractButton {
 	 * @param par4 Button's height.
 	 * @param par5 Button's texture start position (latitude).
 	 * @param par6 Button's texture start position (longitude).
-	 * @param par7 Called when the button is pressed; additional data.
+	 * @param par7 Additional data passed to the press function.
+	 * @param par8 Called when the button is pressed. 
+	 * @param par9 Called when rendering the button.
 	 */
 	public TexturedButton(final ContainerScreen<?> par0, final int par1, final int par2, int par3, int par4, final int par5, final int par6, final int par7, final BiConsumer<ContainerScreen<?>, Integer> par8, @Nullable BiConsumer<Minecraft, Integer[]> par9) {
 		super(par0.getGuiLeft() + par1, par0.getGuiTop() + par2, par3, par4, new StringTextComponent(""));
@@ -41,6 +43,10 @@ public class TexturedButton extends AbstractButton {
 		this.additionalData = par7;
 		this.pressFunction = par8;
 		this.additionalRendering = par9;
+	}
+	
+	public int getAdditionalData() {
+		return this.additionalData;
 	}
 	
 	@Override

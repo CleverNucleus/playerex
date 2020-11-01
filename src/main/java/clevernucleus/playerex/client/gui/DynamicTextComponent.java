@@ -15,7 +15,7 @@ import net.minecraft.util.text.ITextComponent;
 import net.minecraftforge.fml.client.gui.GuiUtils;
 
 public class DynamicTextComponent {
-	private final float scale = 0.75F;
+	private final float scale = 0.7F;
 	private int posX, posY;
 	private BiFunction<PlayerEntity, IPlayerElements, String> titleText;
 	private BiFunction<PlayerEntity, IPlayerElements, List<ITextComponent>> hoverText;

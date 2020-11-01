@@ -26,6 +26,7 @@ public class RegistryEvents {
 	public static void onClientLoad(final FMLClientSetupEvent par0) {
 		ScreenManager.registerFactory(Registry.ELEMENTS_CONTAINER, PlayerElementsScreen::new);
 		ClientReg.init(new DefaultPage(new TranslationTextComponent(PlayerEx.MODID + ".player_elements")));
-		ClientReg.registerPage(new clevernucleus.playerex.api.client.gui.Page(new TranslationTextComponent(PlayerEx.MODID + ".player_smithing")));
+		//ClientReg.registerPage(new clevernucleus.playerex.api.client.gui.Page(new TranslationTextComponent(PlayerEx.MODID + ".player_smithing")));
+		//ClientReg.addTooltip(new net.minecraft.util.ResourceLocation(PlayerEx.MODID, "strength"), (var0, var1) -> net.minecraft.util.text.TextFormatting.GOLD + "+" + (int)(var0.getArmorCoverPercentage() * 100F) + "%");
 	}
 }

@@ -11,6 +11,7 @@ import clevernucleus.playerex.common.network.SwitchScreens;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.screen.inventory.ContainerScreen;
 import net.minecraft.client.gui.screen.inventory.InventoryScreen;
+import net.minecraft.client.gui.widget.Widget;
 import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.text.ITextComponent;
@@ -68,15 +69,16 @@ public class PlayerElementsScreen extends ContainerScreen<PlayerElementsContaine
 		this.minecraft.getTextureManager().bindTexture(GUI);
 		this.blit(par0, var0, var1, 0, 0, this.xSize, this.ySize);
 		this.currentPage.drawGuiContainerBackgroundLayer(par0, par1, par2, par3);
-		this.buttons.forEach(var -> var.render(par0, par2, par3, par1));
+		this.buttons.forEach(var -> {
+			var.render(par0, par2, par3, par1);
+		});
 	}
 	
 	@Override
 	protected void init() {
-		this.buttons.clear();
 		super.init();
 		
-		this.addButton(new TexturedButton(this, 155, 7, 14, 13, 190, 0, 0, (var0, var1) -> {
+		this.addButton(new TexturedButton(this, 155, 7, 14, 13, 190, 0, -1, (var0, var1) -> {
 			Registry.NETWORK.sendToServer(new SwitchScreens(true));
 			InventoryScreen var2 = new InventoryScreen(Minecraft.getInstance().player);
 			Minecraft.getInstance().displayGuiScreen(var2);
@@ -91,10 +93,26 @@ public class PlayerElementsScreen extends ContainerScreen<PlayerElementsContaine
 							var2.active = true;
 						}
 					});
+					
+					for(Page var2: ClientReg.getPages()) {
+						if(var2 != this.currentPage) {
+							for(Widget var3 : var2.getButtonList()) {
+								var3.visible = false;
+							}
+						}
+					}
+					
+					for(Widget var3 : this.currentPage.getButtonList()) {
+						var3.visible = true;
+					}
 				}));
 			}
 		}
 		
-		this.currentPage.init(this.minecraft, this.width, this.height);
+		this.currentPage.init(this.minecraft, this, this.width, this.height);
+		
+		for(Widget var : this.currentPage.getButtonList()) {
+			this.addButton(var);
+		}
 	}
 }

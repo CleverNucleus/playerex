@@ -54,7 +54,7 @@ public class CommonEvents {
 	 * Sync event pass-through with safety functions.
 	 * @param par0
 	 */
-	private static void syncTag(final @Nonnull PlayerEntity par0) {
+	public static void syncTag(final @Nonnull PlayerEntity par0) {
 		if(par0 == null) return;
 		if(par0.world.isRemote) return;
 		
