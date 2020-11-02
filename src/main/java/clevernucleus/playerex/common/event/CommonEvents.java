@@ -11,6 +11,7 @@ import clevernucleus.playerex.api.element.IPlayerElements;
 import clevernucleus.playerex.common.PlayerEx;
 import clevernucleus.playerex.common.init.Registry;
 import clevernucleus.playerex.common.network.SyncPlayerElements;
+import clevernucleus.playerex.common.util.ConfigSetting;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.ai.attributes.Attributes;
 import net.minecraft.entity.player.PlayerEntity;
@@ -40,12 +41,12 @@ public class CommonEvents {
 		
 		if(var0.getBoolean("Initialised")) return;
 		
-		ElementRegistry.CONSTITUTION.add(par0, par1, 6D);//TODO: Config
-		ElementRegistry.STRENGTH.add(par0, par1, 0D);//TODO: Config
-		ElementRegistry.DEXTERITY.add(par0, par1, 0D);//TODO: Config
-		ElementRegistry.INTELLIGENCE.add(par0, par1, 0D);//TODO: Config
-		ElementRegistry.LUCKINESS.add(par0, par1, 0D);//TODO: Config
-		ElementRegistry.HEALTH.add(par0, par1, -20D);//TODO: Config
+		ElementRegistry.CONSTITUTION.add(par0, par1, ConfigSetting.COMMON.constitution.get());
+		ElementRegistry.STRENGTH.add(par0, par1, ConfigSetting.COMMON.strength.get());
+		ElementRegistry.DEXTERITY.add(par0, par1, ConfigSetting.COMMON.dexterity.get());
+		ElementRegistry.INTELLIGENCE.add(par0, par1, ConfigSetting.COMMON.intelligence.get());
+		ElementRegistry.LUCKINESS.add(par0, par1, ConfigSetting.COMMON.luck.get());
+		ElementRegistry.HEALTH.add(par0, par1, -20D);
 		
 		var0.putBoolean("Initialised", true);
 	}

@@ -229,7 +229,7 @@ public class DefaultPage extends Page {
 	}, (par0, par1) -> {
 		List<ITextComponent> var0 = new ArrayList<ITextComponent>();
 		
-		var0.add(new StringTextComponent(TextFormatting.GRAY + I18n.format("playerex.attribute.melee.alt0") + text.format(100D + (100D * ElementRegistry.MELEE_CRIT_CHANCE.get(par0, par1))) + "%"));
+		var0.add(new StringTextComponent(TextFormatting.GRAY + I18n.format("playerex.attribute.melee.alt0") + text.format(100D + (100D * ElementRegistry.MELEE_CRIT_DAMAGE.get(par0, par1))) + "%"));
 		var0.add(new StringTextComponent(TextFormatting.GRAY + I18n.format("playerex.attribute.melee.alt1") + text.format(100D * ElementRegistry.MELEE_CRIT_CHANCE.get(par0, par1)) + "%"));
 		var0.add(new StringTextComponent(TextFormatting.GRAY + I18n.format("playerex.attribute.melee.alt2") + text.format(ElementRegistry.ATTACK_SPEED.get(par0, par1))));
 		
@@ -246,7 +246,7 @@ public class DefaultPage extends Page {
 	}, (par0, par1) -> {
 		List<ITextComponent> var0 = new ArrayList<ITextComponent>();
 		
-		var0.add(new StringTextComponent(TextFormatting.GRAY + I18n.format("playerex.attribute.ranged.alt0") + text.format(100D + (100D * ElementRegistry.RANGED_CRIT_CHANCE.get(par0, par1))) + "%"));
+		var0.add(new StringTextComponent(TextFormatting.GRAY + I18n.format("playerex.attribute.ranged.alt0") + text.format(100D + (100D * ElementRegistry.RANGED_CRIT_DAMAGE.get(par0, par1))) + "%"));
 		var0.add(new StringTextComponent(TextFormatting.GRAY + I18n.format("playerex.attribute.ranged.alt1") + text.format(100D * ElementRegistry.RANGED_CRIT_CHANCE.get(par0, par1)) + "%"));
 		
 		for(BiFunction<PlayerEntity, IPlayerElements, String> var : ClientReg.getTooltips(ElementRegistry.RANGED_DAMAGE.getRegistryName())) {
