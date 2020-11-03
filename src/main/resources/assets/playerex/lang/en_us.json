@@ -1,4 +1,13 @@
 {
+	"itemGroup.playerex_tab": "PlayerEx Relics",
+	"playerex.relic.name": "Random Relic",
+	"playerex.rarity.common": "%sCommon",
+	"playerex.rarity.uncommon": "%sUncommon",
+	"playerex.rarity.rare": "%sRare",
+	"playerex.rarity.epic": "%sEpic",
+	"playerex.rarity.mythical": "%sMythical",
+	"playerex.rarity.legendary": "%sLegendary",
+	"playerex.rarity.immortal": "%sImmortal",
 	"playerex.player_elements": "Player Attributes",
 	"playerex.player_smithing": "Smithing",
 	"playerex.attribute.level": "Level: +%s (%s%s)",
