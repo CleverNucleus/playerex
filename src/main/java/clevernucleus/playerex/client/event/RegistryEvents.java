@@ -1,11 +1,15 @@
 package clevernucleus.playerex.client.event;
 
+import clevernucleus.playerex.api.Rareness;
 import clevernucleus.playerex.api.client.ClientReg;
 import clevernucleus.playerex.client.gui.DefaultPage;
 import clevernucleus.playerex.client.gui.PlayerElementsScreen;
 import clevernucleus.playerex.common.PlayerEx;
 import clevernucleus.playerex.common.init.Registry;
 import net.minecraft.client.gui.ScreenManager;
+import net.minecraft.item.IItemPropertyGetter;
+import net.minecraft.item.ItemModelsProperties;
+import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.text.TranslationTextComponent;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
@@ -25,8 +29,20 @@ public class RegistryEvents {
 	@SubscribeEvent
 	public static void onClientLoad(final FMLClientSetupEvent par0) {
 		ScreenManager.registerFactory(Registry.ELEMENTS_CONTAINER, PlayerElementsScreen::new);
+		ItemModelsProperties.func_239418_a_(Registry.RELIC_AMULET, new ResourceLocation(PlayerEx.MODID, "rareness"), RELIC);
+		ItemModelsProperties.func_239418_a_(Registry.RELIC_BODY, new ResourceLocation(PlayerEx.MODID, "rareness"), RELIC);
+		ItemModelsProperties.func_239418_a_(Registry.RELIC_HEAD, new ResourceLocation(PlayerEx.MODID, "rareness"), RELIC);
+		ItemModelsProperties.func_239418_a_(Registry.RELIC_RING, new ResourceLocation(PlayerEx.MODID, "rareness"), RELIC);
 		ClientReg.init(new DefaultPage(new TranslationTextComponent(PlayerEx.MODID + ".player_elements")));
 		//ClientReg.registerPage(new clevernucleus.playerex.api.client.gui.Page(new TranslationTextComponent(PlayerEx.MODID + ".player_smithing")));
 		//ClientReg.addTooltip(new net.minecraft.util.ResourceLocation(PlayerEx.MODID, "strength"), (var0, var1) -> net.minecraft.util.text.TextFormatting.GOLD + "+" + (int)(var0.getArmorCoverPercentage() * 100F) + "%");
 	}
+	
+	private static final IItemPropertyGetter RELIC = (par0, par1, par2) -> {
+		if(!par0.hasTag() || !par0.getTag().contains("Rareness")) return 0.0F;
+		
+		Rareness var0 = Rareness.read(par0.getTag());
+		
+		return var0.getProperty();
+	};
 }

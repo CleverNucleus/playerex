@@ -3,22 +3,84 @@ package clevernucleus.playerex.api;
 import java.util.List;
 import java.util.Map;
 import java.util.Random;
+import java.util.function.Consumer;
+import java.util.function.Function;
 import java.util.stream.Collectors;
 
 import com.google.common.collect.Maps;
 import com.mojang.datafixers.util.Pair;
 
 import clevernucleus.playerex.api.element.IElement;
+import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.nbt.ListNBT;
 import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.math.AxisAlignedBB;
+import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.MathHelper;
+import net.minecraft.util.math.RayTraceContext;
+import net.minecraft.util.math.RayTraceResult;
+import net.minecraft.util.math.vector.Vector3d;
 import net.minecraft.util.text.TranslationTextComponent;
+import net.minecraft.world.World;
 
 /**
  * Helper class for useful statics.
  */
 public class Util {
+	public static final Function<Double, Double> randomVe = var -> ((new Random()).nextBoolean() ? (-1D) : 1D) * var.doubleValue();
+	
+	/**
+	 * @param par0 Input x pos.
+	 * @param par1 Input y pos.
+	 * @param par2 Input z pos.
+	 * @param par3 Input radius r.
+	 * @return A bounding box from origin position x, y, z with radius r.
+	 */
+	public static AxisAlignedBB effectBounds(final double par0, final double par1, final double par2, final double par3) {
+		BlockPos var0 = new BlockPos(par0, par1, par2);
+		
+		return new AxisAlignedBB(var0.add(-par3, -par3, -par3), var0.add(par3, par3, par3));
+	}
+	
+	/**
+	 * @param par0 World instance.
+	 * @param par1 Player instance.
+	 * @param par2 The distance that can be looked.
+	 * @return A RayTraceResult pointing to a block.
+	 */
+	public static RayTraceResult lookPos(World par0, PlayerEntity par1, double par2) {
+		float var0 = par1.rotationPitch;
+		float var1 = par1.rotationYaw;
+		double var2 = par1.getPosX();
+		double var3 = par1.getPosY() + (double)par1.getEyeHeight();
+		double var4 = par1.getPosZ();
+		
+		Vector3d var5 = new Vector3d(var2, var3, var4);
+		
+		float var6 = MathHelper.cos(-var1 * 0.017453292F - (float)Math.PI);
+        float var7 = MathHelper.sin(-var1 * 0.017453292F - (float)Math.PI);
+        float var8 = -MathHelper.cos(-var0 * 0.017453292F);
+        float var9 = MathHelper.sin(-var0 * 0.017453292F);
+        float var10 = var7 * var8;
+        float var11 = var6 * var8;
+		
+        Vector3d var12 = var5.add((double)var10 * par2, (double)var9 * par2, (double)var11 * par2);
+        
+		return par0.rayTraceBlocks(new RayTraceContext(var5, var12, RayTraceContext.BlockMode.COLLIDER, RayTraceContext.FluidMode.ANY, par1));
+	}
+	
+	/**
+	 * Loops the input consumer from 0 to input max.
+	 * @param par0 Input consumer.
+	 * @param par1 Input max.
+	 */
+	public static void loop(final Consumer<Integer> par0, final int par1) {
+		for(int var = 0; var < par1; var++) {
+			par0.accept(var);
+		}
+	}
 	
 	/**
 	 * Adds par0 and par1 together with diminishing returns as they approach par2.
@@ -50,10 +112,10 @@ public class Util {
 	}
 	
 	/**
-	 * @return A random element from {@link ElementRegistry#getRegistry}; Output Format: [Element[Value, Chance]].
+	 * @return A random element from {@link ElementRegistry#getRegistry}; Output Format: [Element[Value, Chance]]. Note that this does not output Type.DATA.
 	 */
 	public static Pair<IElement, Pair<Double, Double>> randomElement() {
-		List<IElement> var0 = ElementRegistry.getRegistry().stream().map(var -> ElementRegistry.getElement(var)).collect(Collectors.toList());
+		List<IElement> var0 = ElementRegistry.getRegistry().stream().map(var -> ElementRegistry.getElement(var)).filter(var -> var.type() != IElement.Type.DATA).collect(Collectors.toList());
 		RandDistribution<Pair<Double, Double>> var1 = new RandDistribution<Pair<Double, Double>>(Pair.of(0D, 0D));
 		IElement var2 = var0.get((new Random()).nextInt(var0.size()));
 		

@@ -8,5 +8,5 @@ public interface ILoot {
 	/**
 	 * @return The weighting for random getter from 0F - 1F.
 	 */
-	float getWight();
+	float getWeight();
 }

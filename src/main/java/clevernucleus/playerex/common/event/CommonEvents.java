@@ -5,17 +5,27 @@ import java.util.Random;
 import javax.annotation.Nonnull;
 
 import clevernucleus.playerex.api.ElementRegistry;
+import clevernucleus.playerex.api.RandDistribution;
 import clevernucleus.playerex.api.Util;
 import clevernucleus.playerex.api.element.CapabilityProvider;
 import clevernucleus.playerex.api.element.IPlayerElements;
 import clevernucleus.playerex.common.PlayerEx;
 import clevernucleus.playerex.common.init.Registry;
+import clevernucleus.playerex.common.init.item.HealthPotionItem;
+import clevernucleus.playerex.common.init.item.ILoot;
+import clevernucleus.playerex.common.init.item.RelicItem;
 import clevernucleus.playerex.common.network.SyncPlayerElements;
 import clevernucleus.playerex.common.util.ConfigSetting;
 import net.minecraft.entity.Entity;
+import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.ai.attributes.Attributes;
+import net.minecraft.entity.item.ItemEntity;
+import net.minecraft.entity.monster.IMob;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.ServerPlayerEntity;
+import net.minecraft.item.Item;
+import net.minecraft.item.ItemStack;
+import net.minecraft.item.Items;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.ResourceLocation;
@@ -324,6 +334,47 @@ public class CommonEvents {
 			ElementRegistry.GET_PLAYER_ELEMENTS.apply(var0).ifPresent(var -> {
 				par0.setLootingLevel(par0.getLootingLevel() + (int)(ElementRegistry.LUCKINESS.get(var0, var) / 5D));
 			});
+		}
+	}
+	
+	/**
+	 * Event to add random drops to instances of IMobs.
+	 * @param par0
+	 */
+	@SubscribeEvent
+    public static void dropLoot(final net.minecraftforge.event.entity.living.LivingDropsEvent par0) {
+		if(ConfigSetting.COMMON.dropChance.get() == 0) return;
+		if(!ConfigSetting.COMMON.enableCurioDrops.get() && !ConfigSetting.COMMON.enableDivineDrops.get() && !ConfigSetting.COMMON.enablePotionDrops.get()) return;
+		
+		LivingEntity var0 = par0.getEntityLiving();
+		
+		if(var0 instanceof IMob) {
+			Random var1 = new Random();
+			
+			if(var1.nextInt(100) > ConfigSetting.COMMON.dropChance.get()) return;
+			
+			RandDistribution<Item> var2 = new RandDistribution<Item>(Items.AIR);
+			
+			for(Item var : Registry.ITEMS) {
+				if(var instanceof ILoot) {
+					var2.add(var, ((ILoot)var).getWeight());
+				}
+			}
+			
+			Item var3 = var2.getDistributedRandom();
+			ItemStack var4 = new ItemStack(var3);
+			
+			if(var3 instanceof RelicItem) {
+				if(!ConfigSetting.COMMON.enableCurioDrops.get()) return;
+				
+				Util.createRandomRelic(var4);
+			} else if(var3 instanceof HealthPotionItem) {
+				if(!ConfigSetting.COMMON.enablePotionDrops.get()) return;
+			} else {
+				if(!ConfigSetting.COMMON.enableDivineDrops.get()) return;
+			}
+			
+			par0.getDrops().add(new ItemEntity(var0.world, var0.getPosX(), var0.getPosY(), var0.getPosZ(), var4));
 		}
 	}
 }

@@ -1,5 +1,6 @@
 package clevernucleus.playerex.api;
 
+import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -16,6 +17,8 @@ import clevernucleus.playerex.api.element.IPlayerElements;
 import net.minecraft.entity.ai.attributes.Attributes;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.text.ITextComponent;
+import net.minecraft.util.text.TranslationTextComponent;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.common.capabilities.CapabilityInject;
 import net.minecraftforge.common.util.LazyOptional;
@@ -291,6 +294,11 @@ public class ElementRegistry {
 			
 			EXTRA_ADD_METHODS.get(getRegistryName()).stream().forEach(var -> var.accept(par0, par1, par2));
 		}
+		
+		@Override
+		public ITextComponent getDisplay(double par0) {
+			return new TranslationTextComponent(getRegistryName() + ".display", (new DecimalFormat("##.##")).format((400D / 9D) * par0));
+		}
 	});
 	public static final IElement HEALTH_REGEN_AMP = registerElement(new ResourceLocation(MODID, "health_regen_amp"), new Element(0D, 0.01D, 0.2D, IElement.Type.ALL) {
 		
@@ -306,6 +314,11 @@ public class ElementRegistry {
 			super.set(par0, par1, Math.max(0D, Util.dim(get(par0, par1), par2, 10D)));
 			
 			EXTRA_ADD_METHODS.get(getRegistryName()).stream().forEach(var -> var.accept(par0, par1, par2));
+		}
+		
+		@Override
+		public ITextComponent getDisplay(double par0) {
+			return new TranslationTextComponent(getRegistryName() + ".display", (new DecimalFormat("##.##")).format(100D * par0), "%");
 		}
 	});
 	public static final IElement ARMOR = registerElement(new ResourceLocation("armor"), new Element(0D, 1D, 10D, IElement.Type.GAME) {
@@ -370,6 +383,11 @@ public class ElementRegistry {
 			
 			EXTRA_ADD_METHODS.get(getRegistryName()).stream().forEach(var -> var.accept(par0, par1, par2));
 		}
+		
+		@Override
+		public ITextComponent getDisplay(double par0) {
+			return new TranslationTextComponent(getRegistryName() + ".display", (new DecimalFormat("##.##")).format(100D * par0), "%");
+		}
 	});
 	public static final IElement DAMAGE_RESISTANCE = registerElement(new ResourceLocation(MODID, "damage_resistance"), new Element(0D, 0.01D, 0.2D, IElement.Type.ALL) {
 		
@@ -385,6 +403,11 @@ public class ElementRegistry {
 			super.set(par0, par1, Math.max(0D, Util.dim(get(par0, par1), par2, 1D)));
 			
 			EXTRA_ADD_METHODS.get(getRegistryName()).stream().forEach(var -> var.accept(par0, par1, par2));
+		}
+		
+		@Override
+		public ITextComponent getDisplay(double par0) {
+			return new TranslationTextComponent(getRegistryName() + ".display", (new DecimalFormat("##.##")).format(100D * par0), "%");
 		}
 	});
 	public static final IElement FIRE_RESISTANCE = registerElement(new ResourceLocation(MODID, "fire_resistance"), new Element(0D, 0.01D, 0.2D, IElement.Type.ALL) {
@@ -402,6 +425,11 @@ public class ElementRegistry {
 			
 			EXTRA_ADD_METHODS.get(getRegistryName()).stream().forEach(var -> var.accept(par0, par1, par2));
 		}
+		
+		@Override
+		public ITextComponent getDisplay(double par0) {
+			return new TranslationTextComponent(getRegistryName() + ".display", (new DecimalFormat("##.##")).format(100D * par0), "%");
+		}
 	});
 	public static final IElement LAVA_RESISTANCE = registerElement(new ResourceLocation(MODID, "lava_resistance"), new Element(0D, 0.01D, 0.2D, IElement.Type.ALL) {
 		
@@ -417,6 +445,11 @@ public class ElementRegistry {
 			super.set(par0, par1, Math.max(0D, Util.dim(get(par0, par1), par2, 1D)));
 			
 			EXTRA_ADD_METHODS.get(getRegistryName()).stream().forEach(var -> var.accept(par0, par1, par2));
+		}
+		
+		@Override
+		public ITextComponent getDisplay(double par0) {
+			return new TranslationTextComponent(getRegistryName() + ".display", (new DecimalFormat("##.##")).format(100D * par0), "%");
 		}
 	});
 	public static final IElement EXPLOSION_RESISTANCE = registerElement(new ResourceLocation(MODID, "explosion_resistance"), new Element(0D, 0.01D, 0.2D, IElement.Type.ALL) {
@@ -434,6 +467,11 @@ public class ElementRegistry {
 			
 			EXTRA_ADD_METHODS.get(getRegistryName()).stream().forEach(var -> var.accept(par0, par1, par2));
 		}
+		
+		@Override
+		public ITextComponent getDisplay(double par0) {
+			return new TranslationTextComponent(getRegistryName() + ".display", (new DecimalFormat("##.##")).format(100D * par0), "%");
+		}
 	});
 	public static final IElement FALLING_RESISTANCE = registerElement(new ResourceLocation(MODID, "falling_resistance"), new Element(0D, 0.01D, 0.2D, IElement.Type.ALL) {
 		
@@ -449,6 +487,11 @@ public class ElementRegistry {
 			super.set(par0, par1, Math.max(0D, Util.dim(get(par0, par1), par2, 1D)));
 			
 			EXTRA_ADD_METHODS.get(getRegistryName()).stream().forEach(var -> var.accept(par0, par1, par2));
+		}
+		
+		@Override
+		public ITextComponent getDisplay(double par0) {
+			return new TranslationTextComponent(getRegistryName() + ".display", (new DecimalFormat("##.##")).format(100D * par0), "%");
 		}
 	});
 	public static final IElement POISON_RESISTANCE = registerElement(new ResourceLocation(MODID, "poison_resistance"), new Element(0D, 0.01D, 0.2D, IElement.Type.ALL) {
@@ -466,6 +509,11 @@ public class ElementRegistry {
 			
 			EXTRA_ADD_METHODS.get(getRegistryName()).stream().forEach(var -> var.accept(par0, par1, par2));
 		}
+		
+		@Override
+		public ITextComponent getDisplay(double par0) {
+			return new TranslationTextComponent(getRegistryName() + ".display", (new DecimalFormat("##.##")).format(100D * par0), "%");
+		}
 	});
 	public static final IElement WITHER_RESISTANCE = registerElement(new ResourceLocation(MODID, "wither_resistance"), new Element(0D, 0.01D, 0.2D, IElement.Type.ALL) {
 		
@@ -481,6 +529,11 @@ public class ElementRegistry {
 			super.set(par0, par1, Math.max(0D, Util.dim(get(par0, par1), par2, 1D)));
 			
 			EXTRA_ADD_METHODS.get(getRegistryName()).stream().forEach(var -> var.accept(par0, par1, par2));
+		}
+		
+		@Override
+		public ITextComponent getDisplay(double par0) {
+			return new TranslationTextComponent(getRegistryName() + ".display", (new DecimalFormat("##.##")).format(100D * par0), "%");
 		}
 	});
 	public static final IElement DROWNING_RESISTANCE = registerElement(new ResourceLocation(MODID, "drowning_resistance"), new Element(0D, 0.01D, 0.2D, IElement.Type.ALL) {
@@ -498,6 +551,11 @@ public class ElementRegistry {
 			
 			EXTRA_ADD_METHODS.get(getRegistryName()).stream().forEach(var -> var.accept(par0, par1, par2));
 		}
+		
+		@Override
+		public ITextComponent getDisplay(double par0) {
+			return new TranslationTextComponent(getRegistryName() + ".display", (new DecimalFormat("##.##")).format(100D * par0), "%");
+		}
 	});
 	public static final IElement MOVEMENT_SPEED_AMP = registerElement(new ResourceLocation(MODID, "movement_speed_amp"), new Element(0D, 0.01D, 0.4D, IElement.Type.ALL) {
 		
@@ -513,6 +571,11 @@ public class ElementRegistry {
 			super.set(par0, par1, Math.max(0D, Util.dim(get(par0, par1), par2, 2D)));
 			
 			EXTRA_ADD_METHODS.get(getRegistryName()).stream().forEach(var -> var.accept(par0, par1, par2));
+		}
+		
+		@Override
+		public ITextComponent getDisplay(double par0) {
+			return new TranslationTextComponent(getRegistryName() + ".display", (new DecimalFormat("##.##")).format(100D * par0), "%");
 		}
 	});
 	public static final IElement MELEE_DAMAGE = registerElement(new ResourceLocation("melee_damage"), new Element(0D, 0.01D, 0.2D, IElement.Type.GAME) {
@@ -551,6 +614,11 @@ public class ElementRegistry {
 			
 			EXTRA_ADD_METHODS.get(getRegistryName()).stream().forEach(var -> var.accept(par0, par1, par2));
 		}
+		
+		@Override
+		public ITextComponent getDisplay(double par0) {
+			return new TranslationTextComponent(getRegistryName() + ".display", (new DecimalFormat("##.##")).format(100D * par0), "%");
+		}
 	});
 	public static final IElement MELEE_CRIT_CHANCE = registerElement(new ResourceLocation(MODID, "melee_crit_chance"), new Element(0D, 0.01D, 0.2D, IElement.Type.ALL) {
 		
@@ -566,6 +634,11 @@ public class ElementRegistry {
 			super.set(par0, par1, Math.max(0D, Util.dim(get(par0, par1), par2, 1D)));
 			
 			EXTRA_ADD_METHODS.get(getRegistryName()).stream().forEach(var -> var.accept(par0, par1, par2));
+		}
+		
+		@Override
+		public ITextComponent getDisplay(double par0) {
+			return new TranslationTextComponent(getRegistryName() + ".display", (new DecimalFormat("##.##")).format(100D * par0), "%");
 		}
 	});
 	public static final IElement ATTACK_SPEED = registerElement(new ResourceLocation("attack_speed"), new Element(0D, 0.25D, 4D, IElement.Type.GAME) {
@@ -604,6 +677,11 @@ public class ElementRegistry {
 			
 			EXTRA_ADD_METHODS.get(getRegistryName()).stream().forEach(var -> var.accept(par0, par1, par2));
 		}
+		
+		@Override
+		public ITextComponent getDisplay(double par0) {
+			return new TranslationTextComponent(getRegistryName() + ".display", (new DecimalFormat("##.##")).format(100D * par0), "%");
+		}
 	});
 	public static final IElement RANGED_DAMAGE = registerElement(new ResourceLocation(MODID, "ranged_damage"), new Element(0D, 0.25D, 4D, IElement.Type.ALL) {
 		
@@ -636,6 +714,11 @@ public class ElementRegistry {
 			
 			EXTRA_ADD_METHODS.get(getRegistryName()).stream().forEach(var -> var.accept(par0, par1, par2));
 		}
+		
+		@Override
+		public ITextComponent getDisplay(double par0) {
+			return new TranslationTextComponent(getRegistryName() + ".display", (new DecimalFormat("##.##")).format(100D * par0), "%");
+		}
 	});
 	public static final IElement RANGED_CRIT_CHANCE = registerElement(new ResourceLocation(MODID, "ranged_crit_chance"), new Element(0D, 0.01D, 0.2D, IElement.Type.ALL) {
 		
@@ -652,6 +735,11 @@ public class ElementRegistry {
 			
 			EXTRA_ADD_METHODS.get(getRegistryName()).stream().forEach(var -> var.accept(par0, par1, par2));
 		}
+		
+		@Override
+		public ITextComponent getDisplay(double par0) {
+			return new TranslationTextComponent(getRegistryName() + ".display", (new DecimalFormat("##.##")).format(100D * par0), "%");
+		}
 	});
 	public static final IElement LIFESTEAL = registerElement(new ResourceLocation(MODID, "lifesteal"), new Element(0D, 0.01D, 0.2D, IElement.Type.ALL) {
 		
@@ -667,6 +755,11 @@ public class ElementRegistry {
 			super.set(par0, par1, Math.max(0D, Util.dim(get(par0, par1), par2, 10D)));
 			
 			EXTRA_ADD_METHODS.get(getRegistryName()).stream().forEach(var -> var.accept(par0, par1, par2));
+		}
+		
+		@Override
+		public ITextComponent getDisplay(double par0) {
+			return new TranslationTextComponent(getRegistryName() + ".display", (new DecimalFormat("##.##")).format(100D * par0), "%");
 		}
 	});
 	public static final IElement LUCK = registerElement(new ResourceLocation("luck"), new Element(0D, 1D, 10D, IElement.Type.GAME) {

@@ -1,5 +1,7 @@
 package clevernucleus.playerex.api.element;
 
+import java.text.DecimalFormat;
+
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.text.ITextComponent;
@@ -82,9 +84,9 @@ public interface IElement {
 	}
 	
 	/**
-	 * @return The display text for this element.
+	 * @return The display text for this element when provided a value.
 	 */
-	default ITextComponent getDisplay() {
-		return new TranslationTextComponent(getRegistryName() + ".display");
+	default ITextComponent getDisplay(double par0) {
+		return new TranslationTextComponent(getRegistryName() + ".display", (new DecimalFormat("##.##")).format(par0));
 	}
 }

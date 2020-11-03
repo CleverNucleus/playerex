@@ -1,19 +1,30 @@
 package clevernucleus.playerex.client.event;
 
+import java.util.Map;
+
+import clevernucleus.playerex.api.Rareness;
+import clevernucleus.playerex.api.Util;
+import clevernucleus.playerex.api.element.IElement;
 import clevernucleus.playerex.client.gui.OverlayScreen;
 import clevernucleus.playerex.client.gui.TexturedButton;
 import clevernucleus.playerex.common.PlayerEx;
 import clevernucleus.playerex.common.init.Registry;
+import clevernucleus.playerex.common.init.item.RelicItem;
 import clevernucleus.playerex.common.network.SwitchScreens;
 import clevernucleus.playerex.common.util.ConfigSetting;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.client.gui.screen.inventory.ContainerScreen;
 import net.minecraft.client.gui.screen.inventory.InventoryScreen;
+import net.minecraft.item.ItemStack;
+import net.minecraft.util.text.StringTextComponent;
+import net.minecraft.util.text.TextFormatting;
+import net.minecraft.util.text.TranslationTextComponent;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.client.event.GuiScreenEvent;
 import net.minecraftforge.client.event.RenderGameOverlayEvent;
 import net.minecraftforge.client.event.RenderGameOverlayEvent.ElementType;
+import net.minecraftforge.event.entity.player.ItemTooltipEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 
@@ -43,6 +54,31 @@ public class GuiEvents {
 						Registry.NETWORK.sendToServer(new SwitchScreens(false));
 					}
 				}, null));
+			}
+		}
+	}
+	
+	/**
+	 * Event drawing item tooltips.
+	 * @param par0
+	 */
+	@SubscribeEvent
+	public static void onDrawTooltip(final ItemTooltipEvent par0) {
+		ItemStack var0 = par0.getItemStack();
+		
+		if(var0.getItem() instanceof RelicItem) {
+			if(!var0.hasTag() || !var0.getTag().contains("Elements") || !var0.getTag().contains("Rareness")) {
+				par0.getToolTip().clear();
+				par0.getToolTip().add(new TranslationTextComponent("playerex.relic.name"));
+			} else {
+				Rareness var2 = Rareness.read(var0.getTag());
+				
+				par0.getToolTip().add(new StringTextComponent(""));
+				par0.getToolTip().add(var2.getDisplayText());
+				
+				for(Map.Entry<IElement, Double> var : Util.attributeMap(var0.getTag()).entrySet()) {
+					par0.getToolTip().add(new StringTextComponent(TextFormatting.GRAY + var.getKey().getDisplay(var.getValue()).getString()));
+				}
 			}
 		}
 	}

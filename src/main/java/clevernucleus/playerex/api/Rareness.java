@@ -2,6 +2,7 @@ package clevernucleus.playerex.api;
 
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.util.text.ITextComponent;
+import net.minecraft.util.text.StringTextComponent;
 import net.minecraft.util.text.TextFormatting;
 import net.minecraft.util.text.TranslationTextComponent;
 
@@ -10,7 +11,7 @@ import net.minecraft.util.text.TranslationTextComponent;
  */
 public enum Rareness {
 	COMMON("common", 70, 0.0F, TextFormatting.WHITE),
-	UNCOMMON("uncommon", 50, 0.1F, TextFormatting.GRAY),
+	UNCOMMON("uncommon", 50, 0.1F, TextFormatting.DARK_GRAY),
 	RARE("rare", 30, 0.2F, TextFormatting.DARK_GREEN),
 	EPIC("epic", 20, 0.3F, TextFormatting.DARK_AQUA),
 	MYTHICAL("mythical", 10, 0.4F, TextFormatting.DARK_RED),
@@ -102,7 +103,7 @@ public enum Rareness {
 	 * @return The display text for this rareness.
 	 */
 	public ITextComponent getDisplayText() {
-		return new TranslationTextComponent(ElementRegistry.MODID + ".rarity." + this.name, this.colour);
+		return new StringTextComponent(this.colour + (new TranslationTextComponent(ElementRegistry.MODID + ".rarity." + this.name)).getString());
 	}
 	
 	@Override

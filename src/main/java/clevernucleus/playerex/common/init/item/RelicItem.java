@@ -34,7 +34,7 @@ public class RelicItem extends Item implements ILoot {
 	}
 	
 	@Override
-	public float getWight() {
+	public float getWeight() {
 		return this.weight;
 	}
 	
