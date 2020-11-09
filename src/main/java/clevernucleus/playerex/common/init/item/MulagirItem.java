@@ -1,9 +1,6 @@
 package clevernucleus.playerex.common.init.item;
 
-import java.util.List;
-
-import clevernucleus.playerex.common.PlayerEx;
-import net.minecraft.client.util.ITooltipFlag;
+import clevernucleus.playerex.common.init.Registry;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.projectile.AbstractArrowEntity;
 import net.minecraft.entity.projectile.ArrowEntity;
@@ -14,10 +11,6 @@ import net.minecraft.util.ActionResult;
 import net.minecraft.util.Hand;
 import net.minecraft.util.SoundCategory;
 import net.minecraft.util.SoundEvents;
-import net.minecraft.util.text.ITextComponent;
-import net.minecraft.util.text.StringTextComponent;
-import net.minecraft.util.text.TextFormatting;
-import net.minecraft.util.text.TranslationTextComponent;
 import net.minecraft.world.World;
 
 /**
@@ -38,12 +31,7 @@ public class MulagirItem extends Item implements ILoot {
 	
 	@Override
 	public Rarity getRarity(ItemStack par0) {
-		return Rarity.create("immortal", TextFormatting.GOLD);
-	}
-	
-	@Override
-	public void addInformation(ItemStack par0, World par1, List<ITextComponent> par2, ITooltipFlag par3) {
-		par2.add(new StringTextComponent(TextFormatting.GRAY + (new TranslationTextComponent(PlayerEx.MODID + ".mulagir.desc")).getString()));
+		return Registry.IMMORTAL;
 	}
 	
 	@Override
@@ -56,8 +44,8 @@ public class MulagirItem extends Item implements ILoot {
 			for(int var1 = -5; var1 < 5; var1++) {
 				ArrowEntity var2 = new ArrowEntity(par0, par1);
 				
+				var2.func_234612_a_(par1, par1.rotationPitch, par1.rotationYaw + var1, 0.0F, 1 * 3.0F, 1.0F);
 				var2.setShooter(par1);
-				var2.shoot(par1.rotationPitch, par1.rotationYaw + var1, 0.0F, 4.0F, 1F);
 				var2.setIsCritical(true);
 				var2.setDamage(var2.getDamage() + 10D);
 				var2.setKnockbackStrength(2);

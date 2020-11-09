@@ -7,6 +7,8 @@ import clevernucleus.playerex.client.gui.PlayerElementsScreen;
 import clevernucleus.playerex.common.PlayerEx;
 import clevernucleus.playerex.common.init.Registry;
 import net.minecraft.client.gui.ScreenManager;
+import net.minecraft.client.renderer.RenderType;
+import net.minecraft.client.renderer.RenderTypeLookup;
 import net.minecraft.item.IItemPropertyGetter;
 import net.minecraft.item.ItemModelsProperties;
 import net.minecraft.util.ResourceLocation;
@@ -28,6 +30,7 @@ public class RegistryEvents {
 	 */
 	@SubscribeEvent
 	public static void onClientLoad(final FMLClientSetupEvent par0) {
+		RenderTypeLookup.setRenderLayer(Registry.MAGIC_ICE, RenderType.getTranslucent());
 		ScreenManager.registerFactory(Registry.ELEMENTS_CONTAINER, PlayerElementsScreen::new);
 		ItemModelsProperties.func_239418_a_(Registry.RELIC_AMULET, new ResourceLocation(PlayerEx.MODID, "rareness"), RELIC);
 		ItemModelsProperties.func_239418_a_(Registry.RELIC_BODY, new ResourceLocation(PlayerEx.MODID, "rareness"), RELIC);

@@ -18,10 +18,12 @@ import net.minecraft.inventory.container.Container;
 import net.minecraft.inventory.container.ContainerType;
 import net.minecraft.item.BlockItem;
 import net.minecraft.item.Item;
+import net.minecraft.item.Rarity;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.nbt.INBT;
 import net.minecraft.util.Direction;
 import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.text.TextFormatting;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.common.capabilities.CapabilityManager;
 import net.minecraftforge.common.extensions.IForgeContainerType;
@@ -43,6 +45,9 @@ public class Registry {
 	
 	/** Network instance. */
 	public static final SimpleChannel NETWORK = NetworkRegistry.newSimpleChannel(new ResourceLocation(PlayerEx.MODID, "path"), () -> "1", "1"::equals, "1"::equals);
+	
+	/** For gold coloured tooltips. */
+	public static final Rarity IMMORTAL = Rarity.create("immortal", TextFormatting.GOLD);
 	
 	/** List storing instances of every registered item. */
 	public static final List<Item> ITEMS = new ArrayList<Item>();

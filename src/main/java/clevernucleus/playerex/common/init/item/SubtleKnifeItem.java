@@ -1,10 +1,7 @@
 package clevernucleus.playerex.common.init.item;
 
-import java.util.List;
-
 import clevernucleus.playerex.api.Util;
-import clevernucleus.playerex.common.PlayerEx;
-import net.minecraft.client.util.ITooltipFlag;
+import clevernucleus.playerex.common.init.Registry;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.ItemTier;
@@ -16,10 +13,6 @@ import net.minecraft.util.Hand;
 import net.minecraft.util.SoundCategory;
 import net.minecraft.util.SoundEvents;
 import net.minecraft.util.math.RayTraceResult;
-import net.minecraft.util.text.ITextComponent;
-import net.minecraft.util.text.StringTextComponent;
-import net.minecraft.util.text.TextFormatting;
-import net.minecraft.util.text.TranslationTextComponent;
 import net.minecraft.world.World;
 
 /**
@@ -40,13 +33,7 @@ public class SubtleKnifeItem extends SwordItem implements ILoot {
 	
 	@Override
 	public Rarity getRarity(ItemStack par0) {
-		return Rarity.create("immortal", TextFormatting.GOLD);
-	}
-	
-	@Override
-	public void addInformation(ItemStack par0, World par1, List<ITextComponent> par2, ITooltipFlag par3) {
-		
-		par2.add(new StringTextComponent(TextFormatting.GRAY + (new TranslationTextComponent(PlayerEx.MODID + ".subtle_knife.desc")).getString()));
+		return Registry.IMMORTAL;
 	}
 	
 	@Override
