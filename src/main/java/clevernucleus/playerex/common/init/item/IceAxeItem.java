@@ -63,7 +63,8 @@ public class IceAxeItem extends AxeItem implements ILoot {
 				BlockPos var3 = var.add(0, -var2, 0);
 				
 				if(par0.getBlockState(var3).getBlock() == Blocks.AIR) {
-					par0.setBlockState(var3, Registry.MAGIC_ICE.getDefaultState());
+					//par0.setBlockState(var3, Registry.MAGIC_ICE.getDefaultState());
+					par0.setBlockState(var3, Blocks.STONE.getDefaultState());
 				}
 			}
 		}

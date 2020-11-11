@@ -13,6 +13,7 @@ import net.minecraft.world.server.ServerWorld;
  * Magic ice block object.
  */
 public class MagicIceBlock extends BreakableBlock {
+	
 	public MagicIceBlock() {
 		super(Properties.from(Blocks.ICE));
 	}

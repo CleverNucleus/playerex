@@ -37,8 +37,6 @@ public class RegistryEvents {
 		ItemModelsProperties.func_239418_a_(Registry.RELIC_HEAD, new ResourceLocation(PlayerEx.MODID, "rareness"), RELIC);
 		ItemModelsProperties.func_239418_a_(Registry.RELIC_RING, new ResourceLocation(PlayerEx.MODID, "rareness"), RELIC);
 		ClientReg.init(new DefaultPage(new TranslationTextComponent(PlayerEx.MODID + ".player_elements")));
-		//ClientReg.registerPage(new clevernucleus.playerex.api.client.gui.Page(new TranslationTextComponent(PlayerEx.MODID + ".player_smithing")));
-		//ClientReg.addTooltip(new net.minecraft.util.ResourceLocation(PlayerEx.MODID, "strength"), (var0, var1) -> net.minecraft.util.text.TextFormatting.GOLD + "+" + (int)(var0.getArmorCoverPercentage() * 100F) + "%");
 	}
 	
 	private static final IItemPropertyGetter RELIC = (par0, par1, par2) -> {
