@@ -12,9 +12,9 @@ apply plugin: 'net.minecraftforge.gradle'
 apply plugin: 'eclipse'
 apply plugin: 'maven-publish'
 
-version = mod_version
-group = mod_group
-archivesBaseName = mod_name
+version = "${mod_version}"
+group = "${mod_group}"
+archivesBaseName = "${mod_name}"
 
 sourceCompatibility = targetCompatibility = compileJava.sourceCompatibility = compileJava.targetCompatibility = '1.8' // Need this here so eclipse task generates correctly.
 
@@ -46,20 +46,6 @@ minecraft {
                 }
             }
         }
-
-        data {
-            workingDirectory project.file('run')
-            property 'forge.logging.markers', 'SCAN,REGISTRIES,REGISTRYDUMP'
-            property 'forge.logging.console.level', 'debug'
-
-            args '--mod', 'playerex', '--all', '--output', file('src/generated/resources/')
-
-            mods {
-                playerex {
-                    source sourceSets.main
-                }
-            }
-        }
     }
 }
 
@@ -78,29 +64,46 @@ repositories {
 jar {
     manifest {
         attributes([
-            "Specification-Title": "playerex",
-            "Specification-Vendor": "playerexsareus",
-            "Specification-Version": "1",
+            "Specification-Title": "${mod_name}",
+            "Specification-Vendor": "${mod_author}",
+            "Specification-Version": "${version}",
             "Implementation-Title": "${archivesBaseName}",
             "Implementation-Version": "${version}",
-            "Implementation-Vendor" :"playerexsareus",
+            "Implementation-Vendor" :"${mod_author}",
             "Implementation-Timestamp": new Date().format("yyyy-MM-dd'T'HH:mm:ssZ")
         ])
     }
 }
 
-jar.finalizedBy('reobfJar') 
-//publish.dependsOn('reobfJar')
+jar.finalizedBy('reobfJar')
+
+task apiJar(type: Jar) {
+    classifier = 'api'
+    include 'github/clevernucleus/playerex/api/**/*'
+    from sourceSets.main.allSource
+    from sourceSets.main.output
+}
+
+task sourcesJar(type: Jar) {
+    classifier = 'sources'
+    from sourceSets.main.allJava
+}
+
+tasks.build.dependsOn apiJar, sourcesJar
 
 publishing {
     publications {
         mavenJava(MavenPublication) {
+			artifactId project.archivesBaseName
+			
             artifact jar
+            artifact sourcesJar
+            artifact apiJar
         }
     }
     repositories {
         maven {
-            url "file:///D:/Files/Java/Git/PlayerEx/PlayerEx/maven"
+			url "file:///D:/Files/Java/Git/API/maven"
         }
     }
 }

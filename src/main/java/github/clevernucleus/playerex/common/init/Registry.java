@@ -5,6 +5,7 @@ import java.util.List;
 
 import javax.annotation.Nonnull;
 
+import git.clevernucleus.playerex.network.SyncPlayerElements;
 import github.clevernucleus.playerex.api.element.IPlayerElements;
 import github.clevernucleus.playerex.api.element.PlayerElements;
 import github.clevernucleus.playerex.common.PlayerEx;
@@ -12,7 +13,6 @@ import github.clevernucleus.playerex.common.init.container.PlayerElementsContain
 import github.clevernucleus.playerex.common.init.item.*;
 import github.clevernucleus.playerex.common.network.AddPlayerElement;
 import github.clevernucleus.playerex.common.network.SwitchScreens;
-import github.clevernucleus.playerex.common.network.SyncPlayerElements;
 import net.minecraft.block.Block;
 import net.minecraft.inventory.container.Container;
 import net.minecraft.inventory.container.ContainerType;

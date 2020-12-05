@@ -1,4 +1,4 @@
-package github.clevernucleus.playerex.api;
+package git.clevernucleus.playerex.api;
 
 import java.util.HashMap;
 import java.util.Map;

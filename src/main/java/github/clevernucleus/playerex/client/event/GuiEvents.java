@@ -2,7 +2,7 @@ package github.clevernucleus.playerex.client.event;
 
 import java.util.Map;
 
-import github.clevernucleus.playerex.api.Rareness;
+import git.clevernucleus.playerex.api.Rareness;
 import github.clevernucleus.playerex.api.Util;
 import github.clevernucleus.playerex.api.element.IElement;
 import github.clevernucleus.playerex.client.gui.OverlayScreen;

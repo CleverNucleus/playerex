@@ -4,17 +4,17 @@ import java.util.Random;
 
 import javax.annotation.Nonnull;
 
+import git.clevernucleus.playerex.api.RandDistribution;
+import git.clevernucleus.playerex.api.element.CapabilityProvider;
+import git.clevernucleus.playerex.network.SyncPlayerElements;
 import github.clevernucleus.playerex.api.ElementRegistry;
-import github.clevernucleus.playerex.api.RandDistribution;
 import github.clevernucleus.playerex.api.Util;
-import github.clevernucleus.playerex.api.element.CapabilityProvider;
 import github.clevernucleus.playerex.api.element.IPlayerElements;
 import github.clevernucleus.playerex.common.PlayerEx;
 import github.clevernucleus.playerex.common.init.Registry;
 import github.clevernucleus.playerex.common.init.item.HealthPotionItem;
 import github.clevernucleus.playerex.common.init.item.ILoot;
 import github.clevernucleus.playerex.common.init.item.RelicItem;
-import github.clevernucleus.playerex.common.network.SyncPlayerElements;
 import github.clevernucleus.playerex.common.util.ConfigSetting;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.LivingEntity;

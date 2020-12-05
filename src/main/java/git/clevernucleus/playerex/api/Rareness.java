@@ -1,4 +1,4 @@
-package github.clevernucleus.playerex.api;
+package git.clevernucleus.playerex.api;
 
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.util.text.ITextComponent;
@@ -103,7 +103,7 @@ public enum Rareness {
 	 * @return The display text for this rareness.
 	 */
 	public ITextComponent getDisplayText() {
-		return new StringTextComponent(this.colour + (new TranslationTextComponent(ElementRegistry.MODID + ".rarity." + this.name)).getString());
+		return new StringTextComponent(this.colour + (new TranslationTextComponent(ExAPI.MODID + ".rarity." + this.name)).getString());
 	}
 	
 	@Override

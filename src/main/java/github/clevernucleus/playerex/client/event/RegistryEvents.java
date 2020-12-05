@@ -4,7 +4,7 @@ import github.clevernucleus.playerex.client.gui.DefaultPage;
 import github.clevernucleus.playerex.client.gui.PlayerElementsScreen;
 import github.clevernucleus.playerex.common.PlayerEx;
 import github.clevernucleus.playerex.common.init.Registry;
-import github.clevernucleus.playerex.api.Rareness;
+import git.clevernucleus.playerex.api.Rareness;
 import github.clevernucleus.playerex.api.client.ClientReg;
 import net.minecraft.client.gui.ScreenManager;
 import net.minecraft.client.renderer.RenderType;

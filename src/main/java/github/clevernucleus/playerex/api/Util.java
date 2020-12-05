@@ -10,6 +10,8 @@ import java.util.stream.Collectors;
 import com.google.common.collect.Maps;
 import com.mojang.datafixers.util.Pair;
 
+import git.clevernucleus.playerex.api.RandDistribution;
+import git.clevernucleus.playerex.api.Rareness;
 import github.clevernucleus.playerex.api.element.IElement;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
