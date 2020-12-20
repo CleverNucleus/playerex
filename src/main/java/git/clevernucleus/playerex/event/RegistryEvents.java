@@ -1,30 +1,46 @@
 package git.clevernucleus.playerex.event;
 
 import git.clevernucleus.playerex.api.ExAPI;
-import git.clevernucleus.playerex.api.element.Elements;
+import git.clevernucleus.playerex.api.element.IPlayerElements;
+import git.clevernucleus.playerex.api.element.PlayerElements;
+import git.clevernucleus.playerex.network.SyncPlayerElements;
+import net.minecraft.nbt.CompoundNBT;
+import net.minecraft.nbt.INBT;
+import net.minecraft.util.Direction;
+import net.minecraft.util.ResourceLocation;
+import net.minecraftforge.common.capabilities.Capability;
+import net.minecraftforge.common.capabilities.CapabilityManager;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
+import net.minecraftforge.fml.network.NetworkRegistry;
+import net.minecraftforge.fml.network.simple.SimpleChannel;
 
-/**
- * Repository for common events on the MOD bus.
- */
 @Mod.EventBusSubscriber(modid = ExAPI.MODID, bus = Mod.EventBusSubscriber.Bus.MOD)
 public class RegistryEvents {
 	
+	/** Network instance. */
+	public static final SimpleChannel NETWORK = NetworkRegistry.newSimpleChannel(new ResourceLocation(ExAPI.MODID, "path"), () -> "1", "1"::equals, "1"::equals);
+	
+	/**
+	 * Mod initialisation event.
+	 * @param par0
+	 */
 	@SubscribeEvent
-	public static void onCommonSetup(final FMLCommonSetupEvent par0) {
-		/*Elements.registerGetFunction(Elements.EXPERIENCE.registry(), (var0, var1) -> var1.get(Elements.EXPERIENCE));
-		Elements.registerGetFunction(Elements.LEVEL.registry(), (var0, var1) -> var1.get(Elements.LEVEL));
-		Elements.registerGetFunction(Elements.SKILLPOINTS.registry(), (var0, var1) -> var1.get(Elements.SKILLPOINTS));
-		Elements.registerGetFunction(Elements.CONSTITUTION.registry(), (var0, var1) -> var1.get(Elements.CONSTITUTION));
-		Elements.registerGetFunction(Elements.STRENGTH.registry(), (var0, var1) -> var1.get(Elements.STRENGTH));
-		Elements.registerGetFunction(Elements.DEXTERITY.registry(), (var0, var1) -> var1.get(Elements.DEXTERITY));
-		Elements.registerGetFunction(Elements.INTELLIGENCE.registry(), (var0, var1) -> var1.get(Elements.INTELLIGENCE));
-		Elements.registerGetFunction(Elements.LUCKINESS.registry(), (var0, var1) -> var1.get(Elements.LUCKINESS));
-		Elements.registerGetFunction(Elements.EXPERIENCE.registry(), (var0, var1) -> var1.get(Elements.EXPERIENCE));
-		Elements.registerGetFunction(Elements.HEALTH.registry(), (var0, var1) -> var0.getMaxHealth());
-		Elements.registerGetFunction(Elements.HEALTH_REGEN.registry(), (var0, var1) -> var1.get(Elements.HEALTH_REGEN));
-		Elements.registerGetFunction(Elements.HEALTH_REGEN.registry(), (var0, var1) -> var1.get(Elements.HEALTH_REGEN));*/
+	public static void commonSetup(final FMLCommonSetupEvent par0) {
+		CapabilityManager.INSTANCE.register(IPlayerElements.class, new Capability.IStorage<IPlayerElements>() {
+			
+			@Override
+			public INBT writeNBT(Capability<IPlayerElements> par0, IPlayerElements par1, Direction par2) {
+				return par1.write();
+			}
+			
+			@Override
+			public void readNBT(Capability<IPlayerElements> par0, IPlayerElements par1, Direction par2, INBT par3) {
+				par1.read((CompoundNBT)par3);
+			}
+		}, PlayerElements::new);
+		
+		NETWORK.registerMessage(0, SyncPlayerElements.class, SyncPlayerElements::encode, SyncPlayerElements::decode, SyncPlayerElements::handle);
 	}
 }

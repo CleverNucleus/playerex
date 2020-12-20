@@ -1,7 +1,6 @@
 package git.clevernucleus.playerex.api.element;
 
-import java.util.function.Function;
-
+import git.clevernucleus.playerex.api.ElementFunction;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.nbt.INBT;
@@ -9,7 +8,7 @@ import net.minecraft.nbt.ListNBT;
 
 public class PlayerElements implements IPlayerElements {
 	private CompoundNBT tag;
-	private PlayerEntity player = null;
+	private PlayerEntity player;
 	
 	public PlayerElements() {
 		ListNBT var0 = new ListNBT();
@@ -72,30 +71,25 @@ public class PlayerElements implements IPlayerElements {
 		return par0.defaultValue();
 	}
 	
-	//@Override
-	/*protected float get(Element par0) {
-		if(isEmpty()) return par0.defaultValue();
-		
-		for(INBT var : this.tag.getList("Elements", 10)) {
-			CompoundNBT var0 = (CompoundNBT)var;
-			String var1 = var0.getString("Name");
-			
-			if(var1.equals(par0.toString())) return var0.getFloat("Value");
-		}
-		
-		return par0.defaultValue();
-	}
-	
-	public void set(Element par0, PlayerEntity par1, float par2) {
-		putTag(par0, par2);
-	}*/
-	
+	@Override
 	public float get(Element par0) {
 		return par0.getFunction().apply(this.player, getTag(par0)).floatValue();
 	}
 	
-	public void modify(Element par0, Function<Float, Float> par1) {
-		putTag(par0, par1.apply(get(par0)).floatValue());
+	@Override
+	public void add(Element par0, float par1) {
+		if(par0.type() == Element.Type.ALL || par0.type() == Element.Type.DATA) {
+			putTag(par0, par0.addFunction().apply(ElementFunction.hold(this.player, this, get(par0), par1)));
+		} else {
+			par0.addFunction().apply(ElementFunction.hold(this.player, this, get(par0), par1));
+		}
+	}
+	
+	@Override
+	public void set(Element par0, float par1) {
+		if(par0.type() != Element.Type.ALL && par0.type() != Element.Type.DATA) return;
+		
+		putTag(par0, par1);
 	}
 	
 	@Override

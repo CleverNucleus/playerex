@@ -1,9 +1,11 @@
 package git.clevernucleus.playerex.api.element;
 
 import java.util.function.BiFunction;
+import java.util.function.Function;
 
 import javax.annotation.Nonnull;
 
+import git.clevernucleus.playerex.api.ElementFunction;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.util.ResourceLocation;
 
@@ -13,19 +15,25 @@ public class Element {
 	}
 	
 	private BiFunction<PlayerEntity, Float, Float> get;
+	private Function<ElementFunction, Float> add;
 	private float defaultValue, minValue, maxValue;
 	private Type type;
 	
-	public Element(float par0, float par1, float par2, Type par3, @Nonnull BiFunction<PlayerEntity, Float, Float> par4) {
+	public Element(float par0, float par1, float par2, Type par3, @Nonnull BiFunction<PlayerEntity, Float, Float> par4, @Nonnull Function<ElementFunction, Float> par5) {
 		this.defaultValue = par0;
 		this.minValue = par1;
 		this.maxValue = par2;
 		this.type = par3;
 		this.get = par4;
+		this.add = par5;
 	}
 	
 	protected BiFunction<PlayerEntity, Float, Float> getFunction() {
 		return this.get;
+	}
+	
+	protected Function<ElementFunction, Float> addFunction() {
+		return this.add;
 	}
 	
 	public Type type() {

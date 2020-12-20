@@ -11,18 +11,18 @@ public interface IPlayerElements {
 	float get(Element par0);
 	
 	/**
-	 * Sets the input elements data in the player's tag to the input float.
+	 * Changes the value of the input element (Equivalent to an adder/setter).
 	 * @param par0 Input element.
-	 * @param par1 Input float.
+	 * @param par1 Add value.
 	 */
-	//void set(Element par0, float par1);
+	void add(Element par0, float par1);
 	
 	/**
-	 * Adds the input float to the input element's data in the player's tag if it exists.
+	 * Forcefully sets the input Element to the input value without affecting other elements, provided that the input element is of {@link Element.Type#ALL} or {@link Element.Type#DATA}.
 	 * @param par0 Input element.
-	 * @param par1 Input float.
+	 * @param par1 Input value.
 	 */
-	//void add(Element par0, float par1);
+	void set(Element par0, float par1);
 	
 	/**
 	 * Writes capability data to a tag.
