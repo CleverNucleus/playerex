@@ -8,7 +8,6 @@ import net.minecraft.nbt.ListNBT;
 
 public class PlayerElements implements IPlayerElements {
 	private CompoundNBT tag;
-	private PlayerEntity player;
 	
 	public PlayerElements() {
 		ListNBT var0 = new ListNBT();
@@ -72,16 +71,16 @@ public class PlayerElements implements IPlayerElements {
 	}
 	
 	@Override
-	public float get(Element par0) {
-		return par0.getFunction().apply(this.player, getTag(par0)).floatValue();
+	public float get(PlayerEntity par0, Element par1) {
+		return par1.getFunction().apply(par0, getTag(par1)).floatValue();
 	}
 	
 	@Override
-	public void add(Element par0, float par1) {
-		if(par0.type() == Element.Type.ALL || par0.type() == Element.Type.DATA) {
-			putTag(par0, par0.addFunction().apply(ElementFunction.hold(this.player, this, get(par0), par1)));
+	public void add(PlayerEntity par0, Element par1, float par2) {
+		if(par1.type() == Element.Type.ALL || par1.type() == Element.Type.DATA) {
+			putTag(par1, par1.addFunction().apply(ElementFunction.hold(par0, this, get(par0, par1), par2)));
 		} else {
-			par0.addFunction().apply(ElementFunction.hold(this.player, this, get(par0), par1));
+			par1.addFunction().apply(ElementFunction.hold(par0, this, get(par0, par1), par2));
 		}
 	}
 	

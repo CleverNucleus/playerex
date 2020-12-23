@@ -40,12 +40,12 @@ public class CommonEvents {
 		
 		if(var0.getBoolean("Initialised")) return;
 		
-		par1.add(Elements.CONSTITUTION, ConfigSetting.COMMON.constitution.get());
-		par1.add(Elements.STRENGTH, ConfigSetting.COMMON.strength.get());
-		par1.add(Elements.DEXTERITY, ConfigSetting.COMMON.dexterity.get());
-		par1.add(Elements.INTELLIGENCE, ConfigSetting.COMMON.intelligence.get());
-		par1.add(Elements.LUCKINESS, ConfigSetting.COMMON.luckiness.get());
-		par1.add(Elements.HEALTH, -20F);
+		par1.add(par0, Elements.CONSTITUTION, ConfigSetting.COMMON.constitution.get());
+		par1.add(par0, Elements.STRENGTH, ConfigSetting.COMMON.strength.get());
+		par1.add(par0, Elements.DEXTERITY, ConfigSetting.COMMON.dexterity.get());
+		par1.add(par0, Elements.INTELLIGENCE, ConfigSetting.COMMON.intelligence.get());
+		par1.add(par0, Elements.LUCKINESS, ConfigSetting.COMMON.luckiness.get());
+		par1.add(par0, Elements.HEALTH, -20F);
 		
 		var0.putBoolean("Initialised", true);
 	}
@@ -94,6 +94,14 @@ public class CommonEvents {
 		if(var0.world.isRemote) return;
 		
 		try {
+			var0.getAttribute(Attributes.MAX_HEALTH).setBaseValue(var1.getAttribute(Attributes.MAX_HEALTH).getBaseValue());
+			var0.getAttribute(Attributes.KNOCKBACK_RESISTANCE).setBaseValue(var1.getAttribute(Attributes.KNOCKBACK_RESISTANCE).getBaseValue());
+			var0.getAttribute(Attributes.ATTACK_DAMAGE).setBaseValue(var1.getAttribute(Attributes.ATTACK_DAMAGE).getBaseValue());
+			var0.getAttribute(Attributes.ATTACK_SPEED).setBaseValue(var1.getAttribute(Attributes.ATTACK_SPEED).getBaseValue());
+			var0.getAttribute(Attributes.ARMOR).setBaseValue(var1.getAttribute(Attributes.ARMOR).getBaseValue());
+			var0.getAttribute(Attributes.ARMOR_TOUGHNESS).setBaseValue(var1.getAttribute(Attributes.ARMOR_TOUGHNESS).getBaseValue());
+			var0.getAttribute(Attributes.LUCK).setBaseValue(var1.getAttribute(Attributes.LUCK).getBaseValue());
+			
 			ExAPI.playerElements(var0).ifPresent(par1 -> {
 				ExAPI.playerElements(var1).ifPresent(par2 -> {
 					par1.read(par2.write());
@@ -148,12 +156,12 @@ public class CommonEvents {
 		int var1 = par0.getOrb().getXpValue();
 		
 		ExAPI.playerElements(var0).ifPresent(var -> {
-			var.add(Elements.EXPERIENCE, var1);
+			var.add(var0, Elements.EXPERIENCE, var1);
 			
-			float var2 = Util.expCoeff(var.get(Elements.LEVEL), var.get(Elements.EXPERIENCE));
+			float var2 = Util.expCoeff(var.get(var0, Elements.LEVEL), var.get(var0, Elements.EXPERIENCE));
 			
 			if(var2 > 0.95F) {
-				var.add(Elements.LEVEL, 1);
+				var.add(var0, Elements.LEVEL, 1);
 				var.set(Elements.EXPERIENCE, 0F);
 			}
 		});
@@ -172,8 +180,8 @@ public class CommonEvents {
 		if(var0.world.isRemote) return;
 		
 		ExAPI.playerElements(var0).ifPresent(var -> {
-			var0.getAttribute(Attributes.MOVEMENT_SPEED).setBaseValue(0.1D + (0.1D * var.get(Elements.MOVEMENT_SPEED_AMP)));
-			var0.heal(var.get(Elements.HEALTH_REGEN));
+			var0.getAttribute(Attributes.MOVEMENT_SPEED).setBaseValue(0.1D + (0.1D * var.get(var0, Elements.MOVEMENT_SPEED_AMP)));
+			var0.heal(var.get(var0, Elements.HEALTH_REGEN));
 		});
 	}
 	
@@ -189,7 +197,7 @@ public class CommonEvents {
 			if(var0.world.isRemote) return;
 			
 			ExAPI.playerElements(var0).ifPresent(var -> {
-				par0.setAmount(par0.getAmount() * (1F + var.get(Elements.HEALTH_REGEN_AMP)));
+				par0.setAmount(par0.getAmount() * (1F + var.get(var0, Elements.HEALTH_REGEN_AMP)));
 			});
 		}
 	}
@@ -206,9 +214,9 @@ public class CommonEvents {
 		if(var0.world.isRemote) return;
 		
 		ExAPI.playerElements(var0).ifPresent(var -> {
-			par0.setDamageModifier(1F + var.get(Elements.MELEE_CRIT_DAMAGE));
+			par0.setDamageModifier(1F + var.get(var0, Elements.MELEE_CRIT_DAMAGE));
 			
-			if(var1.nextInt(100) < (int)(100F * var.get(Elements.MELEE_CRIT_CHANCE))) {
+			if(var1.nextInt(100) < (int)(100F * var.get(var0, Elements.MELEE_CRIT_CHANCE))) {
 				par0.setResult(Result.ALLOW);
 			} else {
 				par0.setResult(Result.DENY);
@@ -230,39 +238,39 @@ public class CommonEvents {
 			
 			ExAPI.playerElements(var0).ifPresent(var -> {
 				if(par0.getSource().equals(DamageSource.IN_FIRE) || par0.getSource().equals(DamageSource.ON_FIRE) || par0.getSource().equals(DamageSource.HOT_FLOOR)) {
-					par0.setAmount(par0.getAmount() * (1F - var.get(Elements.FIRE_RESISTANCE)));
+					par0.setAmount(par0.getAmount() * (1F - var.get(var0, Elements.FIRE_RESISTANCE)));
 				}
 				
 				if(par0.getSource().equals(DamageSource.LAVA)) {
-					par0.setAmount(par0.getAmount() * (1F - var.get(Elements.LAVA_RESISTANCE)));
+					par0.setAmount(par0.getAmount() * (1F - var.get(var0, Elements.LAVA_RESISTANCE)));
 				}
 				
 				if(par0.getSource().isExplosion()) {
-					par0.setAmount(par0.getAmount() * (1F - var.get(Elements.EXPLOSION_RESISTANCE)));
+					par0.setAmount(par0.getAmount() * (1F - var.get(var0, Elements.EXPLOSION_RESISTANCE)));
 				}
 				
 				if(par0.getSource().isMagicDamage()) {
-					par0.setAmount(par0.getAmount() * (1F - var.get(Elements.POISON_RESISTANCE)));
+					par0.setAmount(par0.getAmount() * (1F - var.get(var0, Elements.POISON_RESISTANCE)));
 				}
 				
 				if(par0.getSource().equals(DamageSource.WITHER)) {
-					par0.setAmount(par0.getAmount() * (1F - var.get(Elements.WITHER_RESISTANCE)));
+					par0.setAmount(par0.getAmount() * (1F - var.get(var0, Elements.WITHER_RESISTANCE)));
 				}
 				
 				if(par0.getSource().equals(DamageSource.DROWN)) {
-					par0.setAmount(par0.getAmount() * (1F - var.get(Elements.DROWNING_RESISTANCE)));
+					par0.setAmount(par0.getAmount() * (1F - var.get(var0, Elements.DROWNING_RESISTANCE)));
 				}
 				
 				if(par0.getSource().equals(DamageSource.FALL)) {
-					par0.setAmount(par0.getAmount() * (1F - var.get(Elements.FALLING_RESISTANCE)));
+					par0.setAmount(par0.getAmount() * (1F - var.get(var0, Elements.FALLING_RESISTANCE)));
 				}
 				
 				if(par0.getSource().isUnblockable()) {
-					par0.setAmount(par0.getAmount() * (1F - var.get(Elements.DAMAGE_RESISTANCE)));
+					par0.setAmount(par0.getAmount() * (1F - var.get(var0, Elements.DAMAGE_RESISTANCE)));
 				}
 				
 				if(par0.getSource().isProjectile()) {
-					if(var1.nextInt(100) < (int)(100D * var.get(Elements.EVASION_CHANCE))) {
+					if(var1.nextInt(100) < (int)(100D * var.get(var0, Elements.EVASION_CHANCE))) {
 						par0.setCanceled(true);
 					}
 				}
@@ -273,7 +281,7 @@ public class CommonEvents {
 			PlayerEntity var0 = (PlayerEntity)par0.getSource().getTrueSource();
 			
 			ExAPI.playerElements(var0).ifPresent(var -> {
-				var0.heal(par0.getAmount() * var.get(Elements.LIFESTEAL));
+				var0.heal(par0.getAmount() * var.get(var0, Elements.LIFESTEAL));
 			});
 		}
 	}
@@ -291,11 +299,11 @@ public class CommonEvents {
 			if(var0.world.isRemote) return;
 			
 			ExAPI.playerElements(var0).ifPresent(var -> {
-				boolean var2 = var1.nextInt(100) > (int)(100F * var.get(Elements.RANGED_CRIT_CHANCE));
-				double var3 = par0.getArrow().getDamage() + var.get(Elements.RANGED_DAMAGE);
+				boolean var2 = var1.nextInt(100) > (int)(100F * var.get(var0, Elements.RANGED_CRIT_CHANCE));
+				double var3 = par0.getArrow().getDamage() + var.get(var0, Elements.RANGED_DAMAGE);
 				
 				par0.getArrow().setIsCritical(var2);
-				par0.getArrow().setDamage(var2 ? (var3 * (1D + var.get(Elements.RANGED_CRIT_DAMAGE))) : var3);
+				par0.getArrow().setDamage(var2 ? (var3 * (1D + var.get(var0, Elements.RANGED_CRIT_DAMAGE))) : var3);
 			});
 		}
 	}
@@ -312,7 +320,7 @@ public class CommonEvents {
 			if(var0.world.isRemote) return;
 			
 			ExAPI.playerElements(var0).ifPresent(var -> {
-				par0.setLootingLevel(par0.getLootingLevel() + (int)(var.get(Elements.LUCKINESS) / 5F));
+				par0.setLootingLevel(par0.getLootingLevel() + (int)(var.get(var0, Elements.LUCKINESS) / 5F));
 			});
 		}
 	}

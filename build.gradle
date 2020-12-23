@@ -51,14 +51,14 @@ minecraft {
 
 dependencies {
     minecraft 'net.minecraftforge:forge:1.16.3-34.1.0'
-	runtimeOnly fg.deobf("top.theillusivec4.curios:curios-forge:1.16.3-4.0.2.0")
-    compileOnly fg.deobf("top.theillusivec4.curios:curios-forge:1.16.3-4.0.2.0:api")
+	// runtimeOnly fg.deobf("top.theillusivec4.curios:curios-forge:1.16.3-4.0.2.0")
+    // compileOnly fg.deobf("top.theillusivec4.curios:curios-forge:1.16.3-4.0.2.0:api")
 }
 
 repositories {
-    maven {
-		url = "https://maven.theillusivec4.top/"
-	}
+    // maven {
+		// url = "https://maven.theillusivec4.top/"
+	// }
 }
 
 jar {
@@ -79,7 +79,7 @@ jar.finalizedBy('reobfJar')
 
 task apiJar(type: Jar) {
     classifier = 'api'
-    include 'github/clevernucleus/playerex/api/**/*'
+    include 'git/clevernucleus/playerex/api/**/*'
     from sourceSets.main.allSource
     from sourceSets.main.output
 }

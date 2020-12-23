@@ -4,7 +4,7 @@ license="MIT License"
 
 [[mods]]
 modId="playerex"
-version="1.1.0"
+version="1.1.2"
 displayName="Player Ex"
 displayURL="https://github.com/CleverNucleus/PlayerEx"
 logoFile="logo.png"
@@ -27,11 +27,4 @@ A clever implementaton of a novel attributes system for players.
     mandatory=true
     versionRange="[1.16.3]"
     ordering="NONE"
-    side="BOTH"
-
-[[dependencies.playerex]]
-    modId="curios"
-    mandatory=true
-    versionRange="[1.16.3-4.0,]"
-    ordering="AFTER"
     side="BOTH"
