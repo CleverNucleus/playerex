@@ -73,9 +73,6 @@ public class DefaultPage extends Page {
 		
 		var0.add(new StringTextComponent(TextFormatting.GRAY + I18n.format(ExAPI.MODID + ".attribute.constitution.alt0")));
 		var0.add(new StringTextComponent(TextFormatting.GRAY + I18n.format(ExAPI.MODID + ".attribute.constitution.alt1")));
-		var0.add(new StringTextComponent(TextFormatting.GRAY + I18n.format(ExAPI.MODID + ".attribute.constitution.alt2")));
-		var0.add(new StringTextComponent(TextFormatting.GRAY + I18n.format(ExAPI.MODID + ".attribute.constitution.alt3")));
-		var0.add(new StringTextComponent(TextFormatting.GRAY + I18n.format(ExAPI.MODID + ".attribute.constitution.alt4")));
 		
 		for(BiFunction<PlayerEntity, IPlayerElements, String> var : ClientReg.getTooltips(Elements.CONSTITUTION.registry())) {
 			var0.add(new StringTextComponent(var.apply(par0, par1)));
@@ -93,9 +90,6 @@ public class DefaultPage extends Page {
 		var0.add(new StringTextComponent(TextFormatting.GRAY + I18n.format(ExAPI.MODID + ".attribute.strength.alt0")));
 		var0.add(new StringTextComponent(TextFormatting.GRAY + I18n.format(ExAPI.MODID + ".attribute.strength.alt1")));
 		var0.add(new StringTextComponent(TextFormatting.GRAY + I18n.format(ExAPI.MODID + ".attribute.strength.alt2")));
-		var0.add(new StringTextComponent(TextFormatting.GRAY + I18n.format(ExAPI.MODID + ".attribute.strength.alt3")));
-		var0.add(new StringTextComponent(TextFormatting.GRAY + I18n.format(ExAPI.MODID + ".attribute.strength.alt4")));
-		var0.add(new StringTextComponent(TextFormatting.GRAY + I18n.format(ExAPI.MODID + ".attribute.strength.alt5")));
 		
 		for(BiFunction<PlayerEntity, IPlayerElements, String> var : ClientReg.getTooltips(Elements.STRENGTH.registry())) {
 			var0.add(new StringTextComponent(var.apply(par0, par1)));
@@ -114,9 +108,6 @@ public class DefaultPage extends Page {
 		var0.add(new StringTextComponent(TextFormatting.GRAY + I18n.format(ExAPI.MODID + ".attribute.dexterity.alt1")));
 		var0.add(new StringTextComponent(TextFormatting.GRAY + I18n.format(ExAPI.MODID + ".attribute.dexterity.alt2")));
 		var0.add(new StringTextComponent(TextFormatting.GRAY + I18n.format(ExAPI.MODID + ".attribute.dexterity.alt3")));
-		var0.add(new StringTextComponent(TextFormatting.GRAY + I18n.format(ExAPI.MODID + ".attribute.dexterity.alt4")));
-		var0.add(new StringTextComponent(TextFormatting.GRAY + I18n.format(ExAPI.MODID + ".attribute.dexterity.alt5")));
-		var0.add(new StringTextComponent(TextFormatting.GRAY + I18n.format(ExAPI.MODID + ".attribute.dexterity.alt6")));
 		
 		for(BiFunction<PlayerEntity, IPlayerElements, String> var : ClientReg.getTooltips(Elements.DEXTERITY.registry())) {
 			var0.add(new StringTextComponent(var.apply(par0, par1)));
@@ -134,10 +125,6 @@ public class DefaultPage extends Page {
 		var0.add(new StringTextComponent(TextFormatting.GRAY + I18n.format(ExAPI.MODID + ".attribute.intelligence.alt0")));
 		var0.add(new StringTextComponent(TextFormatting.GRAY + I18n.format(ExAPI.MODID + ".attribute.intelligence.alt1")));
 		var0.add(new StringTextComponent(TextFormatting.GRAY + I18n.format(ExAPI.MODID + ".attribute.intelligence.alt2")));
-		var0.add(new StringTextComponent(TextFormatting.GRAY + I18n.format(ExAPI.MODID + ".attribute.intelligence.alt3")));
-		var0.add(new StringTextComponent(TextFormatting.GRAY + I18n.format(ExAPI.MODID + ".attribute.intelligence.alt4")));
-		var0.add(new StringTextComponent(TextFormatting.GRAY + I18n.format(ExAPI.MODID + ".attribute.intelligence.alt5")));
-		var0.add(new StringTextComponent(TextFormatting.GRAY + I18n.format(ExAPI.MODID + ".attribute.intelligence.alt6")));
 		
 		for(BiFunction<PlayerEntity, IPlayerElements, String> var : ClientReg.getTooltips(Elements.INTELLIGENCE.registry())) {
 			var0.add(new StringTextComponent(var.apply(par0, par1)));
@@ -156,7 +143,6 @@ public class DefaultPage extends Page {
 		var0.add(new StringTextComponent(TextFormatting.GRAY + I18n.format(ExAPI.MODID + ".attribute.luckiness.alt1")));
 		var0.add(new StringTextComponent(TextFormatting.GRAY + I18n.format(ExAPI.MODID + ".attribute.luckiness.alt2")));
 		var0.add(new StringTextComponent(TextFormatting.GRAY + I18n.format(ExAPI.MODID + ".attribute.luckiness.alt3")));
-		var0.add(new StringTextComponent(TextFormatting.GRAY + I18n.format(ExAPI.MODID + ".attribute.luckiness.alt4")));
 		
 		for(BiFunction<PlayerEntity, IPlayerElements, String> var : ClientReg.getTooltips(Elements.LUCKINESS.registry())) {
 			var0.add(new StringTextComponent(var.apply(par0, par1)));

@@ -20,7 +20,7 @@ import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.util.ResourceLocation;
 
 /**
- * Main API for modders. Allows the dev to register/edit/add/get elements.
+ * Allows the dev to register/edit/add/get elements.
  */
 public class Elements {
 	protected static final BiMap<ResourceLocation, Element> ELEMENT_REGISTRY = HashBiMap.create();
@@ -67,10 +67,7 @@ public class Elements {
 		float var3 = var.addingValue();
 		
 		var1.add(var0, Elements.HEALTH, var3);
-		var1.add(var0, Elements.HEALTH_REGEN_AMP, (float)(var3 * 0.01D));
 		var1.add(var0, Elements.KNOCKBACK_RESISTANCE, (float)(var3 * 0.01D));
-		var1.add(var0, Elements.EXPLOSION_RESISTANCE, (float)(var3 * 0.01D));
-		var1.add(var0, Elements.DROWNING_RESISTANCE, (float)(var3 * 0.01D));
 		
 		for(Consumer<ElementFunction> var4 : ADD_REGISTRY.getOrDefault(Elements.CONSTITUTION.registry(), new ArrayList<Consumer<ElementFunction>>())) {
 			var4.accept(var);
@@ -84,12 +81,9 @@ public class Elements {
 		float var2 = var.currentValue();
 		float var3 = var.addingValue();
 		
+		var1.add(var0, Elements.ARMOR, (float)(var3 * 0.5D));
 		var1.add(var0, Elements.HEALTH_REGEN, (float)(var3 * 0.0005D));
-		var1.add(var0, Elements.DAMAGE_RESISTANCE, (float)(var3 * 0.01D));
-		var1.add(var0, Elements.FALLING_RESISTANCE, (float)(var3 * 0.01D));
 		var1.add(var0, Elements.MELEE_DAMAGE, (float)(var3 * 0.25D));
-		var1.add(var0, Elements.EXPLOSION_RESISTANCE, (float)(var3 * 0.01D));
-		var1.add(var0, Elements.LAVA_RESISTANCE, (float)(var3 * 0.01D));
 		
 		for(Consumer<ElementFunction> var4 : ADD_REGISTRY.getOrDefault(Elements.STRENGTH.registry(), new ArrayList<Consumer<ElementFunction>>())) {
 			var4.accept(var);
@@ -103,9 +97,6 @@ public class Elements {
 		float var2 = var.currentValue();
 		float var3 = var.addingValue();
 		
-		var1.add(var0, Elements.ARMOR, (float)(var3 * 0.5D));
-		var1.add(var0, Elements.FALLING_RESISTANCE, (float)(var3 * 0.01D));
-		var1.add(var0, Elements.FIRE_RESISTANCE, (float)(var3 * 0.01D));
 		var1.add(var0, Elements.MOVEMENT_SPEED_AMP, (float)(var3 * 0.02D));
 		var1.add(var0, Elements.MELEE_CRIT_DAMAGE, (float)(var3 * 0.05D));
 		var1.add(var0, Elements.ATTACK_SPEED, (float)(var3 * 0.25D));
@@ -123,11 +114,7 @@ public class Elements {
 		float var2 = var.currentValue();
 		float var3 = var.addingValue();
 		
-		var1.add(var0, Elements.FIRE_RESISTANCE, (float)(var3 * 0.01D));
-		var1.add(var0, Elements.LAVA_RESISTANCE, (float)(var3 * 0.01D));
-		var1.add(var0, Elements.POISON_RESISTANCE, (float)(var3 * 0.01D));
-		var1.add(var0, Elements.WITHER_RESISTANCE, (float)(var3 * 0.01D));
-		var1.add(var0, Elements.DROWNING_RESISTANCE, (float)(var3 * 0.01D));
+		var1.add(var0, Elements.HEALTH_REGEN_AMP, (float)(var3 * 0.01D));
 		var1.add(var0, Elements.RANGED_CRIT_DAMAGE, (float)(var3 * 0.05D));
 		var1.add(var0, Elements.LIFESTEAL, (float)(var3 * 0.02D));
 		
@@ -147,7 +134,6 @@ public class Elements {
 		var1.add(var0, Elements.MELEE_CRIT_CHANCE, (float)(var3 * 0.02D));
 		var1.add(var0, Elements.RANGED_CRIT_CHANCE, (float)(var3 * 0.02D));
 		var1.add(var0, Elements.EVASION_CHANCE, (float)(var3 * 0.02D));
-		var1.add(var0, Elements.POISON_RESISTANCE, (float)(var3 * 0.01D));
 		
 		for(Consumer<ElementFunction> var4 : ADD_REGISTRY.getOrDefault(Elements.LUCKINESS.registry(), new ArrayList<Consumer<ElementFunction>>())) {
 			var4.accept(var);
