@@ -5,7 +5,6 @@ import java.util.function.BiConsumer;
 import com.mojang.blaze3d.matrix.MatrixStack;
 import com.mojang.blaze3d.systems.RenderSystem;
 
-import git.clevernucleus.playerex.api.client.ClientReg;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.screen.inventory.ContainerScreen;
 import net.minecraft.client.gui.widget.button.AbstractButton;
@@ -16,7 +15,7 @@ import net.minecraft.util.text.StringTextComponent;
  * Similar to ImageButton, but with some modifications specific to the needs of this object.
  */
 public class PageButton extends AbstractButton {
-	private ContainerScreen<?> parentScreen;
+	private PlayerAttributesScreen parentScreen;
 	private BiConsumer<ContainerScreen<?>, Integer> pressFunction; 
 	private int textureLat, textureLon, additionalData;
 	
@@ -34,7 +33,7 @@ public class PageButton extends AbstractButton {
 	public PageButton(final ContainerScreen<?> par0, final int par1, final int par2, int par3, int par4, final int par5, final int par6, final int par7, final BiConsumer<ContainerScreen<?>, Integer> par8) {
 		super(par0.getGuiLeft() + par1, par0.getGuiTop() + par2, par3, par4, new StringTextComponent(""));
 		
-		this.parentScreen = par0;
+		this.parentScreen = (PlayerAttributesScreen)par0;
 		this.textureLat = par5;
 		this.textureLon = par6;
 		this.additionalData = par7;
@@ -46,7 +45,7 @@ public class PageButton extends AbstractButton {
 		return (par0 >= this.x && par1 >= this.y && par0 < this.x + this.width && par1 < this.y + this.height);
 	}
 	
-	public int getAdditionalData() {
+	public int additionalData() {
 		return this.additionalData;
 	}
 	
@@ -60,7 +59,7 @@ public class PageButton extends AbstractButton {
 	public void renderButton(MatrixStack par0, int par1, int par2, float par3) {
 		Minecraft var0 = Minecraft.getInstance();
 		
-		var0.getTextureManager().bindTexture(PlayerElementsScreen.TAB);
+		var0.getTextureManager().bindTexture(PlayerAttributesScreen.TAB);
 		
 		RenderSystem.disableDepthTest();
 		
@@ -70,6 +69,6 @@ public class PageButton extends AbstractButton {
 		
 		ItemRenderer var1 = var0.getItemRenderer();
 		
-		var1.renderItemAndEffectIntoGUI(ClientReg.getPage(this.additionalData).displayStack(), this.x + 6, this.y + (this.additionalData < 6 ? 8 : 6));
+		var1.renderItemAndEffectIntoGUI(this.parentScreen.getPage(this.additionalData).displayStack(), this.x + 6, this.y + (this.additionalData < 6 ? 8 : 6));
 	}
 }

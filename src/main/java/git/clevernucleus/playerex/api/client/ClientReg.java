@@ -2,79 +2,72 @@ package git.clevernucleus.playerex.api.client;
 
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.List;
 import java.util.Map;
 import java.util.function.BiFunction;
 
+import com.google.common.collect.ArrayListMultimap;
+import com.google.common.collect.ImmutableList;
+import com.google.common.collect.ImmutableListMultimap;
 import com.google.common.collect.Maps;
+import com.google.common.collect.Multimap;
 
-import git.clevernucleus.playerex.api.element.IPlayerElements;
-import git.clevernucleus.playerex.client.gui.DefaultPage;
-import git.clevernucleus.playerex.api.ExAPI;
-import git.clevernucleus.playerex.api.client.Page;
+import git.clevernucleus.playerex.api.attribute.IPlayerAttributes;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.text.StringTextComponent;
-import net.minecraft.util.text.TranslationTextComponent;
 
 /**
  * Use this to register client side things.
  */
 public class ClientReg {
-	private static final Map<Integer, Page> INDEX = Maps.newHashMap();
-	private static final Map<ResourceLocation, List<BiFunction<PlayerEntity, IPlayerElements, String>>> TOOLTIPS = Maps.newHashMap();
-	
-	static {
-		INDEX.put(Integer.valueOf(0), new DefaultPage(new TranslationTextComponent(ExAPI.MODID + ".player_elements")));
-	}
+	private static final Map<ResourceLocation, Page> INDEX = Maps.newHashMap();
+	private static final Multimap<ResourceLocation, BiFunction<PlayerEntity, IPlayerAttributes, String>> TOOLTIPS = ArrayListMultimap.create();
 	
 	/**
 	 * Add to the tooltip of an element.
-	 * @param par0 The element's resource location
+	 * @param par0 The IPlayerAttribute's registryName.
 	 * @param par1 The output string to display on the tooltip (dynamic).
 	 */
-	public static void addTooltip(final ResourceLocation par0, BiFunction<PlayerEntity, IPlayerElements, String> par1) {
-		List<BiFunction<PlayerEntity, IPlayerElements, String>> var0 = TOOLTIPS.getOrDefault(par0, new ArrayList<BiFunction<PlayerEntity, IPlayerElements, String>>());
-		
-		var0.add(par1);
-		
-		TOOLTIPS.put(par0, var0);
-	}
-	
-	/**
-	 * @param par0 Element's resource location
-	 * @return The input element's tooltip list.
-	 */
-	public static List<BiFunction<PlayerEntity, IPlayerElements, String>> getTooltips(final ResourceLocation par0) {
-		return TOOLTIPS.getOrDefault(par0, new ArrayList<BiFunction<PlayerEntity, IPlayerElements, String>>());
+	public static void addTooltip(final ResourceLocation par0, BiFunction<PlayerEntity, IPlayerAttributes, String> par1) {
+		TOOLTIPS.put(par0, par1);
 	}
 	
 	/**
 	 * Registers a new player attributes page/tab.
-	 * @param par1
-	 * @return
+	 * @param par1 Registry Name.
+	 * @return the registered page.
 	 */
-	public static Page registerPage(final Page par1) {
-		int var0 = INDEX.size();
-		
-		if(!INDEX.containsKey(Integer.valueOf(0))) {
-			var0++;
-		}
-		
-		INDEX.putIfAbsent(var0, par1);
-		
-		return par1;
+	public static Page registerPage(final ResourceLocation par0, final Page par1) {
+		return INDEX.put(par0, par1);
 	}
 	
-	public static Page getPage(int par0) {
+	/**
+	 * @return An immutable copy of the TOOLTIPS Multimap.
+	 */
+	public static Multimap<ResourceLocation, BiFunction<PlayerEntity, IPlayerAttributes, String>> tooltips() {
+		return ImmutableListMultimap.copyOf(TOOLTIPS);
+	}
+	
+	/**
+	 * @param par0 Registry name.
+	 * @return Collection of tooltips attached to the input registry name.
+	 */
+	public static Collection<BiFunction<PlayerEntity, IPlayerAttributes, String>> getTooltips(final ResourceLocation par0) {
+		return ImmutableList.copyOf(TOOLTIPS.asMap().getOrDefault(par0, new ArrayList<>()));
+	}
+	
+	/**
+	 * @param par0 Registry Name.
+	 * @return The relevant page from the registry.
+	 */
+	public static Page getPage(final ResourceLocation par0) {
 		return INDEX.getOrDefault(par0, new Page(new StringTextComponent("")));
 	}
 	
-	public static Collection<Page> getPages() {
-		return INDEX.values();
-	}
-	
-	public static int size() {
-		return INDEX.size();
+	/**
+	 * @return A collection of all the registry names for each page.
+	 */
+	public static Collection<ResourceLocation> pageRegistry() {
+		return INDEX.keySet();
 	}
 }

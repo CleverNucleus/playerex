@@ -1,37 +1,30 @@
-package git.clevernucleus.playerex.client.event;
+package git.clevernucleus.playerex.client.gui;
 
 import git.clevernucleus.playerex.api.ExAPI;
-import git.clevernucleus.playerex.client.gui.OverlayScreen;
-import git.clevernucleus.playerex.client.gui.TexturedButton;
-import git.clevernucleus.playerex.event.RegistryEvents;
-import git.clevernucleus.playerex.network.SwitchScreens;
+import git.clevernucleus.playerex.init.Registry;
+import git.clevernucleus.playerex.init.container.SwitchScreens;
 import git.clevernucleus.playerex.util.ConfigSetting;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.client.gui.screen.inventory.ContainerScreen;
 import net.minecraft.client.gui.screen.inventory.InventoryScreen;
 import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.client.event.GuiScreenEvent;
-import net.minecraftforge.client.event.RenderGameOverlayEvent;
 import net.minecraftforge.client.event.RenderGameOverlayEvent.ElementType;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 
-/**
- * Events holder on the FORGE bus for client side hooks.
- */
 @Mod.EventBusSubscriber(modid = ExAPI.MODID, bus = Mod.EventBusSubscriber.Bus.FORGE, value = Dist.CLIENT)
-public class GuiEvents {
+public class ClientEventHandler {
 	
 	/** Custom overlay object. */
 	private static OverlayScreen overlay = new OverlayScreen(() -> Minecraft.getInstance());
 	
 	/**
-	 * Event for adding components to a container.
+	 * Event for adding to a gui container.
 	 * @param par0
 	 */
 	@SubscribeEvent
-	public static void onGuiInit(final GuiScreenEvent.InitGuiEvent.Post par0) {
+	public static void onGuiInitPost(final net.minecraftforge.client.event.GuiScreenEvent.InitGuiEvent.Post par0) {
 		Screen var0 = par0.getGui();
 		
 		if(var0 instanceof InventoryScreen) {
@@ -40,15 +33,19 @@ public class GuiEvents {
 			if(par0.getWidgetList() != null) {
 				par0.addWidget(new TexturedButton(var1, 155, 7, 14, 13, 176, 0, 0, (var2, var3) -> {
 					if(var2 instanceof InventoryScreen) {
-						RegistryEvents.NETWORK.sendToServer(new SwitchScreens(false));
+						Registry.NETWORK.sendToServer(new SwitchScreens(false));
 					}
-				}, null));
+				}));
 			}
 		}
 	}
 	
+	/**
+	 * Event for adding ingame HUD elements (pre-render).
+	 * @param par0
+	 */
 	@SubscribeEvent
-	public static void onHUDRender(final RenderGameOverlayEvent.Pre par0) {
+	public static void onHUDRenderPre(final net.minecraftforge.client.event.RenderGameOverlayEvent.Pre par0) {
 		if(!ConfigSetting.CLIENT.enableGui.get().booleanValue() || overlay == null) return;
 		
 		ElementType var0 = par0.getType();
@@ -63,8 +60,12 @@ public class GuiEvents {
 		overlay.draw(par0.getMatrixStack(), true);
 	}
 	
+	/**
+	 * Event for adding ingame HUD elements (post-render).
+	 * @param par0
+	 */
 	@SubscribeEvent
-	public static void onRenderIntercept(final RenderGameOverlayEvent.Post par0) {
+	public static void onHUDRenderPost(final net.minecraftforge.client.event.RenderGameOverlayEvent.Post par0) {
 		if(!ConfigSetting.CLIENT.enableGui.get().booleanValue() || overlay == null) return;
 		if(par0.getType() != ElementType.HOTBAR) return;
 		if(Minecraft.getInstance().player.isCreative()) return;

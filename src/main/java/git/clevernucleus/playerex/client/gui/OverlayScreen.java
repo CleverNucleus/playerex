@@ -10,7 +10,7 @@ import com.mojang.blaze3d.matrix.MatrixStack;
 
 import git.clevernucleus.playerex.api.ExAPI;
 import git.clevernucleus.playerex.api.Util;
-import git.clevernucleus.playerex.api.element.Elements;
+import git.clevernucleus.playerex.api.attribute.PlayerAttributes;
 import net.minecraft.client.MainWindow;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.entity.player.ClientPlayerEntity;
@@ -64,13 +64,13 @@ public class OverlayScreen extends AbstractGui {
 		if(par1) {
 			int var2 = (int)(78F / var0.getMaxHealth() * var0.getHealth());
 			
-			this.mc.get().getTextureManager().bindTexture(PlayerElementsScreen.GUI);
+			this.mc.get().getTextureManager().bindTexture(PlayerAttributesScreen.GUI);
 			this.blit(par0, (varX / 2) - 91, varY - 37, 0, 178, 78, 8);
 			this.blit(par0, (varX / 2) - 91, varY - 37, 0, healthLat(var0), var2, 8);
 			this.blit(par0, (varX / 2) - 91, varY - 27, 0, 166, 182, 3);
 			
-			ExAPI.playerElements(var0).ifPresent(var -> {
-				int var3 = (int)(182F * Util.expCoeff(var.get(var0, Elements.LEVEL), var.get(var0, Elements.EXPERIENCE)));
+			ExAPI.playerAttributes(var0).ifPresent(var -> {
+				int var3 = (int)(182F * Util.expCoeff(var.get(var0, PlayerAttributes.LEVEL), var.get(var0, PlayerAttributes.EXPERIENCE)));
 				
 				if(Screen.hasAltDown()) {
 					this.blit(par0, (varX / 2) - 91, varY - 27, 0, 169, var3, 3);
@@ -115,32 +115,35 @@ public class OverlayScreen extends AbstractGui {
 			this.blit(par0, (varX / 2) + 12, varY - 38, var3 ? 88 : 52, 27, 9, 9);
 			this.blit(par0, (varX / 2) + (var4 < 100 ? 44 : 50), varY - 38, 34, 9, 9, 9);//+44 min left, +50 max left
 			
-			int p = var0.getTotalArmorValue();
-			
-			if(var4 < 100) {
-				this.blit(par0, (varX / 2) + (p < 10 ? 66 : (p < 100 ? 70 : 76)), varY - 38, 16, 18, 9, 9);//66 min, 70 med, 
-			}
+			ExAPI.playerAttributes(var0).ifPresent(var -> {
+				int p = Math.round((float)var.get(var0, PlayerAttributes.ARMOR));
+				
+				if(var4 < 100) {
+					this.blit(par0, (varX / 2) + (p < 10 ? 66 : (p < 100 ? 70 : 76)), varY - 38, 16, 18, 9, 9);//66 min, 70 med, 
+				}
+			});
 		} else {
 			FontRenderer var2 = this.mc.get().fontRenderer;
 			String var3 = this.format.apply("#.##", (double)var0.getHealth() + var0.getAbsorptionAmount()) + "/" + this.format.apply("#.##", (double)var0.getMaxHealth());
-			String var4 = "x" + var0.getTotalArmorValue();
-			String var5 = (int)(100F * (float)var0.getFoodStats().getFoodLevel() / 20F) + "%";
-			int var6 = (int)(100F * Math.max((float)var0.getAir(), 0F) / (float)var0.getMaxAir());
-			int var7 = (varX - var2.getStringWidth(var3)) / 2;
-			
-			int p = var0.getTotalArmorValue();
-			
-			GL11.glPushMatrix();
-			GL11.glScalef(0.8F, 0.8F, 0.8F);
-			
-			var2.drawString(par0, var3, 1.25F * (var7 - 48), 1.25F * (varY - 36F), 0xFFFFFF);
-			var2.drawString(par0, var4, 1.25F * ((varX / 2) + (var6 < 100 ? 54 : 60)), 1.25F * (varY - 36F), 0xFFFFFF);//+54 min left, + 60 max left
-			var2.drawString(par0, var5, 1.25F * ((varX / 2) + 22), 1.25F * (varY - 36F), 0xFFFFFF);
-			
-			if(var6 < 100) {
-				var2.drawString(par0, var6 + "%", 1.25F * ((varX / 2) + (p < 10 ? 76 : (p < 100 ? 80 : 86))), 1.25F * (varY - 36F), 0xFFFFFF);//76 min, 80 med, 
-			}
-			
+			ExAPI.playerAttributes(var0).ifPresent(var -> {
+				int p = Math.round((float)var.get(var0, PlayerAttributes.ARMOR));
+				
+				String var4 = "x" + p;
+				String var5 = (int)(100F * (float)var0.getFoodStats().getFoodLevel() / 20F) + "%";
+				int var6 = (int)(100F * Math.max((float)var0.getAir(), 0F) / (float)var0.getMaxAir());
+				int var7 = (varX - var2.getStringWidth(var3)) / 2;
+				
+				GL11.glPushMatrix();
+				GL11.glScalef(0.8F, 0.8F, 0.8F);
+				
+				var2.drawString(par0, var3, 1.25F * (var7 - 48), 1.25F * (varY - 36F), 0xFFFFFF);
+				var2.drawString(par0, var4, 1.25F * ((varX / 2) + (var6 < 100 ? 54 : 60)), 1.25F * (varY - 36F), 0xFFFFFF);//+54 min left, + 60 max left
+				var2.drawString(par0, var5, 1.25F * ((varX / 2) + 22), 1.25F * (varY - 36F), 0xFFFFFF);
+				
+				if(var6 < 100) {
+					var2.drawString(par0, var6 + "%", 1.25F * ((varX / 2) + (p < 10 ? 76 : (p < 100 ? 80 : 86))), 1.25F * (varY - 36F), 0xFFFFFF);//76 min, 80 med, 
+				}
+			});
 			if(var0.isRidingHorse()) {
 				Entity var8 = var0.getRidingEntity();
 				
@@ -155,11 +158,11 @@ public class OverlayScreen extends AbstractGui {
 			
 			GL11.glPopMatrix();
 			
-			ExAPI.playerElements(var0).ifPresent(var -> {
+			ExAPI.playerAttributes(var0).ifPresent(var -> {
 				int var8 = 0, var9 = 0, var10 = varY - 36;
 				
 				if(Screen.hasAltDown()) {
-					var8 = (int)var.get(var0, Elements.LEVEL);
+					var8 = (int)var.get(var0, PlayerAttributes.LEVEL);
 					var9 = 16759296;
 				} else {
 					var8 = var0.experienceLevel;

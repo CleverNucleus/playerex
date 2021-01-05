@@ -1,8 +1,8 @@
 package git.clevernucleus.playerex;
 
 import git.clevernucleus.playerex.api.ExAPI;
-import git.clevernucleus.playerex.util.IProxy;
 import git.clevernucleus.playerex.util.ConfigSetting;
+import git.clevernucleus.playerex.util.IProxy;
 import net.minecraftforge.fml.DistExecutor;
 import net.minecraftforge.fml.ModLoadingContext;
 import net.minecraftforge.fml.common.Mod;

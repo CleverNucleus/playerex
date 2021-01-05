@@ -1,8 +1,7 @@
-package git.clevernucleus.playerex.network;
+package git.clevernucleus.playerex.init.container;
 
 import java.util.function.Supplier;
 
-import git.clevernucleus.playerex.container.PlayerElementsContainerProvider;
 import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.network.PacketBuffer;
 import net.minecraftforge.fml.network.NetworkEvent;
@@ -58,7 +57,7 @@ public class SwitchScreens {
 				}
 			} else {
 				par1.get().getSender().closeContainer();
-				NetworkHooks.openGui(par1.get().getSender(), new PlayerElementsContainerProvider());
+				NetworkHooks.openGui(par1.get().getSender(), new PlayerAttributesContainerProvider());
 			}
 		});
 		

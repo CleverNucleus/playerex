@@ -2,8 +2,6 @@ package git.clevernucleus.playerex.client.gui;
 
 import java.util.function.BiConsumer;
 
-import javax.annotation.Nullable;
-
 import com.mojang.blaze3d.matrix.MatrixStack;
 import com.mojang.blaze3d.systems.RenderSystem;
 
@@ -18,7 +16,6 @@ import net.minecraft.util.text.StringTextComponent;
 public class TexturedButton extends AbstractButton {
 	private ContainerScreen<?> parentScreen;
 	private BiConsumer<ContainerScreen<?>, Integer> pressFunction;
-	private BiConsumer<Minecraft, Integer[]> additionalRendering;
 	private int textureLat, textureLon, additionalData;
 	
 	/**
@@ -34,7 +31,7 @@ public class TexturedButton extends AbstractButton {
 	 * @param par8 Called when the button is pressed. 
 	 * @param par9 Called when rendering the button.
 	 */
-	public TexturedButton(final ContainerScreen<?> par0, final int par1, final int par2, int par3, int par4, final int par5, final int par6, final int par7, final BiConsumer<ContainerScreen<?>, Integer> par8, @Nullable BiConsumer<Minecraft, Integer[]> par9) {
+	public TexturedButton(final ContainerScreen<?> par0, final int par1, final int par2, int par3, int par4, final int par5, final int par6, final int par7, final BiConsumer<ContainerScreen<?>, Integer> par8) {
 		super(par0.getGuiLeft() + par1, par0.getGuiTop() + par2, par3, par4, new StringTextComponent(""));
 		
 		this.parentScreen = par0;
@@ -42,7 +39,6 @@ public class TexturedButton extends AbstractButton {
 		this.textureLon = par6;
 		this.additionalData = par7;
 		this.pressFunction = par8;
-		this.additionalRendering = par9;
 	}
 	
 	public int getAdditionalData() {
@@ -58,7 +54,7 @@ public class TexturedButton extends AbstractButton {
 	public void renderButton(MatrixStack par0, int par1, int par2, float par3) {
 		Minecraft var0 = Minecraft.getInstance();
 		
-		var0.getTextureManager().bindTexture(PlayerElementsScreen.GUI);
+		var0.getTextureManager().bindTexture(PlayerAttributesScreen.GUI);
 		
 		RenderSystem.disableDepthTest();
 		
@@ -75,9 +71,5 @@ public class TexturedButton extends AbstractButton {
 		this.blit(par0, this.x, this.y, this.textureLat, var1, this.width, this.height);
 		
 		RenderSystem.enableDepthTest();
-		
-		if(this.additionalRendering == null) return;
-		
-		this.additionalRendering.accept(var0, new Integer[] {this.x, this.y});
 	}
 }

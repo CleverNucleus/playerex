@@ -1,4 +1,4 @@
-package git.clevernucleus.playerex.network;
+package git.clevernucleus.playerex.init.capability;
 
 import java.util.function.Supplier;
 
@@ -6,7 +6,6 @@ import javax.annotation.Nonnull;
 
 import git.clevernucleus.playerex.PlayerEx;
 import git.clevernucleus.playerex.api.ExAPI;
-import net.minecraft.entity.ai.attributes.Attributes;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.network.PacketBuffer;
 import net.minecraftforge.fml.network.NetworkEvent;
@@ -14,16 +13,16 @@ import net.minecraftforge.fml.network.NetworkEvent;
 /**
  * Network packet responsible for syncing server entity display data to the client.
  */
-public class SyncPlayerElements {
+public class SyncPlayerAttributes {
 	private CompoundNBT tag;
 	
-	public SyncPlayerElements() {}
+	public SyncPlayerAttributes() {}
 	
 	/**
 	 * Constructor.
 	 * @param par0 Compound tag to send.
 	 */
-	public SyncPlayerElements(final @Nonnull CompoundNBT par0) {
+	public SyncPlayerAttributes(final @Nonnull CompoundNBT par0) {
 		this.tag = par0;
 	}
 	
@@ -32,7 +31,7 @@ public class SyncPlayerElements {
 	 * @param par0 Input packet.
 	 * @param par1 Input buffer
 	 */
-	public static void encode(SyncPlayerElements par0, PacketBuffer par1) {
+	public static void encode(SyncPlayerAttributes par0, PacketBuffer par1) {
 		par1.writeCompoundTag(par0.tag);
 	}
 	
@@ -41,8 +40,8 @@ public class SyncPlayerElements {
 	 * @param par0 Input buffer.
 	 * @return A new Packet instance.
 	 */
-	public static SyncPlayerElements decode(PacketBuffer par0) {
-		return new SyncPlayerElements(par0.readCompoundTag());
+	public static SyncPlayerAttributes decode(PacketBuffer par0) {
+		return new SyncPlayerAttributes(par0.readCompoundTag());
 	}
 	
 	/**
@@ -50,16 +49,13 @@ public class SyncPlayerElements {
 	 * @param par0 Packet input.
 	 * @param par1 Network context.
 	 */
-	public static void handle(SyncPlayerElements par0, Supplier<NetworkEvent.Context> par1) {
+	public static void handle(SyncPlayerAttributes par0, Supplier<NetworkEvent.Context> par1) {
 		if(par1.get().getDirection().getReceptionSide().isClient()) {
 			par1.get().enqueueWork(() -> {
 				PlayerEx.PROXY.player().ifPresent(var0 -> {
-					if(par0.tag == null) return;
-					
-					var0.getAttribute(Attributes.KNOCKBACK_RESISTANCE).setBaseValue(par0.tag.getDouble("generic.knockbackResistance"));
-					var0.getAttribute(Attributes.ATTACK_DAMAGE).setBaseValue(par0.tag.getDouble("generic.attackDamage"));
-					
-					ExAPI.playerElements(var0).ifPresent(var -> var.read(par0.tag.getCompound("Elements")));
+					if(par0.tag != null) {
+						ExAPI.playerAttributes(var0).ifPresent(var1 -> ((AttributesCapability)var1).receive(par0.tag));
+					}
 				});
 			});
 			

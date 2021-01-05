@@ -1,5 +1,5 @@
 modLoader="javafml"
-loaderVersion="[34,)"
+loaderVersion="[35,)"
 license="MIT License"
 
 [[mods]]
@@ -8,23 +8,23 @@ version="1.1.2"
 displayName="Player Ex"
 displayURL="https://github.com/CleverNucleus/PlayerEx"
 logoFile="logo.png"
-credits="CleverNucleus: Code and major texturer; Kyrise, Bonsaiheldin, Joe Williamson, Orteil, 7Soul1 & Darina Matvienko: Awesome textures."
+credits="CleverNucleus: Code and major texturer."
 authors="CleverNucleus"
 
 description='''
-A clever implementaton of a novel attributes system for players.
+A clever implementaton of a novel attributes API for players and devs.
 '''
 
 [[dependencies.playerex]]
     modId="forge"
     mandatory=true
-    versionRange="[34,)"
+    versionRange="[35,)"
     ordering="NONE"
     side="BOTH"
 
 [[dependencies.playerex]]
     modId="minecraft"
     mandatory=true
-    versionRange="[1.16.3]"
+    versionRange="[1.16.4]"
     ordering="NONE"
     side="BOTH"

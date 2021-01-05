@@ -1,0 +1,330 @@
+package git.clevernucleus.playerex.init;
+
+import java.util.Random;
+
+import git.clevernucleus.playerex.api.ExAPI;
+import git.clevernucleus.playerex.api.Util;
+import git.clevernucleus.playerex.api.attribute.PlayerAttributes;
+import git.clevernucleus.playerex.init.capability.AttributesCapability;
+import git.clevernucleus.playerex.init.capability.CapabilityProvider;
+import git.clevernucleus.playerex.util.ConfigSetting;
+import net.minecraft.entity.Entity;
+import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.nbt.CompoundNBT;
+import net.minecraft.util.DamageSource;
+import net.minecraft.util.ResourceLocation;
+import net.minecraftforge.eventbus.api.Event.Result;
+import net.minecraftforge.eventbus.api.EventPriority;
+import net.minecraftforge.eventbus.api.SubscribeEvent;
+import net.minecraftforge.fml.common.Mod;
+
+@Mod.EventBusSubscriber(modid = ExAPI.MODID, bus = Mod.EventBusSubscriber.Bus.FORGE)
+public class EventHandler {
+	
+	/**
+	 * Initialises the config to the game.
+	 * @param par0
+	 */
+	private static void initAttributes(final PlayerEntity par0) {
+		if(par0 == null) return;
+		if(par0.world.isRemote) return;
+		
+		ExAPI.playerAttributes(par0).ifPresent(var -> {
+			CompoundNBT var0 = var.write();
+			
+			if(!var0.getBoolean("Initialised")) {
+				var.add(par0, PlayerAttributes.CONSTITUTION, ConfigSetting.COMMON.constitution.get().doubleValue());
+				var.add(par0, PlayerAttributes.STRENGTH, ConfigSetting.COMMON.strength.get().doubleValue());
+				var.add(par0, PlayerAttributes.DEXTERITY, ConfigSetting.COMMON.dexterity.get().doubleValue());
+				var.add(par0, PlayerAttributes.INTELLIGENCE, ConfigSetting.COMMON.intelligence.get().doubleValue());
+				var.add(par0, PlayerAttributes.LUCKINESS, ConfigSetting.COMMON.luckiness.get().doubleValue());
+				var.add(par0, PlayerAttributes.MAX_HEALTH, -20D);
+				var0.putBoolean("Initialised", true);
+			}
+		});
+	}
+	
+	/**
+	 * Updates the values of the player's attributes.
+	 * @param par0 Player instance.
+	 */
+	private static void updateAttributes(PlayerEntity par0) {
+		if(par0 == null) return;
+		if(par0.world.isRemote) return;
+		
+		ExAPI.playerAttributes(par0).ifPresent(var -> ((AttributesCapability)var).update(par0));
+	}
+	
+	/**
+	 * Event for attaching capabilities.
+	 * @param par0
+	 */
+	@SubscribeEvent
+    public static void onCapabilityAttachEntity(final net.minecraftforge.event.AttachCapabilitiesEvent<Entity> par0) {
+		if(par0.getObject() instanceof PlayerEntity) {
+			par0.addCapability(new ResourceLocation(ExAPI.MODID, "playerattributes"), new CapabilityProvider());
+		}
+	}
+	
+	/**
+	 * Event firing when the player gets cloned.
+	 * @param par0
+	 */
+	@SubscribeEvent
+    public static void onPlayerEntityCloned(final net.minecraftforge.event.entity.player.PlayerEvent.Clone par0) {
+		PlayerEntity var0 = par0.getPlayer();
+		PlayerEntity var1 = par0.getOriginal();
+		
+		if(var0.world.isRemote) return;
+		
+		try {
+			ExAPI.playerAttributes(var0).ifPresent(par1 -> {
+				ExAPI.playerAttributes(var1).ifPresent(par2 -> {
+					par1.read(par2.write());
+				});
+			});
+		} catch(Exception parE) {}
+		
+		updateAttributes(var0);
+		
+		if(par0.isWasDeath()) {
+			var0.heal(var0.getMaxHealth());
+		}
+	}
+	
+	/**
+	 * Event firing when a player changes dimensions.
+	 * @param par0
+	 */
+	@SubscribeEvent
+    public static void onPlayerChangedDimension(final net.minecraftforge.event.entity.player.PlayerEvent.PlayerChangedDimensionEvent par0) {
+		updateAttributes(par0.getPlayer());
+	}
+	
+	/**
+	 * Event firing when the player respawns.
+	 * @param par0
+	 */
+	@SubscribeEvent
+	public static void onPlayerRespawn(final net.minecraftforge.event.entity.player.PlayerEvent.PlayerRespawnEvent par0) {
+		updateAttributes(par0.getPlayer());
+	}
+	
+	/**
+	 * Event firing when a player logs in.
+	 * @param par0
+	 */
+	@SubscribeEvent
+	public static void onPlayerLoggedIn(final net.minecraftforge.event.entity.player.PlayerEvent.PlayerLoggedInEvent par0) {
+		PlayerEntity var0 = par0.getPlayer();
+		
+		initAttributes(var0);
+		updateAttributes(var0);
+		
+		if(var0.world.isRemote) return;
+		
+		ExAPI.playerAttributes(var0).ifPresent(var -> {
+			CompoundNBT var1 = var.write();
+			
+			if(var1.contains("CurrentHealth")) {
+				var0.setHealth(var1.getFloat("CurrentHealth"));
+			}
+		});
+	}
+	
+	/**
+	 * Event firing when a player logs out.
+	 * @param par0
+	 */
+	@SubscribeEvent
+	public static void onPlayerLoggedOut(final net.minecraftforge.event.entity.player.PlayerEvent.PlayerLoggedOutEvent par0) {
+		PlayerEntity var0 = par0.getPlayer();
+		
+		if(var0.world.isRemote) return;
+		
+		ExAPI.playerAttributes(var0).ifPresent(var -> {
+			CompoundNBT var1 = var.write();
+			
+			var1.putFloat("CurrentHealth", var0.getHealth());
+			var.read(var1);
+		});
+	}
+	
+	/**
+	 * Event firing every tick for the player.
+	 * @param par0
+	 */
+	@SubscribeEvent
+	public static void onPlayerTick(final net.minecraftforge.event.TickEvent.PlayerTickEvent par0) {
+		PlayerEntity var0 = par0.player;
+		
+		if(var0.world.isRemote) return;
+		
+		ExAPI.playerAttributes(var0).ifPresent(var -> {
+			var0.heal((float)var.get(var0, PlayerAttributes.HEALTH_REGEN));
+			((AttributesCapability)var).sync(var0);
+		});
+	}
+	
+	/**
+	 * Event fired when xp is picked up.
+	 * @param par0
+	 */
+	@SubscribeEvent
+	public static void onExperiencePickup(final net.minecraftforge.event.entity.player.PlayerXpEvent.PickupXp par0) {
+		PlayerEntity var0 = par0.getPlayer();
+		
+		if(var0.world.isRemote) return;
+		
+		int var1 = par0.getOrb().getXpValue();
+		
+		ExAPI.playerAttributes(var0).ifPresent(var -> {
+			var.add(var0, PlayerAttributes.EXPERIENCE, var1);
+			
+			float var2 = (float)Util.expCoeff(var.get(var0, PlayerAttributes.LEVEL), var.get(var0, PlayerAttributes.EXPERIENCE));
+			
+			if(var2 > 0.95F) {
+				var.add(var0, PlayerAttributes.LEVEL, 1);
+				var.forceSet(var0, PlayerAttributes.EXPERIENCE, 0F);
+			}
+		});
+	}
+	
+	/**
+	 * Event fired when an entity is healed.
+	 * @param par0
+	 */
+	@SubscribeEvent(priority = EventPriority.HIGHEST)
+	public static void onHeal(final net.minecraftforge.event.entity.living.LivingHealEvent par0) {
+		if(par0.getEntityLiving() instanceof PlayerEntity) {
+			PlayerEntity var0 = (PlayerEntity)par0.getEntityLiving();
+			
+			if(var0.world.isRemote) return;
+			
+			ExAPI.playerAttributes(var0).ifPresent(var -> {
+				par0.setAmount(par0.getAmount() * (1F + (float)var.get(var0, PlayerAttributes.HEALTH_REGEN_AMP)));
+			});
+		}
+	}
+	
+	/**
+	 * Event fired when a crit may or may not happen.
+	 * @param par0
+	 */
+	@SubscribeEvent(priority = EventPriority.HIGHEST)
+	public static void onCrit(final net.minecraftforge.event.entity.player.CriticalHitEvent par0) {
+		PlayerEntity var0 = par0.getPlayer();
+		Random var1 = new Random();
+		
+		if(var0.world.isRemote) return;
+		
+		ExAPI.playerAttributes(var0).ifPresent(var -> {
+			par0.setDamageModifier(1F + (float)var.get(var0, PlayerAttributes.MELEE_CRIT_DAMAGE));
+			
+			if(var1.nextInt(100) < (int)(100F * (float)var.get(var0, PlayerAttributes.MELEE_CRIT_CHANCE))) {
+				par0.setResult(Result.ALLOW);
+			} else {
+				par0.setResult(Result.DENY);
+			}
+		});
+	}
+	
+	/**
+	 * Event fired when a living entity is hurt.
+	 * @param par0
+	 */
+	@SubscribeEvent(priority = EventPriority.HIGHEST)
+	public static void onLivingHurt(final net.minecraftforge.event.entity.living.LivingHurtEvent par0) {
+		if(par0.getEntityLiving() instanceof PlayerEntity) {
+			PlayerEntity var0 = (PlayerEntity)par0.getEntityLiving();
+			Random var1 = new Random();
+			
+			if(var0.world.isRemote) return;
+			
+			ExAPI.playerAttributes(var0).ifPresent(var -> {
+				if(par0.getSource().equals(DamageSource.IN_FIRE) || par0.getSource().equals(DamageSource.ON_FIRE) || par0.getSource().equals(DamageSource.HOT_FLOOR)) {
+					par0.setAmount(par0.getAmount() * (1F - (float)var.get(var0, PlayerAttributes.FIRE_RESISTANCE)));
+				}
+				
+				if(par0.getSource().equals(DamageSource.LAVA)) {
+					par0.setAmount(par0.getAmount() * (1F - (float)var.get(var0, PlayerAttributes.LAVA_RESISTANCE)));
+				}
+				
+				if(par0.getSource().isExplosion()) {
+					par0.setAmount(par0.getAmount() * (1F - (float)var.get(var0, PlayerAttributes.EXPLOSION_RESISTANCE)));
+				}
+				
+				if(par0.getSource().isMagicDamage()) {
+					par0.setAmount(par0.getAmount() * (1F - (float)var.get(var0, PlayerAttributes.POISON_RESISTANCE)));
+				}
+				
+				if(par0.getSource().equals(DamageSource.WITHER)) {
+					par0.setAmount(par0.getAmount() * (1F - (float)var.get(var0, PlayerAttributes.WITHER_RESISTANCE)));
+				}
+				
+				if(par0.getSource().equals(DamageSource.DROWN)) {
+					par0.setAmount(par0.getAmount() * (1F - (float)var.get(var0, PlayerAttributes.DROWNING_RESISTANCE)));
+				}
+				
+				if(par0.getSource().equals(DamageSource.FALL)) {
+					par0.setAmount(par0.getAmount() * (1F - (float)var.get(var0, PlayerAttributes.FALLING_RESISTANCE)));
+				}
+				
+				if(par0.getSource().isUnblockable()) {
+					par0.setAmount(par0.getAmount() * (1F - (float)var.get(var0, PlayerAttributes.DAMAGE_REDUCTION)));
+				}
+				
+				if(par0.getSource().isProjectile()) {
+					if(var1.nextInt(100) < (int)(100D * (float)var.get(var0, PlayerAttributes.EVASION))) {
+						par0.setCanceled(true);
+					}
+				}
+			});
+		}
+		
+		if(par0.getSource().getTrueSource() instanceof PlayerEntity) {
+			PlayerEntity var0 = (PlayerEntity)par0.getSource().getTrueSource();
+			
+			ExAPI.playerAttributes(var0).ifPresent(var -> {
+				var0.heal(par0.getAmount() * (float)var.get(var0, PlayerAttributes.LIFESTEAL));
+			});
+		}
+	}
+	
+	/**
+	 * Event fired when a living entity takes an arrow up the ***.
+	 * @param par0
+	 */
+	@SubscribeEvent(priority = EventPriority.HIGHEST)
+	public static void onProjectileImpact(final net.minecraftforge.event.entity.ProjectileImpactEvent.Arrow par0) {
+		if(par0.getArrow().func_234616_v_() instanceof PlayerEntity) {
+			PlayerEntity var0 = (PlayerEntity)par0.getArrow().func_234616_v_();
+			Random var1 = new Random();
+			
+			ExAPI.playerAttributes(var0).ifPresent(var -> {
+				boolean var2 = var1.nextInt(100) > (int)(100F * var.get(var0, PlayerAttributes.RANGED_CRIT_CHANCE));
+				double var3 = par0.getArrow().getDamage() + var.get(var0, PlayerAttributes.RANGED_DAMAGE);
+				
+				par0.getArrow().setIsCritical(var2);
+				par0.getArrow().setDamage(var2 ? (var3 * (1D + var.get(var0, PlayerAttributes.RANGED_CRIT_DAMAGE))) : var3);
+			});
+		}
+	}
+	
+	/**
+	 * Event fired on looting.
+	 * @param par0
+	 */
+	@SubscribeEvent(priority = EventPriority.HIGHEST)
+	public static void onLivingLoot(final net.minecraftforge.event.entity.living.LootingLevelEvent par0) {
+		if(par0.getDamageSource().getTrueSource() instanceof PlayerEntity) {
+			PlayerEntity var0 = (PlayerEntity)par0.getDamageSource().getTrueSource();
+			
+			if(var0.world.isRemote) return;
+			
+			ExAPI.playerAttributes(var0).ifPresent(var -> {
+				par0.setLootingLevel(par0.getLootingLevel() + (int)(var.get(var0, PlayerAttributes.LUCKINESS) / 5F));
+			});
+		}
+	}
+}
