@@ -16,7 +16,7 @@ version = "${mod_version}"
 group = "${mod_group}"
 archivesBaseName = "${mod_name}"
 
-sourceCompatibility = targetCompatibility = compileJava.sourceCompatibility = compileJava.targetCompatibility = '1.8' // Need this here so eclipse task generates correctly.
+sourceCompatibility = targetCompatibility = compileJava.sourceCompatibility = compileJava.targetCompatibility = '1.8' 
 
 println('Java: ' + System.getProperty('java.version') + ' JVM: ' + System.getProperty('java.vm.version') + '(' + System.getProperty('java.vendor') + ') Arch: ' + System.getProperty('os.arch'))
 minecraft {
@@ -51,14 +51,10 @@ minecraft {
 
 dependencies {
     minecraft 'net.minecraftforge:forge:1.16.4-35.1.0'
-	// runtimeOnly fg.deobf("top.theillusivec4.curios:curios-forge:1.16.3-4.0.2.0")
-    // compileOnly fg.deobf("top.theillusivec4.curios:curios-forge:1.16.3-4.0.2.0:api")
 }
 
 repositories {
-    // maven {
-		// url = "https://maven.theillusivec4.top/"
-	// }
+    
 }
 
 jar {
@@ -79,7 +75,7 @@ jar.finalizedBy('reobfJar')
 
 task apiJar(type: Jar) {
     classifier = 'api'
-    include 'git/clevernucleus/playerex/api/**/*'
+    include 'com/github/clevernucleus/playerex/api/**/*'
     from sourceSets.main.allSource
     from sourceSets.main.output
 }
@@ -106,4 +102,8 @@ publishing {
 			url "file:///D:/Files/Java/Git/API/maven"
         }
     }
+}
+
+task wrapper(type: Wrapper) {
+    gradleVersion = '4.10.3'
 }
