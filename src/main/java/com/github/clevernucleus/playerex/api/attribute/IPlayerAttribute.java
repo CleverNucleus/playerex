@@ -2,6 +2,8 @@ package com.github.clevernucleus.playerex.api.attribute;
 
 import java.util.UUID;
 
+import com.github.clevernucleus.playerex.api.Limit;
+
 import net.minecraft.entity.ai.attributes.Attribute;
 import net.minecraft.util.ResourceLocation;
 
@@ -26,6 +28,11 @@ public interface IPlayerAttribute {
 	 * @return The attributes UUID, used to define it.
 	 */
 	UUID uuid();
+	
+	/**
+	 * @return The attributes Limit instance, available for external use by modders.
+	 */
+	Limit limit();
 	
 	/**
 	 * @return Should be in the format of (YourMod.MODID, "name_of_attribute"). Example: {@link PlayerAttributes#CONSTITUTION} is (ExAPI.MODID, "constitution").

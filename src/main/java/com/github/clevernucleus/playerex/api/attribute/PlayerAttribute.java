@@ -3,6 +3,8 @@ package com.github.clevernucleus.playerex.api.attribute;
 import java.util.UUID;
 import java.util.function.Supplier;
 
+import com.github.clevernucleus.playerex.api.Limit;
+
 import net.minecraft.entity.ai.attributes.Attribute;
 import net.minecraft.util.ResourceLocation;
 
@@ -10,13 +12,15 @@ public class PlayerAttribute implements IPlayerAttribute {
 	private IPlayerAttribute.Type type;
 	private Supplier<Attribute> attribute;
 	private ResourceLocation registryName;
+	private Limit limit;
 	private UUID uuid;
 	
-	public PlayerAttribute(final ResourceLocation par0, final UUID par1, final IPlayerAttribute.Type par2, final Supplier<Attribute> par3) {
+	public PlayerAttribute(final ResourceLocation par0, final UUID par1, final Limit par2, final IPlayerAttribute.Type par3, final Supplier<Attribute> par4) {
 		this.registryName = par0;
 		this.uuid = par1;
-		this.type = par2;
-		this.attribute = par3;
+		this.limit = par2;
+		this.type = par3;
+		this.attribute = par4;
 	}
 	
 	@Override
@@ -27,6 +31,11 @@ public class PlayerAttribute implements IPlayerAttribute {
 	@Override
 	public UUID uuid() {
 		return this.uuid;
+	}
+	
+	@Override
+	public Limit limit() {
+		return this.limit;
 	}
 	
 	@Override
