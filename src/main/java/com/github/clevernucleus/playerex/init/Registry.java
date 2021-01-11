@@ -105,6 +105,37 @@ public class Registry {
 				var0.setHealth(var0.getMaxHealth());
 			}
 		});
+		PlayerAttributes.registerModifier(PlayerAttributes.CONSTITUTION.registryName(), (var0, var1, var2) -> {
+			var1.apply(var0, PlayerAttributes.MAX_HEALTH, var2);
+			Util.apply(var1, var0, PlayerAttributes.KNOCKBACK_RESISTANCE, var2, 0.01D, 1.0D);
+		});
+		PlayerAttributes.registerModifier(PlayerAttributes.STRENGTH.registryName(), (var0, var1, var2) -> {
+			Util.apply(var1, var0, PlayerAttributes.HEALTH_REGEN, var2, 0.0005D);
+			Util.apply(var1, var0, PlayerAttributes.MELEE_DAMAGE, var2, 0.25D);
+			Util.apply(var1, var0, PlayerAttributes.ARMOR, var2, 0.5D, 100D);
+		});
+		PlayerAttributes.registerModifier(PlayerAttributes.DEXTERITY.registryName(), (var0, var1, var2) -> {
+			Util.apply(var1, var0, PlayerAttributes.RANGED_DAMAGE, var2, 0.25D);
+			Util.apply(var1, var0, PlayerAttributes.ATTACK_SPEED, var2, 0.25D);
+			Util.apply(var1, var0, PlayerAttributes.MOVEMENT_SPEED, var2, 0.004D, 1.0D);
+			Util.apply(var1, var0, PlayerAttributes.MELEE_CRIT_DAMAGE, var2, 0.05D, 10.0D);
+		});
+		PlayerAttributes.registerModifier(PlayerAttributes.INTELLIGENCE.registryName(), (var0, var1, var2) -> {
+			Util.apply(var1, var0, PlayerAttributes.HEALTH_REGEN_AMP, var2, 0.01D, 10.0D);
+			Util.apply(var1, var0, PlayerAttributes.RANGED_CRIT_DAMAGE, var2, 0.05D, 10.0D);
+			Util.apply(var1, var0, PlayerAttributes.LIFESTEAL, var2, 0.02D, 10.0D);
+		});
+		PlayerAttributes.registerModifier(PlayerAttributes.LUCKINESS.registryName(), (var0, var1, var2) -> {
+			var1.apply(var0, PlayerAttributes.LUCK, var2);
+			Util.apply(var1, var0, PlayerAttributes.MELEE_CRIT_CHANCE, var2, 0.02D, 1.0D);
+			Util.apply(var1, var0, PlayerAttributes.RANGED_CRIT_CHANCE, var2, 0.02D, 1.0D);
+			Util.apply(var1, var0, PlayerAttributes.EVASION, var2, 0.02D, 1.0D);
+		});
+		PlayerAttributes.registerModifier(PlayerAttributes.MAX_HEALTH.registryName(), (var0, var1, var2) -> {
+			if(var0.getHealth() > var0.getMaxHealth()) {
+				var0.setHealth(var0.getMaxHealth());
+			}
+		});
 	}
 	
 	/**

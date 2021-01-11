@@ -281,23 +281,35 @@ public class AttributesCapability implements IPlayerAttributes {
 	}
 	
 	@Override
-	public void applyModifier(PlayerEntity par0, IPlayerAttribute par1, AttributeModifier par2) {
+	public IPlayerAttributes applyModifier(PlayerEntity par0, IPlayerAttribute par1, AttributeModifier par2) {
+		if(par0 == null || par1 == null || par2 == null) return this;
+		
 		Multimap<Attribute, AttributeModifier> var0 = HashMultimap.create();
 		
 		var0.put(par1.get(), par2);
 		
 		putModifier(par1, par2);
 		getAttributeModifier(par0, par1).reapplyModifiers(var0);
+		
+		PlayerAttributes.modifiers().get(par1.registryName()).forEach(var -> var.accept(par0, this::applyModifier, par2));
+		
+		return this;
 	}
 	
 	@Override
-	public void removeModifier(PlayerEntity par0, IPlayerAttribute par1, AttributeModifier par2) {
+	public IPlayerAttributes removeModifier(PlayerEntity par0, IPlayerAttribute par1, AttributeModifier par2) {
+		if(par0 == null || par1 == null || par2 == null) return this;
+		
 		Multimap<Attribute, AttributeModifier> var0 = HashMultimap.create();
 		
 		var0.put(par1.get(), par2);
 		
 		removeModifier(par1, par2);
 		getAttributeModifier(par0, par1).removeModifiers(var0);
+		
+		PlayerAttributes.modifiers().get(par1.registryName()).forEach(var -> var.accept(par0, this::removeModifier, par2));
+		
+		return this;
 	}
 	
 	@Override

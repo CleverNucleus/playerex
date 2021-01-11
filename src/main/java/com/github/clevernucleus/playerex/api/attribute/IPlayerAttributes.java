@@ -42,16 +42,18 @@ public interface IPlayerAttributes {
 	 * @param par0 PlayerEntity instance.
 	 * @param par1 IPlayerAttribute instance.
 	 * @param par2 AttributeModifier input.
+	 * @return the capability instance (pass-through).
 	 */
-	void applyModifier(PlayerEntity par0, IPlayerAttribute par1, AttributeModifier par2);
+	IPlayerAttributes applyModifier(PlayerEntity par0, IPlayerAttribute par1, AttributeModifier par2);
 	
 	/**
 	 * Removes the input AttributeModifier if it exists.
 	 * @param par0 PlayerEntity instance.
 	 * @param par1 IPlayerAttribute instance.
 	 * @param par2 AttributeModifier input.
+	 * @return the capability instance (pass-through).
 	 */
-	void removeModifier(PlayerEntity par0, IPlayerAttribute par1, AttributeModifier par2);
+	IPlayerAttributes removeModifier(PlayerEntity par0, IPlayerAttribute par1, AttributeModifier par2);
 	
 	/**
 	 * @return The capabilities data. Dev's should AVOID using this.

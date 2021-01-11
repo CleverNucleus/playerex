@@ -15,8 +15,10 @@ import com.google.common.collect.Multimap;
 
 import com.github.clevernucleus.playerex.api.ExAPI;
 import com.github.clevernucleus.playerex.api.Limit;
+import com.github.clevernucleus.playerex.api.TriFunction;
 
 import net.minecraft.entity.ai.attributes.Attribute;
+import net.minecraft.entity.ai.attributes.AttributeModifier;
 import net.minecraft.entity.ai.attributes.Attributes;
 import net.minecraft.entity.ai.attributes.RangedAttribute;
 import net.minecraft.entity.player.PlayerEntity;
@@ -29,6 +31,7 @@ import net.minecraftforge.common.ForgeMod;
 public class PlayerAttributes {
 	private static final List<IPlayerAttribute> ATTRIBUTES = new ArrayList<IPlayerAttribute>();
 	private static final Multimap<ResourceLocation, TriConsumer<PlayerEntity, IPlayerAttributes, Double>> ADD_CONSUMERS = ArrayListMultimap.create();
+	private static final Multimap<ResourceLocation, TriConsumer<PlayerEntity, TriFunction<PlayerEntity, IPlayerAttribute, AttributeModifier, IPlayerAttributes>, AttributeModifier>> MOD_CONSUMERS = ArrayListMultimap.create();
 	
 	public static final IPlayerAttribute EXPERIENCE = registerAttribute(new ResourceLocation(ExAPI.MODID, "experience"), UUID.fromString("b5ff159c-5968-46f7-8bce-b1536a57c1ff"), Limit.none(), IPlayerAttribute.Type.DATA, () -> (new RangedAttribute("attribute.name.playerex.experience", 0D, 0D, Integer.MAX_VALUE)).setShouldWatch(true));
 	public static final IPlayerAttribute LEVEL = registerAttribute(new ResourceLocation(ExAPI.MODID, "level"), UUID.fromString("c76e5f55-a45a-435b-974e-c41fb357e32f"), Limit.none(), IPlayerAttribute.Type.DATA, () -> (new RangedAttribute("attribute.name.playerex.level", 0D, 0D, Integer.MAX_VALUE)).setShouldWatch(true));
@@ -95,10 +98,19 @@ public class PlayerAttributes {
 	/**
 	 * Registers an adder method that will be run during(after) {@link IPlayerAttributes#add(PlayerEntity, IPlayerAttribute, double)}
 	 * @param par0 The IPlayerAttribute's registry name, which can either be manually defined or from {@link IPlayerAttribute#registryName()}.
-	 * @param par1 The BiConsumer that will take in the player instance and the amount that was added to the attribute with the input registry name.
+	 * @param par1 The TriConsumer that will take in the player instance, the attribute capability and the amount that was added to the attribute with the input registry name.
 	 */
 	public static void registerAdder(final ResourceLocation par0, final TriConsumer<PlayerEntity, IPlayerAttributes, Double> par1) {
 		ADD_CONSUMERS.put(par0, par1);
+	}
+	
+	/**
+	 * Registers a modifier method that will be run during(after) {@link IPlayerAttributes#applyModifier(PlayerEntity, IPlayerAttribute, AttributeModifier)}
+	 * @param par0 The IPlayerAttribute's registry name, which can either be manually defined or from {@link IPlayerAttribute#registryName()}.
+	 * @param par1 The TriConsumer that will take in the player instance, the attribute capability and the modifier that was applied to the attribute with the input registry name.
+	 */
+	public static void registerModifier(final ResourceLocation par0, final TriConsumer<PlayerEntity, TriFunction<PlayerEntity, IPlayerAttribute, AttributeModifier, IPlayerAttributes>, AttributeModifier> par1) {
+		MOD_CONSUMERS.put(par0, par1);
 	}
 	
 	/**
@@ -125,5 +137,12 @@ public class PlayerAttributes {
 	 */
 	public static Multimap<ResourceLocation, TriConsumer<PlayerEntity, IPlayerAttributes, Double>> adders() {
 		return ImmutableListMultimap.copyOf(ADD_CONSUMERS);
+	}
+	
+	/**
+	 * @return An immutable copy of the MOD_CONSUMERS Multimap.
+	 */
+	public static Multimap<ResourceLocation, TriConsumer<PlayerEntity, TriFunction<PlayerEntity, IPlayerAttribute, AttributeModifier, IPlayerAttributes>, AttributeModifier>> modifiers() {
+		return ImmutableListMultimap.copyOf(MOD_CONSUMERS);
 	}
 }

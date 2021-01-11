@@ -2,6 +2,8 @@ package com.github.clevernucleus.playerex.api;
 
 import com.github.clevernucleus.playerex.api.attribute.IPlayerAttribute;
 import com.github.clevernucleus.playerex.api.attribute.IPlayerAttributes;
+
+import net.minecraft.entity.ai.attributes.AttributeModifier;
 import net.minecraft.entity.player.PlayerEntity;
 
 /**
@@ -38,6 +40,42 @@ public class Util {
 		double var1 = dim(var0, par3, par4) - var0;
 		
 		par0.add(par1, par2, var1);
+	}
+	
+	/**
+	 * Applies or removes the input attribute modifier, but uses {@link #dim(double, double, double)} for ADDITION functions. Similar to {@link #add(IPlayerAttributes, PlayerEntity, IPlayerAttribute, double, double)}.
+	 * @param par0 {@link IPlayerAttributes#applyModifier(PlayerEntity, IPlayerAttribute, AttributeModifier)} or {@link IPlayerAttributes#removeModifier(PlayerEntity, IPlayerAttribute, AttributeModifier)}.
+	 * @param par1 Player instance.
+	 * @param par2 IPlayerAttribute.
+	 * @param par3 AttributeModifier.
+	 * @param par4 AttributeModifier value multiplier.
+	 * @param par5 Diminishing value limit (in case of modifier ADDITION function).
+	 */
+	public static void apply(TriFunction<PlayerEntity, IPlayerAttribute, AttributeModifier, IPlayerAttributes> par0, PlayerEntity par1, IPlayerAttribute par2, AttributeModifier par3, double par4, double par5) {
+		double var0 = par3.getAmount() * par4;
+		
+		if(par3.getOperation() == AttributeModifier.Operation.ADDITION) {
+			double var1 = par0.apply(null, null, null).get(par1, par2);
+			var0 = dim(var1, par3.getAmount() * par4, par5) - var1;
+		}
+		
+		AttributeModifier var1 = new AttributeModifier(par3.getID(), par3.getName(), var0, par3.getOperation());
+		
+		par0.apply(par1, par2, var1);
+	}
+	
+	/**
+	 * Applies or removes the input attribute modifier, but multiplies the modifier value with the input multiplier.
+	 * @param par0 {@link IPlayerAttributes#applyModifier(PlayerEntity, IPlayerAttribute, AttributeModifier)} or {@link IPlayerAttributes#removeModifier(PlayerEntity, IPlayerAttribute, AttributeModifier)}.
+	 * @param par1 Player instance.
+	 * @param par2 IPlayerAttribute.
+	 * @param par3 AttributeModifier.
+	 * @param par4 AttributeModifier value multiplier.
+	 */
+	public static void apply(TriFunction<PlayerEntity, IPlayerAttribute, AttributeModifier, IPlayerAttributes> par0, PlayerEntity par1, IPlayerAttribute par2, AttributeModifier par3, double par4) {
+		AttributeModifier var0 = new AttributeModifier(par3.getID(), par3.getName(), par3.getAmount() * par4, par3.getOperation());
+		
+		par0.apply(par1, par2, var0);
 	}
 	
 	/**

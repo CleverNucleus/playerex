@@ -143,6 +143,8 @@ public class OverlayScreen extends AbstractGui {
 				if(var6 < 100) {
 					var2.drawString(par0, var6 + "%", 1.25F * ((varX / 2) + (p < 10 ? 76 : (p < 100 ? 80 : 86))), 1.25F * (varY - 36F), 0xFFFFFF);//76 min, 80 med, 
 				}
+				
+				GL11.glPopMatrix();
 			});
 			if(var0.isRidingHorse()) {
 				Entity var8 = var0.getRidingEntity();
@@ -152,11 +154,14 @@ public class OverlayScreen extends AbstractGui {
 					String var10 = this.format.apply("#.##", (double)var9.getHealth()) + "/" + this.format.apply("#.##", (double)var9.getMaxHealth());
 					int var11 = (varX - var2.getStringWidth(var10)) / 2;
 					
+					GL11.glPushMatrix();
+					GL11.glScalef(0.8F, 0.8F, 0.8F);
+					
 					var2.drawString(par0, var10, 1.25F * (var11 - 48), 1.25F * (varY - 45F), 0xFFFFFF);
+					
+					GL11.glPopMatrix();
 				}
 			}
-			
-			GL11.glPopMatrix();
 			
 			ExAPI.playerAttributes(var0).ifPresent(var -> {
 				int var8 = 0, var9 = 0, var10 = varY - 36;
