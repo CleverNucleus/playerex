@@ -56,6 +56,17 @@ public class EventHandler {
 	}
 	
 	/**
+	 * Sends packets from the server to the client to sync the client with the server.
+	 * @param par0 Player instance.
+	 */
+	private static void forceSync(PlayerEntity par0) {
+		if(par0 == null) return;
+		if(par0.world.isRemote) return;
+		
+		ExAPI.playerAttributes(par0).ifPresent(var -> ((AttributesCapability)var).send(par0));
+	}
+	
+	/**
 	 * Event for attaching capabilities.
 	 * @param par0
 	 */
@@ -86,6 +97,7 @@ public class EventHandler {
 		} catch(Exception parE) {}
 		
 		updateAttributes(var0);
+		forceSync(var0);
 		
 		if(par0.isWasDeath()) {
 			var0.heal(var0.getMaxHealth());
@@ -99,6 +111,7 @@ public class EventHandler {
 	@SubscribeEvent
     public static void onPlayerChangedDimension(final net.minecraftforge.event.entity.player.PlayerEvent.PlayerChangedDimensionEvent par0) {
 		updateAttributes(par0.getPlayer());
+		forceSync(par0.getPlayer());
 	}
 	
 	/**
@@ -108,6 +121,7 @@ public class EventHandler {
 	@SubscribeEvent
 	public static void onPlayerRespawn(final net.minecraftforge.event.entity.player.PlayerEvent.PlayerRespawnEvent par0) {
 		updateAttributes(par0.getPlayer());
+		forceSync(par0.getPlayer());
 	}
 	
 	/**
@@ -120,6 +134,7 @@ public class EventHandler {
 		
 		initAttributes(var0);
 		updateAttributes(var0);
+		forceSync(var0);
 		
 		if(var0.world.isRemote) return;
 		

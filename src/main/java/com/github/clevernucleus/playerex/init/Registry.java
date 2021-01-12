@@ -81,10 +81,10 @@ public class Registry {
 		PlayerAttributes.registerAdder(PlayerAttributes.STRENGTH.registryName(), (var0, var1, var2) -> {
 			var1.add(var0, PlayerAttributes.HEALTH_REGEN, var2 * 0.0005D);
 			var1.add(var0, PlayerAttributes.MELEE_DAMAGE, var2 * 0.25D);
-			Util.add(var1, var0, PlayerAttributes.ARMOR, var2 * 0.5D, 100D);
+			Util.add(var1, var0, PlayerAttributes.ARMOR, var2 * 0.25D, 100D);
 		});
 		PlayerAttributes.registerAdder(PlayerAttributes.DEXTERITY.registryName(), (var0, var1, var2) -> {
-			var1.add(var0, PlayerAttributes.ATTACK_SPEED, var2 * 0.25D);
+			var1.add(var0, PlayerAttributes.ATTACK_SPEED, var2 * 0.1D);
 			var1.add(var0, PlayerAttributes.RANGED_DAMAGE, var2 * 0.25D);
 			Util.add(var1, var0, PlayerAttributes.MOVEMENT_SPEED, var2 * 0.004D, 1.0D);
 			Util.add(var1, var0, PlayerAttributes.MELEE_CRIT_DAMAGE, var2 * 0.05D, 10.0D);
@@ -112,11 +112,11 @@ public class Registry {
 		PlayerAttributes.registerModifier(PlayerAttributes.STRENGTH.registryName(), (var0, var1, var2) -> {
 			Util.apply(var1, var0, PlayerAttributes.HEALTH_REGEN, var2, 0.0005D);
 			Util.apply(var1, var0, PlayerAttributes.MELEE_DAMAGE, var2, 0.25D);
-			Util.apply(var1, var0, PlayerAttributes.ARMOR, var2, 0.5D, 100D);
+			Util.apply(var1, var0, PlayerAttributes.ARMOR, var2, 0.25D, 100D);
 		});
 		PlayerAttributes.registerModifier(PlayerAttributes.DEXTERITY.registryName(), (var0, var1, var2) -> {
 			Util.apply(var1, var0, PlayerAttributes.RANGED_DAMAGE, var2, 0.25D);
-			Util.apply(var1, var0, PlayerAttributes.ATTACK_SPEED, var2, 0.25D);
+			Util.apply(var1, var0, PlayerAttributes.ATTACK_SPEED, var2, 0.1D);
 			Util.apply(var1, var0, PlayerAttributes.MOVEMENT_SPEED, var2, 0.004D, 1.0D);
 			Util.apply(var1, var0, PlayerAttributes.MELEE_CRIT_DAMAGE, var2, 0.05D, 10.0D);
 		});

@@ -223,30 +223,6 @@ public class AttributesCapability implements IPlayerAttributes {
 		this.attributeModifierManager.reapplyModifiers(var3);
 	}
 	
-	/**
-	 * Sends data from the server to the client.
-	 * @param par0 PlayerEntity instance.
-	 */
-	private void send(PlayerEntity par0) {
-		if(par0 == null) return;
-		if(par0.world.isRemote) return;
-		
-		CompoundNBT var0 = new CompoundNBT();
-		ListNBT var1 = new ListNBT();
-		
-		for(IPlayerAttribute var : PlayerAttributes.attributes()) {
-			CompoundNBT var2 = new CompoundNBT();
-			
-			var2.putString("Name", var.toString());
-			var2.putFloat("Value", (float)get(par0, var));
-			var1.add(var2);
-		}
-		
-		var0.put("Data", var1);
-		
-		Registry.NETWORK.sendTo(new SyncPlayerAttributes(var0), ((ServerPlayerEntity)par0).connection.getNetworkManager(), NetworkDirection.PLAY_TO_CLIENT);
-	}
-	
 	@Override
 	public double get(PlayerEntity par0, IPlayerAttribute par1) {
 		if(par0.world.isRemote) return this.clientStore.getOrDefault(par1, 0F);
@@ -357,6 +333,30 @@ public class AttributesCapability implements IPlayerAttributes {
 			
 			this.clientStore.put(var2, var1.getFloat("Value"));
 		}
+	}
+	
+	/**
+	 * Sends data from the server to the client.
+	 * @param par0 PlayerEntity instance.
+	 */
+	public void send(PlayerEntity par0) {
+		if(par0 == null) return;
+		if(par0.world.isRemote) return;
+		
+		CompoundNBT var0 = new CompoundNBT();
+		ListNBT var1 = new ListNBT();
+		
+		for(IPlayerAttribute var : PlayerAttributes.attributes()) {
+			CompoundNBT var2 = new CompoundNBT();
+			
+			var2.putString("Name", var.toString());
+			var2.putFloat("Value", (float)get(par0, var));
+			var1.add(var2);
+		}
+		
+		var0.put("Data", var1);
+		
+		Registry.NETWORK.sendTo(new SyncPlayerAttributes(var0), ((ServerPlayerEntity)par0).connection.getNetworkManager(), NetworkDirection.PLAY_TO_CLIENT);
 	}
 	
 	/**

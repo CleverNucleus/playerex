@@ -84,10 +84,15 @@ public class Util {
 	 * @return The dynamic xp coefficient to level up (0 - 1).
 	 */
 	public static double expCoeff(final double par0, final double par1) {
+		
+		/*
 		int var0 = (int)par0 % 3;
 		
 		double var1 = -((par1 + var0) / (1.0D + par0));
 		
 		return 1.0D - Math.pow(Math.E, var1);
+		*/
+		
+		return par1 / (3.0F + Math.pow(par0, 2.0D));
 	}
 }
