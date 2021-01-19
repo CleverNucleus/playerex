@@ -2,14 +2,17 @@ package com.github.clevernucleus.playerex.init;
 
 import java.util.Random;
 
+import com.github.clevernucleus.playerex.api.CommonConfig;
 import com.github.clevernucleus.playerex.api.ExAPI;
 import com.github.clevernucleus.playerex.api.Util;
 import com.github.clevernucleus.playerex.api.attribute.PlayerAttributes;
 import com.github.clevernucleus.playerex.init.capability.AttributesCapability;
 import com.github.clevernucleus.playerex.init.capability.CapabilityProvider;
-import com.github.clevernucleus.playerex.util.ConfigSetting;
+
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.inventory.EquipmentSlotType;
+import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.ResourceLocation;
@@ -25,7 +28,7 @@ public class EventHandler {
 	 * Initialises the config to the game.
 	 * @param par0
 	 */
-	private static void initAttributes(final PlayerEntity par0) {
+	private static void init(final PlayerEntity par0) {
 		if(par0 == null) return;
 		if(par0.world.isRemote) return;
 		
@@ -33,11 +36,11 @@ public class EventHandler {
 			CompoundNBT var0 = var.write();
 			
 			if(!var0.getBoolean("Initialised")) {
-				var.add(par0, PlayerAttributes.CONSTITUTION, ConfigSetting.COMMON.constitution.get().doubleValue());
-				var.add(par0, PlayerAttributes.STRENGTH, ConfigSetting.COMMON.strength.get().doubleValue());
-				var.add(par0, PlayerAttributes.DEXTERITY, ConfigSetting.COMMON.dexterity.get().doubleValue());
-				var.add(par0, PlayerAttributes.INTELLIGENCE, ConfigSetting.COMMON.intelligence.get().doubleValue());
-				var.add(par0, PlayerAttributes.LUCKINESS, ConfigSetting.COMMON.luckiness.get().doubleValue());
+				var.add(par0, PlayerAttributes.CONSTITUTION, CommonConfig.COMMON.constitution.get().doubleValue());
+				var.add(par0, PlayerAttributes.STRENGTH, CommonConfig.COMMON.strength.get().doubleValue());
+				var.add(par0, PlayerAttributes.DEXTERITY, CommonConfig.COMMON.dexterity.get().doubleValue());
+				var.add(par0, PlayerAttributes.INTELLIGENCE, CommonConfig.COMMON.intelligence.get().doubleValue());
+				var.add(par0, PlayerAttributes.LUCKINESS, CommonConfig.COMMON.luckiness.get().doubleValue());
 				var.add(par0, PlayerAttributes.MAX_HEALTH, -20D);
 				var0.putBoolean("Initialised", true);
 			}
@@ -48,7 +51,7 @@ public class EventHandler {
 	 * Updates the values of the player's attributes.
 	 * @param par0 Player instance.
 	 */
-	private static void updateAttributes(PlayerEntity par0) {
+	private static void update(PlayerEntity par0) {
 		if(par0 == null) return;
 		if(par0.world.isRemote) return;
 		
@@ -59,7 +62,7 @@ public class EventHandler {
 	 * Sends packets from the server to the client to sync the client with the server.
 	 * @param par0 Player instance.
 	 */
-	private static void forceSync(PlayerEntity par0) {
+	private static void sync(PlayerEntity par0) {
 		if(par0 == null) return;
 		if(par0.world.isRemote) return;
 		
@@ -96,8 +99,8 @@ public class EventHandler {
 			});
 		} catch(Exception parE) {}
 		
-		updateAttributes(var0);
-		forceSync(var0);
+		update(var0);
+		sync(var0);
 		
 		if(par0.isWasDeath()) {
 			var0.heal(var0.getMaxHealth());
@@ -110,8 +113,8 @@ public class EventHandler {
 	 */
 	@SubscribeEvent
     public static void onPlayerChangedDimension(final net.minecraftforge.event.entity.player.PlayerEvent.PlayerChangedDimensionEvent par0) {
-		updateAttributes(par0.getPlayer());
-		forceSync(par0.getPlayer());
+		update(par0.getPlayer());
+		sync(par0.getPlayer());
 	}
 	
 	/**
@@ -120,8 +123,8 @@ public class EventHandler {
 	 */
 	@SubscribeEvent
 	public static void onPlayerRespawn(final net.minecraftforge.event.entity.player.PlayerEvent.PlayerRespawnEvent par0) {
-		updateAttributes(par0.getPlayer());
-		forceSync(par0.getPlayer());
+		update(par0.getPlayer());
+		sync(par0.getPlayer());
 	}
 	
 	/**
@@ -132,9 +135,9 @@ public class EventHandler {
 	public static void onPlayerLoggedIn(final net.minecraftforge.event.entity.player.PlayerEvent.PlayerLoggedInEvent par0) {
 		PlayerEntity var0 = par0.getPlayer();
 		
-		initAttributes(var0);
-		updateAttributes(var0);
-		forceSync(var0);
+		init(var0);
+		update(var0);
+		sync(var0);
 		
 		if(var0.world.isRemote) return;
 		
@@ -166,6 +169,19 @@ public class EventHandler {
 	}
 	
 	/**
+	 * Equipment changed event; fired when an equipment slot is changed.
+	 * @param par0
+	 */
+	@SubscribeEvent
+	public static void onPlayerEquippedItems(final net.minecraftforge.event.entity.living.LivingEquipmentChangeEvent par0) {
+		if(!(par0.getEntityLiving() instanceof PlayerEntity)) return;
+		if(par0.getSlot() == EquipmentSlotType.MAINHAND) return;
+		
+		PlayerEntity var0 = (PlayerEntity)par0.getEntityLiving();
+		ExAPI.playerAttributes(var0).ifPresent(var -> ((AttributesCapability)var).putEquipment(par0.getSlot(), par0.getFrom()));
+	}
+	
+	/**
 	 * Event firing every tick for the player.
 	 * @param par0
 	 */
@@ -177,9 +193,22 @@ public class EventHandler {
 		
 		ExAPI.playerAttributes(var0).ifPresent(var -> {
 			var0.heal((float)var.get(var0, PlayerAttributes.HEALTH_REGEN));
-			((AttributesCapability)var).sync(var0);
+			
+			AttributesCapability var1 = (AttributesCapability)var;
+			
+			for(EquipmentSlotType var2 : EquipmentSlotType.values()) {
+				if(var2 == EquipmentSlotType.MAINHAND) continue;
+				
+				ItemStack var3 = var0.getItemStackFromSlot(var2);
+				ItemStack var4 = var1.getEquipment(var2);
+				
+				if(!ItemStack.areItemStacksEqual(var3, var4)) {
+					var1.putEquipment(var2, var3);
+					sync(var0);
+				}
+			}
 		});
-	}
+	}	
 	
 	/**
 	 * Event fired when xp is picked up.

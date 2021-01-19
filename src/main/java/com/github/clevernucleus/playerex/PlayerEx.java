@@ -1,7 +1,8 @@
 package com.github.clevernucleus.playerex;
 
+import com.github.clevernucleus.playerex.api.CommonConfig;
 import com.github.clevernucleus.playerex.api.ExAPI;
-import com.github.clevernucleus.playerex.util.ConfigSetting;
+import com.github.clevernucleus.playerex.client.ClientConfig;
 import com.github.clevernucleus.playerex.util.IProxy;
 import net.minecraftforge.fml.DistExecutor;
 import net.minecraftforge.fml.ModLoadingContext;
@@ -15,7 +16,7 @@ public class PlayerEx {
 	public static final IProxy PROXY = DistExecutor.safeRunForDist(() -> com.github.clevernucleus.playerex.client.ClientProxy::new, () -> com.github.clevernucleus.playerex.util.ServerProxy::new);
 	
 	public PlayerEx() {
-		ModLoadingContext.get().registerConfig(Type.COMMON, ConfigSetting.COMMON_SPEC);
-		ModLoadingContext.get().registerConfig(Type.CLIENT, ConfigSetting.CLIENT_SPEC);
+		ModLoadingContext.get().registerConfig(Type.COMMON, CommonConfig.COMMON_SPEC);
+		ModLoadingContext.get().registerConfig(Type.CLIENT, ClientConfig.CLIENT_SPEC);
 	}
 }

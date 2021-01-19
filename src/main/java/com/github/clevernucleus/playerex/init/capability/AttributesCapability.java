@@ -19,6 +19,8 @@ import net.minecraft.entity.ai.attributes.AttributeModifierMap;
 import net.minecraft.entity.ai.attributes.AttributeModifierMap.MutableAttribute;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.ServerPlayerEntity;
+import net.minecraft.inventory.EquipmentSlotType;
+import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.nbt.INBT;
 import net.minecraft.nbt.ListNBT;
@@ -28,7 +30,8 @@ import net.minecraftforge.fml.network.NetworkDirection;
  * Capability implementation (object).
  */
 public class AttributesCapability implements IPlayerAttributes {
-	private Map<IPlayerAttribute, Float> clientStore, previousStore;
+	private Map<IPlayerAttribute, Float> clientStore;
+	private Map<EquipmentSlotType, ItemStack> equipmentStore;
 	private AttributeModifierManager attributeModifierManager;
 	private CompoundNBT tag;
 	
@@ -49,9 +52,14 @@ public class AttributesCapability implements IPlayerAttributes {
 			}
 		}
 		
-		this.clientStore = new HashMap<>();
-		this.previousStore = new HashMap<>();
 		this.attributeModifierManager = new AttributeModifierManager(var0.create());
+		this.clientStore = new HashMap<>();
+		this.equipmentStore = new HashMap<>();
+		this.equipmentStore.put(EquipmentSlotType.HEAD, ItemStack.EMPTY);
+		this.equipmentStore.put(EquipmentSlotType.CHEST, ItemStack.EMPTY);
+		this.equipmentStore.put(EquipmentSlotType.LEGS, ItemStack.EMPTY);
+		this.equipmentStore.put(EquipmentSlotType.FEET, ItemStack.EMPTY);
+		this.equipmentStore.put(EquipmentSlotType.OFFHAND, ItemStack.EMPTY);
 	}
 	
 	/**
@@ -243,6 +251,8 @@ public class AttributesCapability implements IPlayerAttributes {
 		putAttribute(par1, var0);
 		
 		PlayerAttributes.adders().get(par1.registryName()).forEach(var -> var.accept(par0, this, par2));
+		
+		send(par0);
 	}
 	
 	@Override
@@ -254,6 +264,8 @@ public class AttributesCapability implements IPlayerAttributes {
 		
 		getAttributeModifier(par0, par1).reapplyModifiers(var0);
 		putAttribute(par1, 0D);
+		
+		send(par0);
 	}
 	
 	@Override
@@ -268,6 +280,8 @@ public class AttributesCapability implements IPlayerAttributes {
 		getAttributeModifier(par0, par1).reapplyModifiers(var0);
 		
 		PlayerAttributes.modifiers().get(par1.registryName()).forEach(var -> var.accept(par0, this::applyModifier, par2));
+		
+		send(par0);
 		
 		return this;
 	}
@@ -284,6 +298,8 @@ public class AttributesCapability implements IPlayerAttributes {
 		getAttributeModifier(par0, par1).removeModifiers(var0);
 		
 		PlayerAttributes.modifiers().get(par1.registryName()).forEach(var -> var.accept(par0, this::removeModifier, par2));
+		
+		send(par0);
 		
 		return this;
 	}
@@ -360,22 +376,19 @@ public class AttributesCapability implements IPlayerAttributes {
 	}
 	
 	/**
-	 * Syncs data from the server to the client if a change is detected.
+	 * Sets the equipment store.
 	 * @param par0
+	 * @param par1
 	 */
-	public void sync(PlayerEntity par0) {
-		if(par0 == null) return;
-		
-		Map<IPlayerAttribute, Float> var0 = new HashMap<>();
-		
-		for(IPlayerAttribute var : PlayerAttributes.attributes()) {
-			var0.put(var, (float)get(par0, var));
-		}
-		
-		if(!var0.equals(this.previousStore)) {
-			this.previousStore = var0;
-			
-			send(par0);
-		}
+	public void putEquipment(EquipmentSlotType par0, ItemStack par1) {
+		this.equipmentStore.put(par0, par1);
+	}
+	
+	/**
+	 * @param par0
+	 * @return The ItemStack for this equipment
+	 */
+	public ItemStack getEquipment(EquipmentSlotType par0) {
+		return this.equipmentStore.getOrDefault(par0, ItemStack.EMPTY);
 	}
 }

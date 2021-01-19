@@ -1,9 +1,10 @@
 package com.github.clevernucleus.playerex.client.gui;
 
 import com.github.clevernucleus.playerex.api.ExAPI;
+import com.github.clevernucleus.playerex.client.ClientConfig;
 import com.github.clevernucleus.playerex.init.Registry;
 import com.github.clevernucleus.playerex.init.container.SwitchScreens;
-import com.github.clevernucleus.playerex.util.ConfigSetting;
+
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.client.gui.screen.inventory.ContainerScreen;
@@ -46,7 +47,7 @@ public class ClientEventHandler {
 	 */
 	@SubscribeEvent
 	public static void onHUDRenderPre(final net.minecraftforge.client.event.RenderGameOverlayEvent.Pre par0) {
-		if(!ConfigSetting.CLIENT.enableGui.get().booleanValue() || overlay == null) return;
+		if(!ClientConfig.CLIENT.enableGui.get().booleanValue() || overlay == null) return;
 		
 		ElementType var0 = par0.getType();
 		
@@ -66,7 +67,7 @@ public class ClientEventHandler {
 	 */
 	@SubscribeEvent
 	public static void onHUDRenderPost(final net.minecraftforge.client.event.RenderGameOverlayEvent.Post par0) {
-		if(!ConfigSetting.CLIENT.enableGui.get().booleanValue() || overlay == null) return;
+		if(!ClientConfig.CLIENT.enableGui.get().booleanValue() || overlay == null) return;
 		if(par0.getType() != ElementType.HOTBAR) return;
 		if(Minecraft.getInstance().player.isCreative()) return;
 		
