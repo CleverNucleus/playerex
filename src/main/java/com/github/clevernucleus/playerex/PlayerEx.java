@@ -1,8 +1,8 @@
 package com.github.clevernucleus.playerex;
 
-import com.github.clevernucleus.playerex.api.CommonConfig;
 import com.github.clevernucleus.playerex.api.ExAPI;
 import com.github.clevernucleus.playerex.client.ClientConfig;
+import com.github.clevernucleus.playerex.util.CommonConfig;
 import com.github.clevernucleus.playerex.util.IProxy;
 import net.minecraftforge.fml.DistExecutor;
 import net.minecraftforge.fml.ModLoadingContext;

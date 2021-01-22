@@ -11,6 +11,12 @@ import net.minecraft.nbt.CompoundNBT;
 public interface IPlayerAttributes {
 	
 	/**
+	 * @param par0 Player.
+	 * @return A coefficient from 0 to 1 that multiplies with experience to tell us how close we are to the next level.
+	 */
+	double expCoeff(PlayerEntity par0);
+	
+	/**
 	 * @param par0 PlayerEntity instance.
 	 * @param par1 Input IPlayerAttribute instance.
 	 * @return The total value (including any modifiers) for the input IPlayerAttribute instance.

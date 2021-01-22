@@ -15,15 +15,20 @@ import net.minecraftforge.fml.network.NetworkEvent;
  */
 public class SyncPlayerAttributes {
 	private CompoundNBT tag;
+	private double offset, scale;
 	
 	public SyncPlayerAttributes() {}
 	
 	/**
 	 * Constructor.
 	 * @param par0 Compound tag to send.
+	 * @param par1 Offset
+	 * @param par2 Scale
 	 */
-	public SyncPlayerAttributes(final @Nonnull CompoundNBT par0) {
+	public SyncPlayerAttributes(final @Nonnull CompoundNBT par0, final double par1, final double par2) {
 		this.tag = par0;
+		this.offset = par1;
+		this.scale = par2;
 	}
 	
 	/**
@@ -33,6 +38,8 @@ public class SyncPlayerAttributes {
 	 */
 	public static void encode(SyncPlayerAttributes par0, PacketBuffer par1) {
 		par1.writeCompoundTag(par0.tag);
+		par1.writeDouble(par0.offset);
+		par1.writeDouble(par0.scale);
 	}
 	
 	/**
@@ -41,7 +48,7 @@ public class SyncPlayerAttributes {
 	 * @return A new Packet instance.
 	 */
 	public static SyncPlayerAttributes decode(PacketBuffer par0) {
-		return new SyncPlayerAttributes(par0.readCompoundTag());
+		return new SyncPlayerAttributes(par0.readCompoundTag(), par0.readDouble(), par0.readDouble());
 	}
 	
 	/**
@@ -54,7 +61,7 @@ public class SyncPlayerAttributes {
 			par1.get().enqueueWork(() -> {
 				PlayerEx.PROXY.player().ifPresent(var0 -> {
 					if(par0.tag != null) {
-						ExAPI.playerAttributes(var0).ifPresent(var1 -> ((AttributesCapability)var1).receive(par0.tag));
+						ExAPI.playerAttributes(var0).ifPresent(var1 -> ((AttributesCapability)var1).receive(par0.tag, par0.offset, par0.scale));
 					}
 				});
 			});

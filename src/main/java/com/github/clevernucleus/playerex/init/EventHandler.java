@@ -2,12 +2,11 @@ package com.github.clevernucleus.playerex.init;
 
 import java.util.Random;
 
-import com.github.clevernucleus.playerex.api.CommonConfig;
 import com.github.clevernucleus.playerex.api.ExAPI;
-import com.github.clevernucleus.playerex.api.Util;
 import com.github.clevernucleus.playerex.api.attribute.PlayerAttributes;
 import com.github.clevernucleus.playerex.init.capability.AttributesCapability;
 import com.github.clevernucleus.playerex.init.capability.CapabilityProvider;
+import com.github.clevernucleus.playerex.util.CommonConfig;
 
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.PlayerEntity;
@@ -225,7 +224,7 @@ public class EventHandler {
 		ExAPI.playerAttributes(var0).ifPresent(var -> {
 			var.add(var0, PlayerAttributes.EXPERIENCE, var1);
 			
-			float var2 = (float)Util.expCoeff(var.get(var0, PlayerAttributes.LEVEL), var.get(var0, PlayerAttributes.EXPERIENCE));
+			float var2 = (float)var.expCoeff(var0);
 			
 			if(var2 > 0.95F) {
 				var.add(var0, PlayerAttributes.LEVEL, 1);

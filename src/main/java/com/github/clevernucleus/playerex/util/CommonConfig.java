@@ -1,6 +1,8 @@
-package com.github.clevernucleus.playerex.api;
+package com.github.clevernucleus.playerex.util;
 
 import org.apache.commons.lang3.tuple.Pair;
+
+import com.github.clevernucleus.playerex.api.ExAPI;
 
 import net.minecraftforge.common.ForgeConfigSpec;
 import net.minecraftforge.common.ForgeConfigSpec.DoubleValue;

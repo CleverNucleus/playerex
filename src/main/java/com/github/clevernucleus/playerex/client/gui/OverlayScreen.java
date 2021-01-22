@@ -9,7 +9,6 @@ import org.lwjgl.opengl.GL11;
 import com.mojang.blaze3d.matrix.MatrixStack;
 
 import com.github.clevernucleus.playerex.api.ExAPI;
-import com.github.clevernucleus.playerex.api.Util;
 import com.github.clevernucleus.playerex.api.attribute.PlayerAttributes;
 import net.minecraft.client.MainWindow;
 import net.minecraft.client.Minecraft;
@@ -70,7 +69,7 @@ public class OverlayScreen extends AbstractGui {
 			this.blit(par0, (varX / 2) - 91, varY - 27, 0, 166, 182, 3);
 			
 			ExAPI.playerAttributes(var0).ifPresent(var -> {
-				int var3 = (int)(182F * Util.expCoeff(var.get(var0, PlayerAttributes.LEVEL), var.get(var0, PlayerAttributes.EXPERIENCE)));
+				int var3 = (int)(182F * var.expCoeff(var0));
 				
 				if(Screen.hasAltDown()) {
 					this.blit(par0, (varX / 2) - 91, varY - 27, 0, 169, var3, 3);

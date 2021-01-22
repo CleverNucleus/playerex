@@ -77,13 +77,4 @@ public class Util {
 		
 		par0.apply(par1, par2, var0);
 	}
-	
-	/**
-	 * @param par0 float current player level
-	 * @param par1 float current xp amount
-	 * @return The dynamic xp coefficient to level up (0 - 1).
-	 */
-	public static double expCoeff(final double par0, final double par1) {
-		return par1 / (CommonConfig.COMMON.offset.get() + (CommonConfig.COMMON.scale.get() * Math.pow(par0, 2.0D)));
-	}
 }

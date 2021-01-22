@@ -7,7 +7,6 @@ import com.mojang.blaze3d.matrix.MatrixStack;
 import com.mojang.datafixers.util.Pair;
 
 import com.github.clevernucleus.playerex.api.ExAPI;
-import com.github.clevernucleus.playerex.api.Util;
 import com.github.clevernucleus.playerex.api.attribute.IPlayerAttribute;
 import com.github.clevernucleus.playerex.api.attribute.PlayerAttributes;
 import com.github.clevernucleus.playerex.api.client.ClientReg;
@@ -35,7 +34,7 @@ public class DefaultPage extends Page {
 	private final DecimalFormat text = new DecimalFormat("##.##");
 	
 	private final DynamicTextComponent level = new DynamicTextComponent(20, 50, (par0, par1) -> {
-		TranslationTextComponent var0 = new TranslationTextComponent(ExAPI.MODID + ".attribute.level", (int)par1.get(par0, PlayerAttributes.LEVEL), (int)(100 * Util.expCoeff(par1.get(par0, PlayerAttributes.LEVEL), par1.get(par0, PlayerAttributes.EXPERIENCE))), "%");
+		TranslationTextComponent var0 = new TranslationTextComponent(ExAPI.MODID + ".attribute.level", (int)par1.get(par0, PlayerAttributes.LEVEL), (int)(100 * par1.expCoeff(par0)), "%");
 		
 		return var0.getString();
 	}, (par0, par1) -> {

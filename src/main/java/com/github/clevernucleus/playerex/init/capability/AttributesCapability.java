@@ -12,6 +12,8 @@ import com.github.clevernucleus.playerex.api.attribute.IPlayerAttribute;
 import com.github.clevernucleus.playerex.api.attribute.IPlayerAttributes;
 import com.github.clevernucleus.playerex.api.attribute.PlayerAttributes;
 import com.github.clevernucleus.playerex.init.Registry;
+import com.github.clevernucleus.playerex.util.CommonConfig;
+
 import net.minecraft.entity.ai.attributes.Attribute;
 import net.minecraft.entity.ai.attributes.AttributeModifier;
 import net.minecraft.entity.ai.attributes.AttributeModifierManager;
@@ -34,6 +36,7 @@ public class AttributesCapability implements IPlayerAttributes {
 	private Map<EquipmentSlotType, ItemStack> equipmentStore;
 	private AttributeModifierManager attributeModifierManager;
 	private CompoundNBT tag;
+	private double offset, scale;
 	
 	public AttributesCapability() {
 		MutableAttribute var0 = AttributeModifierMap.createMutableAttribute();
@@ -52,6 +55,8 @@ public class AttributesCapability implements IPlayerAttributes {
 			}
 		}
 		
+		this.offset = 0D;
+		this.scale = 0D;
 		this.attributeModifierManager = new AttributeModifierManager(var0.create());
 		this.clientStore = new HashMap<>();
 		this.equipmentStore = new HashMap<>();
@@ -232,6 +237,11 @@ public class AttributesCapability implements IPlayerAttributes {
 	}
 	
 	@Override
+	public double expCoeff(PlayerEntity par0) {
+		return get(par0, PlayerAttributes.EXPERIENCE) / (this.offset + (this.scale * Math.pow(get(par0, PlayerAttributes.LEVEL), 2.0D)));
+	}
+	
+	@Override
 	public double get(PlayerEntity par0, IPlayerAttribute par1) {
 		if(par0.world.isRemote) return this.clientStore.getOrDefault(par1, 0F);
 		
@@ -331,13 +341,18 @@ public class AttributesCapability implements IPlayerAttributes {
 		}
 		
 		refreshModifierMap(par0);
+		
+		this.offset = CommonConfig.COMMON.offset.get();
+		this.scale = CommonConfig.COMMON.scale.get();
 	}
 	
 	/**
 	 * Receives data from the server.
 	 * @param par0
+	 * @param par1
+	 * @param par2
 	 */
-	public void receive(CompoundNBT par0) {
+	public void receive(CompoundNBT par0, double par1, double par2) {
 		if(par0 == null) return;
 		if(!par0.contains("Data")) return;
 		
@@ -349,6 +364,9 @@ public class AttributesCapability implements IPlayerAttributes {
 			
 			this.clientStore.put(var2, var1.getFloat("Value"));
 		}
+		
+		this.offset = par1;
+		this.scale = par2;
 	}
 	
 	/**
@@ -372,7 +390,7 @@ public class AttributesCapability implements IPlayerAttributes {
 		
 		var0.put("Data", var1);
 		
-		Registry.NETWORK.sendTo(new SyncPlayerAttributes(var0), ((ServerPlayerEntity)par0).connection.getNetworkManager(), NetworkDirection.PLAY_TO_CLIENT);
+		Registry.NETWORK.sendTo(new SyncPlayerAttributes(var0, this.offset, this.scale), ((ServerPlayerEntity)par0).connection.getNetworkManager(), NetworkDirection.PLAY_TO_CLIENT);
 	}
 	
 	/**
