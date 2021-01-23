@@ -21,7 +21,10 @@ public class ClientRegistry {
 	@SubscribeEvent
 	public static void clientSetup(final net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent par0) {
 		ScreenManager.registerFactory(Registry.ATTRIBUTES_CONTAINER, PlayerAttributesScreen::new);
-		ClientReg.registerPage(DefaultPage.REGISTRY_NAME, new DefaultPage());
-		ClientReg.registerPage(ResistancePage.REGISTRY_NAME, new ResistancePage());
+		
+		par0.enqueueWork(() -> {
+			ClientReg.registerPage(DefaultPage.REGISTRY_NAME, new DefaultPage());
+			ClientReg.registerPage(ResistancePage.REGISTRY_NAME, new ResistancePage());
+		});
 	}
 }
