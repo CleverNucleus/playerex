@@ -4,7 +4,7 @@ license="MIT License"
 
 [[mods]]
 modId="playerex"
-version="1.1.5"
+version="1.1.6"
 displayName="Player Ex"
 displayURL="https://github.com/CleverNucleus/PlayerEx"
 logoFile="logo.png"

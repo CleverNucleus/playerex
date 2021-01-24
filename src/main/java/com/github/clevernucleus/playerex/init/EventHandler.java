@@ -174,7 +174,6 @@ public class EventHandler {
 	@SubscribeEvent
 	public static void onPlayerEquippedItems(final net.minecraftforge.event.entity.living.LivingEquipmentChangeEvent par0) {
 		if(!(par0.getEntityLiving() instanceof PlayerEntity)) return;
-		if(par0.getSlot() == EquipmentSlotType.MAINHAND) return;
 		
 		PlayerEntity var0 = (PlayerEntity)par0.getEntityLiving();
 		ExAPI.playerAttributes(var0).ifPresent(var -> ((AttributesCapability)var).putEquipment(par0.getSlot(), par0.getFrom()));
@@ -196,8 +195,6 @@ public class EventHandler {
 			AttributesCapability var1 = (AttributesCapability)var;
 			
 			for(EquipmentSlotType var2 : EquipmentSlotType.values()) {
-				if(var2 == EquipmentSlotType.MAINHAND) continue;
-				
 				ItemStack var3 = var0.getItemStackFromSlot(var2);
 				ItemStack var4 = var1.getEquipment(var2);
 				
@@ -363,6 +360,7 @@ public class EventHandler {
 		if(par0.getDamageSource().getTrueSource() instanceof PlayerEntity) {
 			PlayerEntity var0 = (PlayerEntity)par0.getDamageSource().getTrueSource();
 			
+			if(var0 == null) return;
 			if(var0.world.isRemote) return;
 			
 			ExAPI.playerAttributes(var0).ifPresent(var -> {
