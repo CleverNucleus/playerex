@@ -12,6 +12,8 @@ import com.github.clevernucleus.playerex.init.capability.AttributesCapability;
 import com.github.clevernucleus.playerex.init.capability.SyncPlayerAttributes;
 import com.github.clevernucleus.playerex.init.container.PlayerAttributesContainer;
 import com.github.clevernucleus.playerex.init.container.SwitchScreens;
+import com.github.clevernucleus.playerex.util.CommonConfig;
+
 import net.minecraft.entity.ai.attributes.Attribute;
 import net.minecraft.inventory.container.Container;
 import net.minecraft.inventory.container.ContainerType;
@@ -76,30 +78,30 @@ public class Registry {
 				var1.add(var0, PlayerAttributes.SKILLPOINTS, var2);
 			});
 			PlayerAttributes.registerAdder(PlayerAttributes.CONSTITUTION.registryName(), (var0, var1, var2) -> {
-				var1.add(var0, PlayerAttributes.MAX_HEALTH, var2);
-				Util.add(var1, var0, PlayerAttributes.KNOCKBACK_RESISTANCE, var2 * 0.01D, 1.0D);
+				if(CommonConfig.COMMON.maxHealth.get()) {var1.add(var0, PlayerAttributes.MAX_HEALTH, var2);}
+				if(CommonConfig.COMMON.knockbackRes.get()) {Util.add(var1, var0, PlayerAttributes.KNOCKBACK_RESISTANCE, var2 * 0.01D, 1.0D);}
 			});
 			PlayerAttributes.registerAdder(PlayerAttributes.STRENGTH.registryName(), (var0, var1, var2) -> {
-				var1.add(var0, PlayerAttributes.HEALTH_REGEN, var2 * 0.0005D);
-				var1.add(var0, PlayerAttributes.MELEE_DAMAGE, var2 * 0.25D);
-				Util.add(var1, var0, PlayerAttributes.ARMOR, var2 * 0.25D, 100D);
+				if(CommonConfig.COMMON.healthRegen.get()) {var1.add(var0, PlayerAttributes.HEALTH_REGEN, var2 * 0.0005D);}
+				if(CommonConfig.COMMON.meleeDamage.get()) {var1.add(var0, PlayerAttributes.MELEE_DAMAGE, var2 * 0.25D);}
+				if(CommonConfig.COMMON.armor.get()) {Util.add(var1, var0, PlayerAttributes.ARMOR, var2 * 0.25D, 100D);}
 			});
 			PlayerAttributes.registerAdder(PlayerAttributes.DEXTERITY.registryName(), (var0, var1, var2) -> {
-				var1.add(var0, PlayerAttributes.RANGED_DAMAGE, var2 * 0.25D);
-				Util.add(var1, var0, PlayerAttributes.ATTACK_SPEED, var2 * 0.1D, 8.0D);
-				Util.add(var1, var0, PlayerAttributes.MOVEMENT_SPEED, var2 * 0.004D, 1.0D);
-				Util.add(var1, var0, PlayerAttributes.MELEE_CRIT_DAMAGE, var2 * 0.05D, 10.0D);
+				if(CommonConfig.COMMON.rangedDamage.get()) {var1.add(var0, PlayerAttributes.RANGED_DAMAGE, var2 * 0.25D);}
+				if(CommonConfig.COMMON.attackSpeed.get()) {Util.add(var1, var0, PlayerAttributes.ATTACK_SPEED, var2 * 0.1D, 8.0D);}
+				if(CommonConfig.COMMON.movementSpeed.get()) {Util.add(var1, var0, PlayerAttributes.MOVEMENT_SPEED, var2 * 0.004D, 1.0D);}
+				if(CommonConfig.COMMON.meleeCritDamage.get()) {Util.add(var1, var0, PlayerAttributes.MELEE_CRIT_DAMAGE, var2 * 0.05D, 10.0D);}
 			});
 			PlayerAttributes.registerAdder(PlayerAttributes.INTELLIGENCE.registryName(), (var0, var1, var2) -> {
-				Util.add(var1, var0, PlayerAttributes.HEALTH_REGEN_AMP, var2 * 0.01D, 10.0D);
-				Util.add(var1, var0, PlayerAttributes.RANGED_CRIT_DAMAGE, var2 * 0.05D, 10.0D);
-				Util.add(var1, var0, PlayerAttributes.LIFESTEAL, var2 * 0.02D, 10.0D);
+				if(CommonConfig.COMMON.healthRegenAmp.get()) {Util.add(var1, var0, PlayerAttributes.HEALTH_REGEN_AMP, var2 * 0.01D, 10.0D);}
+				if(CommonConfig.COMMON.rangedCritDamage.get()) {Util.add(var1, var0, PlayerAttributes.RANGED_CRIT_DAMAGE, var2 * 0.05D, 10.0D);}
+				if(CommonConfig.COMMON.lifesteal.get()) {Util.add(var1, var0, PlayerAttributes.LIFESTEAL, var2 * 0.02D, 10.0D);}
 			});
 			PlayerAttributes.registerAdder(PlayerAttributes.LUCKINESS.registryName(), (var0, var1, var2) -> {
-				var1.add(var0, PlayerAttributes.LUCK, var2);
-				Util.add(var1, var0, PlayerAttributes.MELEE_CRIT_CHANCE, var2 * 0.02D, 1.0D);
-				Util.add(var1, var0, PlayerAttributes.RANGED_CRIT_CHANCE, var2 * 0.02D, 1.0D);
-				Util.add(var1, var0, PlayerAttributes.EVASION, var2 * 0.02D, 1.0D);
+				if(CommonConfig.COMMON.luck.get()) {var1.add(var0, PlayerAttributes.LUCK, var2);}
+				if(CommonConfig.COMMON.meleeCritChance.get()) {Util.add(var1, var0, PlayerAttributes.MELEE_CRIT_CHANCE, var2 * 0.02D, 1.0D);}
+				if(CommonConfig.COMMON.rangedCritChance.get()) {Util.add(var1, var0, PlayerAttributes.RANGED_CRIT_CHANCE, var2 * 0.02D, 1.0D);}
+				if(CommonConfig.COMMON.evasion.get()) {Util.add(var1, var0, PlayerAttributes.EVASION, var2 * 0.02D, 1.0D);}
 			});
 			PlayerAttributes.registerAdder(PlayerAttributes.MAX_HEALTH.registryName(), (var0, var1, var2) -> {
 				if(var0.getHealth() > var0.getMaxHealth()) {
@@ -107,30 +109,30 @@ public class Registry {
 				}
 			});
 			PlayerAttributes.registerModifier(PlayerAttributes.CONSTITUTION.registryName(), (var0, var1, var2) -> {
-				var1.apply(var0, PlayerAttributes.MAX_HEALTH, var2);
-				Util.apply(var1, var0, PlayerAttributes.KNOCKBACK_RESISTANCE, var2, 0.01D, 1.0D);
+				if(CommonConfig.COMMON.maxHealth.get()) {var1.apply(var0, PlayerAttributes.MAX_HEALTH, var2);}
+				if(CommonConfig.COMMON.knockbackRes.get()) {Util.apply(var1, var0, PlayerAttributes.KNOCKBACK_RESISTANCE, var2, 0.01D, 1.0D);}
 			});
 			PlayerAttributes.registerModifier(PlayerAttributes.STRENGTH.registryName(), (var0, var1, var2) -> {
-				Util.apply(var1, var0, PlayerAttributes.HEALTH_REGEN, var2, 0.0005D);
-				Util.apply(var1, var0, PlayerAttributes.MELEE_DAMAGE, var2, 0.25D);
-				Util.apply(var1, var0, PlayerAttributes.ARMOR, var2, 0.25D, 100D);
+				if(CommonConfig.COMMON.healthRegen.get()) {Util.apply(var1, var0, PlayerAttributes.HEALTH_REGEN, var2, 0.0005D);}
+				if(CommonConfig.COMMON.meleeDamage.get()) {Util.apply(var1, var0, PlayerAttributes.MELEE_DAMAGE, var2, 0.25D);}
+				if(CommonConfig.COMMON.armor.get()) {Util.apply(var1, var0, PlayerAttributes.ARMOR, var2, 0.25D, 100D);}
 			});
 			PlayerAttributes.registerModifier(PlayerAttributes.DEXTERITY.registryName(), (var0, var1, var2) -> {
-				Util.apply(var1, var0, PlayerAttributes.RANGED_DAMAGE, var2, 0.25D);
-				Util.apply(var1, var0, PlayerAttributes.ATTACK_SPEED, var2, 0.1D, 8.0D);
-				Util.apply(var1, var0, PlayerAttributes.MOVEMENT_SPEED, var2, 0.004D, 1.0D);
-				Util.apply(var1, var0, PlayerAttributes.MELEE_CRIT_DAMAGE, var2, 0.05D, 10.0D);
+				if(CommonConfig.COMMON.rangedDamage.get()) {Util.apply(var1, var0, PlayerAttributes.RANGED_DAMAGE, var2, 0.25D);}
+				if(CommonConfig.COMMON.attackSpeed.get()) {Util.apply(var1, var0, PlayerAttributes.ATTACK_SPEED, var2, 0.1D, 8.0D);}
+				if(CommonConfig.COMMON.movementSpeed.get()) {Util.apply(var1, var0, PlayerAttributes.MOVEMENT_SPEED, var2, 0.004D, 1.0D);}
+				if(CommonConfig.COMMON.meleeCritDamage.get()) {Util.apply(var1, var0, PlayerAttributes.MELEE_CRIT_DAMAGE, var2, 0.05D, 10.0D);}
 			});
 			PlayerAttributes.registerModifier(PlayerAttributes.INTELLIGENCE.registryName(), (var0, var1, var2) -> {
-				Util.apply(var1, var0, PlayerAttributes.HEALTH_REGEN_AMP, var2, 0.01D, 10.0D);
-				Util.apply(var1, var0, PlayerAttributes.RANGED_CRIT_DAMAGE, var2, 0.05D, 10.0D);
-				Util.apply(var1, var0, PlayerAttributes.LIFESTEAL, var2, 0.02D, 10.0D);
+				if(CommonConfig.COMMON.healthRegenAmp.get()) {Util.apply(var1, var0, PlayerAttributes.HEALTH_REGEN_AMP, var2, 0.01D, 10.0D);}
+				if(CommonConfig.COMMON.rangedCritDamage.get()) {Util.apply(var1, var0, PlayerAttributes.RANGED_CRIT_DAMAGE, var2, 0.05D, 10.0D);}
+				if(CommonConfig.COMMON.lifesteal.get()) {Util.apply(var1, var0, PlayerAttributes.LIFESTEAL, var2, 0.02D, 10.0D);}
 			});
 			PlayerAttributes.registerModifier(PlayerAttributes.LUCKINESS.registryName(), (var0, var1, var2) -> {
-				var1.apply(var0, PlayerAttributes.LUCK, var2);
-				Util.apply(var1, var0, PlayerAttributes.MELEE_CRIT_CHANCE, var2, 0.02D, 1.0D);
-				Util.apply(var1, var0, PlayerAttributes.RANGED_CRIT_CHANCE, var2, 0.02D, 1.0D);
-				Util.apply(var1, var0, PlayerAttributes.EVASION, var2, 0.02D, 1.0D);
+				if(CommonConfig.COMMON.luck.get()) {var1.apply(var0, PlayerAttributes.LUCK, var2);}
+				if(CommonConfig.COMMON.meleeCritChance.get()) {Util.apply(var1, var0, PlayerAttributes.MELEE_CRIT_CHANCE, var2, 0.02D, 1.0D);}
+				if(CommonConfig.COMMON.rangedCritChance.get()) {Util.apply(var1, var0, PlayerAttributes.RANGED_CRIT_CHANCE, var2, 0.02D, 1.0D);}
+				if(CommonConfig.COMMON.evasion.get()) {Util.apply(var1, var0, PlayerAttributes.EVASION, var2, 0.02D, 1.0D);}
 			});
 			PlayerAttributes.registerModifier(PlayerAttributes.MAX_HEALTH.registryName(), (var0, var1, var2) -> {
 				if(var0.getHealth() > var0.getMaxHealth()) {

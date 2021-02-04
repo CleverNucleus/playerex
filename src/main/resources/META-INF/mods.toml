@@ -4,11 +4,11 @@ license="MIT License"
 
 [[mods]]
 modId="playerex"
-version="1.1.6"
+version="1.1.7"
 displayName="Player Ex"
 displayURL="https://github.com/CleverNucleus/PlayerEx"
 logoFile="logo.png"
-credits="CleverNucleus: Code and major texturer."
+credits="CleverNucleus: Code and major texturer; sky_bai: simplified chinese translation (thanks!)"
 authors="CleverNucleus"
 
 description='''

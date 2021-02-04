@@ -3,6 +3,7 @@ package com.github.clevernucleus.playerex.init;
 import java.util.Random;
 
 import com.github.clevernucleus.playerex.api.ExAPI;
+import com.github.clevernucleus.playerex.api.attribute.IPlayerAttribute;
 import com.github.clevernucleus.playerex.api.attribute.PlayerAttributes;
 import com.github.clevernucleus.playerex.init.capability.AttributesCapability;
 import com.github.clevernucleus.playerex.init.capability.CapabilityProvider;
@@ -19,6 +20,7 @@ import net.minecraftforge.eventbus.api.Event.Result;
 import net.minecraftforge.eventbus.api.EventPriority;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
+import net.minecraftforge.fml.event.server.FMLServerStartingEvent;
 
 @Mod.EventBusSubscriber(modid = ExAPI.MODID, bus = Mod.EventBusSubscriber.Bus.FORGE)
 public class EventHandler {
@@ -40,9 +42,30 @@ public class EventHandler {
 				var.add(par0, PlayerAttributes.DEXTERITY, CommonConfig.COMMON.dexterity.get().doubleValue());
 				var.add(par0, PlayerAttributes.INTELLIGENCE, CommonConfig.COMMON.intelligence.get().doubleValue());
 				var.add(par0, PlayerAttributes.LUCKINESS, CommonConfig.COMMON.luckiness.get().doubleValue());
-				var.add(par0, PlayerAttributes.MAX_HEALTH, -20D);
+				var.add(par0, PlayerAttributes.MAX_HEALTH, (CommonConfig.COMMON.maxHealth.get() ? -20D : CommonConfig.COMMON.constitution.get().doubleValue() - 20D));
 				var0.putBoolean("Initialised", true);
 			}
+		});
+	}
+	
+	/** Bit of a temporary thing; we'll rewrite this nicely when we rework the system for 1.17 (or pre-1.17)*/
+	public static void reset(final PlayerEntity par0, final boolean par1) {
+		if(par0 == null) return;
+		if(par0.world.isRemote) return;
+		
+		ExAPI.playerAttributes(par0).ifPresent(var -> {
+			if(par1) {
+				for(IPlayerAttribute v : PlayerAttributes.attributes()) {
+					var.forceSet(par0, v, 0);
+				}
+			}
+			
+			var.add(par0, PlayerAttributes.CONSTITUTION, CommonConfig.COMMON.constitution.get().doubleValue());
+			var.add(par0, PlayerAttributes.STRENGTH, CommonConfig.COMMON.strength.get().doubleValue());
+			var.add(par0, PlayerAttributes.DEXTERITY, CommonConfig.COMMON.dexterity.get().doubleValue());
+			var.add(par0, PlayerAttributes.INTELLIGENCE, CommonConfig.COMMON.intelligence.get().doubleValue());
+			var.add(par0, PlayerAttributes.LUCKINESS, CommonConfig.COMMON.luckiness.get().doubleValue());
+			var.add(par0, PlayerAttributes.MAX_HEALTH, (CommonConfig.COMMON.maxHealth.get() ? -20D : CommonConfig.COMMON.constitution.get().doubleValue() - 20D));
 		});
 	}
 	
@@ -50,7 +73,7 @@ public class EventHandler {
 	 * Updates the values of the player's attributes.
 	 * @param par0 Player instance.
 	 */
-	private static void update(PlayerEntity par0) {
+	public static void update(PlayerEntity par0) {
 		if(par0 == null) return;
 		if(par0.world.isRemote) return;
 		
@@ -61,12 +84,17 @@ public class EventHandler {
 	 * Sends packets from the server to the client to sync the client with the server.
 	 * @param par0 Player instance.
 	 */
-	private static void sync(PlayerEntity par0) {
+	public static void sync(PlayerEntity par0) {
 		if(par0 == null) return;
 		if(par0.world.isRemote) return;
 		
 		ExAPI.playerAttributes(par0).ifPresent(var -> ((AttributesCapability)var).send(par0));
 	}
+	
+	@SubscribeEvent
+    public static void serverLoad(final FMLServerStartingEvent par0) {
+        ResetCommand.register(par0.getServer().getCommandManager().getDispatcher());
+    }
 	
 	/**
 	 * Event for attaching capabilities.
@@ -89,6 +117,13 @@ public class EventHandler {
 		PlayerEntity var1 = par0.getOriginal();
 		
 		if(var0.world.isRemote) return;
+		if(par0.isWasDeath() && CommonConfig.COMMON.resetOnDeath.get()) {
+			reset(var0, false);
+			update(var0);
+			sync(var0);
+			
+			return;
+		}
 		
 		try {
 			ExAPI.playerAttributes(var0).ifPresent(par1 -> {
