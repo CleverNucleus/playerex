@@ -385,22 +385,4 @@ public class EventHandler {
 			});
 		}
 	}
-	
-	/**
-	 * Event fired on looting.
-	 * @param par0
-	 */
-	@SubscribeEvent(priority = EventPriority.HIGHEST)
-	public static void onLivingLoot(final net.minecraftforge.event.entity.living.LootingLevelEvent par0) {
-		if(par0.getDamageSource().getTrueSource() instanceof PlayerEntity) {
-			PlayerEntity var0 = (PlayerEntity)par0.getDamageSource().getTrueSource();
-			
-			if(var0 == null) return;
-			if(var0.world.isRemote) return;
-			
-			ExAPI.playerAttributes(var0).ifPresent(var -> {
-				par0.setLootingLevel(par0.getLootingLevel() + (int)(var.get(var0, PlayerAttributes.LUCKINESS) / 5F));
-			});
-		}
-	}
 }
