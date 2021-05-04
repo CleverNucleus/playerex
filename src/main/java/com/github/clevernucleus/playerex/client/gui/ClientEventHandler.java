@@ -26,6 +26,8 @@ import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.client.gui.screen.inventory.ContainerScreen;
 import net.minecraft.client.gui.screen.inventory.InventoryScreen;
 import net.minecraft.entity.Entity;
+import net.minecraft.entity.IJumpingMount;
+import net.minecraft.entity.IRideable;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
@@ -43,6 +45,18 @@ public class ClientEventHandler {
 	private static final Set<ElementType> UTILS_BAR = Sets.immutableEnumSet(ElementType.EXPERIENCE, ElementType.JUMPBAR, ElementType.ARMOR, ElementType.FOOD, ElementType.AIR);
 	private static final Set<ElementType> HEALTH_BAR = Sets.immutableEnumSet(ElementType.HEALTH, ElementType.HEALTHMOUNT);
 	private static final BiFunction<String, Float, String> FORMAT = (par0, par1) -> (new DecimalFormat(par0)).format(par1);
+	
+	private static boolean isRidingJumpable(ClientPlayerEntity par0) {
+		Entity var0 = par0.getRidingEntity();
+		
+		return par0.isPassenger() && var0 instanceof IJumpingMount;
+	}
+	
+	private static boolean isRiding(ClientPlayerEntity par0) {
+		Entity var0 = par0.getRidingEntity();
+		
+		return par0.isPassenger() && var0 instanceof IRideable;
+	}
 	
 	private static boolean isFoodItem(ItemStack par0) {
 		return par0.getItem().getFood() != null;
@@ -100,8 +114,7 @@ public class ClientEventHandler {
 		GL11.glPopMatrix();
 	}
 	
-	//assumes we;re riding a horse
-	private static void drawHorseHealthBar(MatrixStack par0, Minecraft par1, boolean par2) {
+	private static void drawRidingHealthBar(MatrixStack par0, Minecraft par1, boolean par2) {
 		if(par1 == null) return;
 		
 		ClientPlayerEntity var0 = par1.player;
@@ -128,7 +141,7 @@ public class ClientEventHandler {
 			}
 			
 			FontRenderer var4 = par1.fontRenderer;
-			String var5 = FORMAT.apply("#.##", var0.getHealth() + var0.getAbsorptionAmount()) + "/" + FORMAT.apply("#.##", var0.getMaxHealth());
+			String var5 = FORMAT.apply("#.##", var3.getHealth() + var3.getAbsorptionAmount()) + "/" + FORMAT.apply("#.##", var3.getMaxHealth());
 			
 			int var6 = (varX - var4.getStringWidth(var5)) / 2;
 			
@@ -141,7 +154,6 @@ public class ClientEventHandler {
 		}
 	}
 	
-	//assumes we're riding a horse
 	private static void drawHorseJumpBar(MatrixStack par0, Minecraft par1) {
 		if(par1 == null) return;
 		
@@ -233,7 +245,6 @@ public class ClientEventHandler {
 		});
 	}
 	
-	//assumes we're not riding a horse
 	private static void drawUtilsBar(MatrixStack par0, Minecraft par1, boolean par2) {
 		if(par1 == null) return;
 		
@@ -293,7 +304,7 @@ public class ClientEventHandler {
 			boolean var18 = var10 > 0F && var4 < 20F;
 			
 			String var19 = "x" + var13;
-			String var20 = (int)(100F * ((ClientRegistry.HUD.isKeyDown() && var6) ? (((var17 && var18) ? var15 : var16) / (float)var14) : (float)(var17 ? var14 : var2) / 20F)) + "%";
+			String var20 = (int)(100F * ((ClientRegistry.HUD.isKeyDown() && var6) ? (((var17 && var18) ? var15 : var16) / (float)var14) : (float)((var17 && var6) ? var14 : var2) / 20F)) + "%";
 			int var21 = (int)(100F * Math.max((float)var0.getAir(), 0F) / (float)var0.getMaxAir());
 			int var22 = (int)((System.currentTimeMillis() / 50L) % 20L);
 			int var23 = (int)((float)((255 * Math.sin(Math.toRadians(18 * var22))) + 255F) / 2F);
@@ -303,7 +314,7 @@ public class ClientEventHandler {
 			
 			var12.drawString(par0, var19, 1.25F * ((varX / 2) + (var21 < 100 ? 54 : 60)), 1.25F * (varY - 36F), 0xFFFFFF);//+54 min left, + 60 max left
 			
-			if(var17) {
+			if(var17 && var6) {
 				GlStateManager.enableBlend();
 				
 				if(var23 > 8) {
@@ -366,11 +377,14 @@ public class ClientEventHandler {
 		if(var0 == ElementType.HOTBAR) return;
 		if(var2.isCreative() || var2.isSpectator()) return;
 		
-		if(var2.isRidingHorse()) {
+		if(isRidingJumpable(var2)) {
 			drawHorseJumpBar(var1, Minecraft.getInstance());
 		} else {
+			if(!isRiding(var2)) {
+				drawUtilsBar(var1, Minecraft.getInstance(), true);
+			}
+			
 			drawLevelBar(var1, Minecraft.getInstance(), true);
-			drawUtilsBar(var1, Minecraft.getInstance(), true);
 		}
 		
 		if(ClientConfig.CLIENT.enableHealthBar.get().booleanValue()) {
@@ -380,10 +394,12 @@ public class ClientEventHandler {
 			
 			drawHealthBar(var1, Minecraft.getInstance(), true);
 			
-			if(var2.isRidingHorse()) {
-				drawHorseHealthBar(var1, Minecraft.getInstance(), true);
+			if(isRiding(var2) || isRidingJumpable(var2)) {//var2.isRidingHorse()
+				drawRidingHealthBar(var1, Minecraft.getInstance(), true);
 			}
 		}
+		
+		Minecraft.getInstance().getTextureManager().bindTexture(AbstractGui.GUI_ICONS_LOCATION);
 	}
 	
 	/**
@@ -400,16 +416,19 @@ public class ClientEventHandler {
 		if(par0.getType() == ElementType.HOTBAR) return;
 		if(var1.isCreative() || var1.isSpectator()) return;
 		
-		if(!var1.isRidingHorse()) {
+		if(!isRidingJumpable(var1)) {//!var1.isRidingHorse()
+			if(!isRiding(var1)) {
+				drawUtilsBar(var0, Minecraft.getInstance(), false);
+			}
+			
 			drawLevelBar(var0, Minecraft.getInstance(), false);
-			drawUtilsBar(var0, Minecraft.getInstance(), false);
 		}
 		
 		if(ClientConfig.CLIENT.enableHealthBar.get().booleanValue()) {
 			drawHealthBar(var0, Minecraft.getInstance(), false);
 			
-			if(var1.isRidingHorse()) {
-				drawHorseHealthBar(var0, Minecraft.getInstance(), false);
+			if(isRiding(var1) || isRidingJumpable(var1)) {//var1.isRidingHorse()
+				drawRidingHealthBar(var0, Minecraft.getInstance(), false);
 			}
 		}
 	}
