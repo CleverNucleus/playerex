@@ -10,6 +10,7 @@ import com.mojang.blaze3d.matrix.MatrixStack;
 import com.github.clevernucleus.playerex.api.ExAPI;
 import com.github.clevernucleus.playerex.api.client.ClientReg;
 import com.github.clevernucleus.playerex.api.client.Page;
+import com.github.clevernucleus.playerex.client.ClientConfig;
 import com.github.clevernucleus.playerex.init.Registry;
 import com.github.clevernucleus.playerex.init.container.PlayerAttributesContainer;
 import com.github.clevernucleus.playerex.init.container.SwitchScreens;
@@ -95,7 +96,7 @@ public class PlayerAttributesScreen extends ContainerScreen<PlayerAttributesCont
 	protected void init() {
 		super.init();
 		
-		this.addButton(new TexturedButton(this, 155, 7, 14, 13, 190, 0, -1, (var0, var1) -> {
+		this.addButton(new TexturedButton(this, ClientConfig.CLIENT.guiButtonX.get().intValue(), ClientConfig.CLIENT.guiButtonY.get().intValue(), 14, 13, 190, 0, -1, (var0, var1) -> {
 			Registry.NETWORK.sendToServer(new SwitchScreens(true));
 			InventoryScreen var2 = new InventoryScreen(Minecraft.getInstance().player);
 			Minecraft.getInstance().displayGuiScreen(var2);
