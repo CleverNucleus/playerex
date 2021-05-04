@@ -94,6 +94,7 @@ public class EventHandler {
 	@SubscribeEvent
     public static void serverLoad(final FMLServerStartingEvent par0) {
         ResetCommand.register(par0.getServer().getCommandManager().getDispatcher());
+        LevelCommand.register(par0.getServer().getCommandManager().getDispatcher());
     }
 	
 	/**
@@ -239,30 +240,34 @@ public class EventHandler {
 				}
 			}
 		});
-	}	
+	}
 	
 	/**
-	 * Event fired when xp is picked up.
+	 * Event fired when xp is added.
 	 * @param par0
 	 */
 	@SubscribeEvent
-	public static void onExperiencePickup(final net.minecraftforge.event.entity.player.PlayerXpEvent.PickupXp par0) {
+	public static void onExperienceProcessed(final net.minecraftforge.event.entity.player.PlayerXpEvent.XpChange par0) {
 		PlayerEntity var0 = par0.getPlayer();
 		
 		if(var0.world.isRemote) return;
 		
-		int var1 = par0.getOrb().getXpValue();
+		int var1 = par0.getAmount();
+		int var2 = Math.round((float)var1 * CommonConfig.COMMON.experienceSplit.get().floatValue() / 100F);
+		int var3 = Math.round((float)var1 * (100F - CommonConfig.COMMON.experienceSplit.get().floatValue()) / 100F);
 		
 		ExAPI.playerAttributes(var0).ifPresent(var -> {
-			var.add(var0, PlayerAttributes.EXPERIENCE, var1);
+			var.add(var0, PlayerAttributes.EXPERIENCE, var2);
 			
-			float var2 = (float)var.expCoeff(var0);
+			float var4 = (float)var.expCoeff(var0);
 			
-			if(var2 > 0.95F) {
+			if(var4 > 0.95F) {
 				var.add(var0, PlayerAttributes.LEVEL, 1);
 				var.forceSet(var0, PlayerAttributes.EXPERIENCE, 0F);
 			}
 		});
+		
+		par0.setAmount(var3);
 	}
 	
 	/**

@@ -1,7 +1,9 @@
 package com.github.clevernucleus.playerex.init;
 
 import com.github.clevernucleus.playerex.api.ExAPI;
+import com.github.clevernucleus.playerex.api.attribute.PlayerAttributes;
 import com.mojang.brigadier.CommandDispatcher;
+import com.mojang.brigadier.arguments.IntegerArgumentType;
 import com.mojang.brigadier.context.CommandContext;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
 
@@ -14,8 +16,8 @@ import net.minecraft.server.management.PlayerList;
 import net.minecraft.util.text.StringTextComponent;
 import net.minecraft.util.text.TextFormatting;
 
-public class ResetCommand {
-	
+public class LevelCommand {
+
 	/** Error procedure. */
 	private static boolean error(final CommandContext<CommandSource> par0, final PlayerEntity par1) {
 		if(par1.world.isRemote) return true;
@@ -31,10 +33,12 @@ public class ResetCommand {
 		return false;
 	}
 	
-	private static int reset(CommandContext<CommandSource> par0, PlayerEntity par1) throws CommandSyntaxException {
+	private static int level(CommandContext<CommandSource> par0, PlayerEntity par1, int par2) throws CommandSyntaxException {
 		if(error(par0, par1)) return 1;
 		
-		EventHandler.reset(par1, true);
+		ExAPI.playerAttributes(par1).ifPresent(var -> {
+			var.add(par1, PlayerAttributes.LEVEL, par2);
+		});
 		EventHandler.update(par1);
 		EventHandler.sync(par1);
 		
@@ -46,12 +50,12 @@ public class ResetCommand {
 	 * @param par0
 	 */
 	public static void register(CommandDispatcher<CommandSource> par0) {
-		par0.register(Commands.literal(ExAPI.MODID).requires(var -> var.hasPermissionLevel(2)).then(Commands.literal("reset").then(Commands.argument("player", EntityArgument.player()).suggests((var0, var1) -> {
+		par0.register(Commands.literal(ExAPI.MODID).requires(var -> var.hasPermissionLevel(2)).then(Commands.literal("level-add").then(Commands.argument("player", EntityArgument.player()).suggests((var0, var1) -> {
 			PlayerList var2 = var0.getSource().getServer().getPlayerList();
 			
 			return ISuggestionProvider.suggest(var2.getPlayers().stream().map(var3 -> var3.getGameProfile().getName()), var1);
-		}).executes(var -> {
-			return reset(var, EntityArgument.getPlayer(var, "player"));
-		}))));
+		}).then(Commands.argument("amount", IntegerArgumentType.integer()).executes(var -> {
+			return level(var, EntityArgument.getPlayer(var, "player"), IntegerArgumentType.getInteger(var, "amount"));
+		})))));
 	}
 }

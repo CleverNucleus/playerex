@@ -12,6 +12,7 @@
 	"playerex.config.common.dexterity": "Dexterity",
 	"playerex.config.common.intelligence": "Intelligence",
 	"playerex.config.common.luckiness": "Luckiness",
+	"playerex.config.common.experiencesplit": "The percentage of experience that contributes to PlayerEx levels.",
 	"playerex.config.common.offset": "Exp Coeff Offset",
 	"playerex.config.common.scale": "Exp Coeff Scaler",
 	"key.playerex.hud": "Additional HUD",

@@ -32,7 +32,7 @@ public class CommonConfig {
 		/** Starting attribute. */
 		public final IntValue constitution, strength, dexterity, intelligence, luckiness;
 		/** expCoeff parameters. */
-		public final DoubleValue offset, scale;
+		public final DoubleValue offset, scale, experienceSplit;
 		/** reset attributes on death */
 		public final BooleanValue resetOnDeath;
 		
@@ -95,6 +95,11 @@ public class CommonConfig {
 					.comment("If true, resets all attributes to their defaults on death.")
 					.worldRestart()
 					.define("resetOnDeath", false);
+			
+			par0.pop();
+			par0.push("experienceSplit");
+			
+			this.experienceSplit = par0.comment("The percentage of experience that contributes to PlayerEx levels.").translation(ExAPI.MODID + ".config.common.experiencesplit").defineInRange("experienceSplit", 50D, 1D, 99D);
 			
 			par0.pop();
 			par0.push("expcoeff");
