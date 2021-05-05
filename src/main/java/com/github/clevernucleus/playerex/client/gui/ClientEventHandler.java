@@ -75,6 +75,7 @@ public class ClientEventHandler {
 	private static int healthLat(final PlayerEntity par0) {
 		if(par0.isPotionActive(Effects.WITHER)) return 213;
 		if(par0.isPotionActive(Effects.POISON)) return 205;
+		//if(par0.isPotionActive(Effects.FROSTBITE)) return 221; TODO
 		if(par0.isPotionActive(Effects.ABSORPTION)) return 197;
 		
 		return 189;
@@ -109,7 +110,7 @@ public class ClientEventHandler {
 		GL11.glPushMatrix();
 		GL11.glScalef(0.8F, 0.8F, 0.8F);
 		
-		var2.drawString(par0, var3, 1.25F * (var4 - 48), 1.25F * (varY - 36F), 0xFFFFFF);
+		var2.drawString(par0, var3, 1.25F * (var4 - 48), 1.25F * (varY - 36F), 0xFFFFFF);//0x000066); TODO WHEN FROSTY
 		
 		GL11.glPopMatrix();
 	}
