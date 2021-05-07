@@ -1,3 +1,0 @@
--Implement AppleSkin GUI mechanics to our overlay
-	-On ALT_HOLD it should display saturation
-	-When food item is in MAINHAND equipment slot, show percentage stat for food/saturation once item has been consumed (blinky effect)
