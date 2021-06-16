@@ -1,11 +1,9 @@
-# PlayerEx
-An API mod for Minecraft that expands and improves the attributes system, exposing it through Forge capabilities.
+# Fabric Example Mod
 
-#### Game Content
+## Setup
 
-The content added by this mod is split into two distinct categories: 
+For setup instructions please see the [fabric wiki page](https://fabricmc.net/wiki/tutorial:setup) that relates to the IDE that you are using.
 
-- In game content, which includes a gui, optional survival HUD and levelling attributes such as maximum health and armour. 
-- API system, which includes the expanded attributes system, server-client syncing and development options that allow Modders to add their own attributes, change default attributes and add tooltips.
+## License
 
-For a comprehensive breakdown of in game content, see the [CurseForge mod page](https://www.curseforge.com/minecraft/mc-mods/player-ex). For Devs who want to use the API, please see the [Github wiki](https://github.com/CleverNucleus/PlayerEx/wiki).
+This template is available under the CC0 license. Feel free to learn from it and incorporate it in your own projects.
