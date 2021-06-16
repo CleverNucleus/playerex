@@ -4,13 +4,11 @@
 	"version": "2.0.1",
 	"name": "PlayerEx",
 	"description": "Implements a more detailed attributes system with an rpg theme.",
-	"authors": 
-	[
+	"authors": [
 		"CleverNucleus"
 	],
     
-	"contact": 
-	{
+	"contact": {
         "homepage": "https://www.curseforge.com/minecraft/mc-mods/playerex",
         "sources": "https://github.com/CleverNucleus/PlayerEx",
         "issues": "https://github.com/CleverNucleus/PlayerEx/issues"
@@ -19,33 +17,32 @@
 	"license": "MIT",
 	"icon": "assets/playerex/icon.png",
 	"environment": "*",
-	"entrypoints": 
-	{
-		"main": 
-		[
+	"entrypoints": {
+		"main": [
 			"com.github.clevernucleus.playerex.PlayerEx"
+		],
+        "cardinal-components": [
+			"com.github.clevernucleus.playerex.impl.AttributeDataContainer"
 		]
 	},
 	
-	"custom": 
-	{
-		
+    "custom": {
+		"cardinal-components": [
+			"playerex:attributes"
+		]
 	},
-	
-	"mixins": 
-	[
+    
+	"mixins": [
 		"playerex.mixins.json"
 	],
     
-	"depends": 
-	{
+	"depends": {
 		"fabricloader": ">=0.7.4",
 		"fabric": "*",
 		"minecraft": "1.16.x"
 	},
     
-	"suggests": 
-	{
+	"suggests": {
 		"another-mod": "*"
 	}
 }

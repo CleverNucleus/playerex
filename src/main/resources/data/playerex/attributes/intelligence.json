@@ -1,0 +1,36 @@
+{
+    "type": "GAME",
+    "uuid": "3502eccd-63ed-48ea-8ec6-bf4b921cf5a6",
+	"defaultValue": 0.0,
+	"minValue": 0.0,
+	"maxValue": 2147483647.0,
+	"translationKey": "attribute.name.playerex.intelligence",
+	"displayFormat": "attribute.desc.playerex.intelligence",
+    "properties": {
+        "weight": 0.8,
+        "minroll": 1.0,
+        "maxroll": 10.0
+    },
+	"functions": [
+        {
+            "attribute": "playerex:heal_amplification",
+            "type": "DIMINISHING",
+            "multiplier": 0.02
+        },
+        {
+            "attribute": "playerex:ranged_crit_damage",
+            "type": "DIMINISHING",
+            "multiplier": 0.05
+        },
+        {
+            "attribute": "playerex:fire_resistance",
+            "type": "DIMINISHING",
+            "multiplier": 0.01
+        },
+        {
+            "attribute": "playerex:wither_resistance",
+            "type": "DIMINISHING",
+            "multiplier": 0.01
+        }
+    ]
+}

@@ -1,0 +1,15 @@
+{
+    "type": "GAME",
+    "uuid": "839edfb2-74b3-4aa8-8b67-14174ebf1fd0",
+	"defaultValue": 0.0,
+	"minValue": -1024.0,
+	"maxValue": 1024.0,
+	"translationKey": "attribute.name.generic.luck",
+	"displayFormat": "attribute.desc.generic.luck",
+    "properties": {
+        "weight": 0.5,
+        "minroll": 1.0,
+        "maxroll": 10.0
+    },
+	"functions": []
+}

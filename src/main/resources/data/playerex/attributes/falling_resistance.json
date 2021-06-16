@@ -1,0 +1,16 @@
+{
+    "type": "GAME",
+    "uuid": "29f52e86-d08a-4fc1-a89a-14512f138ac3",
+	"defaultValue": 0.0,
+	"minValue": -1.0,
+	"maxValue": 1.0,
+	"translationKey": "attribute.name.playerex.falling_resistance",
+	"displayFormat": "attribute.desc.playerex.falling_resistance",
+    "properties": {
+        "multiplier": 10.0,
+        "weight": 0.4,
+        "minroll": 0.01,
+        "maxroll": 0.25
+    },
+	"functions": []
+}

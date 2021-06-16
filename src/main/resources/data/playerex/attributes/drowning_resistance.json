@@ -1,0 +1,16 @@
+{
+    "type": "GAME",
+    "uuid": "2af143fa-9f5a-442a-b4a6-68bd87edc021",
+	"defaultValue": 0.0,
+	"minValue": -1.0,
+	"maxValue": 1.0,
+	"translationKey": "attribute.name.playerex.drowning_resistance",
+	"displayFormat": "attribute.desc.playerex.drowning_resistance",
+    "properties": {
+        "multiplier": 10.0,
+        "weight": 0.4,
+        "minroll": 0.01,
+        "maxroll": 0.25
+    },
+	"functions": []
+}

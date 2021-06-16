@@ -1,0 +1,16 @@
+{
+    "type": "GAME",
+    "uuid": "c0c8c180-c262-421f-b25a-dfeb773df6c6",
+	"defaultValue": 0.0,
+	"minValue": 0.0,
+	"maxValue": 10.0,
+	"translationKey": "attribute.name.playerex.ranged_crit_damage",
+	"displayFormat": "attribute.desc.playerex.ranged_crit_damage",
+    "properties": {
+        "percent": 100.0,
+        "weight": 0.4,
+        "minroll": 0.05,
+        "maxroll": 0.30
+    },
+	"functions": []
+}

@@ -1,0 +1,16 @@
+{
+    "type": "GAME",
+    "uuid": "fe1bf254-7ffb-43db-856b-13739178b0ef",
+	"defaultValue": 0.0,
+	"minValue": 0.0,
+	"maxValue": 10.0,
+	"translationKey": "attribute.name.playerex.melee_crit_damage",
+	"displayFormat": "attribute.desc.playerex.melee_crit_damage",
+    "properties": {
+        "percent": 100.0,
+        "weight": 0.4,
+        "minroll": 0.05,
+        "maxroll": 0.30
+    },
+	"functions": []
+}

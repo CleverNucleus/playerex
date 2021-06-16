@@ -1,0 +1,15 @@
+{
+    "type": "GAME",
+    "uuid": "4d138fd4-511e-4152-b913-e29dd38c4940",
+	"defaultValue": 4.0,
+	"minValue": 0.0,
+	"maxValue": 1024.0,
+	"translationKey": "attribute.name.generic.attack_speed",
+	"displayFormat": "attribute.desc.generic.attack_speed",
+    "properties": {
+        "weight": 0.6,
+        "minroll": 0.25,
+        "maxroll": 2.0
+    },
+	"functions": []
+}

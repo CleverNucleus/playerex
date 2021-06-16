@@ -4,11 +4,9 @@
   "package": "com.github.clevernucleus.playerex.mixin",
   "compatibilityLevel": "JAVA_8",
   "mixins": [
-  	
+  	"ClampedEntityAttributeMixin"
   ],
-  "client": [
-  	
-  ],
+  "client": [],
   "injectors": {
     "defaultRequire": 1
   }

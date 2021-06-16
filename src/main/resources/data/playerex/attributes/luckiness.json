@@ -1,0 +1,36 @@
+{
+    "type": "GAME",
+    "uuid": "fd97cf9e-2886-4f3f-9c25-bab60bbc3709",
+	"defaultValue": 0.0,
+	"minValue": 0.0,
+	"maxValue": 2147483647.0,
+	"translationKey": "attribute.name.playerex.luckiness",
+	"displayFormat": "attribute.desc.playerex.luckiness",
+    "properties": {
+        "weight": 0.8,
+        "minroll": 1.0,
+        "maxroll": 10.0
+    },
+	"functions": [
+        {
+            "attribute": "minecraft:generic.luck",
+            "type": "FLAT",
+            "multiplier": 0.1
+        },
+        {
+            "attribute": "playerex:melee_crit_chance",
+            "type": "DIMINISHING",
+            "multiplier": 0.02
+        },
+        {
+            "attribute": "playerex:ranged_crit_chance",
+            "type": "DIMINISHING",
+            "multiplier": 0.02
+        },
+        {
+            "attribute": "playerex:evasion",
+            "type": "DIMINISHING",
+            "multiplier": 0.02
+        }
+    ]
+}

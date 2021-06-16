@@ -1,0 +1,41 @@
+{
+    "type": "GAME",
+    "uuid": "ffc32643-9aec-48d6-9db9-e3a8c9e341da",
+	"defaultValue": 0.0,
+	"minValue": 0.0,
+	"maxValue": 2147483647.0,
+	"translationKey": "attribute.name.playerex.dexterity",
+	"displayFormat": "attribute.desc.playerex.dexterity",
+    "properties": {
+        "weight": 0.8,
+        "minroll": 1.0,
+        "maxroll": 10.0
+    },
+	"functions": [
+        {
+            "attribute": "playerex:ranged_damage",
+            "type": "FLAT",
+            "multiplier": 0.25
+        },
+        {
+            "attribute": "minecraft:generic.attack_speed",
+            "type": "DIMINISHING",
+            "multiplier": 0.1
+        },
+        {
+            "attribute": "minecraft:generic.movement_speed",
+            "type": "DIMINISHING",
+            "multiplier": 0.004
+        },
+        {
+            "attribute": "playerex:melee_crit_damage",
+            "type": "DIMINISHING",
+            "multiplier": 0.05
+        },
+        {
+            "attribute": "playerex:falling_resistance",
+            "type": "DIMINISHING",
+            "multiplier": 0.01
+        }
+    ]
+}

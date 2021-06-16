@@ -1,0 +1,17 @@
+{
+    "type": "GAME",
+    "uuid": "7b46ca86-fd93-4f3f-9f62-c6b45f9b8462",
+	"defaultValue": 0.0,
+	"minValue": -1024.0,
+	"maxValue": 1024,
+	"translationKey": "attribute.name.generic.reach-entity-attributes.attack_range",
+	"displayFormat": "attribute.desc.reach-entity-attributes.attack_range",
+    "properties": {},
+	"functions": [
+        {
+            "attribute": "reach-entity-attributes:reach",
+            "type": "FLAT",
+            "multiplier": 1.0
+        }
+    ]
+}

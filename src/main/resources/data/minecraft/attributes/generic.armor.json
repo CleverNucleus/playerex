@@ -1,0 +1,15 @@
+{
+    "type": "GAME",
+    "uuid": "3934dd82-e758-4d1a-8913-7be143f8ef98",
+	"defaultValue": 0.0,
+	"minValue": 0.0,
+	"maxValue": 50.0,
+	"translationKey": "attribute.name.generic.armor",
+	"displayFormat": "attribute.desc.generic.armor",
+    "properties": {
+        "weight": 0.6,
+        "minroll": 1.0,
+        "maxroll": 10.0
+    },
+	"functions": []
+}
