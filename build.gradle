@@ -27,6 +27,9 @@ repositories {
     maven {
 		url "https://maven.terraformersmc.com/"
 	}
+    maven {
+        url "https://www.cursemaven.com"
+    }
 }
 
 dependencies {
@@ -36,7 +39,7 @@ dependencies {
     
 	modImplementation "net.fabricmc.fabric-api:fabric-api:${project.fabric_version}"
     
-    modApi "io.github.onyxstudios.Cardinal-Components-API:cardinal-components-base:${project.cardinal_components_version}"
+	modApi "io.github.onyxstudios.Cardinal-Components-API:cardinal-components-base:${project.cardinal_components_version}"
     include "io.github.onyxstudios.Cardinal-Components-API:cardinal-components-base:${project.cardinal_components_version}"
     
     modApi "io.github.onyxstudios.Cardinal-Components-API:cardinal-components-entity:${project.cardinal_components_version}"
@@ -52,6 +55,9 @@ dependencies {
     include "me.shedaniel.cloth:cloth-config-fabric:${project.cloth_config_version}"
     
     modImplementation "com.terraformersmc:modmenu:${project.modmenu_version}"
+    
+    modImplementation "curse.maven:tooltipfix-411557:3087328"
+    include "curse.maven:tooltipfix-411557:3087328"
 }
 
 processResources {
