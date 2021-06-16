@@ -1,37 +1,51 @@
 {
-  "schemaVersion": 1,
-  "id": "modid",
-  "version": "${version}",
-
-  "name": "Example Mod",
-  "description": "This is an example description! Tell everyone what your mod is about!",
-  "authors": [
-    "Me!"
-  ],
-  "contact": {
-    "homepage": "https://fabricmc.net/",
-    "sources": "https://github.com/FabricMC/fabric-example-mod"
-  },
-
-  "license": "CC0-1.0",
-  "icon": "assets/modid/icon.png",
-
-  "environment": "*",
-  "entrypoints": {
-    "main": [
-      "net.fabricmc.example.ExampleMod"
-    ]
-  },
-  "mixins": [
-    "modid.mixins.json"
-  ],
-
-  "depends": {
-    "fabricloader": ">=0.7.4",
-    "fabric": "*",
-    "minecraft": "1.16.x"
-  },
-  "suggests": {
-    "another-mod": "*"
-  }
+	"schemaVersion": 1,
+	"id": "playerex",
+	"version": "2.0.1",
+	"name": "PlayerEx",
+	"description": "Implements a more detailed attributes system with an rpg theme.",
+	"authors": 
+	[
+		"CleverNucleus"
+	],
+    
+	"contact": 
+	{
+        "homepage": "https://www.curseforge.com/minecraft/mc-mods/playerex",
+        "sources": "https://github.com/CleverNucleus/PlayerEx",
+        "issues": "https://github.com/CleverNucleus/PlayerEx/issues"
+	},
+    
+	"license": "MIT",
+	"icon": "assets/playerex/icon.png",
+	"environment": "*",
+	"entrypoints": 
+	{
+		"main": 
+		[
+			"com.github.clevernucleus.playerex.PlayerEx"
+		]
+	},
+	
+	"custom": 
+	{
+		
+	},
+	
+	"mixins": 
+	[
+		"playerex.mixins.json"
+	],
+    
+	"depends": 
+	{
+		"fabricloader": ">=0.7.4",
+		"fabric": "*",
+		"minecraft": "1.16.x"
+	},
+    
+	"suggests": 
+	{
+		"another-mod": "*"
+	}
 }
