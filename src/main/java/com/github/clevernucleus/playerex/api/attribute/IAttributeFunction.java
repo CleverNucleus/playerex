@@ -38,7 +38,7 @@ public interface IAttributeFunction {
 	/**
 	 * @return The attribute the function is modifying
 	 */
-	Identifier attribute();
+	Identifier attributeKey();
 	
 	/**
 	 * @return The specific enum type of maths that is used to modify the attribute

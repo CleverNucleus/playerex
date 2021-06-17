@@ -8,7 +8,9 @@ import java.util.UUID;
 import java.util.function.Supplier;
 
 import com.github.clevernucleus.playerex.api.ExAPI;
+import com.github.clevernucleus.playerex.api.attribute.AttributeType;
 import com.github.clevernucleus.playerex.api.attribute.IAttributeFunction;
+import com.github.clevernucleus.playerex.api.attribute.IPlayerAttribute;
 import com.google.gson.annotations.Expose;
 import com.ibm.icu.impl.locale.XCldrStub.ImmutableSet;
 
@@ -18,11 +20,11 @@ import net.minecraft.util.Identifier;
 import net.minecraft.util.Lazy;
 import net.minecraft.util.registry.Registry;
 
-public final class PlayerAttribute {
+public final class PlayerAttribute implements IPlayerAttribute {
 	@Expose private AttributeType type;
 	@Expose private UUID uuid;
 	@Expose private double defaultValue, minValue, maxValue;
-	@Expose private String translationKey;
+	@Expose private String translationKey, displayFormat;
 	@Expose private HashMap<String, Float> properties;
 	@Expose private ArrayList<AttributeFunction> functions;
 	private Set<IAttributeFunction> functionsAppended;
@@ -48,7 +50,7 @@ public final class PlayerAttribute {
 			this.functions.forEach(this.functionsAppended::add);
 		}
 		
-		ExAPI.REGISTRY.functions(identifier).forEach(this.functionsAppended::add);
+		ExAPI.REGISTRY.get().functions(identifier).forEach(this.functionsAppended::add);
 		
 		if(this.registryKey == null) {
 			this.registryKey = identifier;
@@ -61,12 +63,12 @@ public final class PlayerAttribute {
 		EntityAttribute value = Registry.ATTRIBUTE.get(identifier);
 		
 		if(value == null) {
-			value = Registry.register(Registry.ATTRIBUTE, identifier, (new ClampedEntityAttribute(this.translationKey, this.defaultValue, this.minValue, this.maxValue)).setTracked(true));
+			value = Registry.register(Registry.ATTRIBUTE, identifier, (new ClampedEntityAttribute(this.translationKey(), this.defaultValue(), this.minValue(), this.maxValue())).setTracked(true));
 		} else {
 			value.setTracked(true);
 		}
 		
-		return ((IClampedEntityAttribute)value).withLimits(this.minValue, this.maxValue);
+		return ((IClampedEntityAttribute)value).withLimits(this.minValue(), this.maxValue());
 	}
 	
 	public PlayerAttribute build(Identifier identifier) {
@@ -87,38 +89,45 @@ public final class PlayerAttribute {
 		return this.registryKey;
 	}
 	
-	public AttributeType type() {
-		return this.type;
+	public double valueFromType() {
+		return this.type.value(this);
 	}
 	
 	public Set<IAttributeFunction> functions() {
 		return ImmutableSet.copyOf(this.functionsAppended);
 	}
 	
-	public double valueFromType() {
-		return this.type.value(this);
+	@Override
+	public AttributeType type() {
+		return this.type;
 	}
 	
+	@Override
 	public double defaultValue() {
 		return this.defaultValue;
 	}
 	
+	@Override
 	public double minValue() {
 		return this.minValue;
 	}
 	
+	@Override
 	public double maxValue() {
 		return this.maxValue;
 	}
 	
+	@Override
 	public boolean hasProperty(final String key) {
 		return this.properties == null ? false : this.properties.containsKey(key);
 	}
 	
+	@Override
 	public float getProperty(final String key) {
 		return this.hasProperty(key) ? this.properties.getOrDefault(key, 0.0F) : 0.0F;
 	}
 	
+	@Override
 	public String translationKey() {
 		return this.translationKey;
 	}

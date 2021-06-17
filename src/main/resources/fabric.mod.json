@@ -21,6 +21,9 @@
 		"main": [
 			"com.github.clevernucleus.playerex.PlayerEx"
 		],
+		"client": [
+			"com.github.clevernucleus.playerex.client.PlayerExClient"
+		],
         "cardinal-components": [
 			"com.github.clevernucleus.playerex.impl.AttributeDataContainer"
 		]

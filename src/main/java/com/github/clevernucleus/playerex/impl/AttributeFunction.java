@@ -17,7 +17,7 @@ public final class AttributeFunction implements IAttributeFunction {
 	}
 	
 	@Override
-	public Identifier attribute() {
+	public Identifier attributeKey() {
 		return new Identifier(this.attribute);
 	}
 	
