@@ -5,7 +5,6 @@
 	"minValue": 0.0,
 	"maxValue": 1.0,
 	"translationKey": "attribute.name.playerex.melee_crit_chance",
-	"displayFormat": "attribute.desc.playerex.melee_crit_chance",
     "properties": {
         "percent": 100.0,
         "weight": 0.4,

@@ -1,4 +1,4 @@
-package com.github.clevernucleus.playerex.impl;
+package com.github.clevernucleus.playerex.impl.attribute;
 
 import com.github.clevernucleus.playerex.api.attribute.IAttributeFunction;
 import com.google.gson.annotations.Expose;

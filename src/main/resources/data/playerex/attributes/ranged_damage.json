@@ -5,7 +5,6 @@
 	"minValue": 0.0,
 	"maxValue": 2048.0,
 	"translationKey": "attribute.name.playerex.ranged_damage",
-	"displayFormat": "attribute.desc.playerex.ranged_damage",
     "properties": {
         "weight": 0.5,
         "minroll": 0.25,

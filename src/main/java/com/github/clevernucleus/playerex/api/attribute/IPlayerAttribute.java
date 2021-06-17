@@ -16,6 +16,9 @@ public interface IPlayerAttribute {
 	Identifier registryKey();
 	
 	
+	double valueFromType();
+	
+	
 	double defaultValue();
 	
 	

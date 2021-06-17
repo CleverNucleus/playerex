@@ -5,7 +5,6 @@
 	"minValue": 0.0,
 	"maxValue": 20.0,
 	"translationKey": "attribute.name.generic.armor_toughness",
-	"displayFormat": "attribute.desc.generic.armor_toughness",
     "properties": {
         "weight": 0.45,
         "minroll": 0.5,

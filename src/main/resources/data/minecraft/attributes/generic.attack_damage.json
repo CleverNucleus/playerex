@@ -5,7 +5,6 @@
 	"minValue": 0.0,
 	"maxValue": 2048.0,
 	"translationKey": "attribute.name.generic.attack_damage",
-	"displayFormat": "attribute.desc.generic.attack_damage",
     "properties": {
         "weight": 0.5,
         "minroll": 0.25,

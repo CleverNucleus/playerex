@@ -5,7 +5,6 @@
 	"minValue": 0.0,
 	"maxValue": 2147483647.0,
 	"translationKey": "attribute.name.playerex.constitution",
-	"displayFormat": "attribute.desc.playerex.constitution",
     "properties": {
         "weight": 0.8,
         "minroll": 1.0,

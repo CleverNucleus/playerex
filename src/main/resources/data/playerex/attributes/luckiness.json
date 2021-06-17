@@ -5,7 +5,6 @@
 	"minValue": 0.0,
 	"maxValue": 2147483647.0,
 	"translationKey": "attribute.name.playerex.luckiness",
-	"displayFormat": "attribute.desc.playerex.luckiness",
     "properties": {
         "weight": 0.8,
         "minroll": 1.0,
@@ -15,7 +14,7 @@
         {
             "attribute": "minecraft:generic.luck",
             "type": "FLAT",
-            "multiplier": 0.1
+            "multiplier": 0.2
         },
         {
             "attribute": "playerex:melee_crit_chance",

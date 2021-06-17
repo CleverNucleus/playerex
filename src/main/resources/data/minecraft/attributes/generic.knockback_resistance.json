@@ -5,7 +5,6 @@
 	"minValue": 0.0,
 	"maxValue": 1.0,
 	"translationKey": "attribute.name.generic.knockback_resistance",
-	"displayFormat": "attribute.desc.generic.knockback_resistance",
     "properties": {
         "multiplier": 10.0,
         "weight": 0.5,

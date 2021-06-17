@@ -5,7 +5,6 @@
 	"minValue": -1.0,
 	"maxValue": 1.0,
 	"translationKey": "attribute.name.playerex.health_regeneration",
-	"displayFormat": "attribute.desc.playerex.health_regeneration",
     "properties": {
         "multiplier": 20.0,
         "weight": 0.5,

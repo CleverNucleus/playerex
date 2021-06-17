@@ -5,7 +5,6 @@
 	"minValue": 0.0,
 	"maxValue": 2147483647.0,
 	"translationKey": "attribute.name.playerex.intelligence",
-	"displayFormat": "attribute.desc.playerex.intelligence",
     "properties": {
         "weight": 0.8,
         "minroll": 1.0,

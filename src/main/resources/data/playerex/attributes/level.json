@@ -5,7 +5,6 @@
 	"minValue": 0.0,
 	"maxValue": 2147483647.0,
 	"translationKey": "attribute.name.playerex.level",
-	"displayFormat": "attribute.desc.playerex.level",
     "properties": {},
 	"functions": [
         {

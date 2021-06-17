@@ -1,4 +1,4 @@
-package com.github.clevernucleus.playerex.impl;
+package com.github.clevernucleus.playerex.impl.attribute;
 
 import net.minecraft.entity.attribute.EntityAttribute;
 

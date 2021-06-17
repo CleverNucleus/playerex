@@ -5,7 +5,6 @@
 	"minValue": -1024.0,
 	"maxValue": 1024,
 	"translationKey": "attribute.name.generic.reach-entity-attributes.attack_range",
-	"displayFormat": "attribute.desc.reach-entity-attributes.attack_range",
     "properties": {},
 	"functions": [
         {

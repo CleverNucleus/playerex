@@ -4,6 +4,9 @@ import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
 
+import org.jetbrains.annotations.Nullable;
+
+import com.github.clevernucleus.playerex.api.attribute.IAttribute;
 import com.github.clevernucleus.playerex.api.attribute.IAttributeFunction;
 import com.github.clevernucleus.playerex.api.attribute.IPlayerAttribute;
 import com.github.clevernucleus.playerex.api.util.ExRegistry;
@@ -25,7 +28,13 @@ public final class ExRegistryImpl implements ExRegistry {
 	}
 	
 	@Override
-	public IPlayerAttribute from(final Identifier keyIn) {
+	public IAttribute getAttribute(final Identifier keyIn) {
+		return () -> this.findAttribute(keyIn);
+	}
+	
+	@Nullable
+	@Override
+	public IPlayerAttribute findAttribute(final Identifier keyIn) {
 		return this.attributes.getOrDefault(keyIn, (IPlayerAttribute)null);
 	}
 	

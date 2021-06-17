@@ -1,8 +1,9 @@
-package com.github.clevernucleus.playerex.impl;
+package com.github.clevernucleus.playerex.impl.attribute;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.Map;
 import java.util.Set;
 import java.util.UUID;
 import java.util.function.Supplier;
@@ -16,15 +17,17 @@ import com.ibm.icu.impl.locale.XCldrStub.ImmutableSet;
 
 import net.minecraft.entity.attribute.ClampedEntityAttribute;
 import net.minecraft.entity.attribute.EntityAttribute;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.nbt.ListTag;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.Lazy;
 import net.minecraft.util.registry.Registry;
 
-public final class PlayerAttribute implements IPlayerAttribute {
+public final class PlayerAttribute implements IPlayerAttribute, IAttributeWrapper {
 	@Expose private AttributeType type;
 	@Expose private UUID uuid;
 	@Expose private double defaultValue, minValue, maxValue;
-	@Expose private String translationKey, displayFormat;
+	@Expose private String translationKey;
 	@Expose private HashMap<String, Float> properties;
 	@Expose private ArrayList<AttributeFunction> functions;
 	private Set<IAttributeFunction> functionsAppended;
@@ -77,29 +80,55 @@ public final class PlayerAttribute implements IPlayerAttribute {
 		return this.set(() -> attribute).register(identifier);
 	}
 	
-	public EntityAttribute get() {
-		return this.attribute.get();
+	public void write(CompoundTag tag) {
+		tag.putString("Type", this.type.toString());
+		tag.putUuid("UUID", this.uuid);
+		tag.putString("RegistryKey", this.registryKey.toString());
+		tag.putDouble("DefaultValue", this.defaultValue);
+		tag.putDouble("MinValue", this.minValue);
+		tag.putDouble("MaxValue", this.maxValue);
+		tag.putString("TranslationKey", this.translationKey);
+		
+		ListTag properties = new ListTag();
+		
+		for(Map.Entry<String, Float> entry : this.properties.entrySet()) {
+			CompoundTag property = new CompoundTag();
+			property.putString("Key", entry.getKey());
+			property.putFloat("Value", entry.getValue());
+			properties.add(property);
+		}
+		
+		tag.put("Properties", properties);
 	}
 	
-	public UUID uuid() {
-		return this.uuid;
-	}
-	
-	public Identifier registryKey() {
-		return this.registryKey;
-	}
-	
-	public double valueFromType() {
-		return this.type.value(this);
-	}
-	
+	@Override
 	public Set<IAttributeFunction> functions() {
 		return ImmutableSet.copyOf(this.functionsAppended);
 	}
 	
 	@Override
+	public EntityAttribute get() {
+		return this.attribute.get();
+	}
+	
+	@Override
+	public UUID uuid() {
+		return this.uuid;
+	}
+	
+	@Override
+	public Identifier registryKey() {
+		return this.registryKey;
+	}
+	
+	@Override
 	public AttributeType type() {
 		return this.type;
+	}
+	
+	@Override
+	public double valueFromType() {
+		return this.type.value(this);
 	}
 	
 	@Override
@@ -118,13 +147,13 @@ public final class PlayerAttribute implements IPlayerAttribute {
 	}
 	
 	@Override
-	public boolean hasProperty(final String key) {
-		return this.properties == null ? false : this.properties.containsKey(key);
+	public boolean hasProperty(final String keyIn) {
+		return this.properties == null ? false : this.properties.containsKey(keyIn);
 	}
 	
 	@Override
-	public float getProperty(final String key) {
-		return this.hasProperty(key) ? this.properties.getOrDefault(key, 0.0F) : 0.0F;
+	public float getProperty(final String keyIn) {
+		return this.hasProperty(keyIn) ? this.properties.getOrDefault(keyIn, 0.0F) : 0.0F;
 	}
 	
 	@Override

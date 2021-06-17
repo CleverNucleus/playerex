@@ -1,4 +1,4 @@
-package com.github.clevernucleus.playerex.impl;
+package com.github.clevernucleus.playerex.impl.attribute;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -13,6 +13,7 @@ import org.apache.logging.log4j.Logger;
 
 import com.github.clevernucleus.playerex.api.ExAPI;
 import com.github.clevernucleus.playerex.api.attribute.AttributeType;
+import com.github.clevernucleus.playerex.impl.ExRegistryImpl;
 import com.google.common.collect.Maps;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;

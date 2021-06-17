@@ -5,7 +5,6 @@
 	"minValue": 0.0,
 	"maxValue": 10.0,
 	"translationKey": "attribute.name.playerex.melee_crit_damage",
-	"displayFormat": "attribute.desc.playerex.melee_crit_damage",
     "properties": {
         "percent": 100.0,
         "weight": 0.4,

@@ -5,7 +5,6 @@
 	"minValue": 0.0,
 	"maxValue": 1024.0,
 	"translationKey": "attribute.name.generic.movement_speed",
-	"displayFormat": "attribute.desc.generic.movement_speed",
     "properties": {
         "multiplier": 20.0,
         "weight": 0.35,

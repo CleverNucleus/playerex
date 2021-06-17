@@ -5,7 +5,6 @@
 	"minValue": 0.0,
 	"maxValue": 1.0,
 	"translationKey": "attribute.name.playerex.evasion",
-	"displayFormat": "attribute.desc.playerex.evasion",
     "properties": {
         "percent": 100.0,
         "weight": 0.3,

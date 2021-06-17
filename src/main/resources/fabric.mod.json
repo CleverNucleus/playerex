@@ -25,7 +25,10 @@
 			"com.github.clevernucleus.playerex.client.PlayerExClient"
 		],
         "cardinal-components": [
-			"com.github.clevernucleus.playerex.impl.AttributeDataContainer"
+			"com.github.clevernucleus.playerex.impl.attribute.AttributeDataContainer"
+		],
+		"modmenu": [
+			"com.github.clevernucleus.playerex.config.ModMenuCompat"
 		]
 	},
 	

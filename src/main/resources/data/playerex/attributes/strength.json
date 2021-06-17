@@ -5,7 +5,6 @@
 	"minValue": 0.0,
 	"maxValue": 2147483647.0,
 	"translationKey": "attribute.name.playerex.strength",
-	"displayFormat": "attribute.desc.playerex.strength",
     "properties": {
         "weight": 0.8,
         "minroll": 1.0,

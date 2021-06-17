@@ -5,7 +5,6 @@
 	"minValue": -1.0,
 	"maxValue": 1.0,
 	"translationKey": "attribute.name.playerex.magic_resistance",
-	"displayFormat": "attribute.desc.playerex.magic_resistance",
     "properties": {
         "multiplier": 10.0,
         "weight": 0.5,

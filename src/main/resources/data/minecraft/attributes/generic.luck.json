@@ -5,7 +5,6 @@
 	"minValue": -1024.0,
 	"maxValue": 1024.0,
 	"translationKey": "attribute.name.generic.luck",
-	"displayFormat": "attribute.desc.generic.luck",
     "properties": {
         "weight": 0.5,
         "minroll": 1.0,

@@ -5,7 +5,6 @@
 	"minValue": -1024.0,
 	"maxValue": 1024,
 	"translationKey": "attribute.name.generic.reach-entity-attributes.reach",
-	"displayFormat": "attribute.desc.reach-entity-attributes.reach",
     "properties": {},
 	"functions": []
 }
