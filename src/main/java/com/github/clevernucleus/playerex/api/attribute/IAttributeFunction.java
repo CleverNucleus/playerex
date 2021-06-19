@@ -22,14 +22,32 @@ public interface IAttributeFunction {
 	public enum Type {
 		
 		/** Adds a + b linearly */
-		FLAT((base, value, limit) -> base + value),
+		FLAT((byte)0, (base, value, limit) -> base + value),
 		
 		/** Adds a + b with a limit l diminishingly. Uses {@link Maths#add(double, double, double)} */
-		DIMINISHING(Maths::add);
+		DIMINISHING((byte)1, Maths::add);
 		
+		private byte id;
 		private TriFunction<Double, Double, Double, Double> func;
 		
-		private Type(final TriFunction<Double, Double, Double, Double> adder) { this.func = adder; }
+		private Type(final byte id, final TriFunction<Double, Double, Double, Double> adder) {
+			this.id = id;
+			this.func = adder;
+		}
+		
+		/**
+		 * @param idIn
+		 * @return The type from the id. If the id is unknown then defaults to FLAT.
+		 */
+		public static Type from(final byte idIn) {
+			if(idIn == 1) return DIMINISHING;
+			else return FLAT;
+		}
+		
+		/**
+		 * @return The type's id.
+		 */
+		public byte id() { return this.id; }
 		
 		/** Applies the add function of the enum type to the input values (if type is FLAT then limit is irrelevant). */
 		public double add(final double base, final double value, final double limit) { return this.func.apply(base, value, limit); }

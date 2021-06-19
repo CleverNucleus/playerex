@@ -1,5 +1,6 @@
 package com.github.clevernucleus.playerex.api.attribute;
 
+import java.util.Set;
 import java.util.UUID;
 
 import net.minecraft.util.Identifier;
@@ -14,6 +15,9 @@ public interface IPlayerAttribute {
 	
 	
 	Identifier registryKey();
+	
+	
+	Set<IAttributeFunction> functions();
 	
 	
 	double valueFromType();

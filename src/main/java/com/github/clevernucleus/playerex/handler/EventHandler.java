@@ -5,6 +5,7 @@ import java.util.Random;
 
 import com.github.clevernucleus.playerex.PlayerEx;
 import com.github.clevernucleus.playerex.api.ExAPI;
+import com.github.clevernucleus.playerex.api.PlayerAttributes;
 import com.github.clevernucleus.playerex.api.attribute.AttributeData;
 import com.github.clevernucleus.playerex.api.attribute.IPlayerAttribute;
 import com.github.clevernucleus.playerex.impl.attribute.AttributeDataManager;
@@ -80,7 +81,7 @@ public final class EventHandler {
 	}
 	
 	public static void attributeModified(PlayerEntity player, IPlayerAttribute attribute, double oldValue, double newValue) {
-		if(attribute.equals(ExAPI.ATTRIBUTES.get().maxHealth.get())) {
+		if(attribute.equals(PlayerAttributes.MAX_HEALTH.get())) {
 			if(player.getHealth() > player.getMaxHealth()) {
 				player.setHealth(player.getMaxHealth());
 			}
@@ -91,7 +92,7 @@ public final class EventHandler {
 		if(!(entity instanceof PlayerEntity)) return;
 		
 		AttributeData data = ExAPI.DATA.get((PlayerEntity)entity);
-		float mult = (float)data.get(ExAPI.ATTRIBUTES.get().healAmplification.get());
+		float mult = (float)data.get(PlayerAttributes.HEAL_AMPLIFICATION.get());
 		
 		amount = amount * (1.0F + mult);
 	}
@@ -100,7 +101,7 @@ public final class EventHandler {
 		if(player.world.isClient) return;
 		
 		AttributeData data = ExAPI.DATA.get(player);
-		float amount = (float)data.get(ExAPI.ATTRIBUTES.get().healthRegeneration.get());
+		float amount = (float)data.get(PlayerAttributes.HEALTH_REGEN.get());
 		
 		if(amount > 0.0F) {
 			player.heal(amount);
@@ -119,17 +120,17 @@ public final class EventHandler {
 			boolean end = false;
 			
 			if(source.equals(DamageSource.FALL)) {
-				mult = (float)data.get(ExAPI.ATTRIBUTES.get().fallingResistance.get());
+				mult = (float)data.get(PlayerAttributes.FALLING_RESISTANCE.get());
 			} else if(source.equals(DamageSource.DROWN)) {
-				mult = (float)data.get(ExAPI.ATTRIBUTES.get().drowningResistance.get());
+				mult = (float)data.get(PlayerAttributes.DROWNING_RESISTANCE.get());
 			} else if(source.equals(DamageSource.WITHER)) {
-				mult = (float)data.get(ExAPI.ATTRIBUTES.get().witherResistance.get());
+				mult = (float)data.get(PlayerAttributes.WITHER_RESISTANCE.get());
 			} else if(source.isFire()) {
-				mult = (float)data.get(ExAPI.ATTRIBUTES.get().fireResistance.get());
+				mult = (float)data.get(PlayerAttributes.FIRE_RESISTANCE.get());
 			} else if(source.getMagic()) {
-				mult = (float)data.get(ExAPI.ATTRIBUTES.get().magicResistance.get());
+				mult = (float)data.get(PlayerAttributes.MAGIC_RESISTANCE.get());
 			} else if(source.isProjectile()) {
-				float evasion = (float)data.get(ExAPI.ATTRIBUTES.get().evasion.get());
+				float evasion = (float)data.get(PlayerAttributes.EVASION.get());
 				
 				end = rand.nextInt(100) < (int)(100.0F * evasion);
 			}
@@ -141,7 +142,7 @@ public final class EventHandler {
 			if(source.getSource() instanceof PlayerEntity) {
 				PlayerEntity player = (PlayerEntity)source.getSource();
 				AttributeData data = ExAPI.DATA.get(player);
-				float lifesteal = (float)data.get(ExAPI.ATTRIBUTES.get().lifesteal.get());
+				float lifesteal = (float)data.get(PlayerAttributes.LIFESTEAL.get());
 				
 				player.heal(amount * lifesteal);
 			}
@@ -152,14 +153,14 @@ public final class EventHandler {
 	
 	public static boolean onCritChance(PlayerEntity player, Random rand, boolean bl3) {
 		AttributeData data = ExAPI.DATA.get(player);
-		float chance = (float)data.get(ExAPI.ATTRIBUTES.get().meleeCritChance.get());
+		float chance = (float)data.get(PlayerAttributes.MELEE_CRIT_CHANCE.get());
 		
 		return rand.nextInt(100) < (int)(100.0F * chance);
 	}
 	
 	public static float onCritDamage(PlayerEntity player, Random rand, float amount) {
 		AttributeData data = ExAPI.DATA.get(player);
-		float damage = (float)data.get(ExAPI.ATTRIBUTES.get().meleeCritDamage.get());
+		float damage = (float)data.get(PlayerAttributes.MELEE_CRIT_DAMAGE.get());
 		
 		return amount * (1.0F + damage);
 	}
@@ -172,9 +173,9 @@ public final class EventHandler {
 		if(arrow.getOwner() instanceof PlayerEntity) {
 			PlayerEntity player = (PlayerEntity)arrow.getOwner();
 			AttributeData data = ExAPI.DATA.get(player);
-			float critChance = (float)data.get(ExAPI.ATTRIBUTES.get().rangedCritChance.get());
-			float critDamage = (float)data.get(ExAPI.ATTRIBUTES.get().rangedCritDamage.get());
-			float nextDamage = (float)data.get(ExAPI.ATTRIBUTES.get().rangedDamage.get());
+			float critChance = (float)data.get(PlayerAttributes.RANGED_CRIT_CHANCE.get());
+			float critDamage = (float)data.get(PlayerAttributes.RANGED_CRIT_DAMAGE.get());
+			float nextDamage = (float)data.get(PlayerAttributes.RANGED_DAMAGE.get());
 			float prevDamage = (float)arrow.getDamage();
 			boolean isCrit = rand.nextInt(100) < (int)(100.0F * critChance);
 			double result = (prevDamage + nextDamage) * (isCrit ? (1.0F + critDamage) : 1.0F);

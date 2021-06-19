@@ -9,7 +9,9 @@
   	"LivingEntityMixin",
   	"ProjectileEntityMixin"
   ],
-  "client": [],
+  "client": [
+  	"client.HandledScreenMixin"
+  ],
   "injectors": {
     "defaultRequire": 1
   }

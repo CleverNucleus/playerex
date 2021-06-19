@@ -7,7 +7,7 @@ import net.minecraft.entity.attribute.EntityAttributeModifier;
 public interface AttributeData extends Component {
 	
 	
-	void addRefundPoints(final int pointsIn);
+	int addRefundPoints(final int pointsIn);
 	
 	
 	int refundPoints();

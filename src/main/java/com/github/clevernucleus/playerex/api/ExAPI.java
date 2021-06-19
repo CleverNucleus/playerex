@@ -25,9 +25,6 @@ public final class ExAPI {
 	/** The API's registry instance. Use this to register/access attributes, additionals and functions.  */
 	public static final ExRegistry.Provider REGISTRY = new ExRegistryProvider();
 	
-	/** The API's repository of all default player attributes. */
-	public static final PlayerAttributesProvider ATTRIBUTES = new PlayerAttributesProvider();
-	
 	/** The API's data system key: provided by Cardinal Components. Use this to interact with attributes/modifiers preferentially to EntityAttributes. */
 	public static final ComponentKey<AttributeData> DATA = ComponentRegistry.getOrCreate(new Identifier(MODID, "attributes"), AttributeData.class);
 }

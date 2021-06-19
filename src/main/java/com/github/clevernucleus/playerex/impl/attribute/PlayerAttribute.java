@@ -90,6 +90,7 @@ public final class PlayerAttribute implements IPlayerAttribute, IAttributeWrappe
 		tag.putString("TranslationKey", this.translationKey);
 		
 		ListTag properties = new ListTag();
+		ListTag functions = new ListTag();
 		
 		for(Map.Entry<String, Float> entry : this.properties.entrySet()) {
 			CompoundTag property = new CompoundTag();
@@ -99,6 +100,16 @@ public final class PlayerAttribute implements IPlayerAttribute, IAttributeWrappe
 		}
 		
 		tag.put("Properties", properties);
+		
+		for(IAttributeFunction function : this.functionsAppended) {
+			CompoundTag functionTag = new CompoundTag();
+			functionTag.putString("Key", function.attributeKey().toString());
+			functionTag.putByte("Type", function.type().id());
+			functionTag.putDouble("Value", function.multiplier());
+			functions.add(functionTag);
+		}
+		
+		tag.put("Functions", functions);
 	}
 	
 	@Override

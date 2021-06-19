@@ -6,6 +6,7 @@ import java.util.Map;
 import java.util.Set;
 
 import com.github.clevernucleus.playerex.api.ExAPI;
+import com.github.clevernucleus.playerex.api.PlayerAttributes;
 import com.github.clevernucleus.playerex.api.attribute.AttributeData;
 import com.github.clevernucleus.playerex.api.attribute.AttributeType;
 import com.github.clevernucleus.playerex.api.attribute.IAttribute;
@@ -15,6 +16,8 @@ import com.github.clevernucleus.playerex.api.event.PlayerAttributeModifiedEvent;
 
 import dev.onyxstudios.cca.api.v3.component.sync.AutoSyncedComponent;
 import net.fabricmc.fabric.api.util.NbtType;
+import net.minecraft.entity.attribute.AttributeContainer;
+import net.minecraft.entity.attribute.DefaultAttributeContainer;
 import net.minecraft.entity.attribute.EntityAttributeModifier;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.nbt.CompoundTag;
@@ -88,15 +91,14 @@ public final class AttributeDataManager implements AttributeData, AutoSyncedComp
 		
 		recursives.add(keyIn);
 		
-		IAttributeWrapper attribute = (IAttributeWrapper)keyIn;
 		final double oldValue = this.get(keyIn);
 		this.applyModifier(keyIn, modifierIn);
 		final double newValue = this.get(keyIn);
 		PlayerAttributeModifiedEvent.MODIFIED.invoker().onAttributeModified(this.player, keyIn, oldValue, newValue);
 		
-		for(IAttributeFunction function : attribute.functions()) {
+		for(IAttributeFunction function : keyIn.functions()) {
 			Identifier subKey = function.attributeKey();
-			IPlayerAttribute subAttribute = ExAPI.REGISTRY.get().findAttribute(subKey);
+			IPlayerAttribute subAttribute = ExAPI.REGISTRY.get().getAttribute(subKey);
 			EntityAttributeModifier.Operation operation = modifierIn.getOperation();
 			double current = this.get(subAttribute);
 			double limit = subAttribute.maxValue();
@@ -137,8 +139,51 @@ public final class AttributeDataManager implements AttributeData, AutoSyncedComp
 	}
 	
 	public void respawn(final AttributeDataManager manager) {
-		manager.attributes.forEach((key, value) -> this.reapplyModifier(ExAPI.REGISTRY.get().findAttribute(key), value));
+		manager.attributes.forEach((key, value) -> this.reapplyModifier(ExAPI.REGISTRY.get().getAttribute(key), value));
 	}
+	
+	
+	
+	public void p() {
+		// server-side:
+		
+		AttributeContainer one = this.player.getAttributes();
+		// loop through all previous/cached attributes to get every attribute instance on this
+		EntityAttributeModifier modOne = one.getCustomInstance(null).getModifier(null);
+		
+		// map every cached attribute to it's modifier
+		
+		
+		// now we can register/refresh attributes
+		
+		DefaultAttributeContainer.Builder builder = DefaultAttributeContainer.builder();
+		// add attributes to builder
+		
+		AttributeContainer two = new AttributeContainer(builder.build());
+		// loop through every cached attribute and see if our new attributes list has it
+		// if yes, apply the mapped modifier 'modOne' to the AttributeContainer 'two'
+		// this will require the attribute instance
+		
+		one = two;
+		// set one to two
+		
+		//client-side:
+		
+		// once attributes have been synced and registered :
+		AttributeContainer oneClient = this.player.getAttributes();
+		
+		DefaultAttributeContainer.Builder builderClient = DefaultAttributeContainer.builder();
+		// add attributes to builder
+		
+		AttributeContainer twoClient = new AttributeContainer(builderClient.build());
+		
+		oneClient = twoClient;
+		
+		// reset them
+	}
+	
+	
+	
 	
 	public void setLevelled(final boolean levelledIn) {
 		this.levelled = levelledIn;
@@ -153,27 +198,28 @@ public final class AttributeDataManager implements AttributeData, AutoSyncedComp
 		this.refunds = 0;
 		
 		ExAPI.REGISTRY.get().attributes().forEach((key, value) -> this.attributes.replace(key, value.valueFromType()));
-		this.attributes.forEach((key, value) -> this.reapplyModifier(ExAPI.REGISTRY.get().findAttribute(key), value));
+		this.attributes.forEach((key, value) -> this.reapplyModifier(ExAPI.REGISTRY.get().getAttribute(key), value));
 	}
 	
 	@Override
-	public void addRefundPoints(final int pointsIn) {
-		if(this.player.world.isClient) return;
+	public int addRefundPoints(final int pointsIn) {
+		if(this.player.world.isClient) return -1;
 		
 		IAttribute[] primaries = new IAttribute[] {
-			ExAPI.ATTRIBUTES.get().constitution,
-			ExAPI.ATTRIBUTES.get().strength,
-			ExAPI.ATTRIBUTES.get().dexterity,
-			ExAPI.ATTRIBUTES.get().intelligence,
-			ExAPI.ATTRIBUTES.get().luckiness
+			PlayerAttributes.CONSTITUTION,
+			PlayerAttributes.STRENGTH,
+			PlayerAttributes.DEXTERITY,
+			PlayerAttributes.INTELLIGENCE,
+			PlayerAttributes.LUCKINESS
 		};
 		
+		final int previousRefunds = this.refundPoints();
 		double maxRefundPoints = 0D;
 		
 		for(IAttribute supplier : primaries) {
 			IPlayerAttribute attribute = supplier.get();
 			
-			if(attribute == null) return;
+			if(attribute == null) return -1;
 			
 			maxRefundPoints += this.getValue(attribute);
 		}
@@ -181,6 +227,8 @@ public final class AttributeDataManager implements AttributeData, AutoSyncedComp
 		double refund = MathHelper.clamp((double)(this.refunds + pointsIn), 0.0D, maxRefundPoints);
 		this.refunds = (int)Math.round(refund);
 		ExAPI.DATA.sync(this.player);
+		
+		return this.refunds - previousRefunds;
 	}
 	
 	@Override
@@ -199,11 +247,9 @@ public final class AttributeDataManager implements AttributeData, AutoSyncedComp
 		
 		this.setAttribute(keyIn, valueIn);
 		
-		IAttributeWrapper attribute = (IAttributeWrapper)keyIn;
-		
-		for(IAttributeFunction function : attribute.functions()) {
+		for(IAttributeFunction function : keyIn.functions()) {
 			Identifier subKey = function.attributeKey();
-			IPlayerAttribute subAttribute = ExAPI.REGISTRY.get().findAttribute(subKey);
+			IPlayerAttribute subAttribute = ExAPI.REGISTRY.get().getAttribute(subKey);
 			double result = function.multiplier() * valueIn;
 			
 			this.setAttribute(subAttribute, result);
@@ -214,15 +260,14 @@ public final class AttributeDataManager implements AttributeData, AutoSyncedComp
 	public void add(final IPlayerAttribute keyIn, final double valueIn) {
 		if(keyIn == null || this.player.world.isClient) return;
 		
-		IAttributeWrapper attribute = (IAttributeWrapper)keyIn;
 		double currentValue = this.get(keyIn);
 		double newValue = currentValue + valueIn;
 		
 		this.setAttribute(keyIn, newValue);
 		
-		for(IAttributeFunction function : attribute.functions()) {
+		for(IAttributeFunction function : keyIn.functions()) {
 			Identifier subKey = function.attributeKey();
-			IPlayerAttribute subAttribute = ExAPI.REGISTRY.get().findAttribute(subKey);
+			IPlayerAttribute subAttribute = ExAPI.REGISTRY.get().getAttribute(subKey);
 			double current = this.get(subAttribute);
 			double limit = subAttribute.maxValue();
 			double result = function.type().add(current, function.multiplier() * valueIn, limit);
@@ -244,15 +289,14 @@ public final class AttributeDataManager implements AttributeData, AutoSyncedComp
 	public void removeAttributeModifier(final IPlayerAttribute keyIn, final EntityAttributeModifier modifierIn) {
 		if(!this.isGame(keyIn) || keyIn == null || this.player.world.isClient) return;
 		
-		IAttributeWrapper attribute = (IAttributeWrapper)keyIn;
 		final double oldValue = this.get(keyIn);
 		this.removeModifier(keyIn, modifierIn);
 		final double newValue = this.get(keyIn);
 		PlayerAttributeModifiedEvent.MODIFIED.invoker().onAttributeModified(this.player, keyIn, oldValue, newValue);
 		
-		for(IAttributeFunction function : attribute.functions()) {
+		for(IAttributeFunction function : keyIn.functions()) {
 			Identifier subKey = function.attributeKey();
-			IPlayerAttribute subAttribute = ExAPI.REGISTRY.get().findAttribute(subKey);
+			IPlayerAttribute subAttribute = ExAPI.REGISTRY.get().getAttribute(subKey);
 			EntityAttributeModifier.Operation operation = modifierIn.getOperation();
 			double current = this.get(subAttribute);
 			double limit = subAttribute.maxValue();

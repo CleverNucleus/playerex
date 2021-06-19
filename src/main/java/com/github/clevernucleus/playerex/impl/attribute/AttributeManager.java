@@ -64,6 +64,8 @@ public class AttributeManager implements SimpleSynchronousResourceReloadListener
 			}
 		}
 		
+		//TODO only create a cache of loaded attributes maybe? (not even registering their get() EntityAttribute).
+		
 		DefaultAttributeContainer.Builder container = DefaultAttributeContainer.builder();
 		
 		for(Map.Entry<Identifier, PlayerAttribute> entry : map.entrySet()) {

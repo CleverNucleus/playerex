@@ -3,7 +3,6 @@ package com.github.clevernucleus.playerex.api.util;
 import java.util.Collection;
 import java.util.Map;
 
-import com.github.clevernucleus.playerex.api.attribute.IAttribute;
 import com.github.clevernucleus.playerex.api.attribute.IAttributeFunction;
 import com.github.clevernucleus.playerex.api.attribute.IPlayerAttribute;
 
@@ -13,10 +12,7 @@ import net.minecraft.util.Identifier;
 public interface ExRegistry {
 	
 	
-	IAttribute getAttribute(final Identifier keyIn);
-	
-	
-	IPlayerAttribute findAttribute(final Identifier keyIn);
+	IPlayerAttribute getAttribute(final Identifier keyIn);
 	
 	
 	Map<Identifier, IPlayerAttribute> attributes();
