@@ -12,8 +12,8 @@ import com.github.clevernucleus.playerex.api.attribute.AttributeType;
 import com.github.clevernucleus.playerex.api.attribute.IAttributeFunction;
 import com.github.clevernucleus.playerex.api.attribute.IAttributeFunction.Type;
 import com.github.clevernucleus.playerex.api.attribute.IPlayerAttribute;
+import com.google.common.collect.ImmutableSet;
 import com.google.gson.annotations.Expose;
-import com.ibm.icu.impl.locale.XCldrStub.ImmutableSet;
 
 import net.fabricmc.fabric.api.util.NbtType;
 import net.minecraft.entity.attribute.EntityAttribute;

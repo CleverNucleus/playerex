@@ -31,6 +31,11 @@ public interface IConfig {
 	boolean announceLevelUp();
 	
 	/**
+	 * @return Whether an additional name plate is displayed on multiplier just below the player's name, showing the player's level.
+	 */
+	boolean showLevelNameplates();
+	
+	/**
 	 * @return Whether to play the sound on spending a skill point. Client Sided.
 	 */
 	boolean playSkillUpSound();

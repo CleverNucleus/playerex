@@ -193,6 +193,9 @@ public final class AttributeDataManager implements AttributeData, AutoSyncedComp
 	
 	public void refresh(final AttributeDataManager manager) {
 		manager.attributes.forEach((key, value) -> this.reapplyModifier(ExAPI.REGISTRY.get().getAttribute(key), value));
+		
+		this.player.setHealth(this.player.getHealth() + 0.0001F);
+		this.player.setHealth(this.player.getHealth() - 0.0001F);
 	}
 	
 	public void setLevelled(final boolean levelledIn) {

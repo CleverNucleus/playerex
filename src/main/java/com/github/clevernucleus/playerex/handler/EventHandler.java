@@ -39,14 +39,14 @@ public final class EventHandler {
 		if(canSyncAttributes()) {
 			NetworkHandler.syncAttributes(player);
 		}
+		
+		AttributeDataManager data = (AttributeDataManager)ExAPI.DATA.get(player);
+		data.refresh(data);
 	}
 	
 	public static void afterChangeWorld(ServerPlayerEntity player, ServerWorld origin, ServerWorld destination) {
 		AttributeDataManager data = (AttributeDataManager)ExAPI.DATA.get(player);
-		
 		data.refresh(data);
-		player.setHealth(player.getHealth() + 0.0001F);
-		player.setHealth(player.getHealth() - 0.0001F);
 	}
 	
 	public static void respawn(ServerPlayerEntity oldPlayer, ServerPlayerEntity newPlayer, boolean alive) {

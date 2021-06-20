@@ -29,6 +29,10 @@ public class ConfigImpl implements ConfigData, IConfig {
 	@ConfigEntry.Gui.Tooltip(count = 2)
 	protected boolean announceLevelUp = true;
 	
+	@ConfigEntry.Category(value = "server")
+	@ConfigEntry.Gui.Tooltip(count = 2)
+	protected boolean showLevelNameplates = true;
+	
 	@ConfigEntry.Category(value = "client")
 	@ConfigEntry.Gui.Tooltip
 	private boolean playSkillUpSound = true;
@@ -61,6 +65,11 @@ public class ConfigImpl implements ConfigData, IConfig {
 	@Override
 	public boolean announceLevelUp() {
 		return PlayerEx.CONFIG_CACHE.announceLevelUp;
+	}
+	
+	@Override
+	public boolean showLevelNameplates() {
+		return PlayerEx.CONFIG_CACHE.showLevelNameplates;
 	}
 	
 	@Override
