@@ -2,10 +2,11 @@ package com.github.clevernucleus.playerex.client.network;
 
 import com.github.clevernucleus.playerex.PlayerEx;
 import com.github.clevernucleus.playerex.api.ExAPI;
-import com.github.clevernucleus.playerex.api.attribute.AttributeType;
 import com.github.clevernucleus.playerex.api.attribute.IPlayerAttribute;
 import com.github.clevernucleus.playerex.handler.NetworkHandler;
 import com.github.clevernucleus.playerex.impl.ExRegistryImpl;
+import com.github.clevernucleus.playerex.impl.attribute.AttributeDataManager;
+import com.github.clevernucleus.playerex.impl.attribute.PlayerAttribute;
 
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
@@ -17,7 +18,6 @@ import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gui.screen.ingame.InventoryScreen;
 import net.minecraft.client.gui.widget.ButtonWidget;
 import net.minecraft.client.network.ClientPlayNetworkHandler;
-import net.minecraft.entity.attribute.DefaultAttributeContainer;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.ListTag;
 import net.minecraft.network.PacketByteBuf;
@@ -81,18 +81,16 @@ public final class ClientNetworkHandler {
 		client.execute(() -> {
 			if(tag.contains("Attributes")) {
 				ListTag attributes = tag.getList("Attributes", NbtType.COMPOUND);
-				DefaultAttributeContainer.Builder container = DefaultAttributeContainer.builder();
 				
 				for(int i = 0; i < attributes.size(); i++) {
 					CompoundTag attributeTag = attributes.getCompound(i);
-					ClientPlayerAttribute attribute = ClientPlayerAttribute.read(attributeTag).build();
-					
-					if(attribute.type() == AttributeType.GAME) {
-						container.add(attribute.get(), attribute.defaultValue());
-					}
+					PlayerAttribute attribute = PlayerAttribute.read(attributeTag);
 					
 					((ExRegistryImpl)ExAPI.REGISTRY.get()).put(attribute.registryKey(), attribute);
 				}
+				
+				AttributeDataManager data = (AttributeDataManager)ExAPI.DATA.get(client.player);
+				data.initContainer();
 			}
 		});
 	}

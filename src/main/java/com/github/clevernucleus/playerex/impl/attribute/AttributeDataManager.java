@@ -16,14 +16,20 @@ import com.github.clevernucleus.playerex.api.event.PlayerAttributeModifiedEvent;
 
 import dev.onyxstudios.cca.api.v3.component.sync.AutoSyncedComponent;
 import net.fabricmc.fabric.api.util.NbtType;
+import net.minecraft.entity.EntityType;
 import net.minecraft.entity.attribute.AttributeContainer;
+import net.minecraft.entity.attribute.ClampedEntityAttribute;
 import net.minecraft.entity.attribute.DefaultAttributeContainer;
+import net.minecraft.entity.attribute.DefaultAttributeRegistry;
+import net.minecraft.entity.attribute.EntityAttribute;
+import net.minecraft.entity.attribute.EntityAttributeInstance;
 import net.minecraft.entity.attribute.EntityAttributeModifier;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.ListTag;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.math.MathHelper;
+import net.minecraft.util.registry.Registry;
 
 public final class AttributeDataManager implements AttributeData, AutoSyncedComponent {
 	private Map<Identifier, Double> attributes = new HashMap<Identifier, Double>();
@@ -31,10 +37,26 @@ public final class AttributeDataManager implements AttributeData, AutoSyncedComp
 	private boolean levelled;
 	private int refunds;
 	
+	private AttributeContainer container;
+	
 	public AttributeDataManager(PlayerEntity player) {
 		this.player = player;
+		this.container = new AttributeContainer(DefaultAttributeRegistry.get(EntityType.PLAYER));
 		
 		ExAPI.REGISTRY.get().attributes().forEach((key, value) -> this.attributes.putIfAbsent(key, value.valueFromType()));
+	}
+	
+	private EntityAttribute getOrDefault(IPlayerAttribute keyIn) {
+		Identifier registryKey = keyIn.registryKey();
+		EntityAttribute value = Registry.ATTRIBUTE.get(registryKey);
+		
+		if(value == null) {
+			value = Registry.register(Registry.ATTRIBUTE, registryKey, (new ClampedEntityAttribute(keyIn.translationKey(), keyIn.defaultValue(), keyIn.minValue(), keyIn.maxValue())).setTracked(true));
+		} else {
+			value.setTracked(true);
+		}
+		
+		return ((IClampedEntityAttribute)value).withLimits(keyIn.minValue(), keyIn.maxValue());
 	}
 	
 	private boolean isGame(final IPlayerAttribute attributeIn) {
@@ -45,12 +67,18 @@ public final class AttributeDataManager implements AttributeData, AutoSyncedComp
 	private boolean hasModifier(final IPlayerAttribute attributeIn, EntityAttributeModifier modifierIn) {
 		if(attributeIn == null && modifierIn == null) return false;
 		
-		return this.player.getAttributeInstance(((IAttributeWrapper)attributeIn).get()).hasModifier(modifierIn);
+		EntityAttributeInstance instance = this.player.getAttributeInstance(((PlayerAttribute)attributeIn).get());
+		
+		return instance != null ? instance.hasModifier(modifierIn) : false;
 	}
 	
 	private EntityAttributeModifier applyModifier(final IPlayerAttribute attributeIn, EntityAttributeModifier modifierIn) {
 		if(attributeIn != null && modifierIn != null) {
-			this.player.getAttributeInstance(((IAttributeWrapper)attributeIn).get()).addPersistentModifier(modifierIn);
+			EntityAttributeInstance instance = this.player.getAttributeInstance(((PlayerAttribute)attributeIn).get());
+			
+			if(instance != null) {
+				instance.addPersistentModifier(modifierIn);
+			}
 		}
 		
 		return modifierIn;
@@ -58,7 +86,11 @@ public final class AttributeDataManager implements AttributeData, AutoSyncedComp
 	
 	private EntityAttributeModifier removeModifier(final IPlayerAttribute attributeIn, EntityAttributeModifier modifierIn) {
 		if(attributeIn != null && modifierIn != null) {
-			this.player.getAttributeInstance(((IAttributeWrapper)attributeIn).get()).removeModifier(modifierIn);
+			EntityAttributeInstance instance = this.player.getAttributeInstance(((PlayerAttribute)attributeIn).get());
+			
+			if(instance != null) {
+				instance.removeModifier(modifierIn);
+			}
 		}
 		
 		return modifierIn;
@@ -79,7 +111,7 @@ public final class AttributeDataManager implements AttributeData, AutoSyncedComp
 		double value = valueIn;
 		
 		if(this.isGame(attributeIn)) {
-			value = valueIn - this.player.getAttributeValue(((IAttributeWrapper)attributeIn).get()) + this.getValue(attributeIn);
+			value = valueIn - this.player.getAttributeValue(((PlayerAttribute)attributeIn).get()) + this.getValue(attributeIn);
 		}
 		
 		return this.reapplyModifier(attributeIn, value);
@@ -138,52 +170,30 @@ public final class AttributeDataManager implements AttributeData, AutoSyncedComp
 		ExAPI.DATA.sync(this.player);
 	}
 	
-	public void respawn(final AttributeDataManager manager) {
+	public void initContainer() {
+		DefaultAttributeContainer.Builder builder = DefaultAttributeContainer.builder();
+		
+		for(Map.Entry<Identifier, IPlayerAttribute> entry : ExAPI.REGISTRY.get().attributes().entrySet()) {
+			IPlayerAttribute attributeKey = entry.getValue();
+			EntityAttribute attribute = this.getOrDefault(attributeKey);
+			
+			builder.add(attribute, attributeKey.defaultValue());
+		}
+		
+		this.setContainer(new AttributeContainer(builder.build()));
+	}
+	
+	public AttributeContainer container() {
+		return this.container;
+	}
+	
+	public void setContainer(AttributeContainer container) {
+		this.container = container;
+	}
+	
+	public void refresh(final AttributeDataManager manager) {
 		manager.attributes.forEach((key, value) -> this.reapplyModifier(ExAPI.REGISTRY.get().getAttribute(key), value));
 	}
-	
-	
-	
-	public void p() {
-		// server-side:
-		
-		AttributeContainer one = this.player.getAttributes();
-		// loop through all previous/cached attributes to get every attribute instance on this
-		EntityAttributeModifier modOne = one.getCustomInstance(null).getModifier(null);
-		
-		// map every cached attribute to it's modifier
-		
-		
-		// now we can register/refresh attributes
-		
-		DefaultAttributeContainer.Builder builder = DefaultAttributeContainer.builder();
-		// add attributes to builder
-		
-		AttributeContainer two = new AttributeContainer(builder.build());
-		// loop through every cached attribute and see if our new attributes list has it
-		// if yes, apply the mapped modifier 'modOne' to the AttributeContainer 'two'
-		// this will require the attribute instance
-		
-		one = two;
-		// set one to two
-		
-		//client-side:
-		
-		// once attributes have been synced and registered :
-		AttributeContainer oneClient = this.player.getAttributes();
-		
-		DefaultAttributeContainer.Builder builderClient = DefaultAttributeContainer.builder();
-		// add attributes to builder
-		
-		AttributeContainer twoClient = new AttributeContainer(builderClient.build());
-		
-		oneClient = twoClient;
-		
-		// reset them
-	}
-	
-	
-	
 	
 	public void setLevelled(final boolean levelledIn) {
 		this.levelled = levelledIn;
@@ -198,7 +208,7 @@ public final class AttributeDataManager implements AttributeData, AutoSyncedComp
 		this.refunds = 0;
 		
 		ExAPI.REGISTRY.get().attributes().forEach((key, value) -> this.attributes.replace(key, value.valueFromType()));
-		this.attributes.forEach((key, value) -> this.reapplyModifier(ExAPI.REGISTRY.get().getAttribute(key), value));
+		this.refresh(this);
 	}
 	
 	@Override
@@ -238,7 +248,7 @@ public final class AttributeDataManager implements AttributeData, AutoSyncedComp
 	
 	@Override
 	public double get(final IPlayerAttribute keyIn) {
-		return this.isGame(keyIn) ? this.player.getAttributeValue(((IAttributeWrapper)keyIn).get()) : this.getValue(keyIn);
+		return this.isGame(keyIn) ? this.player.getAttributeValue(((PlayerAttribute)keyIn).get()) : this.getValue(keyIn);
 	}
 	
 	@Override

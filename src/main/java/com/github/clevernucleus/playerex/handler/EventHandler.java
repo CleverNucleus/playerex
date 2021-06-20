@@ -17,7 +17,6 @@ import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.projectile.PersistentProjectileEntity;
 import net.minecraft.entity.projectile.ProjectileEntity;
 import net.minecraft.particle.ParticleTypes;
-import net.minecraft.resource.ServerResourceManager;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.network.ServerPlayNetworkHandler;
 import net.minecraft.server.network.ServerPlayerEntity;
@@ -33,20 +32,21 @@ public final class EventHandler {
 		return attributes == null ? false : !attributes.isEmpty();
 	}
 	
-	public static void dataPackReload(MinecraftServer server, ServerResourceManager manager, boolean success) {
+	public static void onPlayerJoin(ServerPlayNetworkHandler handler, PacketSender sender, MinecraftServer server) {
+		ServerPlayerEntity player = handler.player;
+		NetworkHandler.syncConfig(player);
+		
 		if(canSyncAttributes()) {
-			for(ServerPlayerEntity player : server.getPlayerManager().getPlayerList()) {
-				NetworkHandler.syncAttributes(player);
-			}
+			NetworkHandler.syncAttributes(player);
 		}
 	}
 	
-	public static void onPlayerJoin(ServerPlayNetworkHandler handler, PacketSender sender, MinecraftServer server) {
-		NetworkHandler.syncConfig(handler.player);
+	public static void afterChangeWorld(ServerPlayerEntity player, ServerWorld origin, ServerWorld destination) {
+		AttributeDataManager data = (AttributeDataManager)ExAPI.DATA.get(player);
 		
-		if(canSyncAttributes()) {
-			NetworkHandler.syncAttributes(handler.player);
-		}
+		data.refresh(data);
+		player.setHealth(player.getHealth() + 0.0001F);
+		player.setHealth(player.getHealth() - 0.0001F);
 	}
 	
 	public static void respawn(ServerPlayerEntity oldPlayer, ServerPlayerEntity newPlayer, boolean alive) {
@@ -57,7 +57,8 @@ public final class EventHandler {
 			oldData.reset();
 		}
 		
-		newData.respawn(oldData);
+		newData.setContainer(oldData.container());
+		newData.refresh(oldData);
 		
 		if(!alive) {
 			newPlayer.setHealth(oldPlayer.getMaxHealth());

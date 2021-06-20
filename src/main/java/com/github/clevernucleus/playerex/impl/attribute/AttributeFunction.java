@@ -10,7 +10,7 @@ public final class AttributeFunction implements IAttributeFunction {
 	@Expose private Type type;
 	@Expose private double multiplier;
 	
-	private AttributeFunction(String attribute, Type type, double multiplier) {
+	protected AttributeFunction(String attribute, Type type, double multiplier) {
 		this.attribute = attribute;
 		this.type = type;
 		this.multiplier = multiplier;

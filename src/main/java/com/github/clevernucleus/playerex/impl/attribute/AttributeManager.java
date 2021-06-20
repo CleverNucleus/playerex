@@ -12,7 +12,7 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 import com.github.clevernucleus.playerex.api.ExAPI;
-import com.github.clevernucleus.playerex.api.attribute.AttributeType;
+import com.github.clevernucleus.playerex.api.attribute.IPlayerAttribute;
 import com.github.clevernucleus.playerex.impl.ExRegistryImpl;
 import com.google.common.collect.Maps;
 import com.google.gson.Gson;
@@ -21,17 +21,38 @@ import com.google.gson.GsonBuilder;
 import net.fabricmc.fabric.api.object.builder.v1.entity.FabricDefaultAttributeRegistry;
 import net.fabricmc.fabric.api.resource.SimpleSynchronousResourceReloadListener;
 import net.minecraft.entity.EntityType;
+import net.minecraft.entity.attribute.ClampedEntityAttribute;
 import net.minecraft.entity.attribute.DefaultAttributeContainer;
+import net.minecraft.entity.attribute.EntityAttribute;
 import net.minecraft.resource.Resource;
 import net.minecraft.resource.ResourceManager;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.JsonHelper;
+import net.minecraft.util.registry.Registry;
 
 public class AttributeManager implements SimpleSynchronousResourceReloadListener {
 	private static final Gson GSON = (new GsonBuilder()).excludeFieldsWithoutExposeAnnotation().create();
 	private static final int PATH_SUFFIX_LENGTH = ".json".length();
 	private static final Logger LOGGER = LogManager.getLogger();
 	private static final String DIRECTORY = "attributes";
+	private boolean initialised;
+	
+	public AttributeManager() {
+		this.initialised = false;
+	}
+	
+	private EntityAttribute getOrDefault(IPlayerAttribute keyIn) {
+		Identifier registryKey = keyIn.registryKey();
+		EntityAttribute value = Registry.ATTRIBUTE.get(registryKey);
+		
+		if(value == null) {
+			value = Registry.register(Registry.ATTRIBUTE, registryKey, (new ClampedEntityAttribute(keyIn.translationKey(), keyIn.defaultValue(), keyIn.minValue(), keyIn.maxValue())).setTracked(true));
+		} else {
+			value.setTracked(true);
+		}
+		
+		return ((IClampedEntityAttribute)value).withLimits(keyIn.minValue(), keyIn.maxValue());
+	}
 	
 	@Override
 	public void apply(ResourceManager manager) {
@@ -64,22 +85,21 @@ public class AttributeManager implements SimpleSynchronousResourceReloadListener
 			}
 		}
 		
-		//TODO only create a cache of loaded attributes maybe? (not even registering their get() EntityAttribute).
+		if(this.initialised) return;
 		
-		DefaultAttributeContainer.Builder container = DefaultAttributeContainer.builder();
+		DefaultAttributeContainer.Builder builder = DefaultAttributeContainer.builder();
 		
 		for(Map.Entry<Identifier, PlayerAttribute> entry : map.entrySet()) {
-			Identifier identifier = entry.getKey();
-			PlayerAttribute attribute = entry.getValue().build(identifier);
+			Identifier attributeKey = entry.getKey();
+			PlayerAttribute attributeEntry = entry.getValue().build(attributeKey);
 			
-			if(attribute.type() == AttributeType.GAME) {
-				container.add(attribute.get(), attribute.defaultValue());
-			}
+			((ExRegistryImpl)ExAPI.REGISTRY.get()).put(attributeKey, attributeEntry);
 			
-			((ExRegistryImpl)ExAPI.REGISTRY.get()).put(identifier, attribute);
+			EntityAttribute attribute = this.getOrDefault(attributeEntry);
+			builder.add(attribute, attributeEntry.defaultValue());
 		}
 		
-		FabricDefaultAttributeRegistry.register(EntityType.PLAYER, container);
+		FabricDefaultAttributeRegistry.register(EntityType.PLAYER, builder);
 	}
 	
 	@Override

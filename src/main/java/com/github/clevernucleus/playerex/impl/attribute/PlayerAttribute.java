@@ -6,24 +6,23 @@ import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 import java.util.UUID;
-import java.util.function.Supplier;
 
 import com.github.clevernucleus.playerex.api.ExAPI;
 import com.github.clevernucleus.playerex.api.attribute.AttributeType;
 import com.github.clevernucleus.playerex.api.attribute.IAttributeFunction;
+import com.github.clevernucleus.playerex.api.attribute.IAttributeFunction.Type;
 import com.github.clevernucleus.playerex.api.attribute.IPlayerAttribute;
 import com.google.gson.annotations.Expose;
 import com.ibm.icu.impl.locale.XCldrStub.ImmutableSet;
 
-import net.minecraft.entity.attribute.ClampedEntityAttribute;
+import net.fabricmc.fabric.api.util.NbtType;
 import net.minecraft.entity.attribute.EntityAttribute;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.ListTag;
 import net.minecraft.util.Identifier;
-import net.minecraft.util.Lazy;
 import net.minecraft.util.registry.Registry;
 
-public final class PlayerAttribute implements IPlayerAttribute, IAttributeWrapper {
+public final class PlayerAttribute implements IPlayerAttribute {
 	@Expose private AttributeType type;
 	@Expose private UUID uuid;
 	@Expose private double defaultValue, minValue, maxValue;
@@ -32,20 +31,20 @@ public final class PlayerAttribute implements IPlayerAttribute, IAttributeWrappe
 	@Expose private ArrayList<AttributeFunction> functions;
 	private Set<IAttributeFunction> functionsAppended;
 	private Identifier registryKey;
-	private Lazy<EntityAttribute> attribute;
 	
-	private PlayerAttribute() {}
-	
-	private PlayerAttribute set(Supplier<EntityAttribute> attribute) {
-		if(this.attribute == null) {
-			this.attribute = new Lazy<EntityAttribute>(attribute);
-		}
-		
-		return this;
+	private PlayerAttribute(AttributeType type, UUID uuid, HashMap<String, Float> properties, ArrayList<AttributeFunction> functions, String translationKey, double defaultValue, double minValue, double maxValue) {
+		this.type = type;
+		this.uuid = uuid;
+		this.properties = properties;
+		this.functions = functions;
+		this.translationKey = translationKey;
+		this.defaultValue = defaultValue;
+		this.minValue = minValue;
+		this.maxValue = maxValue;
 	}
 	
-	private PlayerAttribute register(final Identifier identifier) {
-		if(identifier == null) throw new IllegalStateException("Cannot register the attribute because the registry key is null!");
+	protected PlayerAttribute build(Identifier identifier) {
+		if(identifier == null) throw new IllegalStateException("Cannot build the attribute because the registry key is null!");
 		
 		this.functionsAppended = new HashSet<IAttributeFunction>();
 		
@@ -62,22 +61,36 @@ public final class PlayerAttribute implements IPlayerAttribute, IAttributeWrappe
 		return this;
 	}
 	
-	private EntityAttribute getOrDefault(Identifier identifier) {
-		EntityAttribute value = Registry.ATTRIBUTE.get(identifier);
+	public static PlayerAttribute read(CompoundTag tag) {
+		AttributeType type = AttributeType.fromName(tag.getString("Type"));
+		UUID uuid = tag.getUuid("UUID");
+		Identifier registryKey = new Identifier(tag.getString("RegistryKey"));
+		double defaultValue = tag.getDouble("DefaultValue");
+		double minValue = tag.getDouble("MinValue");
+		double maxValue = tag.getDouble("MaxValue");
+		String translationKey = tag.getString("TranslationKey");
+		HashMap<String, Float> properties = new HashMap<String, Float>();
+		ListTag propertiesTag = tag.getList("Properties", NbtType.COMPOUND);
+		ArrayList<AttributeFunction> functions = new ArrayList<AttributeFunction>();
+		ListTag functionsTag = tag.getList("Functions", NbtType.COMPOUND);
 		
-		if(value == null) {
-			value = Registry.register(Registry.ATTRIBUTE, identifier, (new ClampedEntityAttribute(this.translationKey(), this.defaultValue(), this.minValue(), this.maxValue())).setTracked(true));
-		} else {
-			value.setTracked(true);
+		for(int i = 0; i < propertiesTag.size(); i++) {
+			CompoundTag propertyTag = propertiesTag.getCompound(i);
+			properties.put(propertyTag.getString("Key"), propertyTag.getFloat("Value"));
 		}
 		
-		return ((IClampedEntityAttribute)value).withLimits(this.minValue(), this.maxValue());
-	}
-	
-	public PlayerAttribute build(Identifier identifier) {
-		EntityAttribute attribute = this.getOrDefault(identifier);
+		for(int i = 0; i < functionsTag.size(); i++) {
+			CompoundTag functionTag = functionsTag.getCompound(i);
+			Type functionType = Type.from(functionTag.getByte("Type"));
+			String functionId = functionTag.getString("Key");
+			double functionMultiplier = functionTag.getDouble("Value");
+			AttributeFunction function = new AttributeFunction(functionId, functionType, functionMultiplier);
+			functions.add(function);
+		}
 		
-		return this.set(() -> attribute).register(identifier);
+		PlayerAttribute attribute = new PlayerAttribute(type, uuid, properties, functions, translationKey, defaultValue, minValue, maxValue);
+		
+		return attribute.build(registryKey);
 	}
 	
 	public void write(CompoundTag tag) {
@@ -112,14 +125,13 @@ public final class PlayerAttribute implements IPlayerAttribute, IAttributeWrappe
 		tag.put("Functions", functions);
 	}
 	
-	@Override
-	public Set<IAttributeFunction> functions() {
-		return ImmutableSet.copyOf(this.functionsAppended);
+	public EntityAttribute get() {
+		return Registry.ATTRIBUTE.get(this.registryKey);
 	}
 	
 	@Override
-	public EntityAttribute get() {
-		return this.attribute.get();
+	public Set<IAttributeFunction> functions() {
+		return ImmutableSet.copyOf(this.functionsAppended);
 	}
 	
 	@Override
