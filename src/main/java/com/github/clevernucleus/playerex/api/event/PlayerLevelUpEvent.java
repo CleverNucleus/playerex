@@ -34,6 +34,6 @@ public final class PlayerLevelUpEvent {
 		 * Event method;
 		 * @param player
 		 */
-		void onLevelUp(PlayerEntity player);
+		void onLevelUp(final PlayerEntity player);
 	}
 }

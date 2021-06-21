@@ -1,7 +1,7 @@
 package com.github.clevernucleus.playerex.api.attribute;
 
 /**
- * Repository of attribute properties that PlayerEx implements.
+ * Small repository for all attribute properties added by the default PlayerEx implementation.
  * 
  * @author CleverNucleus
  *

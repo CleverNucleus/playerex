@@ -1,13 +1,15 @@
 package com.github.clevernucleus.playerex.api;
 
 import com.github.clevernucleus.playerex.api.attribute.IAttribute;
-import com.jamieswhiteshirt.reachentityattributes.ReachEntityAttributes;
 
 import net.minecraft.util.Identifier;
 
 /**
  * A repository of all attributes that the player has access to in the game by default. Developers should use these to access 
  * attributes preferentially to the repository EntityAttributes.
+ * 
+ * If any of these attributes (e.g. PlayerAttributes{@link #EVASION}) are removed from the game by a datapack, these entry objects
+ * won't be affected as they are suppliers.
  * 
  * @author CleverNucleus
  * 
@@ -24,9 +26,9 @@ public final class PlayerAttributes {
 	/** Vanilla attack speed */
 	public static final IAttribute ATTACK_SPEED = find(new Identifier("generic.attack_speed"));
 	/** Jar-in-jar reach-entity-attributes reach distance */
-	public static final IAttribute REACH_DISTANCE = find(new Identifier(ReachEntityAttributes.MOD_ID, "reach"));
+	public static final IAttribute REACH_DISTANCE = find(new Identifier("reach-entity-attributes", "reach"));
 	/** Jar-in-jar reach-entity-attributes attack range */
-	public static final IAttribute ATTACK_RANGE = find(new Identifier(ReachEntityAttributes.MOD_ID, "attack_range"));
+	public static final IAttribute ATTACK_RANGE = find(new Identifier("reach-entity-attributes", "attack_range"));
 	/** Vanilla armor */
 	public static final IAttribute ARMOR = find(new Identifier("generic.armor"));
 	/** Vanilla armour toughness */
