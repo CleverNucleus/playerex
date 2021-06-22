@@ -27,8 +27,8 @@ public final class PlayerExClient implements ClientModInitializer {
 		ClientPlayNetworking.registerGlobalReceiver(NetworkHandler.SYNC_ATTRIBUTES, ClientNetworkHandler::syncAttributes);
 		
 		ScreenRegistry.register(PlayerEx.ATTRIBUTES_SCREEN_HANDLER, AttributesScreen::new);
-		PageRegistry.register(ATTTRIBUTES_PAGE_KEY, (parent, handler, inv) -> new AttributesPage(parent, handler, inv));
-		PageRegistry.register(COMBAT_PAGE_KEY, (parent, handler, inv) -> new CombatPage(parent, handler, inv));
+		PageRegistry.register(ATTTRIBUTES_PAGE_KEY, AttributesPage::new);
+		PageRegistry.register(COMBAT_PAGE_KEY, CombatPage::new);
 		
 		NameplateRenderEvent.ON_RENDER.register(ClientEventHandler::nameplateRender);
 		ScreenEvents.AFTER_INIT.register(ClientEventHandler::screenInit);
