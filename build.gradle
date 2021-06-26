@@ -30,6 +30,9 @@ repositories {
     maven {
         url "https://www.cursemaven.com"
     }
+	maven {
+		url = "https://jitpack.io"
+	}
 }
 
 dependencies {
@@ -48,6 +51,9 @@ dependencies {
     modImplementation "com.jamieswhiteshirt:reach-entity-attributes:${project.reach_entity_attributes_version}"
     include "com.jamieswhiteshirt:reach-entity-attributes:${project.reach_entity_attributes_version}"
     
+	modImplementation "com.github.emilyploszaj:step-height-entity-attribute:${project.step_height_entity_attribute_version}"
+	include "com.github.emilyploszaj:step-height-entity-attribute:${project.step_height_entity_attribute_version}"
+	
     modApi("me.shedaniel.cloth:cloth-config-fabric:${project.cloth_config_version}") {
         exclude(group: "net.fabricmc.fabric-api")
     }

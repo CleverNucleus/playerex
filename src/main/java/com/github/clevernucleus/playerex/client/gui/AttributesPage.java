@@ -318,8 +318,7 @@ public class AttributesPage extends PageScreen {
 		this.drawTexture(matrices, this.x + 96, this.y + 24, 226, 9, 9, 9);
 		this.drawTexture(matrices, this.x + 96, this.y + 79, 235, 9, 9, 9);
 		
-		
-		this.buttons.forEach(btn -> {
+		this.buttons.stream().filter(btn -> btn instanceof ScreenButtonWidget).forEach(btn -> {
 			ScreenButtonWidget button = (ScreenButtonWidget)btn;
 			Identifier key = button.attribute();
 			Identifier level = new Identifier("playerex:level");
