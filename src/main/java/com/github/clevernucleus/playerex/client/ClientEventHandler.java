@@ -119,7 +119,9 @@ public final class ClientEventHandler {
 					if(attribute == EntityAttributes.GENERIC_ATTACK_DAMAGE || attribute == EntityAttributes.GENERIC_ATTACK_SPEED) {
 						String prefix = d >= 0.0D ? "+" : "";
 						
-						lines.add(lines.size() - index, (new LiteralText(" ")).append(new TranslatableText("attribute.modifier.equals." + modifier.getOperation().getId(), new Object[] {prefix + MODIFIER_FORMAT.format(d), new TranslatableText(((EntityAttribute)entry.getKey()).getTranslationKey())})).formatted(Formatting.DARK_GREEN));
+						if(d != 0.0D) {
+							lines.add(lines.size() - index, (new LiteralText(" ")).append(new TranslatableText("attribute.modifier.equals." + modifier.getOperation().getId(), new Object[] {prefix + MODIFIER_FORMAT.format(d), new TranslatableText(((EntityAttribute)entry.getKey()).getTranslationKey())})).formatted(Formatting.DARK_GREEN));
+						}
 					}
 				}
 			}
