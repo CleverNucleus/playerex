@@ -12,7 +12,8 @@
   "client": [
   	"client.HandledScreenMixin",
   	"client.ClientPlayNetworkHandlerMixin",
-  	"client.PlayerEntityRendererMixin"
+  	"client.PlayerEntityRendererMixin",
+  	"client.ItemStackMixin"
   ],
   "injectors": {
     "defaultRequire": 1

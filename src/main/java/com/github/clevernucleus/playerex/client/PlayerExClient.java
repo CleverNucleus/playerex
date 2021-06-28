@@ -11,7 +11,6 @@ import com.github.clevernucleus.playerex.client.network.ClientNetworkHandler;
 import com.github.clevernucleus.playerex.handler.NetworkHandler;
 
 import net.fabricmc.api.ClientModInitializer;
-import net.fabricmc.fabric.api.client.item.v1.ItemTooltipCallback;
 import net.fabricmc.fabric.api.client.networking.v1.ClientPlayNetworking;
 import net.fabricmc.fabric.api.client.screen.v1.ScreenEvents;
 import net.fabricmc.fabric.api.client.screenhandler.v1.ScreenRegistry;
@@ -32,6 +31,5 @@ public final class PlayerExClient implements ClientModInitializer {
 		
 		NameplateRenderEvent.ON_RENDER.register(ClientEventHandler::nameplateRender);
 		ScreenEvents.AFTER_INIT.register(ClientEventHandler::screenInit);
-		ItemTooltipCallback.EVENT.register(ClientEventHandler::tooltipModify);
 	}
 }
