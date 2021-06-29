@@ -1,27 +1,7 @@
 package com.github.clevernucleus.playerex.mixin.client;
 
-import java.util.Iterator;
-import java.util.Map.Entry;
-import java.util.UUID;
-
-import org.jetbrains.annotations.Nullable;
 import org.spongepowered.asm.mixin.Mixin;
-import org.spongepowered.asm.mixin.injection.At;
-import org.spongepowered.asm.mixin.injection.ModifyVariable;
 
-import com.github.clevernucleus.playerex.api.ExAPI;
-import com.github.clevernucleus.playerex.api.PlayerAttributes;
-import com.github.clevernucleus.playerex.api.attribute.AttributeData;
-import com.google.common.collect.Multimap;
-
-import net.minecraft.client.item.TooltipContext;
-import net.minecraft.enchantment.EnchantmentHelper;
-import net.minecraft.entity.EntityGroup;
-import net.minecraft.entity.EquipmentSlot;
-import net.minecraft.entity.attribute.EntityAttribute;
-import net.minecraft.entity.attribute.EntityAttributeModifier;
-import net.minecraft.entity.attribute.EntityAttributes;
-import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
 
 @Mixin(ItemStack.class)

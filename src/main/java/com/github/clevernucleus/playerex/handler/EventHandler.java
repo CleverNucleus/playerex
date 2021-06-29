@@ -16,6 +16,7 @@ import net.minecraft.entity.damage.DamageSource;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.projectile.PersistentProjectileEntity;
 import net.minecraft.entity.projectile.ProjectileEntity;
+import net.minecraft.entity.projectile.thrown.PotionEntity;
 import net.minecraft.particle.ParticleTypes;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.network.ServerPlayNetworkHandler;
@@ -129,6 +130,7 @@ public final class EventHandler {
 			} else if(source.isFire()) {
 				mult = (float)data.get(PlayerAttributes.FIRE_RESISTANCE.get());
 			} else if(source.getMagic()) {
+				System.out.println("Potion resist");
 				mult = (float)data.get(PlayerAttributes.MAGIC_RESISTANCE.get());
 			} else if(source.isProjectile()) {
 				float evasion = (float)data.get(PlayerAttributes.EVASION.get());
@@ -143,9 +145,29 @@ public final class EventHandler {
 			if(source.getSource() instanceof PlayerEntity) {
 				PlayerEntity player = (PlayerEntity)source.getSource();
 				AttributeData data = ExAPI.DATA.get(player);
-				float lifesteal = (float)data.get(PlayerAttributes.LIFESTEAL.get());
 				
-				player.heal(amount * lifesteal);
+				if(source.getMagic()) {
+					float magicAmp = (float)data.get(PlayerAttributes.MAGIC_AMPLIFICATION.get());
+					
+					amount = amount * (1.0F + magicAmp);
+				} else {
+					float lifesteal = (float)data.get(PlayerAttributes.LIFESTEAL.get());
+					
+					player.heal(amount * lifesteal);
+				}
+			} else if(source.getSource() instanceof PotionEntity) {
+				PotionEntity potion = (PotionEntity)source.getSource();
+				
+				if(potion.getOwner() instanceof PlayerEntity) {
+					PlayerEntity player = (PlayerEntity)potion.getOwner();
+					AttributeData data = ExAPI.DATA.get(player);
+					
+					if(source.getMagic()) {
+						float magicAmp = (float)data.get(PlayerAttributes.MAGIC_AMPLIFICATION.get());
+						
+						amount = amount * (1.0F + magicAmp);
+					}
+				}
 			}
 		}
 		

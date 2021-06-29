@@ -77,6 +77,10 @@ public final class PlayerAttributes {
 	public static final IAttribute RANGED_CRIT_DAMAGE = find(new Identifier(ExAPI.MODID, "ranged_crit_damage"));
 	/** PlayerEx ranged crit chance */
 	public static final IAttribute RANGED_CRIT_CHANCE = find(new Identifier(ExAPI.MODID, "ranged_crit_chance"));
+	/** PlayerEx magic damage amplification */
+	public static final IAttribute MAGIC_AMPLIFICATION = find(new Identifier(ExAPI.MODID, "magic_amplification"));
+	/** Jar-in-jar step-height-entity-attribute step height */
+	public static final IAttribute STEP_HEIGHT = find(new Identifier("stepheightentityattribute", "stepheight"));
 	
 	/**
 	 * @param keyIn Player Attribute key

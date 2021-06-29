@@ -30,6 +30,11 @@
             "attribute": "playerex:wither_resistance",
             "type": "DIMINISHING",
             "multiplier": 0.01
+        },
+        {
+            "attribute": "playerex:magic_amplification",
+            "type": "DIMINISHING",
+            "multiplier": 0.05
         }
     ]
 }

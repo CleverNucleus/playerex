@@ -45,6 +45,7 @@
 	"gui.playerex.text.knockback_resistance": "Knockback Res.",
 	"gui.playerex.text.ranged_damage": "Damage",
     "gui.playerex.text.attack_range": "Attack Ran.",
+    "gui.playerex.text.magic_amp": "Magic Amp.",
 	"gui.playerex.tooltip.level_up": "Level Up (%s)",
 	"gui.playerex.tooltip.skill": "Skill ",
 	"gui.playerex.tooltip.refund": "Refund ",
@@ -76,6 +77,7 @@
     "gui.playerex.tooltip.ranged_crit_chance": "The chance for a ranged attack to be a critical hit.",
     "gui.playerex.tooltip.lifesteal": "A percentage of melee attack damage dealt is healed.",
     "gui.playerex.tooltip.attack_range": "Attack Range: %s blocks",
+    "gui.playerex.tooltip.magic_amp": "Amplifies most magic damage.",
     "command.playerex.modifier.already_present": "Modifier already present!",
     "command.playerex.modifier.error": "Modifier not present!",
     "command.playerex.modifier.get": "Modifier value: %s",
@@ -112,5 +114,6 @@
 	"attribute.name.playerex.evasion": "Evasion",
 	"attribute.name.playerex.ranged_damage": "Ranged Damage",
 	"attribute.name.playerex.ranged_crit_damage": "Ranged Crit Damage",
-	"attribute.name.playerex.ranged_crit_chance": "Ranged Crit Chance"
+	"attribute.name.playerex.ranged_crit_chance": "Ranged Crit Chance",
+	"attribute.name.playerex.magic_amplification": "Magic Amplification"
 }

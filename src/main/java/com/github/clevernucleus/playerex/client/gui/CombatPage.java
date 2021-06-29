@@ -60,6 +60,16 @@ public class CombatPage extends PageScreen {
 		return text.getString() + ": " + value(value) + suffix;
 	}
 	
+	private String magicAmp() {
+		IPlayerAttribute attribute = PlayerAttributes.MAGIC_AMPLIFICATION.get();
+		Text text = new TranslatableText("gui.playerex.text.magic_amp");
+		boolean percent = attribute.hasProperty(AttributeProperties.PROPERTY_PERCENT);
+		float value = (float)Maths.shownValue(attribute, this.data.get(attribute));
+		String suffix = percent ? "%" : "";
+		
+		return text.getString() + ": " + value(value) + suffix;
+	}
+	
 	private String crit(final IPlayerAttribute attribute) {
 		String key = attribute.translationKey();
 		String type = key.substring(key.length() - 11);
@@ -191,6 +201,10 @@ public class CombatPage extends PageScreen {
 		if(this.isMouseOver((this.x + 108), (this.y + 103), this.textRenderer.getWidth(this.reach()) * s, 7, mouseX, mouseY)) {
 			this.renderTooltip(matrices, (new TranslatableText("gui.playerex.tooltip.attack_range", this.reachTT())).formatted(Formatting.GRAY), mouseX, mouseY);
 		}
+		
+		if(this.isMouseOver((this.x + 108), (this.y + 114), this.textRenderer.getWidth(this.magicAmp()) * s, 7, mouseX, mouseY)) {
+			this.renderTooltip(matrices, (new TranslatableText("gui.playerex.tooltip.magic_amp")).formatted(Formatting.GRAY), mouseX, mouseY);
+		}
 	}
 	
 	@Override
@@ -216,6 +230,7 @@ public class CombatPage extends PageScreen {
 		this.textRenderer.draw(matrices, this.crit(PlayerAttributes.RANGED_CRIT_CHANCE.get()), (this.x + 96) / s, (this.y + 59) / s, 4210752);
 		this.textRenderer.draw(matrices, this.display(PlayerAttributes.LIFESTEAL.get()), (this.x + 108) / s, (this.y + 92) / s, 4210752);
 		this.textRenderer.draw(matrices, this.reach(), (this.x + 108) / s, (this.y + 103) / s, 4210752);
+		this.textRenderer.draw(matrices, this.magicAmp(), (this.x + 108) / s, (this.y + 114) / s, 4210752);
 		
 		GlStateManager.popMatrix();
 		
@@ -231,6 +246,7 @@ public class CombatPage extends PageScreen {
 		this.drawTexture(matrices, this.x + 96, this.y + 24, 235, 18, 9, 9);
 		this.drawTexture(matrices, this.x + 96, this.y + 90, 244, 18, 9, 9);
 		this.drawTexture(matrices, this.x + 96, this.y + 101, 226, 27, 9, 9);
+		this.drawTexture(matrices, this.x + 96, this.y + 112, 235, 27, 9, 9);
 	}
 	
 	@Override
