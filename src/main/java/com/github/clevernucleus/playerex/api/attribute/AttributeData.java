@@ -12,6 +12,11 @@ import net.minecraft.entity.attribute.EntityAttributeModifier;
 public interface AttributeData extends Component {
 	
 	/**
+	 * Resets all attributes to their defaults. requires a sync.
+	 */
+	void reset();
+	
+	/**
 	 * Adds refund points (if allowed). Refund points are clamped above zero.
 	 * @param valueIn
 	 * @return The change in refund points.

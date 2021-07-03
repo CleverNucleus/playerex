@@ -1,7 +1,7 @@
 {
 	"schemaVersion": 1,
 	"id": "playerex",
-	"version": "2.0.2",
+	"version": "2.0.3",
 	"name": "PlayerEx",
 	"description": "Implements a more detailed attributes system with an rpg theme.",
 	"authors": [

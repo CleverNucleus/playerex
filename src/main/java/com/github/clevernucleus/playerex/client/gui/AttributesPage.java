@@ -17,6 +17,7 @@ import com.github.clevernucleus.playerex.api.util.Maths;
 import com.github.clevernucleus.playerex.client.gui.widget.ScreenButtonWidget;
 import com.github.clevernucleus.playerex.client.network.ClientNetworkHandler;
 import com.github.clevernucleus.playerex.handler.NetworkHandler.PacketType;
+import com.github.clevernucleus.playerex.impl.attribute.AttributeDataManager;
 import com.mojang.blaze3d.platform.GlStateManager;
 
 import net.fabricmc.api.EnvType;
@@ -329,7 +330,7 @@ public class AttributesPage extends PageScreen {
 				IPlayerAttribute attribute = this.fromKey(key);
 				
 				if(this.refunds()) {
-					button.active = this.data.get(attribute) >= 1.0D;
+					button.active = ((AttributeDataManager)this.data).getValue(attribute) >= 1.0D;
 				} else {
 					button.active = (this.data.get(attribute) < attribute.maxValue()) && (this.data.get(PlayerAttributes.SKILLPOINTS.get()) >= 1.0D);
 				}

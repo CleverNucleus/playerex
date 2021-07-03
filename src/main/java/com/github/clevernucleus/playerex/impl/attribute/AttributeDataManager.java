@@ -147,10 +147,6 @@ public final class AttributeDataManager implements AttributeData, AutoSyncedComp
 		}
 	}
 	
-	private double getValue(final IPlayerAttribute keyIn) {
-		return this.attributes.getOrDefault(keyIn.registryKey(), keyIn.valueFromType());
-	}
-	
 	private void setValue(final IPlayerAttribute keyIn, final double value) {
 		this.attributes.put(keyIn.registryKey(), value);
 	}
@@ -168,6 +164,10 @@ public final class AttributeDataManager implements AttributeData, AutoSyncedComp
 		
 		PlayerAttributeModifiedEvent.MODIFIED.invoker().onAttributeModified(this.player, keyIn, oldValue, newValue);
 		ExAPI.DATA.sync(this.player);
+	}
+	
+	public double getValue(final IPlayerAttribute keyIn) {
+		return this.attributes.getOrDefault(keyIn.registryKey(), keyIn.valueFromType());
 	}
 	
 	public void initContainer() {
@@ -206,6 +206,7 @@ public final class AttributeDataManager implements AttributeData, AutoSyncedComp
 		return this.levelled;
 	}
 	
+	@Override
 	public void reset() {
 		this.levelled = false;
 		this.refunds = 0;

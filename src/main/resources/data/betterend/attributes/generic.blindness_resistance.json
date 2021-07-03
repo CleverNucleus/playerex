@@ -1,0 +1,10 @@
+{
+    "type": "GAME",
+    "uuid": "ed0b99aa-b2f2-4c5e-b135-ecd62ceea26e",
+	"defaultValue": 0.0,
+	"minValue": 0.0,
+	"maxValue": 1.0,
+	"translationKey": "attribute.name.generic.blindness_resistance",
+    "properties": {},
+	"functions": []
+}
