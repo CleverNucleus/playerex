@@ -12,6 +12,13 @@ import net.minecraft.entity.attribute.EntityAttributeModifier;
 public interface AttributeData extends Component {
 	
 	/**
+	 * Semi-internal use, modder's don't need to use this.
+	 * @param keyIn
+	 * @return
+	 */
+	double getValue(final IPlayerAttribute keyIn);
+	
+	/**
 	 * Resets all attributes to their defaults. requires a sync.
 	 */
 	void reset();

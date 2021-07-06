@@ -56,7 +56,11 @@ public final class AttributeDataManager implements AttributeData, AutoSyncedComp
 			value.setTracked(true);
 		}
 		
-		return ((IClampedEntityAttribute)value).withLimits(keyIn.minValue(), keyIn.maxValue());
+		if(value instanceof IClampedEntityAttribute) {
+			return ((IClampedEntityAttribute)value).withLimits(keyIn.minValue(), keyIn.maxValue());
+		} else {
+			return value;
+		}
 	}
 	
 	private boolean isGame(final IPlayerAttribute attributeIn) {
@@ -166,6 +170,7 @@ public final class AttributeDataManager implements AttributeData, AutoSyncedComp
 		ExAPI.DATA.sync(this.player);
 	}
 	
+	@Override
 	public double getValue(final IPlayerAttribute keyIn) {
 		return this.attributes.getOrDefault(keyIn.registryKey(), keyIn.valueFromType());
 	}

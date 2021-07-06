@@ -68,7 +68,7 @@ public class AttributesPage extends PageScreen {
 		ClientNetworkHandler.modifyAttributes(this.refunds() ? PacketType.REFUND : PacketType.SKILL, pair(attribute, value), pair(PlayerAttributes.SKILLPOINTS.get(), (-1) * value));
 		
 		if(!ExAPI.CONFIG.get().playSkillUpSound()) return;
-		this.client.player.playSound(PlayerEx.SP_SPEND, SoundCategory.NEUTRAL, 0.5F, 1.5F);
+		this.client.player.playSound(PlayerEx.SP_SPEND, SoundCategory.NEUTRAL, ExAPI.CONFIG.get().skillUpVolume(), 1.5F);
 	}
 	
 	private String value(IPlayerAttribute attribute, double value) {

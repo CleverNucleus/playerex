@@ -26,9 +26,14 @@ public interface IConfig {
 	boolean resetOnDeath();
 	
 	/**
-	 * @return Whether to play the server-side level up effects (sound + particles).
+	 * @return Whether to play the level up effects (sound + particles).
 	 */
-	boolean announceLevelUp();
+	boolean playLevelUpSound();
+	
+	/**
+	 * @return The level up sound volume. 
+	 */
+	float levelUpVolume();
 	
 	/**
 	 * @return Whether an additional name plate is displayed on multiplier just below the player's name, showing the player's level.
@@ -39,6 +44,11 @@ public interface IConfig {
 	 * @return Whether to play the sound on spending a skill point. Client Sided.
 	 */
 	boolean playSkillUpSound();
+	
+	/**
+	 * @return The skill up sound volume. Client Sided.
+	 */
+	float skillUpVolume();
 	
 	/**
 	 * @return The x-position of the gui inventory button. Client Sided.

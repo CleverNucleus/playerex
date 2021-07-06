@@ -7,7 +7,7 @@ import net.minecraft.nbt.CompoundTag;
 public final class ConfigCache {
 	private ConfigImpl config;
 	protected byte levelOffset, levelMultiplier;
-	protected boolean resetOnDeath, announceLevelUp, showLevelNameplates;
+	protected boolean resetOnDeath, showLevelNameplates;
 	
 	private byte getOrDefault(CompoundTag tag, String key, byte value) {
 		return tag.contains(key) ? tag.getByte(key) : value;
@@ -21,7 +21,6 @@ public final class ConfigCache {
 		this.levelOffset = this.getOrDefault(tag, "levelOffset", (byte)this.config.levelOffset);
 		this.levelMultiplier = this.getOrDefault(tag, "levelMultiplier", (byte)this.config.levelMultiplier);
 		this.resetOnDeath = this.getOrDefault(tag, "resetOnDeath", this.config.resetOnDeath);
-		this.announceLevelUp = this.getOrDefault(tag, "announceLevelUp", this.config.announceLevelUp);
 		this.showLevelNameplates = this.getOrDefault(tag, "showLevelNameplates", this.config.showLevelNameplates);
 	}
 	
@@ -29,7 +28,6 @@ public final class ConfigCache {
 		tag.putByte("levelOffset", this.levelOffset);
 		tag.putByte("levelMultiplier", this.levelMultiplier);
 		tag.putBoolean("resetOnDeath", this.resetOnDeath);
-		tag.putBoolean("announceLevelUp", this.announceLevelUp);
 		tag.putBoolean("showLevelNameplates", this.showLevelNameplates);
 	}
 	
@@ -38,7 +36,6 @@ public final class ConfigCache {
 		this.levelOffset = (byte)this.config.levelOffset;
 		this.levelMultiplier = (byte)this.config.levelMultiplier;
 		this.resetOnDeath = this.config.resetOnDeath;
-		this.announceLevelUp = this.config.announceLevelUp;
 		this.showLevelNameplates = this.config.showLevelNameplates;
 	}
 }

@@ -24,6 +24,7 @@ public final class PlayerExClient implements ClientModInitializer {
 	public void onInitializeClient() {
 		ClientPlayNetworking.registerGlobalReceiver(NetworkHandler.SYNC_CONFIG, ClientNetworkHandler::syncConfig);
 		ClientPlayNetworking.registerGlobalReceiver(NetworkHandler.SYNC_ATTRIBUTES, ClientNetworkHandler::syncAttributes);
+		ClientPlayNetworking.registerGlobalReceiver(NetworkHandler.LEVEL_UP_EVENT, ClientNetworkHandler::levelUpEvent);
 		
 		ScreenRegistry.register(PlayerEx.ATTRIBUTES_SCREEN_HANDLER, AttributesScreen::new);
 		PageRegistry.register(ATTTRIBUTES_PAGE_KEY, AttributesPage::new);

@@ -51,7 +51,11 @@ public class AttributeManager implements SimpleSynchronousResourceReloadListener
 			value.setTracked(true);
 		}
 		
-		return ((IClampedEntityAttribute)value).withLimits(keyIn.minValue(), keyIn.maxValue());
+		if(value instanceof IClampedEntityAttribute) {
+			return ((IClampedEntityAttribute)value).withLimits(keyIn.minValue(), keyIn.maxValue());
+		} else {
+			return value;
+		}
 	}
 	
 	@Override

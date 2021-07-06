@@ -27,6 +27,11 @@ public final class NetworkHandler {
 	public static final Identifier SYNC_ATTRIBUTES = new Identifier(ExAPI.MODID, "sync_attributes");
 	public static final Identifier SWITCH_SCREEN = new Identifier(ExAPI.MODID, "switch_screen");
 	public static final Identifier MODIFY_ATTRIBUTES = new Identifier(ExAPI.MODID, "modify_attributes");
+	public static final Identifier LEVEL_UP_EVENT = new Identifier(ExAPI.MODID, "level_up_event");
+	
+	public static void levelUpEvent(ServerPlayerEntity player) {
+		ServerPlayNetworking.send(player, LEVEL_UP_EVENT, PacketByteBufs.create());
+	}
 	
 	public static void switchScreen(MinecraftServer server, ServerPlayerEntity player, ServerPlayNetworkHandler handler, PacketByteBuf buf, PacketSender responseSender) {
 		boolean isPlayerInventory = buf.readBoolean();

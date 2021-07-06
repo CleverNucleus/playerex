@@ -21,6 +21,7 @@ import net.minecraft.client.network.ClientPlayNetworkHandler;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.ListTag;
 import net.minecraft.network.PacketByteBuf;
+import net.minecraft.sound.SoundCategory;
 import net.minecraft.util.Pair;
 
 @Environment(EnvType.CLIENT)
@@ -65,6 +66,14 @@ public final class ClientNetworkHandler {
 		buf.writeCompoundTag(tag);
 		
 		ClientPlayNetworking.send(NetworkHandler.MODIFY_ATTRIBUTES, buf);
+	}
+	
+	public static void levelUpEvent(MinecraftClient client, ClientPlayNetworkHandler handler, PacketByteBuf buf, PacketSender responseSender) {
+		client.execute(() -> {
+			if(ExAPI.CONFIG.get().playLevelUpSound()) {
+				client.player.playSound(PlayerEx.LEVEL_UP, SoundCategory.NEUTRAL, ExAPI.CONFIG.get().levelUpVolume(), 1.5F);
+			}
+		});
 	}
 	
 	public static void syncConfig(MinecraftClient client, ClientPlayNetworkHandler handler, PacketByteBuf buf, PacketSender responseSender) {

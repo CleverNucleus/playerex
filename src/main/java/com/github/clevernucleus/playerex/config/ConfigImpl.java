@@ -27,15 +27,25 @@ public class ConfigImpl implements ConfigData, IConfig {
 	
 	@ConfigEntry.Category(value = "server")
 	@ConfigEntry.Gui.Tooltip(count = 2)
-	protected boolean announceLevelUp = true;
-	
-	@ConfigEntry.Category(value = "server")
-	@ConfigEntry.Gui.Tooltip(count = 2)
 	protected boolean showLevelNameplates = true;
 	
 	@ConfigEntry.Category(value = "client")
 	@ConfigEntry.Gui.Tooltip
+	private boolean playLevelUpSound = true;
+	
+	@ConfigEntry.Category(value = "client")
+	@ConfigEntry.BoundedDiscrete(min = 0, max = 150)
+	@ConfigEntry.Gui.Tooltip
+	private int levelUpVolume = 100;
+	
+	@ConfigEntry.Category(value = "client")
+	@ConfigEntry.Gui.Tooltip
 	private boolean playSkillUpSound = true;
+	
+	@ConfigEntry.Category(value = "client")
+	@ConfigEntry.BoundedDiscrete(min = 0, max = 150)
+	@ConfigEntry.Gui.Tooltip
+	private int skillUpVolume = 50;
 	
 	@ConfigEntry.Category(value = "client")
 	@ConfigEntry.BoundedDiscrete(min = -200, max = 200)
@@ -63,8 +73,13 @@ public class ConfigImpl implements ConfigData, IConfig {
 	}
 	
 	@Override
-	public boolean announceLevelUp() {
-		return PlayerEx.CONFIG_CACHE.announceLevelUp;
+	public boolean playLevelUpSound() {
+		return this.playLevelUpSound;
+	}
+	
+	@Override
+	public float levelUpVolume() {
+		return (float)this.levelUpVolume * 0.01F;
 	}
 	
 	@Override
@@ -75,6 +90,11 @@ public class ConfigImpl implements ConfigData, IConfig {
 	@Override
 	public boolean playSkillUpSound() {
 		return this.playSkillUpSound;
+	}
+	
+	@Override
+	public float skillUpVolume() {
+		return (float)this.skillUpVolume * 0.01F;
 	}
 	
 	@Override

@@ -3,7 +3,6 @@ package com.github.clevernucleus.playerex.handler;
 import java.util.Map;
 import java.util.Random;
 
-import com.github.clevernucleus.playerex.PlayerEx;
 import com.github.clevernucleus.playerex.api.ExAPI;
 import com.github.clevernucleus.playerex.api.PlayerAttributes;
 import com.github.clevernucleus.playerex.api.attribute.AttributeData;
@@ -17,12 +16,10 @@ import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.projectile.PersistentProjectileEntity;
 import net.minecraft.entity.projectile.ProjectileEntity;
 import net.minecraft.entity.projectile.thrown.PotionEntity;
-import net.minecraft.particle.ParticleTypes;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.network.ServerPlayNetworkHandler;
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.server.world.ServerWorld;
-import net.minecraft.sound.SoundCategory;
 import net.minecraft.util.Identifier;
 import net.minecraft.world.World;
 
@@ -67,18 +64,10 @@ public final class EventHandler {
 	}
 	
 	public static void levelUp(PlayerEntity player) {
-		if(!ExAPI.CONFIG.get().announceLevelUp()) return;
-		
 		World world = player.world;
 		
 		if(!world.isClient) {
-			ServerWorld server = (ServerWorld)world;
-			
-			for(int i = 0; i < 6; ++i) {
-				server.spawnParticles(ParticleTypes.LARGE_SMOKE, player.getParticleX(0.5D), player.getRandomBodyY(), player.getParticleZ(0.5D), 5, 0, 0, 0, 0);
-			}
-			
-			server.playSound((PlayerEntity)null, player.getBlockPos(), PlayerEx.LEVEL_UP, SoundCategory.NEUTRAL, 1.0F, 1.5F);
+			NetworkHandler.levelUpEvent((ServerPlayerEntity)player);
 		}
 	}
 	
