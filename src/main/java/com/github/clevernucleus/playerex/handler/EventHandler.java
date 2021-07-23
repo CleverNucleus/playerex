@@ -182,9 +182,13 @@ public final class EventHandler {
 		
 		PersistentProjectileEntity arrow = (PersistentProjectileEntity)projectile;
 		
+		if(arrow.getOwner() == null) return;
 		if(arrow.getOwner() instanceof PlayerEntity) {
 			PlayerEntity player = (PlayerEntity)arrow.getOwner();
 			AttributeData data = ExAPI.DATA.get(player);
+			
+			if(player.world.isClient) return;
+			
 			float critChance = (float)data.get(PlayerAttributes.RANGED_CRIT_CHANCE.get());
 			float critDamage = (float)data.get(PlayerAttributes.RANGED_CRIT_DAMAGE.get());
 			float nextDamage = (float)data.get(PlayerAttributes.RANGED_DAMAGE.get());

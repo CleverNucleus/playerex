@@ -115,7 +115,7 @@ public class CombatPage extends PageScreen {
 	
 	private void rangedCritTT(MatrixStack matrices, int mouseX, int mouseY) {
 		List<Text> tooltip = new ArrayList<Text>();
-		IPlayerAttribute attribute = PlayerAttributes.MELEE_CRIT_CHANCE.get();
+		IPlayerAttribute attribute = PlayerAttributes.RANGED_CRIT_DAMAGE.get();
 		
 		tooltip.add((new TranslatableText("gui.playerex.tooltip.ranged_crit_damage")).formatted(Formatting.GRAY));
 		
