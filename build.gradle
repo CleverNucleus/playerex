@@ -1,103 +1,44 @@
 plugins {
-	id 'fabric-loom' version '0.6-SNAPSHOT'
+	id 'fabric-loom' version '0.8-SNAPSHOT'
 	id 'maven-publish'
 }
 
-sourceCompatibility = JavaVersion.VERSION_1_8
-targetCompatibility = JavaVersion.VERSION_1_8
+sourceCompatibility = JavaVersion.VERSION_16
+targetCompatibility = JavaVersion.VERSION_16
 
 archivesBaseName = project.archives_base_name
 version = project.mod_version
 group = project.maven_group
 
 repositories {
-	maven {
-        name = 'Ladysnake Mods'
+    maven {
+        name = "Ladysnake Mods"
         url = 'https://ladysnake.jfrog.io/artifactory/mods'
     }
-    maven {
-        url "https://maven.jamieswhiteshirt.com/libs-release"
-        content {
-            includeGroup "com.jamieswhiteshirt"
-        }
-    }
-    maven {
-        url "https://maven.shedaniel.me/"
-    }
-    maven {
-		url "https://maven.terraformersmc.com/"
-	}
-    maven {
-        url "https://www.cursemaven.com"
-    }
-	maven {
-		url = "https://jitpack.io"
-	}
 }
 
 dependencies {
 	minecraft "com.mojang:minecraft:${project.minecraft_version}"
 	mappings "net.fabricmc:yarn:${project.yarn_mappings}:v2"
 	modImplementation "net.fabricmc:fabric-loader:${project.loader_version}"
-    
 	modImplementation "net.fabricmc.fabric-api:fabric-api:${project.fabric_version}"
-    
-	modApi "io.github.onyxstudios.Cardinal-Components-API:cardinal-components-base:${project.cardinal_components_version}"
+    modImplementation "io.github.onyxstudios.Cardinal-Components-API:cardinal-components-base:${project.cardinal_components_version}"
     include "io.github.onyxstudios.Cardinal-Components-API:cardinal-components-base:${project.cardinal_components_version}"
-    
-    modApi "io.github.onyxstudios.Cardinal-Components-API:cardinal-components-entity:${project.cardinal_components_version}"
+    modImplementation "io.github.onyxstudios.Cardinal-Components-API:cardinal-components-entity:${project.cardinal_components_version}"
     include "io.github.onyxstudios.Cardinal-Components-API:cardinal-components-entity:${project.cardinal_components_version}"
-    
-    modImplementation "com.jamieswhiteshirt:reach-entity-attributes:${project.reach_entity_attributes_version}"
-    include "com.jamieswhiteshirt:reach-entity-attributes:${project.reach_entity_attributes_version}"
-    
-	modImplementation "com.github.emilyploszaj:step-height-entity-attribute:${project.step_height_entity_attribute_version}"
-	include "com.github.emilyploszaj:step-height-entity-attribute:${project.step_height_entity_attribute_version}"
-	
-    modApi("me.shedaniel.cloth:cloth-config-fabric:${project.cloth_config_version}") {
-        exclude(group: "net.fabricmc.fabric-api")
-    }
-    
-    include "me.shedaniel.cloth:cloth-config-fabric:${project.cloth_config_version}"
-    
-    modImplementation "com.terraformersmc:modmenu:${project.modmenu_version}"
-    
-    modImplementation "curse.maven:tooltipfix-411557:3087328"
-    include "curse.maven:tooltipfix-411557:3087328"
 }
 
 processResources {
-    inputs.property "version", project.version
-    
-    from(sourceSets.main.resources.srcDirs) {
-        include "fabric.mod.json"
-        expand 'version': project.version
-    }
-    
-    from(sourceSets.main.resources.srcDirs) {
-        exclude "fabric.mod.json"
-    }
+	inputs.property "version", project.version
+
+	filesMatching("fabric.mod.json") {
+		expand "version": project.version
+	}
 }
 
 tasks.withType(JavaCompile).configureEach {
 	it.options.encoding = "UTF-8"
-    
-	def targetVersion = 8
-	if (JavaVersion.current().isJava9Compatible()) {
-		 it.options.release = targetVersion
-	}
-}
-
-task sourcesJar(type: Jar, dependsOn: classes) {
-    archiveClassifier.set("sources")
-    from sourceSets.main.allSource
-}
-
-task apiJar(type: Jar, dependsOn: classes) {
-    archiveClassifier.set("api")
-    include 'com/github/clevernucleus/playerex/api/**'
-    from sourceSets.main.output
-	from sourceSets.main.allSource
+	it.options.release = 16
 }
 
 java {
@@ -113,20 +54,15 @@ jar {
 publishing {
 	publications {
 		mavenJava(MavenPublication) {
-            artifactId = project.archives_base_name
-            
 			artifact(remapJar) {
 				builtBy remapJar
 			}
 			artifact(sourcesJar) {
 				builtBy remapSourcesJar
 			}
-            artifact(apiJar) {
-                builtBy apiJar
-            }
 		}
 	}
-    
+
 	repositories {
         
 	}

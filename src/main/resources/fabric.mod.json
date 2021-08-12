@@ -1,54 +1,40 @@
 {
-	"schemaVersion": 1,
-	"id": "playerex",
-	"version": "2.0.5",
-	"name": "PlayerEx",
-	"description": "Implements a more detailed attributes system with an rpg theme.",
-	"authors": [
-		"CleverNucleus"
-	],
-    
-	"contact": {
+    "schemaVersion": 1,
+    "id": "playerex",
+    "version": "${version}",
+    "name": "PlayerEx",
+    "description": "Adds RPG attributes to the player.",
+    "authors": [
+      "CleverNucleus"
+    ],
+    "contact": {
         "homepage": "https://www.curseforge.com/minecraft/mc-mods/playerex",
-        "sources": "https://github.com/CleverNucleus/PlayerEx",
-        "issues": "https://github.com/CleverNucleus/PlayerEx/issues"
-	},
+        "sources": "https://github.com/CleverNucleus/PlayerEx"
+    },
     
-	"license": "MIT",
-	"icon": "assets/playerex/icon.png",
-	"environment": "*",
-	"entrypoints": {
-		"main": [
-			"com.github.clevernucleus.playerex.PlayerEx"
-		],
-		"client": [
-			"com.github.clevernucleus.playerex.client.PlayerExClient"
-		],
-        "cardinal-components": [
-			"com.github.clevernucleus.playerex.impl.attribute.AttributeDataContainer"
-		],
-		"modmenu": [
-			"com.github.clevernucleus.playerex.config.ModMenuCompat"
-		]
-	},
-	
-    "custom": {
-		"cardinal-components": [
-			"playerex:attributes"
-		]
-	},
+    "license": "MIT",
+    "icon": "assets/playerex/icon.png",
     
-	"mixins": [
-		"playerex.mixins.json"
-	],
+    "environment": "*",
+    "entrypoints": {
+        "main": [
+            "com.github.clevernucleus.playerex.PlayerEx"
+        ],
+        "client": [
+            "com.github.clevernucleus.playerex.client.PlayerExClient"
+        ]
+    },
+    "mixins": [
+        "playerex.mixins.json"
+    ],
     
-	"depends": {
-		"fabricloader": ">=0.7.4",
-		"fabric": "*",
-		"minecraft": "1.16.x"
-	},
-    
-	"suggests": {
-		"another-mod": "*"
-	}
+    "depends": {
+        "fabricloader": ">=0.11.3",
+        "fabric": "*",
+        "minecraft": "1.17.x",
+        "java": ">=16"
+    },
+    "suggests": {
+        "another-mod": "*"
+    }
 }
