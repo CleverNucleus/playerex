@@ -73,6 +73,33 @@ public final class ModifierDataManager implements ModifierData, AutoSyncedCompon
 		instance.removeModifier(uuid);
 	}
 	
+	public void refresh(final ModifierDataManager manager) {
+		for(Identifier identifier : manager.data.keySet()) {
+			EntityAttribute attribute = Registry.ATTRIBUTE.get(identifier);
+			
+			if(attribute == null) continue;
+			
+			this.data.replace(identifier, manager.data.getOrDefault(identifier, 0.0D));
+			this.apply(attribute);
+		}
+		
+		ExAPI.DATA.sync(this.player);
+	}
+	
+	@Override
+	public void reset() {
+		for(Identifier identifier : this.data.keySet()) {
+			EntityAttribute attribute = Registry.ATTRIBUTE.get(identifier);
+			
+			if(attribute == null) continue;
+			
+			this.data.replace(identifier, 0.0D);
+			this.remove(attribute);
+		}
+		
+		ExAPI.DATA.sync(this.player);
+	}
+	
 	@Override
 	public double get(final EntityAttribute attributeIn) {
 		if(!this.isPresent(attributeIn)) return 0.0D;
@@ -92,29 +119,6 @@ public final class ModifierDataManager implements ModifierData, AutoSyncedCompon
 		this.apply(attributeIn);
 		
 		ExAPI.DATA.sync(this.player);
-	}
-	
-	@Override
-	public void refresh() {
-		for(Identifier identifier : this.data.keySet()) {
-			EntityAttribute attribute = Registry.ATTRIBUTE.get(identifier);
-			
-			if(attribute == null) continue;
-			
-			this.apply(attribute);
-		}
-	}
-	
-	@Override
-	public void reset() {
-		for(Identifier identifier : this.data.keySet()) {
-			EntityAttribute attribute = Registry.ATTRIBUTE.get(identifier);
-			
-			if(attribute == null) continue;
-			
-			this.data.replace(identifier, 0.0D);
-			this.remove(attribute);
-		}
 	}
 	
 	@Override

@@ -15,6 +15,9 @@ repositories {
         name = "Ladysnake Mods"
         url = 'https://ladysnake.jfrog.io/artifactory/mods'
     }
+	maven {
+		url = "https://www.cursemaven.com"
+	}
 }
 
 dependencies {
@@ -26,6 +29,7 @@ dependencies {
     include "io.github.onyxstudios.Cardinal-Components-API:cardinal-components-base:${project.cardinal_components_version}"
     modImplementation "io.github.onyxstudios.Cardinal-Components-API:cardinal-components-entity:${project.cardinal_components_version}"
     include "io.github.onyxstudios.Cardinal-Components-API:cardinal-components-entity:${project.cardinal_components_version}"
+	modImplementation "curse.maven:dataattributes-514734:3423345"
 }
 
 processResources {

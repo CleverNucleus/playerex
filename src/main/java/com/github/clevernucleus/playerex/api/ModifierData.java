@@ -13,8 +13,5 @@ public interface ModifierData extends Component {
 	void set(final EntityAttribute attributeIn, final double valueIn);
 	
 	
-	void refresh();
-	
-	
 	void reset();
 }
