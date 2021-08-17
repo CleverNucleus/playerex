@@ -25,6 +25,9 @@
         ],
         "cardinal-components": [
             "com.github.clevernucleus.playerex.impl.ModifierDataContainer"
+        ],
+        "modmenu": [
+            "com.github.clevernucleus.playerex.config.ModMenuCompat"
         ]
     },
     "custom": {

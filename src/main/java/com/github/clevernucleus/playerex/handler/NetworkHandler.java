@@ -23,7 +23,10 @@ public final class NetworkHandler {
 	public static void loginQueryStart(ServerLoginNetworkHandler handler, MinecraftServer server, PacketSender sender, ServerLoginNetworking.LoginSynchronizer synchronizer) {
 		PacketByteBuf buf = PacketByteBufs.create();
 		NbtCompound tag = new NbtCompound();
+		NbtCompound cfg = new NbtCompound();
 		NbtList list = new NbtList();
+		
+		PlayerEx.CONFIG.write(cfg);
 		
 		for(Identifier identifier : PlayerEx.MANAGER.modifiers.keySet()) {
 			NbtCompound entry = new NbtCompound();
@@ -35,6 +38,7 @@ public final class NetworkHandler {
 			list.add(entry);
 		}
 		
+		tag.put("Config", cfg);
 		tag.put("Modifiers", list);
 		buf.writeNbt(tag);
 		sender.sendPacket(SYNC, buf);

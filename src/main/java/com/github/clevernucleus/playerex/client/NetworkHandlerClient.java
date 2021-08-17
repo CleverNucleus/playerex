@@ -22,6 +22,12 @@ public final class NetworkHandlerClient {
 		NbtCompound tag = buf.readNbt();
 		
 		client.execute(() -> {
+			if(tag.contains("Config")) {
+				NbtCompound cfg = tag.getCompound("Config");
+				
+				PlayerEx.CONFIG.read(cfg);
+			}
+			
 			PlayerEx.MANAGER.modifiers.clear();
 			
 			if(tag.contains("Modifiers")) {

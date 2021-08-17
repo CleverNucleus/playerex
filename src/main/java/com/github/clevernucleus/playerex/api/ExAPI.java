@@ -3,6 +3,8 @@ package com.github.clevernucleus.playerex.api;
 import java.util.function.Supplier;
 
 import com.github.clevernucleus.dataattributes.api.API;
+import com.github.clevernucleus.playerex.api.config.ExConfigProvider;
+import com.github.clevernucleus.playerex.api.config.IConfig;
 
 import dev.onyxstudios.cca.api.v3.component.ComponentKey;
 import dev.onyxstudios.cca.api.v3.component.ComponentRegistry;
@@ -21,6 +23,8 @@ public final class ExAPI {
 	public static final String MODID = "playerex";
 	/** The Cardinal Components Key for PlayerEx modifier data. */
 	public static final ComponentKey<ModifierData> DATA = ComponentRegistry.getOrCreate(new Identifier(MODID, "data"), ModifierData.class);
+	/** The config supplier object. */
+	public static final IConfig.Provider CONFIG = new ExConfigProvider();
 	
 	public static final Supplier<EntityAttribute> LEVEL = API.getAttribute(new Identifier(MODID, "level"));
 	public static final Supplier<EntityAttribute> SKILL_POINTS = API.getAttribute(new Identifier(MODID, "skill_points"));

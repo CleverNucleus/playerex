@@ -65,7 +65,7 @@
             {
                 "attribute": "minecraft:generic.movement_speed",
                 "behaviour": "FLAT",
-                "multiplier": 0.004
+                "multiplier": 0.002
             },
             {
                 "attribute": "playerex:melee_crit_damage",
