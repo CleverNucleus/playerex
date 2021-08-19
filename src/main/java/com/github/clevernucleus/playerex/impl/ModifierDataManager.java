@@ -18,16 +18,20 @@ import net.minecraft.entity.attribute.EntityAttributeModifier;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.nbt.NbtCompound;
 import net.minecraft.nbt.NbtList;
+import net.minecraft.network.PacketByteBuf;
+import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.registry.Registry;
 
 public final class ModifierDataManager implements ModifierData, AutoSyncedComponent {
 	private final PlayerEntity player;
 	private final Map<Identifier, Double> data;
+	private boolean hasLevelPotential;
 	
 	public ModifierDataManager(PlayerEntity player) {
 		this.player = player;
 		this.data = new HashMap<Identifier, Double>();
+		this.hasLevelPotential = false;
 		
 		PlayerEx.MANAGER.modifiers.keySet().forEach(key -> this.data.put(key, 0.0D));
 	}
@@ -71,6 +75,14 @@ public final class ModifierDataManager implements ModifierData, AutoSyncedCompon
 		if(instance == null) return;
 		
 		instance.removeModifier(uuid);
+	}
+	
+	public boolean hasLevelPotential() {
+		return this.hasLevelPotential;
+	}
+	
+	public void setHasLevelPotential(final boolean hasLevelPotential) {
+		this.hasLevelPotential = hasLevelPotential;
 	}
 	
 	public void refresh(final ModifierDataManager manager) {
@@ -118,13 +130,55 @@ public final class ModifierDataManager implements ModifierData, AutoSyncedCompon
 		this.data.replace(registryKey, valueIn);
 		this.apply(attributeIn);
 		
-		ExAPI.DATA.sync(this.player);
+		ExAPI.DATA.sync(this.player, (buf, player) -> {
+			NbtCompound tag = new NbtCompound();
+			NbtCompound entry = new NbtCompound();
+			entry.putString("Key", registryKey.toString());
+			entry.putDouble("Value", valueIn);
+			
+			tag.put("Modifier", entry);
+			buf.writeNbt(tag);
+		});
+	}
+	
+	@Override
+	public boolean shouldSyncWith(ServerPlayerEntity player) {
+		return player == this.player;
+	}
+	
+	@Override
+	public void applySyncPacket(PacketByteBuf buf) {
+		NbtCompound tag = buf.readNbt();
+		
+		if(tag == null) return;
+		
+		if(tag.contains("Modifiers")) {
+			NbtList data = tag.getList("Modifiers", NbtType.COMPOUND);
+			
+			for(int i = 0; i < data.size(); i++) {
+				NbtCompound entry = data.getCompound(i);
+				String key = entry.getString("Key");
+				Identifier identifier = new Identifier(key);
+				double value = entry.getDouble("Value");
+				this.data.put(identifier, value);
+			}
+		}
+		
+		if(tag.contains("Modifier")) {
+			NbtCompound entry  = tag.getCompound("Modifier");
+			Identifier key = new Identifier(entry.getString("Key"));
+			double value = entry.getDouble("Value");
+			
+			this.data.replace(key, value);
+		}
+		
+		if(tag.contains("Potential")) {
+			this.hasLevelPotential = tag.getBoolean("Potential");
+		}
 	}
 	
 	@Override
 	public void readFromNbt(NbtCompound tag) {
-		if(!tag.contains("Modifiers")) return;
-		
 		NbtList data = tag.getList("Modifiers", NbtType.COMPOUND);
 		
 		for(int i = 0; i < data.size(); i++) {
@@ -134,6 +188,8 @@ public final class ModifierDataManager implements ModifierData, AutoSyncedCompon
 			double value = entry.getDouble("Value");
 			this.data.put(identifier, value);
 		}
+		
+		this.hasLevelPotential = tag.getBoolean("Potential");
 	}
 	
 	@Override
@@ -150,5 +206,6 @@ public final class ModifierDataManager implements ModifierData, AutoSyncedCompon
 		}
 		
 		tag.put("Modifiers", data);
+		tag.putBoolean("Potential", this.hasLevelPotential);
 	}
 }

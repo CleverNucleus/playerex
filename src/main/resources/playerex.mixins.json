@@ -4,7 +4,8 @@
     "package": "com.github.clevernucleus.playerex.mixin",
     "compatibilityLevel": "JAVA_16",
     "mixins": [
-        
+        "LivingEntityMixin",
+        "PlayerEntityMixin"
     ],
     "client": [
         

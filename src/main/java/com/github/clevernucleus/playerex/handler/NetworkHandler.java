@@ -9,16 +9,20 @@ import net.fabricmc.fabric.api.networking.v1.PacketByteBufs;
 import net.fabricmc.fabric.api.networking.v1.PacketSender;
 import net.fabricmc.fabric.api.networking.v1.ServerLoginNetworking;
 import net.fabricmc.fabric.api.networking.v1.ServerLoginNetworking.LoginSynchronizer;
+import net.fabricmc.fabric.api.networking.v1.ServerPlayNetworking;
 import net.minecraft.nbt.NbtCompound;
 import net.minecraft.nbt.NbtList;
 import net.minecraft.network.PacketByteBuf;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.network.ServerLoginNetworkHandler;
+import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.text.LiteralText;
+import net.minecraft.util.ActionResult;
 import net.minecraft.util.Identifier;
 
 public final class NetworkHandler {
 	public static final Identifier SYNC = new Identifier(ExAPI.MODID, "sync");
+	public static final Identifier LEVEL = new Identifier(ExAPI.MODID, "level");
 	
 	public static void loginQueryStart(ServerLoginNetworkHandler handler, MinecraftServer server, PacketSender sender, ServerLoginNetworking.LoginSynchronizer synchronizer) {
 		PacketByteBuf buf = PacketByteBufs.create();
@@ -54,5 +58,11 @@ public final class NetworkHandler {
 		} else {
 			handler.disconnect(new LiteralText("Disconnected: server requires client to have PlayerEx version " + PlayerEx.VERSION + "."));
 		}
+	}
+	
+	public static ActionResult levelUpEvent(ServerPlayerEntity player) {
+		ServerPlayNetworking.send(player, LEVEL, PacketByteBufs.empty());
+		
+		return ActionResult.PASS;
 	}
 }

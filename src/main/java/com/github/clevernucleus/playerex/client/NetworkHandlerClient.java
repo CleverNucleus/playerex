@@ -5,16 +5,20 @@ import java.util.concurrent.CompletableFuture;
 import java.util.function.Consumer;
 
 import com.github.clevernucleus.playerex.PlayerEx;
+import com.github.clevernucleus.playerex.api.ExAPI;
 
 import io.netty.util.concurrent.Future;
 import io.netty.util.concurrent.GenericFutureListener;
 import net.fabricmc.fabric.api.networking.v1.PacketByteBufs;
+import net.fabricmc.fabric.api.networking.v1.PacketSender;
 import net.fabricmc.fabric.api.util.NbtType;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.network.ClientLoginNetworkHandler;
+import net.minecraft.client.network.ClientPlayNetworkHandler;
 import net.minecraft.nbt.NbtCompound;
 import net.minecraft.nbt.NbtList;
 import net.minecraft.network.PacketByteBuf;
+import net.minecraft.sound.SoundCategory;
 import net.minecraft.util.Identifier;
 
 public final class NetworkHandlerClient {
@@ -47,5 +51,11 @@ public final class NetworkHandlerClient {
 		bufOut.writeString(PlayerEx.VERSION);
 		
 		return CompletableFuture.completedFuture(bufOut);
+	}
+	
+	public static void levelUpEvent(MinecraftClient client, ClientPlayNetworkHandler handler, PacketByteBuf buf, PacketSender responseSender) {
+		client.execute(() -> {
+			client.player.playSound(PlayerEx.LEVEL_UP_SOUND, SoundCategory.NEUTRAL, ExAPI.CONFIG.get().levelUpVolume(), 1.5F);
+		});
 	}
 }
