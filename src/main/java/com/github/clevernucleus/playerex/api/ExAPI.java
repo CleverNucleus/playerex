@@ -34,6 +34,7 @@ public final class ExAPI {
 	public static final Supplier<EntityAttribute> INTELLIGENCE = API.getAttribute(new Identifier(MODID, "intelligence"));
 	public static final Supplier<EntityAttribute> LUCKINESS = API.getAttribute(new Identifier(MODID, "luckiness"));
 	public static final Supplier<EntityAttribute> EVASION = API.getAttribute(new Identifier(MODID, "evasion"));
+	public static final Supplier<EntityAttribute> LIFESTEAL = API.getAttribute(new Identifier(MODID, "lifesteal"));
 	public static final Supplier<EntityAttribute> HEALTH_REGENERATION = API.getAttribute(new Identifier(MODID, "health_regeneration"));
 	public static final Supplier<EntityAttribute> HEAL_AMPLIFICATION = API.getAttribute(new Identifier(MODID, "heal_amplification"));
 	public static final Supplier<EntityAttribute> MAGIC_AMPLIFICATION = API.getAttribute(new Identifier(MODID, "magic_amplification"));

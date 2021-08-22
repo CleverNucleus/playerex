@@ -9,6 +9,7 @@
             "playerex:level": 0.0,
             "playerex:skill_points": 0.0,
             "playerex:evasion": 0.0,
+            "playerex:lifesteal": 0.0,
             "playerex:heal_amplification": 0.0,
             "playerex:health_regeneration": 0.0,
             "playerex:magic_amplification": 0.0,

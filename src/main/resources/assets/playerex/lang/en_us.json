@@ -28,6 +28,7 @@
     "playerex.attribute.name.intelligence": "Intelligence",
     "playerex.attribute.name.luckiness": "Luckiness",
     "playerex.attribute.name.evasion": "Evasion",
+    "playerex.attribute.name.lifesteal": "Lifesteal",
     "playerex.attribute.name.health_regeneration": "Health Regeneration",
     "playerex.attribute.name.heal_amplification": "Heal Amplification",
     "playerex.attribute.name.magic_amplification": "Magic Amplification",
