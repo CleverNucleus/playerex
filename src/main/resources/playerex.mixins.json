@@ -9,7 +9,7 @@
         "ProjectileEntityMixin"
     ],
     "client": [
-        
+        "client.HandledScreenMixin"
     ],
     "injectors": {
         "defaultRequire": 1

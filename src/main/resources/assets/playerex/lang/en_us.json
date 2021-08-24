@@ -1,4 +1,6 @@
 {
+    "gui.playerex.page.attributes.title": "Attributes",
+    "gui.playerex.page.combat.title": "Attributes",
     "text.autoconfig.playerex.title": "PlayerEx Config Options",
     "text.autoconfig.playerex.category.server": "Server Options",
     "text.autoconfig.playerex.category.client": "Client Options",
