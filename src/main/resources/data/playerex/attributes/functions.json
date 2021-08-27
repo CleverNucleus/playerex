@@ -1,8 +1,8 @@
 {
     "values": {
-        "playerex:skill_points": [
+        "playerex:level": [
             {
-                "attribute": "playerex:level",
+                "attribute": "playerex:skill_points",
                 "behaviour": "FLAT",
                 "multiplier": 1.0
             }
@@ -24,7 +24,7 @@
                 "multiplier": 0.01
             },
             {
-                "attribute": "playerex:cold_resistance",
+                "attribute": "playerex:freeze_resistance",
                 "behaviour": "DIMINISHING",
                 "multiplier": 0.01
             }

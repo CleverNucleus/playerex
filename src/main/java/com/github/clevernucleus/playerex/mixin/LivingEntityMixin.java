@@ -27,7 +27,7 @@ abstract class LivingEntityMixin {
 	
 	static {
 		RESISTANCES.add(new StoredResistance("fire", ExAPI.FIRE_RESISTANCE, s -> s.isFire()));
-		RESISTANCES.add(new StoredResistance("cold", ExAPI.COLD_RESISTANCE, s -> s.equals(DamageSource.FREEZE)));
+		RESISTANCES.add(new StoredResistance("cold", ExAPI.FREEZE_RESISTANCE, s -> s.equals(DamageSource.FREEZE)));
 		RESISTANCES.add(new StoredResistance("drowning", ExAPI.DROWNING_RESISTANCE, s -> s.equals(DamageSource.DROWN)));
 		RESISTANCES.add(new StoredResistance("falling", ExAPI.FALLING_RESISTANCE, s -> s.isFromFalling()));
 		RESISTANCES.add(new StoredResistance("wither", ExAPI.WITHER_RESISTANCE, s -> s.equals(DamageSource.WITHER)));

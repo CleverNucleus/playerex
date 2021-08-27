@@ -21,6 +21,10 @@ public final class ExAPI {
 	
 	/** The PlayerEx mod Id */
 	public static final String MODID = "playerex";
+	/** Display formatting property attached to some attributes. */
+	public static final String PERCENTAGE_PROPERTY = "percent";
+	/** Display formatting property attached to some attributes. */
+	public static final String MULTIPLIER_PROPERTY = "multiplier";
 	/** The Cardinal Components Key for PlayerEx modifier data. */
 	public static final ComponentKey<ModifierData> DATA = ComponentRegistry.getOrCreate(new Identifier(MODID, "data"), ModifierData.class);
 	/** The config supplier object. */
@@ -40,7 +44,7 @@ public final class ExAPI {
 	public static final Supplier<EntityAttribute> MAGIC_AMPLIFICATION = API.getAttribute(new Identifier(MODID, "magic_amplification"));
 	public static final Supplier<EntityAttribute> MAGIC_RESISTANCE = API.getAttribute(new Identifier(MODID, "magic_resistance"));
 	public static final Supplier<EntityAttribute> FIRE_RESISTANCE = API.getAttribute(new Identifier(MODID, "fire_resistance"));
-	public static final Supplier<EntityAttribute> COLD_RESISTANCE = API.getAttribute(new Identifier(MODID, "cold_resistance"));
+	public static final Supplier<EntityAttribute> FREEZE_RESISTANCE = API.getAttribute(new Identifier(MODID, "freeze_resistance"));
 	public static final Supplier<EntityAttribute> DROWNING_RESISTANCE = API.getAttribute(new Identifier(MODID, "drowning_resistance"));
 	public static final Supplier<EntityAttribute> FALLING_RESISTANCE = API.getAttribute(new Identifier(MODID, "falling_resistance"));
 	public static final Supplier<EntityAttribute> WITHER_RESISTANCE = API.getAttribute(new Identifier(MODID, "wither_resistance"));
