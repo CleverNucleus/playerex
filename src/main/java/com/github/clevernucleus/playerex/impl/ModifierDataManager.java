@@ -1,14 +1,17 @@
 package com.github.clevernucleus.playerex.impl;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.UUID;
+import java.util.function.Supplier;
 
 import org.jetbrains.annotations.Nullable;
 
 import com.github.clevernucleus.playerex.PlayerEx;
 import com.github.clevernucleus.playerex.api.ExAPI;
 import com.github.clevernucleus.playerex.api.ModifierData;
+import com.google.common.collect.Lists;
 
 import dev.onyxstudios.cca.api.v3.component.sync.AutoSyncedComponent;
 import net.fabricmc.fabric.api.util.NbtType;
@@ -21,12 +24,14 @@ import net.minecraft.nbt.NbtList;
 import net.minecraft.network.PacketByteBuf;
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.util.Identifier;
+import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.registry.Registry;
 
 public final class ModifierDataManager implements ModifierData, AutoSyncedComponent {
 	private final PlayerEntity player;
 	private final Map<Identifier, Double> data;
 	private boolean hasLevelPotential;
+	private int refundPoints;
 	
 	public ModifierDataManager(PlayerEntity player) {
 		this.player = player;
@@ -113,6 +118,44 @@ public final class ModifierDataManager implements ModifierData, AutoSyncedCompon
 	}
 	
 	@Override
+	public int refundPoints() {
+		return this.refundPoints;
+	}
+	
+	@Override
+	public int addRefundPoints(final int pointsIn) {
+		List<Supplier<EntityAttribute>> primaries = Lists.newArrayList(
+			ExAPI.CONSTITUTION,
+			ExAPI.STRENGTH,
+			ExAPI.DEXTERITY,
+			ExAPI.INTELLIGENCE,
+			ExAPI.LUCKINESS
+		);
+		
+		final int previousRefunds = this.refundPoints;
+		double maxRefundPoints = 0.0D;
+		
+		for(Supplier<EntityAttribute> supplier : primaries) {
+			EntityAttribute attribute = supplier.get();
+			
+			if(attribute == null) continue;
+			
+			maxRefundPoints += this.get(attribute);
+		}
+		
+		double refund = MathHelper.clamp((double)(this.refundPoints + pointsIn), 0.0D, maxRefundPoints);
+		this.refundPoints = (int)Math.round(refund);
+		
+		ExAPI.DATA.sync(this.player, (buf, player) -> {
+			NbtCompound tag = new NbtCompound();
+			tag.putInt("RefundPoints", this.refundPoints);
+			buf.writeNbt(tag);
+		});
+		
+		return this.refundPoints - previousRefunds;
+	}
+	
+	@Override
 	public double get(final EntityAttribute attributeIn) {
 		if(!this.isPresent(attributeIn)) return 0.0D;
 		
@@ -139,6 +182,13 @@ public final class ModifierDataManager implements ModifierData, AutoSyncedCompon
 			tag.put("Modifier", entry);
 			buf.writeNbt(tag);
 		});
+	}
+	
+	@Override
+	public void add(final EntityAttribute attributeIn, final double valueIn) {
+		final double value = this.get(attributeIn);
+		
+		this.set(attributeIn, value + valueIn);
 	}
 	
 	@Override
@@ -175,6 +225,10 @@ public final class ModifierDataManager implements ModifierData, AutoSyncedCompon
 		if(tag.contains("Potential")) {
 			this.hasLevelPotential = tag.getBoolean("Potential");
 		}
+		
+		if(tag.contains("RefundPoints")) {
+			this.refundPoints = tag.getInt("RefundPoints");
+		}
 	}
 	
 	@Override
@@ -190,6 +244,7 @@ public final class ModifierDataManager implements ModifierData, AutoSyncedCompon
 		}
 		
 		this.hasLevelPotential = tag.getBoolean("Potential");
+		this.refundPoints = tag.getInt("RefundPoints");
 	}
 	
 	@Override
@@ -207,5 +262,6 @@ public final class ModifierDataManager implements ModifierData, AutoSyncedCompon
 		
 		tag.put("Modifiers", data);
 		tag.putBoolean("Potential", this.hasLevelPotential);
+		tag.putInt("RefundPoints", this.refundPoints);
 	}
 }

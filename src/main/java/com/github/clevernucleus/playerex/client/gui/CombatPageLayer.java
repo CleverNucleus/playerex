@@ -2,14 +2,15 @@ package com.github.clevernucleus.playerex.client.gui;
 
 import com.github.clevernucleus.playerex.api.client.PageLayer;
 
+import net.minecraft.client.gui.screen.ingame.HandledScreen;
 import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.screen.ScreenHandler;
 import net.minecraft.text.Text;
 
 public class CombatPageLayer extends PageLayer {
-	public CombatPageLayer(ScreenHandler handler, PlayerInventory inventory, Text title) {
-		super(handler, inventory, title);
+	public CombatPageLayer(HandledScreen<?> parent, ScreenHandler handler, PlayerInventory inventory, Text title) {
+		super(parent, handler, inventory, title);
 	}
 	
 	@Override

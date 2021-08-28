@@ -19,11 +19,14 @@ import net.minecraft.client.gui.screen.ingame.InventoryScreen;
 import net.minecraft.client.gui.widget.ButtonWidget;
 import net.minecraft.client.network.ClientLoginNetworkHandler;
 import net.minecraft.client.network.ClientPlayNetworkHandler;
+import net.minecraft.entity.attribute.EntityAttribute;
 import net.minecraft.nbt.NbtCompound;
 import net.minecraft.nbt.NbtList;
 import net.minecraft.network.PacketByteBuf;
 import net.minecraft.sound.SoundCategory;
 import net.minecraft.util.Identifier;
+import net.minecraft.util.Pair;
+import net.minecraft.util.registry.Registry;
 
 public final class NetworkHandlerClient {
 	public static CompletableFuture<PacketByteBuf> loginQueryReceived(MinecraftClient client, ClientLoginNetworkHandler handler, PacketByteBuf buf, Consumer<GenericFutureListener<? extends Future<? super Void>>> listenerAdder) {
@@ -77,5 +80,34 @@ public final class NetworkHandlerClient {
 		ClientPlayNetworking.send(NetworkHandler.SCREEN, buf);
 		MinecraftClient client = MinecraftClient.getInstance();
 		client.setScreen(new InventoryScreen(client.player));
+	}
+	
+	@SafeVarargs
+	public static void modifyAttributes(NetworkHandler.PacketType type, Pair<EntityAttribute, Double> ... attributes) {
+		if(attributes == null) return;
+		
+		PacketByteBuf buf = PacketByteBufs.create();
+		NbtCompound tag = new NbtCompound();
+		NbtList list = new NbtList();
+		
+		for(Pair<EntityAttribute, Double> pair : attributes) {
+			NbtCompound data = new NbtCompound();
+			EntityAttribute attribute = pair.getLeft();
+			
+			if(attribute == null) continue;
+			
+			Identifier key = Registry.ATTRIBUTE.getId(attribute);
+			double value = pair.getRight();
+			
+			data.putString("Key", key.toString());
+			data.putDouble("Value", value);
+			list.add(data);
+		}
+		
+		tag.put("Data", list);
+		tag.putByte("Type", type.id());
+		buf.writeNbt(tag);
+		
+		ClientPlayNetworking.send(NetworkHandler.MODIFY, buf);
 	}
 }

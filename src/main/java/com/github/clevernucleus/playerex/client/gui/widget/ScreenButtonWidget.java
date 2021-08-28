@@ -10,17 +10,21 @@ import net.minecraft.client.gui.screen.ingame.HandledScreen;
 import net.minecraft.client.gui.widget.ButtonWidget;
 import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.text.LiteralText;
+import net.minecraft.util.Identifier;
 
 @Environment(EnvType.CLIENT)
 public class ScreenButtonWidget extends ButtonWidget {
+	public static final Identifier EMPTY_KEY = new Identifier("playerex:empty");
 	private HandledScreen<?> parent;
+	private final Identifier key;
 	private int u, v, dx, dy;
-	private boolean alt;
+	public boolean alt;
 	
-	public ScreenButtonWidget(HandledScreen<?> parent, int x, int y, int u, int v, int width, int height, PressAction pressAction, TooltipSupplier tooltipSupplier) {
+	public ScreenButtonWidget(HandledScreen<?> parent, int x, int y, int u, int v, int width, int height, Identifier key, PressAction pressAction, TooltipSupplier tooltipSupplier) {
 		super(x, y, width, height, LiteralText.EMPTY, pressAction, tooltipSupplier);
 		
 		this.parent = parent;
+		this.key = key;
 		this.u = u;
 		this.v = v;
 		this.dx = x;
@@ -28,8 +32,16 @@ public class ScreenButtonWidget extends ButtonWidget {
 		this.alt = false;
 	}
 	
+	public ScreenButtonWidget(HandledScreen<?> parent, int x, int y, int u, int v, int width, int height, PressAction pressAction, TooltipSupplier tooltipSupplier) {
+		this(parent, x, y, u, v, width, height, EMPTY_KEY, pressAction, tooltipSupplier);
+	}
+	
 	public ScreenButtonWidget(HandledScreen<?> parent, int x, int y, int u, int v, int width, int height, PressAction pressAction) {
-		this(parent, x, y, u, v, width, height, pressAction, EMPTY);
+		this(parent, x, y, u, v, width, height, EMPTY_KEY, pressAction, EMPTY);
+	}
+	
+	public Identifier key() {
+		return this.key;
 	}
 	
 	@Override

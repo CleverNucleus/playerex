@@ -11,8 +11,12 @@ import net.minecraft.text.Text;
 
 @Environment(EnvType.CLIENT)
 public abstract class PageLayer extends HandledScreen<ScreenHandler> {
-	public PageLayer(ScreenHandler handler, PlayerInventory inventory, Text title) {
+	protected final HandledScreen<?> parent;
+	
+	public PageLayer(HandledScreen<?> parent, ScreenHandler handler, PlayerInventory inventory, Text title) {
 		super(handler, inventory, title);
+		
+		this.parent = parent;
 	}
 	
 	@Override
@@ -26,6 +30,6 @@ public abstract class PageLayer extends HandledScreen<ScreenHandler> {
 	public interface Builder {
 		
 		
-		PageLayer build(ScreenHandler handler, PlayerInventory inv, Text text);
+		PageLayer build(HandledScreen<?> parent, ScreenHandler handler, PlayerInventory inv, Text text);
 	}
 }

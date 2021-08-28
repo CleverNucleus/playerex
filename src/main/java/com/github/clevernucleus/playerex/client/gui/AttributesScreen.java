@@ -37,7 +37,7 @@ public class AttributesScreen extends AbstractInventoryScreen<AttributesScreenHa
 		
 		PageRegistry.pages().entrySet().stream().filter(this::filter).forEach(entry -> this.pages.add(entry.getValue()));
 		
-		this.pages.forEach(page -> page.buildLayers(screenHandler, playerInventory));
+		this.pages.forEach(page -> page.buildLayers(this, screenHandler, playerInventory));
 	}
 	
 	private boolean filter(Map.Entry<Identifier, Page> entry) {

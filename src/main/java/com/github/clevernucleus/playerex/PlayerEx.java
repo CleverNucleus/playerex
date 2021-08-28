@@ -49,6 +49,7 @@ public final class PlayerEx implements ModInitializer {
 		ServerPlayerEvents.COPY_FROM.register(EventHandler::respawn);
 		ServerLoginNetworking.registerGlobalReceiver(NetworkHandler.SYNC, NetworkHandler::loginQueryResponse);
 		ServerPlayNetworking.registerGlobalReceiver(NetworkHandler.SCREEN, NetworkHandler::switchScreen);
+		ServerPlayNetworking.registerGlobalReceiver(NetworkHandler.MODIFY, NetworkHandler::modifyAttributes);
 		
 		Registry.register(Registry.SOUND_EVENT, LEVEL_UP_SOUND.getId(), LEVEL_UP_SOUND);
 		Registry.register(Registry.SOUND_EVENT, SP_SPEND_SOUND.getId(), SP_SPEND_SOUND);

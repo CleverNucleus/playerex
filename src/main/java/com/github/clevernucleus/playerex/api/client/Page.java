@@ -5,6 +5,7 @@ import java.util.Collection;
 
 import com.google.common.collect.ImmutableList;
 
+import net.minecraft.client.gui.screen.ingame.HandledScreen;
 import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.screen.ScreenHandler;
@@ -36,7 +37,7 @@ public final class Page {
 		return ImmutableList.copyOf(this.layers);
 	}
 	
-	public void buildLayers(ScreenHandler handler, PlayerInventory inv) {
-		PageRegistry.findPageLayers(this.identifier).stream().map(builder -> builder.build(handler, inv, this.title)).forEach(this.layers::add);
+	public void buildLayers(HandledScreen<?> parent, ScreenHandler handler, PlayerInventory inv) {
+		PageRegistry.findPageLayers(this.identifier).stream().map(builder -> builder.build(parent, handler, inv, this.title)).forEach(this.layers::add);
 	}
 }
