@@ -21,7 +21,10 @@ import net.minecraft.util.Identifier;
 public final class ClientUtil {
 	
 	
-	public static final DecimalFormat FORMATTING = new DecimalFormat("###.###");
+	public static final DecimalFormat FORMATTING_2 = new DecimalFormat("###.##");
+	
+	
+	public static final DecimalFormat FORMATTING_3 = new DecimalFormat("###.###");
 	
 	
 	public static double displayValue(final IAttribute attributeIn, double valueIn) {
@@ -32,7 +35,7 @@ public final class ClientUtil {
 	
 	
 	public static String formatValue(final IAttribute attributeIn, double valueIn) {
-		String value = FORMATTING.format(valueIn);
+		String value = FORMATTING_3.format(valueIn);
 		
 		if(valueIn > 0) {
 			value = "+" + value;

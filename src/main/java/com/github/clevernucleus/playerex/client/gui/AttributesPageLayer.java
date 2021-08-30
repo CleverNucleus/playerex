@@ -191,37 +191,22 @@ public class AttributesPageLayer extends PageLayer {
 			AttributeContainer container = instance.client.player.getAttributes();
 			double value = container.getValue(attribute);
 			
-			return text.append(": " + ClientUtil.FORMATTING.format(value));
+			return text.append(": " + ClientUtil.FORMATTING_3.format(value));
 		}, () -> {
 			List<Text> tooltip = new ArrayList<Text>();
 			EntityAttribute attribute = EntityAttributes.GENERIC_MOVEMENT_SPEED;
 			AttributeContainer container = instance.client.player.getAttributes();
-			String value = ClientUtil.FORMATTING.format(20.0D * container.getValue(attribute));
+			String value = ClientUtil.FORMATTING_3.format(20.0D * container.getValue(attribute));
 			
 			tooltip.add((new TranslatableText("gui.playerex.page.attributes.tooltip.speed", value)).formatted(Formatting.GRAY));
 			
 			return tooltip;
 		}, 21, 125, SCALE);
-		register(() -> ExAPI.MAGIC_AMPLIFICATION.get() != null, () -> {
-			EntityAttribute attribute = ExAPI.MAGIC_AMPLIFICATION.get();
-			MutableText text = new TranslatableText("gui.playerex.page.attributes.text.magic_amplification");
-			AttributeContainer container = instance.client.player.getAttributes();
-			double value = container.hasAttribute(attribute) ? container.getValue(attribute) : 0.0D;
-			double displayValue = ClientUtil.displayValue((IAttribute)attribute, value);
-			
-			return text.append(": " + ClientUtil.FORMATTING.format(displayValue) + "%");
-		}, () -> {
-			List<Text> tooltip = new ArrayList<Text>();
-			tooltip.add((new TranslatableText("gui.playerex.page.attributes.tooltip.magic_amplification[0]")).formatted(Formatting.GRAY));
-			tooltip.add((new TranslatableText("gui.playerex.page.attributes.tooltip.magic_amplification[1]")).formatted(Formatting.GRAY));
-			
-			return tooltip;
-		}, 21, 136, SCALE);
 		register(() -> true, () -> {
 			float current = instance.client.player.getHealth();
 			float maximum = instance.client.player.getMaxHealth();
-			String currentVal = ClientUtil.FORMATTING.format(current);
-			String maximumVal = ClientUtil.FORMATTING.format(maximum);
+			String currentVal = ClientUtil.FORMATTING_2.format(current);
+			String maximumVal = ClientUtil.FORMATTING_2.format(maximum);
 			MutableText text = new TranslatableText("gui.playerex.page.attributes.text.health", currentVal, maximumVal);
 			
 			return text;
@@ -230,7 +215,7 @@ public class AttributesPageLayer extends PageLayer {
 			tooltip.add((new TranslatableText("gui.playerex.page.attributes.tooltip.health")).formatted(Formatting.GRAY));
 			
 			return tooltip;
-		}, 96, 37, SCALE);
+		}, 93, 37, SCALE);
 		register(() -> ExAPI.HEALTH_REGENERATION.get() != null, () -> {
 			EntityAttribute attribute = ExAPI.HEALTH_REGENERATION.get();
 			MutableText text = new TranslatableText("gui.playerex.page.attributes.text.health_regeneration");
@@ -238,14 +223,14 @@ public class AttributesPageLayer extends PageLayer {
 			double value = container.hasAttribute(attribute) ? container.getValue(attribute) : 0.0D;
 			double displayValue = ClientUtil.displayValue((IAttribute)attribute, value);
 			
-			return text.append(": " + ClientUtil.FORMATTING.format(displayValue));
+			return text.append(": " + ClientUtil.FORMATTING_2.format(displayValue));
 		}, () -> {
 			List<Text> tooltip = new ArrayList<Text>();
 			tooltip.add((new TranslatableText("gui.playerex.page.attributes.tooltip.health_regeneration[0]")).formatted(Formatting.GRAY));
 			tooltip.add((new TranslatableText("gui.playerex.page.attributes.tooltip.health_regeneration[1]")).formatted(Formatting.GRAY));
 			
 			return tooltip;
-		}, 96, 48, SCALE);
+		}, 93, 48, SCALE);
 		register(() -> ExAPI.HEAL_AMPLIFICATION.get() != null, () -> {
 			EntityAttribute attribute = ExAPI.HEAL_AMPLIFICATION.get();
 			MutableText text = new TranslatableText("gui.playerex.page.attributes.text.heal_amplification");
@@ -253,14 +238,14 @@ public class AttributesPageLayer extends PageLayer {
 			double value = container.hasAttribute(attribute) ? container.getValue(attribute) : 0.0D;
 			double displayValue = ClientUtil.displayValue((IAttribute)attribute, value);
 			
-			return text.append(": " + ClientUtil.FORMATTING.format(displayValue) + "%");
+			return text.append(": " + ClientUtil.FORMATTING_2.format(displayValue) + "%");
 		}, () -> {
 			List<Text> tooltip = new ArrayList<Text>();
 			tooltip.add((new TranslatableText("gui.playerex.page.attributes.tooltip.heal_amplification[0]")).formatted(Formatting.GRAY));
 			tooltip.add((new TranslatableText("gui.playerex.page.attributes.tooltip.heal_amplification[1]")).formatted(Formatting.GRAY));
 			
 			return tooltip;
-		}, 96, 59, SCALE);
+		}, 93, 59, SCALE);
 		register(() -> ExAPI.FIRE_RESISTANCE.get() != null, () -> {
 			EntityAttribute attribute = ExAPI.FIRE_RESISTANCE.get();
 			MutableText text = new TranslatableText("gui.playerex.page.attributes.text.fire_resistance");
@@ -268,18 +253,18 @@ public class AttributesPageLayer extends PageLayer {
 			double value = container.hasAttribute(attribute) ? container.getValue(attribute) : 0.0D;
 			double displayValue = ClientUtil.displayValue((IAttribute)attribute, value);
 			
-			return text.append(": " + ClientUtil.FORMATTING.format(displayValue));
+			return text.append(": " + ClientUtil.FORMATTING_2.format(displayValue));
 		}, () -> {
 			List<Text> tooltip = new ArrayList<Text>();
 			EntityAttribute attribute = ExAPI.FIRE_RESISTANCE.get();
 			AttributeContainer container = instance.client.player.getAttributes();
 			double value = container.hasAttribute(attribute) ? container.getValue(attribute) : 0.0D;
-			String formattedValue = ClientUtil.FORMATTING.format(100.0D * value);
+			String formattedValue = ClientUtil.FORMATTING_2.format(100.0D * value);
 			
 			tooltip.add((new TranslatableText("gui.playerex.page.attributes.tooltip.fire_resistance", formattedValue)).formatted(Formatting.GRAY));
 			
 			return tooltip;
-		}, 96, 92, SCALE);
+		}, 93, 92, SCALE);
 		register(() -> ExAPI.FREEZE_RESISTANCE.get() != null, () -> {
 			EntityAttribute attribute = ExAPI.FREEZE_RESISTANCE.get();
 			MutableText text = new TranslatableText("gui.playerex.page.attributes.text.freeze_resistance");
@@ -287,18 +272,18 @@ public class AttributesPageLayer extends PageLayer {
 			double value = container.hasAttribute(attribute) ? container.getValue(attribute) : 0.0D;
 			double displayValue = ClientUtil.displayValue((IAttribute)attribute, value);
 			
-			return text.append(": " + ClientUtil.FORMATTING.format(displayValue));
+			return text.append(": " + ClientUtil.FORMATTING_2.format(displayValue));
 		}, () -> {
 			List<Text> tooltip = new ArrayList<Text>();
 			EntityAttribute attribute = ExAPI.FREEZE_RESISTANCE.get();
 			AttributeContainer container = instance.client.player.getAttributes();
 			double value = container.hasAttribute(attribute) ? container.getValue(attribute) : 0.0D;
-			String formattedValue = ClientUtil.FORMATTING.format(100.0D * value);
+			String formattedValue = ClientUtil.FORMATTING_2.format(100.0D * value);
 			
 			tooltip.add((new TranslatableText("gui.playerex.page.attributes.tooltip.freeze_resistance", formattedValue)).formatted(Formatting.GRAY));
 			
 			return tooltip;
-		}, 96, 103, SCALE);
+		}, 93, 103, SCALE);
 		register(() -> ExAPI.FALLING_RESISTANCE.get() != null, () -> {
 			EntityAttribute attribute = ExAPI.FALLING_RESISTANCE.get();
 			MutableText text = new TranslatableText("gui.playerex.page.attributes.text.falling_resistance");
@@ -306,18 +291,18 @@ public class AttributesPageLayer extends PageLayer {
 			double value = container.hasAttribute(attribute) ? container.getValue(attribute) : 0.0D;
 			double displayValue = ClientUtil.displayValue((IAttribute)attribute, value);
 			
-			return text.append(": " + ClientUtil.FORMATTING.format(displayValue));
+			return text.append(": " + ClientUtil.FORMATTING_2.format(displayValue));
 		}, () -> {
 			List<Text> tooltip = new ArrayList<Text>();
 			EntityAttribute attribute = ExAPI.FALLING_RESISTANCE.get();
 			AttributeContainer container = instance.client.player.getAttributes();
 			double value = container.hasAttribute(attribute) ? container.getValue(attribute) : 0.0D;
-			String formattedValue = ClientUtil.FORMATTING.format(100.0D * value);
+			String formattedValue = ClientUtil.FORMATTING_2.format(100.0D * value);
 			
 			tooltip.add((new TranslatableText("gui.playerex.page.attributes.tooltip.falling_resistance", formattedValue)).formatted(Formatting.GRAY));
 			
 			return tooltip;
-		}, 96, 114, SCALE);
+		}, 93, 114, SCALE);
 		register(() -> ExAPI.DROWNING_RESISTANCE.get() != null, () -> {
 			EntityAttribute attribute = ExAPI.DROWNING_RESISTANCE.get();
 			MutableText text = new TranslatableText("gui.playerex.page.attributes.text.drowning_resistance");
@@ -325,18 +310,18 @@ public class AttributesPageLayer extends PageLayer {
 			double value = container.hasAttribute(attribute) ? container.getValue(attribute) : 0.0D;
 			double displayValue = ClientUtil.displayValue((IAttribute)attribute, value);
 			
-			return text.append(": " + ClientUtil.FORMATTING.format(displayValue));
+			return text.append(": " + ClientUtil.FORMATTING_2.format(displayValue));
 		}, () -> {
 			List<Text> tooltip = new ArrayList<Text>();
 			EntityAttribute attribute = ExAPI.DROWNING_RESISTANCE.get();
 			AttributeContainer container = instance.client.player.getAttributes();
 			double value = container.hasAttribute(attribute) ? container.getValue(attribute) : 0.0D;
-			String formattedValue = ClientUtil.FORMATTING.format(100.0D * value);
+			String formattedValue = ClientUtil.FORMATTING_2.format(100.0D * value);
 			
 			tooltip.add((new TranslatableText("gui.playerex.page.attributes.tooltip.drowning_resistance", formattedValue)).formatted(Formatting.GRAY));
 			
 			return tooltip;
-		}, 96, 125, SCALE);
+		}, 93, 125, SCALE);
 		register(() -> ExAPI.WITHER_RESISTANCE.get() != null, () -> {
 			EntityAttribute attribute = ExAPI.WITHER_RESISTANCE.get();
 			MutableText text = new TranslatableText("gui.playerex.page.attributes.text.wither_resistance");
@@ -344,18 +329,18 @@ public class AttributesPageLayer extends PageLayer {
 			double value = container.hasAttribute(attribute) ? container.getValue(attribute) : 0.0D;
 			double displayValue = ClientUtil.displayValue((IAttribute)attribute, value);
 			
-			return text.append(": " + ClientUtil.FORMATTING.format(displayValue));
+			return text.append(": " + ClientUtil.FORMATTING_2.format(displayValue));
 		}, () -> {
 			List<Text> tooltip = new ArrayList<Text>();
 			EntityAttribute attribute = ExAPI.WITHER_RESISTANCE.get();
 			AttributeContainer container = instance.client.player.getAttributes();
 			double value = container.hasAttribute(attribute) ? container.getValue(attribute) : 0.0D;
-			String formattedValue = ClientUtil.FORMATTING.format(100.0D * value);
+			String formattedValue = ClientUtil.FORMATTING_2.format(100.0D * value);
 			
 			tooltip.add((new TranslatableText("gui.playerex.page.attributes.tooltip.wither_resistance", formattedValue)).formatted(Formatting.GRAY));
 			
 			return tooltip;
-		}, 96, 136, SCALE);
+		}, 93, 136, SCALE);
 		register(() -> ExAPI.MAGIC_RESISTANCE.get() != null, () -> {
 			EntityAttribute attribute = ExAPI.MAGIC_RESISTANCE.get();
 			MutableText text = new TranslatableText("gui.playerex.page.attributes.text.magic_resistance");
@@ -363,18 +348,18 @@ public class AttributesPageLayer extends PageLayer {
 			double value = container.hasAttribute(attribute) ? container.getValue(attribute) : 0.0D;
 			double displayValue = ClientUtil.displayValue((IAttribute)attribute, value);
 			
-			return text.append(": " + ClientUtil.FORMATTING.format(displayValue));
+			return text.append(": " + ClientUtil.FORMATTING_2.format(displayValue));
 		}, () -> {
 			List<Text> tooltip = new ArrayList<Text>();
 			EntityAttribute attribute = ExAPI.MAGIC_RESISTANCE.get();
 			AttributeContainer container = instance.client.player.getAttributes();
 			double value = container.hasAttribute(attribute) ? container.getValue(attribute) : 0.0D;
-			String formattedValue = ClientUtil.FORMATTING.format(100.0D * value);
+			String formattedValue = ClientUtil.FORMATTING_2.format(100.0D * value);
 			
 			tooltip.add((new TranslatableText("gui.playerex.page.attributes.tooltip.magic_resistance", formattedValue)).formatted(Formatting.GRAY));
 			
 			return tooltip;
-		}, 96, 147, SCALE);
+		}, 93, 147, SCALE);
 	}
 	
 	public AttributesPageLayer(HandledScreen<?> parent, ScreenHandler handler, PlayerInventory inventory, Text title) {
@@ -458,8 +443,9 @@ public class AttributesPageLayer extends PageLayer {
 		matrices.scale(SCALE, SCALE, SCALE);
 		
 		RENDER_COMPONENTS.forEach(c -> c.renderText(matrices, this.textRenderer, this.x, this.y));
-		this.textRenderer.draw(matrices, (new TranslatableText("gui.playerex.page.attributes.text.vitality")), (this.x + 108) / SCALE, (this.y + 26) / SCALE, 4210752);
-		this.textRenderer.draw(matrices, (new TranslatableText("gui.playerex.page.attributes.text.resistances")), (this.x + 108) / SCALE, (this.y + 81) / SCALE, 4210752);
+		
+		this.textRenderer.draw(matrices, (new TranslatableText("gui.playerex.page.attributes.text.vitality")), (this.x + 105) / SCALE, (this.y + 26) / SCALE, 4210752);
+		this.textRenderer.draw(matrices, (new TranslatableText("gui.playerex.page.attributes.text.resistances")), (this.x + 105) / SCALE, (this.y + 81) / SCALE, 4210752);
 		
 		matrices.pop();
 		
@@ -472,9 +458,8 @@ public class AttributesPageLayer extends PageLayer {
 		
 		this.drawTexture(matrices, this.x + 9, this.y + 35, 226, 0, 9, 9);
 		this.drawTexture(matrices, this.x + 9, this.y + 123, 235, 0, 9, 9);
-		this.drawTexture(matrices, this.x + 9, this.y + 134, 235, 27, 9, 9);
-		this.drawTexture(matrices, this.x + 96, this.y + 24, 226, 9, 9, 9);
-		this.drawTexture(matrices, this.x + 96, this.y + 79, 235, 9, 9, 9);
+		this.drawTexture(matrices, this.x + 93, this.y + 24, 226, 9, 9, 9);
+		this.drawTexture(matrices, this.x + 93, this.y + 79, 235, 9, 9, 9);
 		
 		this.forEachScreenButton(button -> {
 			Identifier key = button.key();

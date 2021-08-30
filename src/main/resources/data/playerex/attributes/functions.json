@@ -58,7 +58,7 @@
                 "multiplier": 0.25
             },
             {
-                "attribute": "playerex:attack_speed",
+                "attribute": "minecraft:generic.attack_speed",
                 "behaviour": "DIMINISHING",
                 "multiplier": 0.1
             },
