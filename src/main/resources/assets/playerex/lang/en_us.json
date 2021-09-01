@@ -20,6 +20,7 @@
     "text.autoconfig.playerex.option.inventoryButtonPosX.@Tooltip": "The x-position of the inventory button.",
     "text.autoconfig.playerex.option.inventoryButtonPosY": "Button Y Position",
     "text.autoconfig.playerex.option.inventoryButtonPosY.@Tooltip": "The y-position of the inventory button.",
+    "text.playerex.nameplate.level": "lvl %s",
     "command.playerex.reset": "Reset attributes to default values for player %s",
     "command.playerex.refund": "Refunded %s skill points for player %s",
     "command.playerex.refund_alt": "Refunded 1 skill point for player %s",

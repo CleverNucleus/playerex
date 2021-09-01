@@ -9,7 +9,8 @@
         "ProjectileEntityMixin"
     ],
     "client": [
-        "client.HandledScreenMixin"
+        "client.HandledScreenMixin",
+        "client.PlayerEntityRendererMixin"
     ],
     "injectors": {
         "defaultRequire": 1

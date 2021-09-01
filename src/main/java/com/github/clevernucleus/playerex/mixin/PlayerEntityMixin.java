@@ -39,7 +39,7 @@ abstract class PlayerEntityMixin {
 		
 		if(!hasLevelPotential && currentXp >= requiredXp) {
 			if(player instanceof ServerPlayerEntity) {
-				ActionResult result = PlayerLevelUpEvent.LEVEL_UP.invoker().onLevelUp((ServerPlayerEntity)player);
+				ActionResult result = PlayerLevelUpEvent.EVENT.invoker().onLevelUp((ServerPlayerEntity)player);
 				
 				if(result != ActionResult.PASS) {
 					return;

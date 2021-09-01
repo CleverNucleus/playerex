@@ -7,8 +7,8 @@ import java.util.function.Supplier;
 import com.github.clevernucleus.dataattributes.api.attribute.IAttribute;
 import com.github.clevernucleus.playerex.api.ExAPI;
 import com.github.clevernucleus.playerex.api.client.ClientUtil;
-import com.github.clevernucleus.playerex.api.client.PageLayer;
 import com.github.clevernucleus.playerex.api.client.RenderComponent;
+import com.github.clevernucleus.playerex.api.client.page.PageLayer;
 
 import net.minecraft.client.gui.screen.ingame.HandledScreen;
 import net.minecraft.client.util.math.MatrixStack;

@@ -1,4 +1,4 @@
-package com.github.clevernucleus.playerex.api.client;
+package com.github.clevernucleus.playerex.api.client.page;
 
 import java.util.Collection;
 import java.util.HashMap;

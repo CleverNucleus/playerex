@@ -9,7 +9,7 @@ import net.minecraft.util.ActionResult;
 public final class PlayerLevelUpEvent {
 	
 	
-	public static final Event<PlayerLevelUpEvent.LevelUp> LEVEL_UP = EventFactory.createArrayBacked(PlayerLevelUpEvent.LevelUp.class, listeners -> player -> {
+	public static final Event<PlayerLevelUpEvent.LevelUp> EVENT = EventFactory.createArrayBacked(PlayerLevelUpEvent.LevelUp.class, listeners -> player -> {
 		for(LevelUp listener : listeners) {
 			ActionResult result = listener.onLevelUp(player);
 			

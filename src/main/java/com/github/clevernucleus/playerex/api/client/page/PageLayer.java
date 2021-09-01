@@ -1,4 +1,4 @@
-package com.github.clevernucleus.playerex.api.client;
+package com.github.clevernucleus.playerex.api.client.page;
 
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;

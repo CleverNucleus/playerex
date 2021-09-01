@@ -45,7 +45,7 @@ public final class PlayerEx implements ModInitializer {
 		
 		ResourceManagerHelper.get(ResourceType.SERVER_DATA).registerReloadListener(MANAGER);
 		
-		PlayerLevelUpEvent.LEVEL_UP.register(NetworkHandler::levelUpEvent);
+		PlayerLevelUpEvent.EVENT.register(NetworkHandler::levelUpEvent);
 		EntityAttributeEvents.MODIFIER_ADDED_PRE.register(EventHandler::healthModified);
 		ServerLoginConnectionEvents.QUERY_START.register(NetworkHandler::loginQueryStart);
 		ServerPlayerEvents.COPY_FROM.register(EventHandler::respawn);

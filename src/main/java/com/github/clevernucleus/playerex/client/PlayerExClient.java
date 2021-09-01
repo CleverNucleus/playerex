@@ -2,7 +2,8 @@ package com.github.clevernucleus.playerex.client;
 
 import com.github.clevernucleus.playerex.PlayerEx;
 import com.github.clevernucleus.playerex.api.ExAPI;
-import com.github.clevernucleus.playerex.api.client.PageRegistry;
+import com.github.clevernucleus.playerex.api.client.event.NameplateRenderEvent;
+import com.github.clevernucleus.playerex.api.client.page.PageRegistry;
 import com.github.clevernucleus.playerex.client.gui.AttributesPageLayer;
 import com.github.clevernucleus.playerex.client.gui.AttributesScreen;
 import com.github.clevernucleus.playerex.client.gui.CombatPageLayer;
@@ -34,6 +35,7 @@ public final class PlayerExClient implements ClientModInitializer {
 		PageRegistry.registerLayer(ATTRIBUTES_PAGE, AttributesPageLayer::new);
 		PageRegistry.registerLayer(COMBAT_PAGE, CombatPageLayer::new);
 		
+		NameplateRenderEvent.EVENT.register(EventHandlerClient::nameplateRender);
 		ScreenEvents.AFTER_INIT.register(EventHandlerClient::onScreenInit);
 	}
 }

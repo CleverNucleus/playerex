@@ -5,8 +5,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.function.Consumer;
 
-import com.github.clevernucleus.playerex.api.client.Page;
-import com.github.clevernucleus.playerex.api.client.PageRegistry;
+import com.github.clevernucleus.playerex.api.client.page.Page;
+import com.github.clevernucleus.playerex.api.client.page.PageRegistry;
 import com.github.clevernucleus.playerex.client.NetworkHandlerClient;
 import com.github.clevernucleus.playerex.client.PlayerExClient;
 import com.github.clevernucleus.playerex.client.gui.widget.ScreenButtonWidget;

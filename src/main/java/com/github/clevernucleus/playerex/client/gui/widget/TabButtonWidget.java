@@ -1,7 +1,7 @@
 package com.github.clevernucleus.playerex.client.gui.widget;
 
 import com.github.clevernucleus.playerex.api.ExAPI;
-import com.github.clevernucleus.playerex.api.client.Page;
+import com.github.clevernucleus.playerex.api.client.page.Page;
 import com.github.clevernucleus.playerex.client.gui.IHandledScreen;
 import com.mojang.blaze3d.systems.RenderSystem;
 
