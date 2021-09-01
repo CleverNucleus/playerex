@@ -20,6 +20,8 @@ import com.github.clevernucleus.playerex.handler.NetworkHandler.PacketType;
 import com.google.common.collect.ImmutableList;
 import com.mojang.blaze3d.systems.RenderSystem;
 
+import net.fabricmc.api.EnvType;
+import net.fabricmc.api.Environment;
 import net.minecraft.client.gui.screen.ingame.HandledScreen;
 import net.minecraft.client.gui.widget.ButtonWidget;
 import net.minecraft.client.util.math.MatrixStack;
@@ -38,6 +40,7 @@ import net.minecraft.util.Formatting;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.Pair;
 
+@Environment(EnvType.CLIENT)
 public class AttributesPageLayer extends PageLayer {
 	private ModifierData modifierData;
 	private static AttributesPageLayer instance;

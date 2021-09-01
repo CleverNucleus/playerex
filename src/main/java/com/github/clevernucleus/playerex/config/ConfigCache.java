@@ -1,7 +1,5 @@
 package com.github.clevernucleus.playerex.config;
 
-import com.github.clevernucleus.playerex.api.ExAPI;
-
 import net.minecraft.nbt.NbtCompound;
 import net.objecthunter.exp4j.Expression;
 import net.objecthunter.exp4j.ExpressionBuilder;
@@ -12,28 +10,25 @@ public final class ConfigCache {
 	public String levelFormula;
 	public Expression expression;
 	
-	public ConfigCache() {
-		this.expression = this.standard("x + 1");
-	}
+	public ConfigCache() {}
 	
-	private Expression standard(final String expression) {
+	protected Expression standard(final String expression) {
 		return new ExpressionBuilder(expression).variable("x").build();
 	}
 	
-	private ConfigImpl get() {
-		return (ConfigImpl)ExAPI.CONFIG.get();
-	}
-	
 	public void write(NbtCompound tag) {
-		tag.putBoolean("resetOnDeath", this.get().resetOnDeath);
-		tag.putBoolean("showLevelNameplates", this.get().showLevelNameplates);
-		tag.putString("levelFormula", this.get().levelFormula);
+		tag.putBoolean("resetOnDeath", this.resetOnDeath);
+		tag.putBoolean("showLevelNameplates", this.showLevelNameplates);
+		tag.putString("levelFormula", this.levelFormula);
 	}
 	
 	public void read(NbtCompound tag) {
 		this.resetOnDeath = tag.getBoolean("resetOnDeath");
 		this.showLevelNameplates = tag.getBoolean("showLevelNameplates");
-		this.levelFormula = tag.getString("levelFormula");
-		this.expression = this.standard(this.levelFormula);
+		
+		final String levelFormula = tag.getString("levelFormula");
+		
+		this.levelFormula = levelFormula;
+		this.expression = this.standard(levelFormula);
 	}
 }

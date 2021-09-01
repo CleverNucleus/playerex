@@ -5,6 +5,8 @@ import com.github.clevernucleus.playerex.api.client.page.Page;
 import com.github.clevernucleus.playerex.client.gui.IHandledScreen;
 import com.mojang.blaze3d.systems.RenderSystem;
 
+import net.fabricmc.api.EnvType;
+import net.fabricmc.api.Environment;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gui.screen.ingame.HandledScreen;
 import net.minecraft.client.gui.widget.ButtonWidget;
@@ -13,6 +15,7 @@ import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.text.LiteralText;
 import net.minecraft.util.Identifier;
 
+@Environment(EnvType.CLIENT)
 public class TabButtonWidget extends ButtonWidget {
 	private static final Identifier TABS = new Identifier(ExAPI.MODID, "textures/gui/tab.png");
 	private HandledScreen<?> parent;

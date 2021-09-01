@@ -3,6 +3,8 @@ package com.github.clevernucleus.playerex.client;
 import com.github.clevernucleus.playerex.api.ExAPI;
 import com.github.clevernucleus.playerex.client.gui.widget.ScreenButtonWidget;
 
+import net.fabricmc.api.EnvType;
+import net.fabricmc.api.Environment;
 import net.fabricmc.fabric.api.client.screen.v1.Screens;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.font.TextRenderer;
@@ -21,6 +23,7 @@ import net.minecraft.text.Text;
 import net.minecraft.text.TranslatableText;
 import net.minecraft.util.math.Matrix4f;
 
+@Environment(EnvType.CLIENT)
 public final class EventHandlerClient {
 	private static void renderLevel(EntityRenderDispatcher dispatcher, PlayerEntityRenderer renderer, AbstractClientPlayerEntity entity, Text text, MatrixStack matrices, VertexConsumerProvider vertexConsumers, int light) {
 		double d = dispatcher.getSquaredDistanceToCamera(entity);

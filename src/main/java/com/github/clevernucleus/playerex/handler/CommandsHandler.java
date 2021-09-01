@@ -125,13 +125,6 @@ public final class CommandsHandler {
 		ModifierData modifierData = ExAPI.DATA.get(player);
 		EntityAttribute attribute = ExAPI.LEVEL.get();
 		AttributeContainer container = player.getAttributes();
-		
-		if(attribute == null || !container.hasAttribute(attribute)) {
-			context.getSource().sendFeedback((new TranslatableText("command.playerex.levelup_null_error", player.getName()).formatted(Formatting.RED)), false);
-			
-			return -1;
-		}
-		
 		IAttribute instance = (IAttribute)attribute;
 		int max = (int)Math.round(instance.getMaxValue());
 		int current = (int)Math.round(container.getValue(attribute));
@@ -154,15 +147,8 @@ public final class CommandsHandler {
 		ModifierData modifierData = ExAPI.DATA.get(player);
 		EntityAttribute attribute = ExAPI.LEVEL.get();
 		AttributeContainer container = player.getAttributes();
-		int amount = IntegerArgumentType.getInteger(context, "amount");
-		
-		if(attribute == null || !container.hasAttribute(attribute)) {
-			context.getSource().sendFeedback((new TranslatableText("command.playerex.levelup_null_error", player.getName()).formatted(Formatting.RED)), false);
-			
-			return -1;
-		}
-		
 		IAttribute instance = (IAttribute)attribute;
+		int amount = IntegerArgumentType.getInteger(context, "amount");
 		int max = (int)Math.round(instance.getMaxValue());
 		int current = (int)Math.round(container.getValue(attribute));
 		int ceiling = max - current;

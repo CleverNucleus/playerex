@@ -10,6 +10,8 @@ import com.github.clevernucleus.playerex.handler.NetworkHandler;
 
 import io.netty.util.concurrent.Future;
 import io.netty.util.concurrent.GenericFutureListener;
+import net.fabricmc.api.EnvType;
+import net.fabricmc.api.Environment;
 import net.fabricmc.fabric.api.client.networking.v1.ClientPlayNetworking;
 import net.fabricmc.fabric.api.networking.v1.PacketByteBufs;
 import net.fabricmc.fabric.api.networking.v1.PacketSender;
@@ -28,6 +30,7 @@ import net.minecraft.util.Identifier;
 import net.minecraft.util.Pair;
 import net.minecraft.util.registry.Registry;
 
+@Environment(EnvType.CLIENT)
 public final class NetworkHandlerClient {
 	public static CompletableFuture<PacketByteBuf> loginQueryReceived(MinecraftClient client, ClientLoginNetworkHandler handler, PacketByteBuf buf, Consumer<GenericFutureListener<? extends Future<? super Void>>> listenerAdder) {
 		NbtCompound tag = buf.readNbt();
@@ -97,6 +100,9 @@ public final class NetworkHandlerClient {
 			if(attribute == null) continue;
 			
 			Identifier key = Registry.ATTRIBUTE.getId(attribute);
+			
+			if(key == null) continue;
+			
 			double value = pair.getRight();
 			
 			data.putString("Key", key.toString());

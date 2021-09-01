@@ -17,23 +17,41 @@ import net.minecraft.text.TranslatableText;
 import net.minecraft.util.Formatting;
 import net.minecraft.util.Identifier;
 
-
+/**
+ * A helper class providing useful methods to use with PlayerEx.
+ * 
+ * @author CleverNucleus
+ *
+ */
 public final class ClientUtil {
 	
-	
+	/** Format for two decimal places. */
 	public static final DecimalFormat FORMATTING_2 = new DecimalFormat("###.##");
 	
-	
+	/** Format for three decimal places. */
 	public static final DecimalFormat FORMATTING_3 = new DecimalFormat("###.###");
 	
-	
+	/**
+	 * Takes the input attribute and looks for the {@link ExAPI#PERCENTAGE_PROPERTY} property; if present, multiplies the input 
+	 * value by the property's multiplier. If not, then looks for the {@link ExAPI#MULTIPLIER_PROPERTY} property; if present, 
+	 * multiplies the input value by the property's multiplier. Else returns the input value.
+	 * @param attributeIn
+	 * @param valueIn
+	 * @return
+	 */
 	public static double displayValue(final IAttribute attributeIn, double valueIn) {
 		if(attributeIn.hasProperty(ExAPI.PERCENTAGE_PROPERTY)) return valueIn * attributeIn.getProperty(ExAPI.PERCENTAGE_PROPERTY);
 		if(attributeIn.hasProperty(ExAPI.MULTIPLIER_PROPERTY)) return valueIn * attributeIn.getProperty(ExAPI.MULTIPLIER_PROPERTY);
 		return valueIn;
 	}
 	
-	
+	/**
+	 * If the input value is positive, adds the "+" prefix. If the input attribute has the {@link ExAPI#PERCENTAGE_PROPERTY}
+	 * property, appends the "%" suffix.
+	 * @param attributeIn
+	 * @param valueIn
+	 * @return
+	 */
 	public static String formatValue(final IAttribute attributeIn, double valueIn) {
 		String value = FORMATTING_3.format(valueIn);
 		
@@ -48,7 +66,11 @@ public final class ClientUtil {
 		return value;
 	}
 	
-	
+	/**
+	 * Looks at the input attribute's functions, and if there are any, formats them and adds them to the input list as tooltips.
+	 * @param tooltip
+	 * @param attributeIn
+	 */
 	public static void appendFunctionsToTooltip(List<Text> tooltip, final EntityAttribute attributeIn) {
 		if(attributeIn == null) return;
 		

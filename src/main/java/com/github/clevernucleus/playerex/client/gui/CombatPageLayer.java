@@ -10,6 +10,8 @@ import com.github.clevernucleus.playerex.api.client.ClientUtil;
 import com.github.clevernucleus.playerex.api.client.RenderComponent;
 import com.github.clevernucleus.playerex.api.client.page.PageLayer;
 
+import net.fabricmc.api.EnvType;
+import net.fabricmc.api.Environment;
 import net.minecraft.client.gui.screen.ingame.HandledScreen;
 import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.entity.attribute.AttributeContainer;
@@ -22,6 +24,7 @@ import net.minecraft.text.Text;
 import net.minecraft.text.TranslatableText;
 import net.minecraft.util.Formatting;
 
+@Environment(EnvType.CLIENT)
 public class CombatPageLayer extends PageLayer {
 	private static CombatPageLayer instance;
 	private static final float SCALE = 0.75F;

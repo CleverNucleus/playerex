@@ -42,6 +42,7 @@ public final class PlayerEx implements ModInitializer {
 	public void onInitialize() {
 		AutoConfig.register(ConfigImpl.class, GsonConfigSerializer::new);
 		((ExConfigProvider)ExAPI.CONFIG).build(AutoConfig.getConfigHolder(ConfigImpl.class).get());
+		((ConfigImpl)ExAPI.CONFIG.get()).init(CONFIG);
 		
 		ResourceManagerHelper.get(ResourceType.SERVER_DATA).registerReloadListener(MANAGER);
 		

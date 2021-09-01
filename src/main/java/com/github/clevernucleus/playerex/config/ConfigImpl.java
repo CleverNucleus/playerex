@@ -7,9 +7,9 @@ import com.github.clevernucleus.playerex.api.config.IConfig;
 import me.shedaniel.autoconfig.ConfigData;
 import me.shedaniel.autoconfig.annotation.Config;
 import me.shedaniel.autoconfig.annotation.ConfigEntry;
-import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.attribute.AttributeContainer;
 import net.minecraft.entity.attribute.EntityAttribute;
+import net.minecraft.entity.player.PlayerEntity;
 import net.objecthunter.exp4j.Expression;
 
 @Config(name = ExAPI.MODID)
@@ -47,6 +47,13 @@ public class ConfigImpl implements ConfigData, IConfig {
 	@ConfigEntry.Gui.Tooltip
 	private int inventoryButtonPosY = 7;
 	
+	public void init(final ConfigCache cache) {
+		cache.resetOnDeath = this.resetOnDeath;
+		cache.showLevelNameplates = this.showLevelNameplates;
+		cache.levelFormula = this.levelFormula;
+		cache.expression = cache.standard(this.levelFormula);
+	}
+	
 	@Override
 	public boolean resetOnDeath() {
 		return PlayerEx.CONFIG.resetOnDeath;
@@ -58,18 +65,20 @@ public class ConfigImpl implements ConfigData, IConfig {
 	}
 	
 	@Override
-	public int requiredXp(final LivingEntity entity) {
-		if(entity == null) return 1;
+	public int requiredXp(final PlayerEntity player) {
+		if(player == null) return 1;
 		
-		AttributeContainer container = entity.getAttributes();
+		AttributeContainer container = player.getAttributes();
 		EntityAttribute attribute = ExAPI.LEVEL.get();
 		
 		if(attribute == null || !container.hasAttribute(attribute)) return 1;
 		
-		Expression expression = PlayerEx.CONFIG.expression.setVariable("x", container.getValue(attribute));
+		int level = (int)Math.round(container.getValue(attribute));
+		Expression expression = PlayerEx.CONFIG.expression.setVariable("x", level);
 		float result = (float)expression.evaluate();
+		int rounded = Math.round(result);
 		
-		return Math.abs(Math.round(result));
+		return Math.abs(rounded);
 	}
 	
 	@Override

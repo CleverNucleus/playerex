@@ -26,7 +26,6 @@
     "command.playerex.refund_alt": "Refunded 1 skill point for player %s",
     "command.playerex.levelup": "Added %s levels to player %s",
     "command.playerex.levelup_alt": "Added 1 level to player %s",
-    "command.playerex.levelup_null_error": "Level attribute is not present for player %s",
     "command.playerex.levelup_max_error": "Level attribute is already at maximum value for player %s",
     "sound.playerex.level_up": "Levelled Up",
     "sound.playerex.sp_spend": "Spent Skill Points",
