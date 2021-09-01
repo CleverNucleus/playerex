@@ -7,6 +7,7 @@ import com.github.clevernucleus.playerex.api.event.PlayerLevelUpEvent;
 import com.github.clevernucleus.playerex.config.ConfigCache;
 import com.github.clevernucleus.playerex.config.ConfigImpl;
 import com.github.clevernucleus.playerex.handler.AttributesScreenHandler;
+import com.github.clevernucleus.playerex.handler.CommandsHandler;
 import com.github.clevernucleus.playerex.handler.EventHandler;
 import com.github.clevernucleus.playerex.handler.NetworkHandler;
 import com.github.clevernucleus.playerex.impl.ModifierJsonLoader;
@@ -14,6 +15,7 @@ import com.github.clevernucleus.playerex.impl.ModifierJsonLoader;
 import me.shedaniel.autoconfig.AutoConfig;
 import me.shedaniel.autoconfig.serializer.GsonConfigSerializer;
 import net.fabricmc.api.ModInitializer;
+import net.fabricmc.fabric.api.command.v1.CommandRegistrationCallback;
 import net.fabricmc.fabric.api.entity.event.v1.ServerPlayerEvents;
 import net.fabricmc.fabric.api.networking.v1.ServerLoginConnectionEvents;
 import net.fabricmc.fabric.api.networking.v1.ServerLoginNetworking;
@@ -47,6 +49,8 @@ public final class PlayerEx implements ModInitializer {
 		EntityAttributeEvents.MODIFIER_ADDED_PRE.register(EventHandler::healthModified);
 		ServerLoginConnectionEvents.QUERY_START.register(NetworkHandler::loginQueryStart);
 		ServerPlayerEvents.COPY_FROM.register(EventHandler::respawn);
+		CommandRegistrationCallback.EVENT.register(CommandsHandler::init);
+		
 		ServerLoginNetworking.registerGlobalReceiver(NetworkHandler.SYNC, NetworkHandler::loginQueryResponse);
 		ServerPlayNetworking.registerGlobalReceiver(NetworkHandler.SCREEN, NetworkHandler::switchScreen);
 		ServerPlayNetworking.registerGlobalReceiver(NetworkHandler.MODIFY, NetworkHandler::modifyAttributes);

@@ -19,6 +19,10 @@ public final class EventHandler {
 		}
 		
 		newData.refresh(oldData);
+		
+		if(!alive) {
+			newPlayer.setHealth(oldPlayer.getMaxHealth());
+		}
 	}
 	
 	public static void healthModified(final LivingEntity entity, final EntityAttribute attribute, final IEntityAttributeModifier modifier) {
