@@ -11,7 +11,9 @@ import com.github.clevernucleus.playerex.handler.CommandsHandler;
 import com.github.clevernucleus.playerex.handler.EventHandler;
 import com.github.clevernucleus.playerex.handler.NetworkHandler;
 import com.github.clevernucleus.playerex.impl.ModifierJsonLoader;
+import com.github.clevernucleus.playerex.util.StoredPlaceholder;
 
+import eu.pb4.placeholders.PlaceholderAPI;
 import me.shedaniel.autoconfig.AutoConfig;
 import me.shedaniel.autoconfig.serializer.GsonConfigSerializer;
 import net.fabricmc.api.ModInitializer;
@@ -31,7 +33,7 @@ import net.minecraft.util.registry.Registry;
 public final class PlayerEx implements ModInitializer {
 	public static final ModifierJsonLoader MANAGER = new ModifierJsonLoader();
 	/** Manual; ugh, I know. */
-	public static final String VERSION = "3.0.1";
+	public static final String VERSION = "3.0.2";
 	public static final ConfigCache CONFIG = new ConfigCache();
 	public static final SoundEvent LEVEL_UP_SOUND = new SoundEvent(new Identifier(ExAPI.MODID, "level_up"));
 	public static final SoundEvent SP_SPEND_SOUND = new SoundEvent(new Identifier(ExAPI.MODID, "sp_spend"));
@@ -58,5 +60,7 @@ public final class PlayerEx implements ModInitializer {
 		
 		Registry.register(Registry.SOUND_EVENT, LEVEL_UP_SOUND.getId(), LEVEL_UP_SOUND);
 		Registry.register(Registry.SOUND_EVENT, SP_SPEND_SOUND.getId(), SP_SPEND_SOUND);
+		
+		StoredPlaceholder.STORE.forEach(PlaceholderAPI::register);
 	}
 }

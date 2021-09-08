@@ -23,6 +23,9 @@ repositories {
 		url "https://maven.terraformersmc.com/"
 	}
 	maven {
+		url "https://maven.nucleoid.xyz/"
+	}
+	maven {
 		url = "https://www.cursemaven.com"
 	}
 }
@@ -50,6 +53,8 @@ dependencies {
 	
 	implementation 'net.objecthunter:exp4j:0.4.8'
 	include 'net.objecthunter:exp4j:0.4.8'
+	
+	modImplementation include("eu.pb4:placeholder-api:${project.placeholder_api}")
 }
 
 processResources {
