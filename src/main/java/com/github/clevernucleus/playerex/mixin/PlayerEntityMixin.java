@@ -81,7 +81,7 @@ abstract class PlayerEntityMixin {
 		return false;
 	}
 	
-	@ModifyVariable(method = "attack", at = @At("STORE"), name = "f", ordinal = 2)
+	@ModifyVariable(method = "attack", at = @At(value = "STORE", ordinal = 2), name = "f", ordinal = 0)
 	private float onAttackDamage(float f, Entity target) {
 		if(target instanceof LivingEntity) {
 			PlayerEntity player = (PlayerEntity)(Object)this;
@@ -91,7 +91,7 @@ abstract class PlayerEntityMixin {
 			if(!container.hasAttribute(attribute)) return f;
 			float value = (float)container.getValue(attribute);
 			
-			return f * (1.0F + value);
+			return f * (1.0F + value) / 1.5F;
 		}
 		
 		return f;
