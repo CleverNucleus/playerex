@@ -23,7 +23,7 @@ public final class StoredPlaceholder {
 		STORE.put(new Identifier(ExAPI.MODID, key), handler);
 	}
 	
-	private static PlaceholderHandler specificLevelPlacement(final int place) {
+	private static PlaceholderHandler specificLevelPlacement() {
 		return ctx -> {
 			MinecraftServer server = ctx.getServer();
 			PlayerManager manager = server.getPlayerManager();
@@ -33,6 +33,16 @@ public final class StoredPlaceholder {
 			
 			List<ServerPlayerEntity> players = manager.getPlayerList(); 
 			int size = players.size();
+			int place = 1;
+			
+			if(ctx.hasArgument()) {
+				try {
+					int i = Integer.parseInt(ctx.getArgument());
+					place = Math.max(1, i);
+				} catch(NumberFormatException e) {
+					return PlaceholderResult.value("");
+				}
+			}
 			
 			PlayerLevelPair[] pairs = new PlayerLevelPair[size];
 			
@@ -70,8 +80,6 @@ public final class StoredPlaceholder {
 			return PlaceholderResult.value(String.valueOf(level));
 		});
 		
-		for(int i = 1; i < 11; i++) {
-			register("level_top_" + i, specificLevelPlacement(i));
-		}
+		register("level_top", specificLevelPlacement());
 	}
 }
