@@ -44,7 +44,9 @@ import net.minecraft.util.Pair;
 public class AttributesPageLayer extends PageLayer {
 	private ModifierData modifierData;
 	private static AttributesPageLayer instance;
-	private static final float SCALE = 0.75F;
+	private static Supplier<Float> scaleX = () -> ExAPI.CONFIG.get().textSqueezeX();
+	private static Supplier<Float> scaleY = () -> ExAPI.CONFIG.get().textSqueezeY();
+	private static float scaleZ = 0.75F;
 	private static final List<RenderComponent> RENDER_COMPONENTS = new ArrayList<RenderComponent>();
 	private static final List<Identifier> BUTTON_KEYS = ImmutableList.of(
 		new Identifier("playerex:level"),
@@ -58,7 +60,7 @@ public class AttributesPageLayer extends PageLayer {
 	static {
 		register(() -> ExAPI.LEVEL.get() != null, () -> {
 			EntityAttribute attribute = ExAPI.LEVEL.get();
-			Text text = new TranslatableText(attribute.getTranslationKey());
+			Text text = new TranslatableText("gui.playerex.page.attributes.text.level");
 			AttributeContainer container = instance.client.player.getAttributes();
 			int value = container.hasAttribute(attribute) ? (int)container.getValue(attribute) : 0;
 			
@@ -73,10 +75,10 @@ public class AttributesPageLayer extends PageLayer {
 			ClientUtil.appendFunctionsToTooltip(tooltip, attribute);
 			
 			return tooltip;
-		}, 21, 26, SCALE);
+		}, 21, 26, scaleX, scaleY);
 		register(() -> ExAPI.SKILL_POINTS.get() != null, () -> {
 			EntityAttribute attribute = ExAPI.SKILL_POINTS.get();
-			Text text = new TranslatableText(attribute.getTranslationKey());
+			Text text = new TranslatableText("gui.playerex.page.attributes.text.skill_points");
 			AttributeContainer container = instance.client.player.getAttributes();
 			int value = container.hasAttribute(attribute) ? (int)container.getValue(attribute) : 0;
 			
@@ -87,10 +89,10 @@ public class AttributesPageLayer extends PageLayer {
 			tooltip.add((new TranslatableText("gui.playerex.page.attributes.tooltip.skill_points[1]")).formatted(Formatting.GRAY));
 			
 			return tooltip;
-		}, 21, 37, SCALE);
+		}, 21, 37, scaleX, scaleY);
 		register(() -> ExAPI.CONSTITUTION.get() != null, () -> {
 			EntityAttribute attribute = ExAPI.CONSTITUTION.get();
-			Text text = new TranslatableText(attribute.getTranslationKey());
+			Text text = new TranslatableText("gui.playerex.page.attributes.text.constitution");
 			AttributeContainer container = instance.client.player.getAttributes();
 			MutableText result = new LiteralText(text.getString() + ": ");
 			
@@ -107,10 +109,10 @@ public class AttributesPageLayer extends PageLayer {
 			ClientUtil.appendFunctionsToTooltip(tooltip, attribute);
 			
 			return tooltip;
-		}, 21, 59, SCALE);
+		}, 21, 59, scaleX, scaleY);
 		register(() -> ExAPI.STRENGTH.get() != null, () -> {
 			EntityAttribute attribute = ExAPI.STRENGTH.get();
-			Text text = new TranslatableText(attribute.getTranslationKey());
+			Text text = new TranslatableText("gui.playerex.page.attributes.text.strength");
 			AttributeContainer container = instance.client.player.getAttributes();
 			MutableText result = new LiteralText(text.getString() + ": ");
 			
@@ -127,10 +129,10 @@ public class AttributesPageLayer extends PageLayer {
 			ClientUtil.appendFunctionsToTooltip(tooltip, attribute);
 			
 			return tooltip;
-		}, 21, 70, SCALE);
+		}, 21, 70, scaleX, scaleY);
 		register(() -> ExAPI.DEXTERITY.get() != null, () -> {
 			EntityAttribute attribute = ExAPI.DEXTERITY.get();
-			Text text = new TranslatableText(attribute.getTranslationKey());
+			Text text = new TranslatableText("gui.playerex.page.attributes.text.dexterity");
 			AttributeContainer container = instance.client.player.getAttributes();
 			MutableText result = new LiteralText(text.getString() + ": ");
 			
@@ -147,10 +149,10 @@ public class AttributesPageLayer extends PageLayer {
 			ClientUtil.appendFunctionsToTooltip(tooltip, attribute);
 			
 			return tooltip;
-		}, 21, 81, SCALE);
+		}, 21, 81, scaleX, scaleY);
 		register(() -> ExAPI.INTELLIGENCE.get() != null, () -> {
 			EntityAttribute attribute = ExAPI.INTELLIGENCE.get();
-			Text text = new TranslatableText(attribute.getTranslationKey());
+			Text text = new TranslatableText("gui.playerex.page.attributes.text.intelligence");
 			AttributeContainer container = instance.client.player.getAttributes();
 			MutableText result = new LiteralText(text.getString() + ": ");
 			
@@ -167,10 +169,10 @@ public class AttributesPageLayer extends PageLayer {
 			ClientUtil.appendFunctionsToTooltip(tooltip, attribute);
 			
 			return tooltip;
-		}, 21, 92, SCALE);
+		}, 21, 92, scaleX, scaleY);
 		register(() -> ExAPI.LUCKINESS.get() != null, () -> {
 			EntityAttribute attribute = ExAPI.LUCKINESS.get();
-			Text text = new TranslatableText(attribute.getTranslationKey());
+			Text text = new TranslatableText("gui.playerex.page.attributes.text.luckiness");
 			AttributeContainer container = instance.client.player.getAttributes();
 			MutableText result = new LiteralText(text.getString() + ": ");
 			
@@ -187,10 +189,10 @@ public class AttributesPageLayer extends PageLayer {
 			ClientUtil.appendFunctionsToTooltip(tooltip, attribute);
 			
 			return tooltip;
-		}, 21, 103, SCALE);
+		}, 21, 103, scaleX, scaleY);
 		register(() -> true, () -> {
 			EntityAttribute attribute = EntityAttributes.GENERIC_MOVEMENT_SPEED;
-			MutableText text = new TranslatableText(attribute.getTranslationKey());
+			MutableText text = new TranslatableText("gui.playerex.page.attributes.text.movement_speed");
 			AttributeContainer container = instance.client.player.getAttributes();
 			double value = container.getValue(attribute);
 			
@@ -204,7 +206,7 @@ public class AttributesPageLayer extends PageLayer {
 			tooltip.add((new TranslatableText("gui.playerex.page.attributes.tooltip.speed", value)).formatted(Formatting.GRAY));
 			
 			return tooltip;
-		}, 21, 125, SCALE);
+		}, 21, 125, scaleX, scaleY);
 		register(() -> true, () -> {
 			float current = instance.client.player.getHealth();
 			float maximum = instance.client.player.getMaxHealth();
@@ -218,7 +220,7 @@ public class AttributesPageLayer extends PageLayer {
 			tooltip.add((new TranslatableText("gui.playerex.page.attributes.tooltip.health")).formatted(Formatting.GRAY));
 			
 			return tooltip;
-		}, 93, 37, SCALE);
+		}, 93, 37, scaleX, scaleY);
 		register(() -> ExAPI.HEALTH_REGENERATION.get() != null, () -> {
 			EntityAttribute attribute = ExAPI.HEALTH_REGENERATION.get();
 			MutableText text = new TranslatableText("gui.playerex.page.attributes.text.health_regeneration");
@@ -233,7 +235,7 @@ public class AttributesPageLayer extends PageLayer {
 			tooltip.add((new TranslatableText("gui.playerex.page.attributes.tooltip.health_regeneration[1]")).formatted(Formatting.GRAY));
 			
 			return tooltip;
-		}, 93, 48, SCALE);
+		}, 93, 48, scaleX, scaleY);
 		register(() -> ExAPI.HEAL_AMPLIFICATION.get() != null, () -> {
 			EntityAttribute attribute = ExAPI.HEAL_AMPLIFICATION.get();
 			MutableText text = new TranslatableText("gui.playerex.page.attributes.text.heal_amplification");
@@ -248,7 +250,7 @@ public class AttributesPageLayer extends PageLayer {
 			tooltip.add((new TranslatableText("gui.playerex.page.attributes.tooltip.heal_amplification[1]")).formatted(Formatting.GRAY));
 			
 			return tooltip;
-		}, 93, 59, SCALE);
+		}, 93, 59, scaleX, scaleY);
 		register(() -> ExAPI.FIRE_RESISTANCE.get() != null, () -> {
 			EntityAttribute attribute = ExAPI.FIRE_RESISTANCE.get();
 			MutableText text = new TranslatableText("gui.playerex.page.attributes.text.fire_resistance");
@@ -267,7 +269,7 @@ public class AttributesPageLayer extends PageLayer {
 			tooltip.add((new TranslatableText("gui.playerex.page.attributes.tooltip.fire_resistance", formattedValue)).formatted(Formatting.GRAY));
 			
 			return tooltip;
-		}, 93, 92, SCALE);
+		}, 93, 92, scaleX, scaleY);
 		register(() -> ExAPI.FREEZE_RESISTANCE.get() != null, () -> {
 			EntityAttribute attribute = ExAPI.FREEZE_RESISTANCE.get();
 			MutableText text = new TranslatableText("gui.playerex.page.attributes.text.freeze_resistance");
@@ -286,7 +288,7 @@ public class AttributesPageLayer extends PageLayer {
 			tooltip.add((new TranslatableText("gui.playerex.page.attributes.tooltip.freeze_resistance", formattedValue)).formatted(Formatting.GRAY));
 			
 			return tooltip;
-		}, 93, 103, SCALE);
+		}, 93, 103, scaleX, scaleY);
 		register(() -> ExAPI.FALLING_RESISTANCE.get() != null, () -> {
 			EntityAttribute attribute = ExAPI.FALLING_RESISTANCE.get();
 			MutableText text = new TranslatableText("gui.playerex.page.attributes.text.falling_resistance");
@@ -305,7 +307,7 @@ public class AttributesPageLayer extends PageLayer {
 			tooltip.add((new TranslatableText("gui.playerex.page.attributes.tooltip.falling_resistance", formattedValue)).formatted(Formatting.GRAY));
 			
 			return tooltip;
-		}, 93, 114, SCALE);
+		}, 93, 114, scaleX, scaleY);
 		register(() -> ExAPI.DROWNING_RESISTANCE.get() != null, () -> {
 			EntityAttribute attribute = ExAPI.DROWNING_RESISTANCE.get();
 			MutableText text = new TranslatableText("gui.playerex.page.attributes.text.drowning_resistance");
@@ -324,7 +326,7 @@ public class AttributesPageLayer extends PageLayer {
 			tooltip.add((new TranslatableText("gui.playerex.page.attributes.tooltip.drowning_resistance", formattedValue)).formatted(Formatting.GRAY));
 			
 			return tooltip;
-		}, 93, 125, SCALE);
+		}, 93, 125, scaleX, scaleY);
 		register(() -> ExAPI.WITHER_RESISTANCE.get() != null, () -> {
 			EntityAttribute attribute = ExAPI.WITHER_RESISTANCE.get();
 			MutableText text = new TranslatableText("gui.playerex.page.attributes.text.wither_resistance");
@@ -343,7 +345,7 @@ public class AttributesPageLayer extends PageLayer {
 			tooltip.add((new TranslatableText("gui.playerex.page.attributes.tooltip.wither_resistance", formattedValue)).formatted(Formatting.GRAY));
 			
 			return tooltip;
-		}, 93, 136, SCALE);
+		}, 93, 136, scaleX, scaleY);
 		register(() -> ExAPI.MAGIC_RESISTANCE.get() != null, () -> {
 			EntityAttribute attribute = ExAPI.MAGIC_RESISTANCE.get();
 			MutableText text = new TranslatableText("gui.playerex.page.attributes.text.magic_resistance");
@@ -362,7 +364,7 @@ public class AttributesPageLayer extends PageLayer {
 			tooltip.add((new TranslatableText("gui.playerex.page.attributes.tooltip.magic_resistance", formattedValue)).formatted(Formatting.GRAY));
 			
 			return tooltip;
-		}, 93, 147, SCALE);
+		}, 93, 147, scaleX, scaleY);
 	}
 	
 	public AttributesPageLayer(HandledScreen<?> parent, ScreenHandler handler, PlayerInventory inventory, Text title) {
@@ -371,8 +373,8 @@ public class AttributesPageLayer extends PageLayer {
 		instance = this;
 	}
 	
-	private static RenderComponent register(final Supplier<Boolean> shouldRender, final Supplier<Text> text, final Supplier<List<Text>> tooltip, final int dx, final int dy, final float scale) {
-		RenderComponent renderComponent = new RenderComponent(shouldRender, text, tooltip, dx, dy, scale);
+	private static RenderComponent register(final Supplier<Boolean> shouldRender, final Supplier<Text> text, final Supplier<List<Text>> tooltip, final int dx, final int dy, final Supplier<Float> sx, final Supplier<Float> sy) {
+		RenderComponent renderComponent = new RenderComponent(shouldRender, text, tooltip, dx, dy, sx, sy);
 		RENDER_COMPONENTS.add(renderComponent);
 		
 		return renderComponent;
@@ -443,12 +445,12 @@ public class AttributesPageLayer extends PageLayer {
 	@Override
 	public void render(MatrixStack matrices, int mouseX, int mouseY, float delta) {
 		matrices.push();
-		matrices.scale(SCALE, SCALE, SCALE);
+		matrices.scale(scaleX.get(), scaleY.get(), scaleZ);
 		
 		RENDER_COMPONENTS.forEach(c -> c.renderText(matrices, this.textRenderer, this.x, this.y));
 		
-		this.textRenderer.draw(matrices, (new TranslatableText("gui.playerex.page.attributes.text.vitality")), (this.x + 105) / SCALE, (this.y + 26) / SCALE, 4210752);
-		this.textRenderer.draw(matrices, (new TranslatableText("gui.playerex.page.attributes.text.resistances")), (this.x + 105) / SCALE, (this.y + 81) / SCALE, 4210752);
+		this.textRenderer.draw(matrices, (new TranslatableText("gui.playerex.page.attributes.text.vitality")), (this.x + 105) / scaleX.get(), (this.y + 26) / scaleY.get(), 4210752);
+		this.textRenderer.draw(matrices, (new TranslatableText("gui.playerex.page.attributes.text.resistances")), (this.x + 105) / scaleX.get(), (this.y + 81) / scaleY.get(), 4210752);
 		
 		matrices.pop();
 		

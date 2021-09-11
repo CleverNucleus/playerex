@@ -18,7 +18,7 @@ public final class RenderComponent {
 	private final Supplier<Text> text;
 	private final Supplier<List<Text>> tooltip;
 	private final int dx, dy;
-	private final float scale;
+	private final Supplier<Float> sx, sy;
 	
 	/**
 	 * 
@@ -29,13 +29,14 @@ public final class RenderComponent {
 	 * @param dy The y-offset of the text.
 	 * @param scale The scale of the text (not applied to the tooltip).
 	 */
-	public RenderComponent(final Supplier<Boolean> shouldRender, final Supplier<Text> text, final Supplier<List<Text>> tooltip, final int dx, final int dy, final float scale) {
+	public RenderComponent(final Supplier<Boolean> shouldRender, final Supplier<Text> text, final Supplier<List<Text>> tooltip, final int dx, final int dy, final Supplier<Float> sx, final Supplier<Float> sy) {
 		this.shouldRender = shouldRender;
 		this.text = text;
 		this.tooltip = tooltip;
 		this.dx = dx;
 		this.dy = dy;
-		this.scale = scale;
+		this.sx = sx;
+		this.sy = sy;
 	}
 	
 	private boolean isMouseOver(float x, float y, float width, float height, int mouseX, int mouseY) {
@@ -51,7 +52,7 @@ public final class RenderComponent {
 	 */
 	public void renderText(MatrixStack matrices, TextRenderer textRenderer, int x, int y) {
 		if(!this.shouldRender.get()) return;
-		textRenderer.draw(matrices, this.text.get(), (x + this.dx) / this.scale, (y + this.dy) / this.scale, 4210752);
+		textRenderer.draw(matrices, this.text.get(), (x + this.dx) / this.sx.get(), (y + this.dy) / this.sy.get(), 4210752);
 	}
 	
 	/**
@@ -66,7 +67,7 @@ public final class RenderComponent {
 	 */
 	public void renderTooltip(RenderTooltip consumer, MatrixStack matrices, TextRenderer textRenderer, int x, int y, int mouseX, int mouseY) {
 		if(!this.shouldRender.get()) return;
-		if(this.isMouseOver(x + this.dx, y + this.dy, textRenderer.getWidth(this.text.get()) * this.scale, 7, mouseX, mouseY)) {
+		if(this.isMouseOver(x + this.dx, y + this.dy, textRenderer.getWidth(this.text.get()) * this.sx.get(), 7, mouseX, mouseY)) {
 			consumer.renderTooltip(matrices, this.tooltip.get(), mouseX, mouseY);
 		}
 	}

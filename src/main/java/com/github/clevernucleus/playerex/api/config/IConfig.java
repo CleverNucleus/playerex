@@ -55,6 +55,24 @@ public interface IConfig {
 	 */
 	int inventoryButtonPosY();
 	
+	/**
+	 * Clientside.
+	 * @return The horizontal squeeze of the gui text.
+	 */
+	float textSqueezeX();
+	
+	/**
+	 * Clientside.
+	 * @return The vertical squeeze of the gui text.
+	 */
+	float textSqueezeY();
+	
+	/**
+	 * Clientside.
+	 * @return Fixes item tooltips to show the correct attack damage/speed.
+	 */
+	boolean enableTooltipFix();
+	
 	@FunctionalInterface
 	interface Provider extends Supplier<IConfig> {}
 }

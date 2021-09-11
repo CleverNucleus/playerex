@@ -10,7 +10,8 @@
     ],
     "client": [
         "client.HandledScreenMixin",
-        "client.PlayerEntityRendererMixin"
+        "client.PlayerEntityRendererMixin",
+        "client.ItemStackMixin"
     ],
     "injectors": {
         "defaultRequire": 1

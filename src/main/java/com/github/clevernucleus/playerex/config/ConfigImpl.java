@@ -47,6 +47,20 @@ public class ConfigImpl implements ConfigData, IConfig {
 	@ConfigEntry.Gui.Tooltip
 	private int inventoryButtonPosY = 7;
 	
+	@ConfigEntry.Category(value = "client")
+	@ConfigEntry.BoundedDiscrete(min = 0, max = 50)
+	@ConfigEntry.Gui.Tooltip
+	private int textSqueezeX = 50;
+	
+	@ConfigEntry.Category(value = "client")
+	@ConfigEntry.BoundedDiscrete(min = 0, max = 50)
+	@ConfigEntry.Gui.Tooltip
+	private int textSqueezeY = 50;
+	
+	@ConfigEntry.Category(value = "client")
+	@ConfigEntry.Gui.Tooltip(count = 3)
+	private boolean enableTooltipFix = true;
+	
 	public void init(final ConfigCache cache) {
 		cache.resetOnDeath = this.resetOnDeath;
 		cache.showLevelNameplates = this.showLevelNameplates;
@@ -99,5 +113,20 @@ public class ConfigImpl implements ConfigData, IConfig {
 	@Override
 	public int inventoryButtonPosY() {
 		return this.inventoryButtonPosY;
+	}
+	
+	@Override
+	public float textSqueezeX() {
+		return (this.textSqueezeX + 25)* 0.01F;
+	}
+	
+	@Override
+	public float textSqueezeY() {
+		return (this.textSqueezeY + 25)* 0.01F;
+	}
+	
+	@Override
+	public boolean enableTooltipFix() {
+		return this.enableTooltipFix;
 	}
 }
