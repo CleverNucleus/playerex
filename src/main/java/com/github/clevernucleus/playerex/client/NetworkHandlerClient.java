@@ -69,7 +69,7 @@ public final class NetworkHandlerClient {
 		});
 	}
 	
-	public static void openAttributesScreen(ButtonWidget button) {
+	public static void openAttributesScreen() {
 		PacketByteBuf buf = PacketByteBufs.create();
 		buf.writeBoolean(false);
 		

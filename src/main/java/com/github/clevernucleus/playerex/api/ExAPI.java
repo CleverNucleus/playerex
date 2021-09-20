@@ -9,6 +9,7 @@ import com.github.clevernucleus.playerex.api.config.IConfig;
 import dev.onyxstudios.cca.api.v3.component.ComponentKey;
 import dev.onyxstudios.cca.api.v3.component.ComponentRegistry;
 import net.minecraft.entity.attribute.EntityAttribute;
+import net.minecraft.server.MinecraftServer;
 import net.minecraft.util.Identifier;
 
 /**
@@ -25,8 +26,12 @@ public final class ExAPI {
 	public static final String PERCENTAGE_PROPERTY = "percent";
 	/** Display formatting property attached to some attributes. */
 	public static final String MULTIPLIER_PROPERTY = "multiplier";
+	/** Round value to integer property attached to some attributes. */
+	public static final String INTEGER_PROPERTY = "integer";
 	/** The Cardinal Components Key for PlayerEx modifier data. */
 	public static final ComponentKey<ModifierData> DATA = ComponentRegistry.getOrCreate(new Identifier(MODID, "data"), ModifierData.class);
+	/** The Cardinal Components Key for PlayerEx player cache data. */
+	public static final ComponentKey<PersistentPlayerCache> CACHE = ComponentRegistry.getOrCreate(new Identifier(MODID, "cache"), PersistentPlayerCache.class);
 	/** The config supplier object. */
 	public static final IConfig.Provider CONFIG = new ExConfigProvider();
 	
@@ -53,4 +58,30 @@ public final class ExAPI {
 	public static final Supplier<EntityAttribute> RANGED_CRIT_CHANCE = API.getAttribute(new Identifier(MODID, "ranged_crit_chance"));
 	public static final Supplier<EntityAttribute> RANGED_CRIT_DAMAGE = API.getAttribute(new Identifier(MODID, "ranged_crit_damage"));
 	public static final Supplier<EntityAttribute> RANGED_DAMAGE = API.getAttribute(new Identifier(MODID, "ranged_damage"));
+	
+	/**
+	 * @return The Persistent cache of offline and online players. This is only serverside.
+	 */
+	public static PersistentPlayerCache persistentPlayerCache(final MinecraftServer server) {
+		PersistentPlayerCache cache = CACHE.get(server.getOverworld().getLevelProperties());
+		
+		return cache;
+	}
+	
+	/**
+	 * Parses a string property.
+	 * @param propertyIn
+	 * @return
+	 */
+	public static float parse(final String propertyIn) {
+		float result;
+		
+		try {
+			result = (float)Float.valueOf(propertyIn);
+		} catch(NumberFormatException e) {
+			result = 0.0F;
+		}
+		
+		return result;
+	}
 }

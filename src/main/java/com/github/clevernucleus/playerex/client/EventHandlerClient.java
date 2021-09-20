@@ -74,7 +74,15 @@ public final class EventHandlerClient {
 				int x = ExAPI.CONFIG.get().inventoryButtonPosX();
 				int y = ExAPI.CONFIG.get().inventoryButtonPosY();
 				
-				Screens.getButtons(screen).add(new ScreenButtonWidget(handledScreen, x, y, 176, 0, 14, 13, NetworkHandlerClient::openAttributesScreen));
+				Screens.getButtons(screen).add(new ScreenButtonWidget(handledScreen, x, y, 176, 0, 14, 13, btn -> NetworkHandlerClient.openAttributesScreen()));
+			}
+		}
+	}
+	
+	public static void onKeyPressed(MinecraftClient client) {
+		while(PlayerExClient.keyBinding.wasPressed()) {
+			if(client.currentScreen == null && !client.interactionManager.hasRidingInventory()) {
+				NetworkHandlerClient.openAttributesScreen();
 			}
 		}
 	}

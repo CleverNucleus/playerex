@@ -73,6 +73,15 @@ public class AttributesScreen extends AbstractInventoryScreen<AttributesScreenHa
 	}
 	
 	@Override
+	public boolean keyPressed(int keyCode, int scanCode, int modifiers) {
+		if(PlayerExClient.keyBinding.matchesKey(keyCode, scanCode)) {
+			this.onClose();
+		}
+		
+		return super.keyPressed(keyCode, scanCode, modifiers);
+	}
+	
+	@Override
 	public void render(MatrixStack matrices, int mouseX, int mouseY, float delta) {
 		this.renderBackground(matrices);
 		super.render(matrices, mouseX, mouseY, delta);

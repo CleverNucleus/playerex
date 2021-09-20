@@ -1,8 +1,11 @@
 package com.github.clevernucleus.playerex.handler;
 
+import java.util.UUID;
+
 import com.github.clevernucleus.dataattributes.api.attribute.IAttribute;
 import com.github.clevernucleus.playerex.api.ExAPI;
 import com.github.clevernucleus.playerex.api.ModifierData;
+import com.github.clevernucleus.playerex.impl.PersistentPlayerCacheManager;
 import com.mojang.brigadier.CommandDispatcher;
 import com.mojang.brigadier.arguments.IntegerArgumentType;
 import com.mojang.brigadier.context.CommandContext;
@@ -13,8 +16,10 @@ import com.mojang.brigadier.tree.LiteralCommandNode;
 
 import net.minecraft.command.EntitySelector;
 import net.minecraft.command.argument.EntityArgumentType;
+import net.minecraft.command.argument.UuidArgumentType;
 import net.minecraft.entity.attribute.AttributeContainer;
 import net.minecraft.entity.attribute.EntityAttribute;
+import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.command.CommandManager;
 import net.minecraft.server.command.ServerCommandSource;
 import net.minecraft.server.network.ServerPlayerEntity;
@@ -172,6 +177,52 @@ public final class CommandsHandler {
 		return value % 16;
 	}
 	
+	private static void cacheCommand(CommandNode<ServerCommandSource> node) {
+		LiteralCommandNode<ServerCommandSource> cacheNode = CommandManager
+				.literal("cache")
+				.build();
+		
+		LiteralCommandNode<ServerCommandSource> clearNode = CommandManager
+				.literal("clear")
+				.executes(CommandsHandler::clearCache)
+				.build();
+		
+		LiteralCommandNode<ServerCommandSource> removeNode = CommandManager
+				.literal("remove")
+				.build();
+		
+		ArgumentCommandNode<ServerCommandSource, UUID> uuidNode = CommandManager
+				.argument("uuid", UuidArgumentType.uuid())
+				.executes(CommandsHandler::removeFromCache)
+				.build();
+		
+		node.addChild(cacheNode);
+		cacheNode.addChild(clearNode);
+		cacheNode.addChild(removeNode);
+		removeNode.addChild(uuidNode);
+	}
+	
+	private static int clearCache(CommandContext<ServerCommandSource> context) throws CommandSyntaxException {
+		MinecraftServer server = context.getSource().getServer();
+		PersistentPlayerCacheManager cache = (PersistentPlayerCacheManager)ExAPI.persistentPlayerCache(server);
+		cache.clear();
+		
+		context.getSource().sendFeedback(new TranslatableText("command.playerex.clear_cache"), false);
+		
+		return 1;
+	}
+	
+	private static int removeFromCache(CommandContext<ServerCommandSource> context) throws CommandSyntaxException {
+		UUID uuid = UuidArgumentType.getUuid(context, "uuid");
+		MinecraftServer server = context.getSource().getServer();
+		PersistentPlayerCacheManager cache = (PersistentPlayerCacheManager)ExAPI.persistentPlayerCache(server);
+		cache.removePlayer(uuid);
+		
+		context.getSource().sendFeedback(new TranslatableText("command.playerex.remove_from_cache", uuid), false);
+		
+		return 1;
+	}
+	
 	public static void init(CommandDispatcher<ServerCommandSource> dispatcher, boolean dedicated) {
 		LiteralCommandNode<ServerCommandSource> node = CommandManager
 				.literal("playerex")
@@ -183,5 +234,6 @@ public final class CommandsHandler {
 		resetCommand(node);
 		refundCommand(node);
 		levelUpCommand(node);
+		cacheCommand(node);
 	}
 }

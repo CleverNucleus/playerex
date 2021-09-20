@@ -40,8 +40,8 @@ public final class ClientUtil {
 	 * @return
 	 */
 	public static double displayValue(final IAttribute attributeIn, double valueIn) {
-		if(attributeIn.hasProperty(ExAPI.PERCENTAGE_PROPERTY)) return valueIn * attributeIn.getProperty(ExAPI.PERCENTAGE_PROPERTY);
-		if(attributeIn.hasProperty(ExAPI.MULTIPLIER_PROPERTY)) return valueIn * attributeIn.getProperty(ExAPI.MULTIPLIER_PROPERTY);
+		if(attributeIn.hasProperty(ExAPI.PERCENTAGE_PROPERTY)) return valueIn * ExAPI.parse(attributeIn.getProperty(ExAPI.PERCENTAGE_PROPERTY));
+		if(attributeIn.hasProperty(ExAPI.MULTIPLIER_PROPERTY)) return valueIn * ExAPI.parse(attributeIn.getProperty(ExAPI.MULTIPLIER_PROPERTY));
 		return valueIn;
 	}
 	

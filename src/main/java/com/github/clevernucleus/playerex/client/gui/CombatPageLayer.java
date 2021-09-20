@@ -70,7 +70,7 @@ public class CombatPageLayer extends PageLayer {
 			double displayValue = ClientUtil.displayValue(attributeInstance, value);
 			
 			if(attributeInstance.hasProperty(ExAPI.PERCENTAGE_PROPERTY)) {
-				displayValue += (double)attributeInstance.getProperty(ExAPI.PERCENTAGE_PROPERTY);
+				displayValue += (double)ExAPI.parse(attributeInstance.getProperty(ExAPI.PERCENTAGE_PROPERTY));
 			}
 			
 			return text.append(": " + ClientUtil.FORMATTING_2.format(displayValue) + "%");
@@ -184,7 +184,7 @@ public class CombatPageLayer extends PageLayer {
 			double displayValue = ClientUtil.displayValue(attributeInstance, value);
 			
 			if(attributeInstance.hasProperty(ExAPI.PERCENTAGE_PROPERTY)) {
-				displayValue += (double)attributeInstance.getProperty(ExAPI.PERCENTAGE_PROPERTY);
+				displayValue += (double)ExAPI.parse(attributeInstance.getProperty(ExAPI.PERCENTAGE_PROPERTY));
 			}
 			
 			return text.append(": " + ClientUtil.FORMATTING_2.format(displayValue) + "%");

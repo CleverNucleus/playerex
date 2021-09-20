@@ -5,7 +5,8 @@
     "name": "PlayerEx",
     "description": "Adds RPG attributes to the player.",
     "authors": [
-      "CleverNucleus"
+      "CleverNucleus",
+      "elhertz - spanish translation & helpful feature requests"
     ],
     "contact": {
         "homepage": "https://www.curseforge.com/minecraft/mc-mods/playerex",
@@ -24,7 +25,8 @@
             "com.github.clevernucleus.playerex.client.PlayerExClient"
         ],
         "cardinal-components": [
-            "com.github.clevernucleus.playerex.impl.ModifierDataContainer"
+            "com.github.clevernucleus.playerex.impl.ModifierDataContainer",
+            "com.github.clevernucleus.playerex.impl.PersistentPlayerCacheContainer"
         ],
         "modmenu": [
             "com.github.clevernucleus.playerex.config.ModMenuCompat"
@@ -32,7 +34,8 @@
     },
     "custom": {
         "cardinal-components": [
-            "playerex:data"
+            "playerex:data",
+            "playerex:cache"
         ]
     },
     "mixins": [
@@ -41,9 +44,9 @@
     
     "depends": {
         "fabricloader": ">=0.11.3",
-        "fabric": ">=0.37.1",
+        "fabric": ">=0.40.1",
         "minecraft": "1.17.x",
         "java": ">=16",
-        "dataattributes": ">=1.0.1"
+        "dataattributes": ">=1.0.4"
     }
 }

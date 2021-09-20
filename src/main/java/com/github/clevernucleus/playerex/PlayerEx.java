@@ -1,6 +1,7 @@
 package com.github.clevernucleus.playerex;
 
 import com.github.clevernucleus.dataattributes.api.event.EntityAttributeEvents;
+import com.github.clevernucleus.dataattributes.api.event.MathClampEvent;
 import com.github.clevernucleus.playerex.api.ExAPI;
 import com.github.clevernucleus.playerex.api.config.ExConfigProvider;
 import com.github.clevernucleus.playerex.api.event.PlayerLevelUpEvent;
@@ -21,6 +22,7 @@ import net.fabricmc.fabric.api.command.v1.CommandRegistrationCallback;
 import net.fabricmc.fabric.api.entity.event.v1.ServerPlayerEvents;
 import net.fabricmc.fabric.api.networking.v1.ServerLoginConnectionEvents;
 import net.fabricmc.fabric.api.networking.v1.ServerLoginNetworking;
+import net.fabricmc.fabric.api.networking.v1.ServerPlayConnectionEvents;
 import net.fabricmc.fabric.api.networking.v1.ServerPlayNetworking;
 import net.fabricmc.fabric.api.resource.ResourceManagerHelper;
 import net.fabricmc.fabric.api.screenhandler.v1.ScreenHandlerRegistry;
@@ -33,7 +35,7 @@ import net.minecraft.util.registry.Registry;
 public final class PlayerEx implements ModInitializer {
 	public static final ModifierJsonLoader MANAGER = new ModifierJsonLoader();
 	/** Manual; ugh, I know. */
-	public static final String VERSION = "3.0.3";
+	public static final String VERSION = "3.0.4";
 	public static final ConfigCache CONFIG = new ConfigCache();
 	public static final SoundEvent LEVEL_UP_SOUND = new SoundEvent(new Identifier(ExAPI.MODID, "level_up"));
 	public static final SoundEvent SP_SPEND_SOUND = new SoundEvent(new Identifier(ExAPI.MODID, "sp_spend"));
@@ -49,9 +51,12 @@ public final class PlayerEx implements ModInitializer {
 		ResourceManagerHelper.get(ResourceType.SERVER_DATA).registerReloadListener(MANAGER);
 		
 		PlayerLevelUpEvent.EVENT.register(NetworkHandler::levelUpEvent);
-		EntityAttributeEvents.MODIFIER_ADDED_PRE.register(EventHandler::healthModified);
+		MathClampEvent.EVENT.register(EventHandler::roundClampedValue);
+		EntityAttributeEvents.MODIFIER_ADDED_POST.register(EventHandler::levelUpdate);
+		EntityAttributeEvents.MODIFIER_REMOVED_POST.register(EventHandler::levelUpdate);
 		ServerLoginConnectionEvents.QUERY_START.register(NetworkHandler::loginQueryStart);
 		ServerPlayerEvents.COPY_FROM.register(EventHandler::respawn);
+		ServerPlayConnectionEvents.JOIN.register(EventHandler::join);
 		CommandRegistrationCallback.EVENT.register(CommandsHandler::init);
 		
 		ServerLoginNetworking.registerGlobalReceiver(NetworkHandler.SYNC, NetworkHandler::loginQueryResponse);
