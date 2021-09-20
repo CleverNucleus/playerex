@@ -92,6 +92,16 @@ public final class PersistentPlayerCacheManager implements PersistentPlayerCache
 	}
 	
 	@Override
+	public NameLevelPair get(final ServerPlayerEntity player) {
+		GameProfile profile = player.getGameProfile();
+		UUID uuid = profile.getId();
+		
+		if(uuid == null || !this.cache.containsKey(uuid)) return new NameLevelPair("", 0);
+		
+		return this.cache.get(uuid);
+	}
+	
+	@Override
 	public void readFromNbt(NbtCompound tag) {
 		if(!tag.contains("Cache")) return;
 		

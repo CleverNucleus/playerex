@@ -10,9 +10,7 @@ import com.github.clevernucleus.playerex.api.PersistentPlayerCache;
 import eu.pb4.placeholders.PlaceholderContext;
 import eu.pb4.placeholders.PlaceholderHandler;
 import eu.pb4.placeholders.PlaceholderResult;
-import net.minecraft.entity.attribute.AttributeContainer;
-import net.minecraft.entity.attribute.EntityAttribute;
-import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.util.Identifier;
 
 public final class StoredPlaceholder {	
@@ -53,18 +51,14 @@ public final class StoredPlaceholder {
 	
 	static {
 		register("level", ctx -> {
-			PlayerEntity player = ctx.getPlayer();
+			ServerPlayerEntity player = ctx.getPlayer();
 			
 			if(player == null) return PlaceholderResult.invalid("Null player!");
 			
-			AttributeContainer container = player.getAttributes();
-			EntityAttribute attribute = ExAPI.LEVEL.get();
+			PersistentPlayerCache cache = ExAPI.persistentPlayerCache(ctx.getServer());
+			NameLevelPair pair = cache.get(player);
 			
-			if(attribute == null || !container.hasAttribute(attribute)) return PlaceholderResult.invalid("Player doesn't have a level!");
-			
-			int level = Math.round((float)container.getValue(attribute));
-			
-			return PlaceholderResult.value(String.valueOf(level));
+			return PlaceholderResult.value(pair.level());
 		});
 		register("name_top", topName());
 		register("level_top", topLevel());
