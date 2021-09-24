@@ -38,6 +38,7 @@ public final class Page {
 	}
 	
 	public void buildLayers(HandledScreen<?> parent, ScreenHandler handler, PlayerInventory inv) {
+		this.layers.clear();
 		PageRegistry.findPageLayers(this.identifier).stream().map(builder -> builder.build(parent, handler, inv, this.title)).forEach(this.layers::add);
 	}
 }
