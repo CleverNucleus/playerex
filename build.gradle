@@ -44,7 +44,7 @@ dependencies {
 	modImplementation "io.github.onyxstudios.Cardinal-Components-API:cardinal-components-level:${project.cardinal_components_version}"
     include "io.github.onyxstudios.Cardinal-Components-API:cardinal-components-level:${project.cardinal_components_version}"
 	
-	modImplementation "curse.maven:dataattributes-514734:3462727"
+	modImplementation "curse.maven:dataattributes-514734:3484768"
 	
 	modImplementation("me.shedaniel.cloth:cloth-config-fabric:${project.cloth_config_version}") {
         exclude(group: "net.fabricmc.fabric-api")

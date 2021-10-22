@@ -47,6 +47,6 @@
         "fabric": ">=0.40.1",
         "minecraft": "1.17.x",
         "java": ">=16",
-        "dataattributes": ">=1.0.4"
+        "dataattributes": ">=1.0.6"
     }
 }

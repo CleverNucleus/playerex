@@ -481,7 +481,7 @@ public class AttributesPageLayer extends PageLayer {
 				} else {
 					EntityAttribute attribute = API.getAttribute(key).get();
 					IAttribute instance = (IAttribute)attribute;
-					double value = player.getAttributeValue(attribute);
+					double value = this.modifierData.get(attribute);
 					
 					if(this.canRefund()) {
 						button.active = value >= 1.0D;
