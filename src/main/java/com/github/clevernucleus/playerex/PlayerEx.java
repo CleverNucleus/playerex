@@ -35,7 +35,7 @@ import net.minecraft.util.registry.Registry;
 public final class PlayerEx implements ModInitializer {
 	public static final ModifierJsonLoader MANAGER = new ModifierJsonLoader();
 	/** Manual; ugh, I know. */
-	public static final String VERSION = "3.0.6";
+	public static final String VERSION = "3.0.7";
 	public static final ConfigCache CONFIG = new ConfigCache();
 	public static final SoundEvent LEVEL_UP_SOUND = new SoundEvent(new Identifier(ExAPI.MODID, "level_up"));
 	public static final SoundEvent SP_SPEND_SOUND = new SoundEvent(new Identifier(ExAPI.MODID, "sp_spend"));
@@ -54,6 +54,8 @@ public final class PlayerEx implements ModInitializer {
 		MathClampEvent.EVENT.register(EventHandler::roundClampedValue);
 		EntityAttributeEvents.MODIFIER_ADDED_POST.register(EventHandler::levelUpdate);
 		EntityAttributeEvents.MODIFIER_REMOVED_POST.register(EventHandler::levelUpdate);
+		//EntityAttributeEvents.MODIFIER_REMOVED_PRE.register(EventHandler::test);
+		//EntityAttributeEvents.MODIFIER_ADDED_POST.register(EventHandler::healthUpdate);
 		ServerLoginConnectionEvents.QUERY_START.register(NetworkHandler::loginQueryStart);
 		ServerPlayerEvents.COPY_FROM.register(EventHandler::respawn);
 		ServerPlayConnectionEvents.JOIN.register(EventHandler::join);

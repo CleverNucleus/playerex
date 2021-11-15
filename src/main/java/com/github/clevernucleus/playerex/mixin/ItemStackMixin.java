@@ -7,6 +7,7 @@ import org.spongepowered.asm.mixin.injection.ModifyVariable;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 import com.github.clevernucleus.playerex.api.event.ItemStackEvents;
+import com.google.common.collect.HashMultimap;
 import com.google.common.collect.Multimap;
 
 import net.minecraft.entity.EquipmentSlot;
@@ -30,7 +31,8 @@ abstract class ItemStackMixin {
 	@ModifyVariable(method = "getAttributeModifiers", at = @At(value = "STORE", ordinal = 1), ordinal = 0)
 	private Multimap<EntityAttribute, EntityAttributeModifier> modifyItemStackModifiers(Multimap<EntityAttribute, EntityAttributeModifier> original, EquipmentSlot slot) {
 		ItemStack stack = (ItemStack)(Object)this;
-		ItemStackEvents.ITEMSTACK_MODIFIERS.invoker().getAttributeModifiers(stack, original, slot);
+		Multimap<EntityAttribute, EntityAttributeModifier> modifiers = HashMultimap.create(original);
+		ItemStackEvents.ITEMSTACK_MODIFIERS.invoker().getAttributeModifiers(stack, modifiers, slot);
 		
 		return original;
 	}

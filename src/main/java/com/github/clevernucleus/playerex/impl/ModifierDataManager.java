@@ -30,12 +30,14 @@ import net.minecraft.util.registry.Registry;
 public final class ModifierDataManager implements ModifierData, AutoSyncedComponent {
 	private final PlayerEntity player;
 	private final Map<Identifier, Double> data;
+	//private final Map<Identifier, Double> cache;
 	private boolean hasLevelPotential;
 	private int refundPoints;
 	
 	public ModifierDataManager(PlayerEntity player) {
 		this.player = player;
 		this.data = new HashMap<Identifier, Double>();
+		//this.cache = new HashMap<Identifier, Double>();
 		this.hasLevelPotential = false;
 		
 		PlayerEx.MANAGER.modifiers.keySet().forEach(key -> this.data.put(key, 0.0D));
@@ -80,6 +82,25 @@ public final class ModifierDataManager implements ModifierData, AutoSyncedCompon
 		if(instance == null) return;
 		
 		instance.removeModifier(uuid);
+	}
+	
+	private void syncCache() {
+		/*
+		ExAPI.DATA.sync(this.player, (buf, player) -> {
+			NbtCompound tag = new NbtCompound();
+			NbtList cache = new NbtList();
+			
+			for(Identifier identifier : this.cache.keySet()) {
+				NbtCompound entry = new NbtCompound();
+				entry.putString("Key", identifier.toString());
+				entry.putDouble("Value", this.cache.get(identifier));
+				cache.add(entry);
+			}
+			
+			tag.put("Cache", cache);
+			buf.writeNbt(tag);
+		});
+		*/
 	}
 	
 	public boolean hasLevelPotential() {
@@ -192,6 +213,32 @@ public final class ModifierDataManager implements ModifierData, AutoSyncedCompon
 	}
 	
 	@Override
+	public void putInCache(final Identifier keyIn, final double valueIn) {
+		if(keyIn == null) return;
+		//this.cache.put(keyIn, valueIn);
+		this.syncCache();
+	}
+	
+	@Override
+	public void removeFromCache(final Identifier keyIn) {
+		if(keyIn == null) return;
+		//this.cache.remove(keyIn);
+		this.syncCache();
+	}
+	
+	@Override
+	public double getFromCache(final Identifier keyIn) {
+		if(keyIn == null) return 0.0D;
+		return 0.0D;//this.cache.getOrDefault(keyIn, 0.0D);
+	}
+	
+	@Override
+	public boolean cacheContains(final Identifier keyIn) {
+		if(keyIn == null) return false;
+		return false;//this.cache.containsKey(keyIn);
+	}
+	
+	@Override
 	public boolean shouldSyncWith(ServerPlayerEntity player) {
 		return player == this.player;
 	}
@@ -201,7 +248,19 @@ public final class ModifierDataManager implements ModifierData, AutoSyncedCompon
 		NbtCompound tag = buf.readNbt();
 		
 		if(tag == null) return;
-		
+		/*
+		if(tag.contains("Cache")) {
+			NbtList cache = tag.getList("Cache", NbtType.COMPOUND);
+			
+			for(int i = 0; i < cache.size(); i++) {
+				NbtCompound entry = cache.getCompound(i);
+				String key = entry.getString("Key");
+				Identifier identifier = new Identifier(key);
+				double value = entry.getDouble("Value");
+				this.cache.put(identifier, value);
+			}
+		}
+		*/
 		if(tag.contains("Modifiers")) {
 			NbtList data = tag.getList("Modifiers", NbtType.COMPOUND);
 			
@@ -234,6 +293,7 @@ public final class ModifierDataManager implements ModifierData, AutoSyncedCompon
 	@Override
 	public void readFromNbt(NbtCompound tag) {
 		NbtList data = tag.getList("Modifiers", NbtType.COMPOUND);
+		//NbtList cache = tag.getList("Cache", NbtType.COMPOUND);
 		
 		for(int i = 0; i < data.size(); i++) {
 			NbtCompound entry = data.getCompound(i);
@@ -242,7 +302,15 @@ public final class ModifierDataManager implements ModifierData, AutoSyncedCompon
 			double value = entry.getDouble("Value");
 			this.data.put(identifier, value);
 		}
-		
+		/*
+		for(int i = 0; i < cache.size(); i++) {
+			NbtCompound entry = cache.getCompound(i);
+			String key = entry.getString("Key");
+			Identifier identifier = new Identifier(key);
+			double value = entry.getDouble("Value");
+			this.cache.put(identifier, value);
+		}
+		*/
 		this.hasLevelPotential = tag.getBoolean("Potential");
 		this.refundPoints = tag.getInt("RefundPoints");
 	}
@@ -250,6 +318,7 @@ public final class ModifierDataManager implements ModifierData, AutoSyncedCompon
 	@Override
 	public void writeToNbt(NbtCompound tag) {
 		NbtList data = new NbtList();
+		//NbtList cache = new NbtList();
 		
 		for(Identifier identifier : this.data.keySet()) {
 			NbtCompound entry = new NbtCompound();
@@ -259,8 +328,18 @@ public final class ModifierDataManager implements ModifierData, AutoSyncedCompon
 			entry.putDouble("Value", value);
 			data.add(entry);
 		}
-		
+		/*
+		for(Identifier identifier : this.cache.keySet()) {
+			NbtCompound entry = new NbtCompound();
+			String key = identifier.toString();
+			double value = this.cache.get(identifier);
+			entry.putString("Key", key);
+			entry.putDouble("Value", value);
+			cache.add(entry);
+		}
+		*/
 		tag.put("Modifiers", data);
+		//tag.put("Cache", cache);
 		tag.putBoolean("Potential", this.hasLevelPotential);
 		tag.putInt("RefundPoints", this.refundPoints);
 	}

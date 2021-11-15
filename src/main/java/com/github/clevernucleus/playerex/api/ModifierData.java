@@ -2,6 +2,7 @@ package com.github.clevernucleus.playerex.api;
 
 import dev.onyxstudios.cca.api.v3.component.Component;
 import net.minecraft.entity.attribute.EntityAttribute;
+import net.minecraft.util.Identifier;
 
 /**
  * Interface providing access to the PlayerEx cached modifier values, as well as refund points and the reset option.
@@ -49,4 +50,31 @@ public interface ModifierData extends Component {
 	 * Resets all modifiers to their defaults (should only be called on the server; syncs automatically to the client).
 	 */
 	void reset();
+	
+	/**
+	 * 
+	 * @param keyIn
+	 * @param valueIn
+	 */
+	void putInCache(final Identifier keyIn, final double valueIn);
+	
+	/**
+	 * 
+	 * @param keyIn
+	 */
+	void removeFromCache(final Identifier keyIn);
+	
+	/**
+	 * 
+	 * @param keyIn
+	 * @return
+	 */
+	double getFromCache(final Identifier keyIn);
+	
+	/**
+	 * 
+	 * @param keyIn
+	 * @return
+	 */
+	boolean cacheContains(final Identifier keyIn);
 }
