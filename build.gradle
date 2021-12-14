@@ -1,10 +1,10 @@
 plugins {
-	id 'fabric-loom' version '0.8-SNAPSHOT'
+	id 'fabric-loom' version '0.10-SNAPSHOT'
 	id 'maven-publish'
 }
 
-sourceCompatibility = JavaVersion.VERSION_16
-targetCompatibility = JavaVersion.VERSION_16
+sourceCompatibility = JavaVersion.VERSION_17
+targetCompatibility = JavaVersion.VERSION_17
 
 archivesBaseName = project.archives_base_name
 version = project.mod_version
@@ -12,22 +12,17 @@ group = project.maven_group
 
 repositories {
 	mavenCentral()
-    maven {
-        name = "Ladysnake Mods"
-        url = 'https://ladysnake.jfrog.io/artifactory/mods'
-    }
 	maven {
-        url "https://maven.shedaniel.me/"
-    }
+		name = "Ladysnake Mods"
+		url = 'https://ladysnake.jfrog.io/artifactory/mods'
+	}
+	maven {
+		url "https://maven.shedaniel.me/"
+	}
 	maven {
 		url "https://maven.terraformersmc.com/"
 	}
-	maven {
-		url "https://maven.nucleoid.xyz/"
-	}
-	maven {
-		url = "https://www.cursemaven.com"
-	}
+	mavenLocal()
 }
 
 dependencies {
@@ -37,26 +32,21 @@ dependencies {
 	modImplementation "net.fabricmc:fabric-loader:${project.loader_version}"
 	modImplementation "net.fabricmc.fabric-api:fabric-api:${project.fabric_version}"
 	
-    modImplementation "io.github.onyxstudios.Cardinal-Components-API:cardinal-components-base:${project.cardinal_components_version}"
+	modImplementation "com.github.clevernucleus:DataAttributes:1.1.0"
+	
+	modImplementation "io.github.onyxstudios.Cardinal-Components-API:cardinal-components-base:${project.cardinal_components_version}"
     include "io.github.onyxstudios.Cardinal-Components-API:cardinal-components-base:${project.cardinal_components_version}"
     modImplementation "io.github.onyxstudios.Cardinal-Components-API:cardinal-components-entity:${project.cardinal_components_version}"
     include "io.github.onyxstudios.Cardinal-Components-API:cardinal-components-entity:${project.cardinal_components_version}"
-	modImplementation "io.github.onyxstudios.Cardinal-Components-API:cardinal-components-level:${project.cardinal_components_version}"
-    include "io.github.onyxstudios.Cardinal-Components-API:cardinal-components-level:${project.cardinal_components_version}"
-	
-	modImplementation "curse.maven:dataattributes-514734:3484768"
 	
 	modImplementation("me.shedaniel.cloth:cloth-config-fabric:${project.cloth_config_version}") {
         exclude(group: "net.fabricmc.fabric-api")
-    }
-	include "me.shedaniel.cloth:cloth-config-fabric:${project.cloth_config_version}"
+	}
 	
 	modImplementation "com.terraformersmc:modmenu:${project.modmenu_version}"
 	
 	implementation 'net.objecthunter:exp4j:0.4.8'
 	include 'net.objecthunter:exp4j:0.4.8'
-	
-	modImplementation include("eu.pb4:placeholder-api:${project.placeholder_api}")
 }
 
 processResources {
@@ -68,8 +58,7 @@ processResources {
 }
 
 tasks.withType(JavaCompile).configureEach {
-	it.options.encoding = "UTF-8"
-	it.options.release = 16
+	it.options.release = 17
 }
 
 java {
@@ -85,16 +74,11 @@ jar {
 publishing {
 	publications {
 		mavenJava(MavenPublication) {
-			artifact(remapJar) {
-				builtBy remapJar
-			}
-			artifact(sourcesJar) {
-				builtBy remapSourcesJar
-			}
+			from components.java
 		}
 	}
-
+	
 	repositories {
-        
+	
 	}
 }

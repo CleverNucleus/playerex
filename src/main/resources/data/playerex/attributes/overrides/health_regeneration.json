@@ -1,6 +1,0 @@
-{
-    "defaultValue": 0.0,
-    "minValue": -1.0,
-    "maxValue": 1.0,
-    "translationKey": "playerex.attribute.name.health_regeneration"
-}

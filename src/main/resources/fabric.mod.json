@@ -3,19 +3,17 @@
     "id": "playerex",
     "version": "${version}",
     "name": "PlayerEx",
-    "description": "Adds RPG attributes to the player.",
+    "description": "Adds RPG style attributes to the game, and provides the player with a new levelling system.",
     "authors": [
-      "CleverNucleus",
-      "elhertz - spanish translation & helpful feature requests"
+        "CleverNucleus",
+        "elhertz - spanish translation & helpful feature requests"
     ],
     "contact": {
         "homepage": "https://www.curseforge.com/minecraft/mc-mods/playerex",
         "sources": "https://github.com/CleverNucleus/PlayerEx"
     },
-    
     "license": "MIT",
     "icon": "assets/playerex/icon.png",
-    
     "environment": "*",
     "entrypoints": {
         "main": [
@@ -23,30 +21,17 @@
         ],
         "client": [
             "com.github.clevernucleus.playerex.client.PlayerExClient"
-        ],
-        "cardinal-components": [
-            "com.github.clevernucleus.playerex.impl.ModifierDataContainer",
-            "com.github.clevernucleus.playerex.impl.PersistentPlayerCacheContainer"
-        ],
-        "modmenu": [
-            "com.github.clevernucleus.playerex.config.ModMenuCompat"
-        ]
-    },
-    "custom": {
-        "cardinal-components": [
-            "playerex:data",
-            "playerex:cache"
         ]
     },
     "mixins": [
         "playerex.mixins.json"
     ],
-    
     "depends": {
         "fabricloader": ">=0.11.3",
-        "fabric": ">=0.40.1",
-        "minecraft": "1.17.x",
-        "java": ">=16",
-        "dataattributes": ">=1.0.6"
+        "fabric": ">=0.44.0",
+        "minecraft": "1.18.x",
+        "dataattributes": ">=1.1.0",
+        "cloth-config2": ">=6.0.0",
+        "java": ">=17"
     }
 }

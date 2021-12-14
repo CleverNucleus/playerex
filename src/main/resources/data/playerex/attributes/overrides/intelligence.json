@@ -1,6 +1,0 @@
-{
-    "defaultValue": 0.0,
-    "minValue": 0.0,
-    "maxValue": 2147483647.0,
-    "translationKey": "playerex.attribute.name.intelligence"
-}
