@@ -21,7 +21,15 @@
         ],
         "client": [
             "com.github.clevernucleus.playerex.client.PlayerExClient"
+        ],
+        "cardinal-components": [
+        	"com.github.clevernucleus.playerex.impl.PlayerDataContainer"
         ]
+    },
+    "custom": {
+    	"cardinal-components": [
+    		"playerex:data"
+    	]
     },
     "mixins": [
         "playerex.mixins.json"
