@@ -17,4 +17,7 @@ public interface PlayerData extends Component {
 	
 	
 	void remove(final EntityAttribute attributeIn);
+	
+	
+	void reset();
 }

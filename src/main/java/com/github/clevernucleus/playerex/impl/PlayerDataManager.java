@@ -1,7 +1,9 @@
 package com.github.clevernucleus.playerex.impl;
 
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.Map;
+import java.util.Optional;
 import java.util.UUID;
 
 import com.github.clevernucleus.dataattributes.api.attribute.IEntityAttributeInstance;
@@ -14,9 +16,11 @@ import net.fabricmc.fabric.api.util.NbtType;
 import net.minecraft.entity.attribute.AttributeContainer;
 import net.minecraft.entity.attribute.EntityAttribute;
 import net.minecraft.entity.attribute.EntityAttributeInstance;
+import net.minecraft.entity.attribute.EntityAttributeModifier;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.nbt.NbtCompound;
 import net.minecraft.nbt.NbtList;
+import net.minecraft.nbt.NbtString;
 import net.minecraft.network.PacketByteBuf;
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.util.Identifier;
@@ -31,9 +35,49 @@ public final class PlayerDataManager implements PlayerData, AutoSyncedComponent 
 		this.data = new HashMap<Identifier, Double>();
 	}
 	
-	private UUID uuid(final EntityAttribute attributeIn) {
+	private UUID uuid(final Identifier registryKey) {
+		return PlayerEx.MANAGER.modifiers.getOrDefault(registryKey, (UUID)null);
+	}
+	
+	private Optional<Identifier> tryRemove(final EntityAttribute attributeIn) {
 		Identifier identifier = Registry.ATTRIBUTE.getId(attributeIn);
-		return PlayerEx.MANAGER.modifiers.getOrDefault(identifier, (UUID)null);
+		
+		if(identifier == null) return Optional.empty();
+		
+		AttributeContainer container = this.player.getAttributes();
+		EntityAttributeInstance instance = container.getCustomInstance(attributeIn);
+		
+		if(instance == null) return Optional.empty();
+		
+		UUID uuid = this.uuid(identifier);
+		
+		if(instance.getModifier(uuid) != null) {
+			instance.removeModifier(uuid);
+		}
+		
+		this.data.remove(identifier);
+		
+		return Optional.of(identifier);
+	}
+	
+	private boolean trySet(final Identifier registryKey, final double valueIn) {
+		EntityAttribute attribute = Registry.ATTRIBUTE.get(registryKey);
+		AttributeContainer container = this.player.getAttributes();
+		EntityAttributeInstance instance = container.getCustomInstance(attribute);
+		UUID uuid = this.uuid(registryKey);
+		
+		if(instance == null || uuid == null) return false;
+		
+		if(instance.getModifier(uuid) == null) {
+			EntityAttributeModifier modifier = new EntityAttributeModifier(uuid, "PlayerData Attribute", valueIn, EntityAttributeModifier.Operation.ADDITION);
+			instance.addPersistentModifier(modifier);
+		} else {
+			((IEntityAttributeInstance)instance).updateModifier(uuid, valueIn);
+		}
+		
+		this.data.put(registryKey, valueIn);
+		
+		return true;
 	}
 	
 	@Override
@@ -42,35 +86,21 @@ public final class PlayerDataManager implements PlayerData, AutoSyncedComponent 
 		
 		if(identifier == null) return 0.0D;
 		
-		return this.data.get(identifier);
+		return this.data.getOrDefault(identifier, 0.0D);
 	}
 	
 	@Override
 	public void set(final EntityAttribute attributeIn, final double valueIn) {
-		Identifier identifier = Registry.ATTRIBUTE.getId(attributeIn);
+		double value = attributeIn.clamp(valueIn);
 		
-		if(identifier == null) return;
-		
-		AttributeContainer container = this.player.getAttributes();
-		EntityAttributeInstance instance = container.getCustomInstance(attributeIn);
-		
-		if(instance == null) return;
-		
-		UUID uuid = this.uuid(attributeIn);
-		
-		if(instance.getModifier(uuid) == null) {
-			instance.addPersistentModifier(null);
-		} else {
-			((IEntityAttributeInstance)instance).updateModifier(uuid, valueIn);
-		}
-		
-		this.data.put(identifier, valueIn);
+		Identifier registryKey = Registry.ATTRIBUTE.getId(attributeIn);
+		if(!this.trySet(registryKey, value)) return;
 		
 		ExAPI.INSTANCE.sync(this.player, (buf, player) -> {
 			NbtCompound tag = new NbtCompound();
 			NbtCompound entry = new NbtCompound();
-			entry.putString("Key", identifier.toString());
-			entry.putDouble("Value", valueIn);
+			entry.putString("Key", registryKey.toString());
+			entry.putDouble("Value", value);
 			tag.put("Set", entry);
 			buf.writeNbt(tag);
 		});
@@ -84,26 +114,30 @@ public final class PlayerDataManager implements PlayerData, AutoSyncedComponent 
 	
 	@Override
 	public void remove(final EntityAttribute attributeIn) {
-		Identifier identifier = Registry.ATTRIBUTE.getId(attributeIn);
+		this.tryRemove(attributeIn).ifPresent(identifier -> {
+			ExAPI.INSTANCE.sync(this.player, (buf, player) -> {
+				NbtCompound tag = new NbtCompound();
+				tag.putString("Remove", identifier.toString());
+				buf.writeNbt(tag);
+			});
+		});
+	}
+	
+	@Override
+	public void reset() {
+		NbtList list = new NbtList();
 		
-		if(identifier == null) return;
-		
-		AttributeContainer container = this.player.getAttributes();
-		EntityAttributeInstance instance = container.getCustomInstance(attributeIn);
-		
-		if(instance == null) return;
-		
-		UUID uuid = this.uuid(attributeIn);
-		
-		if(instance.getModifier(uuid) != null) {
-			instance.removeModifier(uuid);
+		for(Iterator<Identifier> iterator = this.data.keySet().iterator(); iterator.hasNext();) {
+			Identifier identifier = iterator.next();
+			EntityAttribute attribute = Registry.ATTRIBUTE.get(identifier);
+			
+			list.add(NbtString.of(identifier.toString()));
+			this.tryRemove(attribute);
 		}
-		
-		this.data.remove(identifier);
 		
 		ExAPI.INSTANCE.sync(this.player, (buf, player) -> {
 			NbtCompound tag = new NbtCompound();
-			tag.putString("Remove", identifier.toString());
+			tag.put("Reset", list);
 			buf.writeNbt(tag);
 		});
 	}
@@ -117,6 +151,8 @@ public final class PlayerDataManager implements PlayerData, AutoSyncedComponent 
 	public void applySyncPacket(PacketByteBuf buf) {
 		NbtCompound tag = buf.readNbt();
 		
+		if(tag == null) return;
+		
 		if(tag.contains("Set")) {
 			NbtCompound entry = tag.getCompound("Set");
 			Identifier identifier = new Identifier(entry.getString("Key"));
@@ -128,6 +164,19 @@ public final class PlayerDataManager implements PlayerData, AutoSyncedComponent 
 			Identifier identifier = new Identifier(tag.getString("Remove"));
 			this.data.remove(identifier);
 		}
+		
+		if(tag.contains("Reset")) {
+			NbtList list = tag.getList("Reset", NbtType.STRING);
+			
+			for(int i = 0; i < list.size(); i++) {
+				Identifier identifier = new Identifier(list.getString(i));
+				this.data.remove(identifier);
+			}
+		}
+		
+		if(tag.contains("Modifiers")) {
+			this.readFromNbt(tag);
+		}
 	}
 	
 	@Override
@@ -136,9 +185,9 @@ public final class PlayerDataManager implements PlayerData, AutoSyncedComponent 
 		
 		for(int i = 0; i < modifiers.size(); i++) {
 			NbtCompound entry = modifiers.getCompound(i);
-			Identifier identifier = new Identifier(entry.getString("Key"));
+			Identifier key = new Identifier(entry.getString("Key"));
 			double value = entry.getDouble("Value");
-			this.data.put(identifier, value);
+			this.trySet(key, value);
 		}
 	}
 	
