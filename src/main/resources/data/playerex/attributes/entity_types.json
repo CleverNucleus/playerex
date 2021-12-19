@@ -1,0 +1,22 @@
+{
+    "values": {
+        "minecraft:player": {
+            "playerex:level": 0.0,
+            "playerex:skill_points": 0.0,
+            "playerex:constitution": 0.0,
+            "playerex:strength": 0.0,
+            "playerex:dexterity": 0.0,
+            "playerex:intelligence": 0.0,
+            "playerex:luckiness": 0.0,
+            "playerex:evasion": 0.0,
+            "playerex:lifesteal": 0.0,
+            "playerex:health_regeneration": 0.0,
+            "playerex:heal_amplification": 0.0,
+            "playerex:melee_crit_damage": 0.0,
+            "playerex:melee_crit_chance": 0.0,
+            "playerex:ranged_crit_damage": 0.0,
+            "playerex:ranged_crit_chance": 0.0,
+            "playerex:ranged_damage": 0.0
+        }
+    }
+}
