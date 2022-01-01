@@ -1,0 +1,28 @@
+{
+    "values": {
+        "minecraft:generic.max_health": {
+            "integer": "0.0"
+        },
+        "playerex:level": {
+            "integer": "0.0"
+        },
+        "playerex:skill_points": {
+            "integer": "0.0"
+        },
+        "playerex:constitution": {
+            "integer": "0.0"
+        },
+        "playerex:strength": {
+            "integer": "0.0"
+        },
+        "playerex:dexterity": {
+            "integer": "0.0"
+        },
+        "playerex:intelligence": {
+            "integer": "0.0"
+        },
+        "playerex:luckiness": {
+            "integer": "0.0"
+        }
+    }
+}

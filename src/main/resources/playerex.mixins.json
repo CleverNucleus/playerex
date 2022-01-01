@@ -5,10 +5,12 @@
     "compatibilityLevel": "JAVA_17",
     "mixins": [
         "LivingEntityMixin",
-        "PlayerEntityMixin"
+        "PlayerEntityMixin",
+        "PersistentProjectileEntityMixin"
     ],
     "client": [
-        
+        "client.PlayerEntityRendererMixin",
+        "client.HandledScreenAccessor"
     ],
     "injectors": {
         "defaultRequire": 1

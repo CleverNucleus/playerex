@@ -16,7 +16,12 @@
             "playerex:melee_crit_chance": 0.0,
             "playerex:ranged_crit_damage": 0.0,
             "playerex:ranged_crit_chance": 0.0,
-            "playerex:ranged_damage": 0.0
+            "playerex:ranged_damage": 0.0,
+            "playerex:fire_resistance": 0.0,
+            "playerex:cold_resistance": 0.0,
+            "playerex:lightning_resistance": 0.0,
+            "playerex:poison_resistance": 0.0,
+            "playerex:wither_resistance": 0.0
         }
     }
 }
