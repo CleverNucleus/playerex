@@ -27,6 +27,8 @@ public final class ExAPI {
 	public static final String PERCENTAGE_PROPERTY = "percentage";
 	/** Multiply value by property. */
 	public static final String MULTIPLIER_PROPERTY = "multiplier";
+	/** Multiply value by property. */
+	public static final String REFUNDABLE_PROPERTY = "refundable";
 	/** The Cardinal Components Key for PlayerEx modifier data. */
 	public static final ComponentKey<PlayerData> INSTANCE = ComponentRegistry.getOrCreate(new Identifier(MODID, "data"), PlayerData.class);
 	
@@ -47,7 +49,7 @@ public final class ExAPI {
 	public static final Supplier<EntityAttribute> RANGED_CRIT_CHANCE = define("ranged_crit_chance");
 	public static final Supplier<EntityAttribute> RANGED_DAMAGE = define("ranged_damage");
 	public static final Supplier<EntityAttribute> FIRE_RESISTANCE = define("fire_resistance");
-	public static final Supplier<EntityAttribute> COLD_RESISTANCE = define("cold_resistance");
+	public static final Supplier<EntityAttribute> FREEZE_RESISTANCE = define("freeze_resistance");
 	public static final Supplier<EntityAttribute> LIGHTNING_RESISTANCE = define("lightning_resistance");
 	public static final Supplier<EntityAttribute> POISON_RESISTANCE = define("poison_resistance");
 	public static final Supplier<EntityAttribute> WITHER_RESISTANCE = define("wither_resistance");

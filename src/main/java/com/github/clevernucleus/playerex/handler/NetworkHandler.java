@@ -1,15 +1,23 @@
 package com.github.clevernucleus.playerex.handler;
 
+import java.util.HashMap;
+import java.util.Map;
 import java.util.UUID;
+import java.util.function.Supplier;
 
+import com.github.clevernucleus.dataattributes.api.DataAttributesAPI;
 import com.github.clevernucleus.playerex.PlayerEx;
 import com.github.clevernucleus.playerex.api.ExAPI;
+import com.github.clevernucleus.playerex.api.PacketType;
+import com.github.clevernucleus.playerex.api.PlayerData;
 import com.github.clevernucleus.playerex.config.ConfigCache;
 
 import net.fabricmc.fabric.api.networking.v1.PacketByteBufs;
 import net.fabricmc.fabric.api.networking.v1.PacketSender;
 import net.fabricmc.fabric.api.networking.v1.ServerLoginNetworking;
 import net.fabricmc.fabric.api.networking.v1.ServerLoginNetworking.LoginSynchronizer;
+import net.fabricmc.fabric.api.util.NbtType;
+import net.minecraft.entity.attribute.EntityAttribute;
 import net.minecraft.nbt.NbtCompound;
 import net.minecraft.nbt.NbtList;
 import net.minecraft.network.PacketByteBuf;
@@ -21,7 +29,14 @@ import net.minecraft.text.LiteralText;
 import net.minecraft.util.Identifier;
 
 public final class NetworkHandler {
+	public static final Identifier MODIFY = new Identifier(ExAPI.MODID, "modify");
 	public static final Identifier SCREEN = new Identifier(ExAPI.MODID, "screen");
+	
+	private static final Map<String, PacketType> PACKET_TYPES = new HashMap<String, PacketType>();
+	
+	public static void addPacketType(final PacketType packetType) {
+		PACKET_TYPES.put(packetType.id(), packetType);
+	}
 	
 	public static void loginQueryStart(ServerLoginNetworkHandler handler, MinecraftServer server, PacketSender sender, ServerLoginNetworking.LoginSynchronizer synchronizer) {
 		PacketByteBuf buf = PacketByteBufs.create();
@@ -66,6 +81,32 @@ public final class NetworkHandler {
 					player.closeScreenHandler();
 				} else {
 					player.openHandledScreen(new ExScreenProvider());
+				}
+			}
+		});
+	}
+	
+	public static void modifyAttributes(MinecraftServer server, ServerPlayerEntity player, ServerPlayNetworkHandler handler, PacketByteBuf buf, PacketSender responseSender) {
+		NbtCompound tag = buf.readNbt();
+		
+		server.execute(() -> {
+			if(player != null) {
+				PlayerData data = ExAPI.INSTANCE.get(player);
+				NbtList list = tag.getList("Data", NbtType.COMPOUND);
+				PacketType packetType = PACKET_TYPES.getOrDefault(tag.getString("Type"), PacketType.DEFAULT);
+				
+				if(packetType.test(server, player, data)) {
+					for(int i = 0; i < list.size(); i++) {
+						NbtCompound entry = list.getCompound(i);
+						Identifier identifier = new Identifier(entry.getString("Key"));
+						Supplier<EntityAttribute> attribute = DataAttributesAPI.getAttribute(identifier);
+						DataAttributesAPI.ifPresent(player, attribute, (Object)null, amount -> {
+							double value = entry.getDouble("Value");
+							data.add(attribute.get(), value);
+							
+							return (Object)null;
+						});
+					}
 				}
 			}
 		});

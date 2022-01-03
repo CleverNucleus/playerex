@@ -2,12 +2,14 @@ package com.github.clevernucleus.playerex.api.client;
 
 import java.text.DecimalFormat;
 import java.util.List;
+import java.util.function.BiConsumer;
+import java.util.function.Consumer;
 import java.util.function.Supplier;
 
 import com.github.clevernucleus.dataattributes.api.attribute.IEntityAttribute;
-import com.github.clevernucleus.dataattributes.api.attribute.StackingBehaviour;
 import com.github.clevernucleus.dataattributes.api.util.Maths;
 import com.github.clevernucleus.playerex.api.ExAPI;
+import com.github.clevernucleus.playerex.api.PacketType;
 
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
@@ -84,12 +86,16 @@ public final class ClientUtil {
 			String formt = formatValue(() -> (EntityAttribute)attribute2, displ);
 			MutableText mutableText = new LiteralText(formt + " ");
 			mutableText.append(new TranslatableText(attribute2.getTranslationKey()));
-			
-			if(attribute2.stackingBehaviour() == StackingBehaviour.DIMINISHING) {
-				mutableText.append(new TranslatableText("playerex.gui.text.diminishing"));
-			}
-			
 			tooltip.add(mutableText.formatted(Formatting.GRAY));
+		}
+	}
+	
+	
+	@SafeVarargs
+	public static void modifyAttributes(final PacketType type, Consumer<BiConsumer<Supplier<EntityAttribute>, Double>> ... consumers) {
+		if(consumers != null) {
+			PacketType packetId = type == null ? PacketType.DEFAULT : type;
+			com.github.clevernucleus.playerex.client.NetworkHandlerClient.modifyAttributes(packetId, consumers);
 		}
 	}
 }

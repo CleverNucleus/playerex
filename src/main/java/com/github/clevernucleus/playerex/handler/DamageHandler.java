@@ -18,7 +18,7 @@ public final class DamageHandler {
 	
 	public void forEach(BiConsumer<DamagePredicate, DamageFunction> registry) {
 		registry.accept((living, source, damage) -> source.isFire(), (living, source, damage) -> DataAttributesAPI.ifPresent(living, ExAPI.FIRE_RESISTANCE, damage, value -> damage * (1.0F - value)));
-		registry.accept((living, source, damage) -> source.equals(DamageSource.FREEZE), (living, source, damage) -> DataAttributesAPI.ifPresent(living, ExAPI.COLD_RESISTANCE, damage, value -> damage * (1.0F - value)));
+		registry.accept((living, source, damage) -> source.equals(DamageSource.FREEZE), (living, source, damage) -> DataAttributesAPI.ifPresent(living, ExAPI.FREEZE_RESISTANCE, damage, value -> damage * (1.0F - value)));
 		registry.accept((living, source, damage) -> source.equals(DamageSource.LIGHTNING_BOLT), (living, source, damage) -> DataAttributesAPI.ifPresent(living, ExAPI.LIGHTNING_RESISTANCE, damage, value -> damage * (1.0F - value)));registry.accept((living, source, damage) -> living.hasStatusEffect(StatusEffects.POISON) && source.isMagic() && damage <= 1.0F, (living, source, damage) -> DataAttributesAPI.ifPresent(living, ExAPI.POISON_RESISTANCE, damage, value -> damage * (1.0F - value)));
 		registry.accept((living, source, damage) -> living.hasStatusEffect(StatusEffects.POISON) && source.isMagic() && damage <= 1.0F, (living, source, damage) -> DataAttributesAPI.ifPresent(living, ExAPI.POISON_RESISTANCE, damage, value -> damage * (1.0F - value)));
 		registry.accept((living, source, damage) -> source.equals(DamageSource.WITHER) || (source.name.equals("indirectMagic") && source.getSource() instanceof PotionEntity), (living, source, damage) -> {

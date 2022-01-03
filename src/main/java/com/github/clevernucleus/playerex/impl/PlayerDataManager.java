@@ -1,10 +1,13 @@
 package com.github.clevernucleus.playerex.impl;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
+import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 import java.util.UUID;
+import java.util.function.BiFunction;
 
 import com.github.clevernucleus.dataattributes.api.attribute.IEntityAttributeInstance;
 import com.github.clevernucleus.playerex.PlayerEx;
@@ -13,6 +16,7 @@ import com.github.clevernucleus.playerex.api.PlayerData;
 
 import dev.onyxstudios.cca.api.v3.component.sync.AutoSyncedComponent;
 import net.fabricmc.fabric.api.util.NbtType;
+import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.attribute.AttributeContainer;
 import net.minecraft.entity.attribute.EntityAttribute;
 import net.minecraft.entity.attribute.EntityAttributeInstance;
@@ -24,15 +28,22 @@ import net.minecraft.nbt.NbtString;
 import net.minecraft.network.PacketByteBuf;
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.util.Identifier;
+import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.registry.Registry;
 
 public final class PlayerDataManager implements PlayerData, AutoSyncedComponent {
+	private static final List<BiFunction<PlayerData, LivingEntity, Double>> REFUND_CONDITIONS = new ArrayList<BiFunction<PlayerData, LivingEntity, Double>>();
 	private final PlayerEntity player;
 	private final Map<Identifier, Double> data;
+	private int refundPoints;
 	
 	public PlayerDataManager(PlayerEntity player) {
 		this.player = player;
 		this.data = new HashMap<Identifier, Double>();
+	}
+	
+	public static void addRefundCondition(final BiFunction<PlayerData, LivingEntity, Double> condition) {
+		REFUND_CONDITIONS.add(condition);
 	}
 	
 	private UUID uuid(final Identifier registryKey) {
@@ -143,6 +154,31 @@ public final class PlayerDataManager implements PlayerData, AutoSyncedComponent 
 	}
 	
 	@Override
+	public int addRefundPoints(final int pointsIn) {
+		final int previous = this.refundPoints;
+		double maxRefundPt = 0.0D;
+		
+		for(BiFunction<PlayerData, LivingEntity, Double> condition : REFUND_CONDITIONS) {
+			maxRefundPt += condition.apply(this, this.player);
+		}
+		
+		double refund = MathHelper.clamp((double)(this.refundPoints + pointsIn), 0.0D, maxRefundPt);
+		this.refundPoints = Math.round((float)refund);
+		
+		ExAPI.INSTANCE.sync(this.player, (buf, player) -> {
+			NbtCompound tag = new NbtCompound();
+			tag.putInt("RefundPoints", this.refundPoints);
+		});
+		
+		return this.refundPoints - previous;
+	}
+	
+	@Override
+	public int refundPoints() {
+		return this.refundPoints;
+	}
+	
+	@Override
 	public boolean shouldSyncWith(ServerPlayerEntity player) {
 		return player == this.player;
 	}
@@ -177,6 +213,10 @@ public final class PlayerDataManager implements PlayerData, AutoSyncedComponent 
 		if(tag.contains("Modifiers")) {
 			this.readFromNbt(tag);
 		}
+		
+		if(tag.contains("RefundPoints")) {
+			this.refundPoints = tag.getInt("RefundPoints");
+		}
 	}
 	
 	@Override
@@ -189,6 +229,8 @@ public final class PlayerDataManager implements PlayerData, AutoSyncedComponent 
 			double value = entry.getDouble("Value");
 			this.trySet(key, value);
 		}
+		
+		this.refundPoints = tag.getInt("RefundPoints");
 	}
 	
 	@Override
@@ -204,5 +246,6 @@ public final class PlayerDataManager implements PlayerData, AutoSyncedComponent 
 		}
 		
 		tag.put("Modifiers", modifiers);
+		tag.putInt("RefundPoints", this.refundPoints);
 	}
 }

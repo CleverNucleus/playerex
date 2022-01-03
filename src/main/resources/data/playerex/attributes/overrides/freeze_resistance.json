@@ -2,6 +2,6 @@
     "fallbackValue": 0.0,
     "minValue": -1.0,
     "maxValue": 1.0,
-    "translationKey": "playerex.attribute.name.cold_resistance",
+    "translationKey": "playerex.attribute.name.freeze_resistance",
     "stackingBehaviour": "DIMINISHING"
 }

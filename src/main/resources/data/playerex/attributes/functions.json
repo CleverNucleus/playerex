@@ -11,7 +11,7 @@
         "playerex:strength": {
             "minecraft:generic.attack_damage": 0.25,
             "minecraft:generic.armor": 0.5,
-            "playerex:health_regeneration": 0.0005
+            "playerex:health_regeneration": 0.01
         },
         "playerex:dexterity": {
             "minecraft:generic.attack_speed": 0.1,

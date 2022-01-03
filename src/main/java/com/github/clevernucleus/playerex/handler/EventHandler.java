@@ -52,18 +52,6 @@ public final class EventHandler {
 		});
 	}
 	
-	public static void tick(final LivingEntity livingEntity) {
-		if(livingEntity.world.isClient) return;
-		
-		DataAttributesAPI.ifPresent(livingEntity, ExAPI.HEALTH_REGENERATION, (Object)null, value -> {
-			if(value > 0.0F && livingEntity.getHealth() < livingEntity.getMaxHealth()) {
-				livingEntity.heal(value);
-			}
-			
-			return (Object)null;
-		});
-	}
-	
 	public static float damageModified(final LivingEntity livingEntity, final DamageSource source, final float original) {
 		float amount = original;
 		

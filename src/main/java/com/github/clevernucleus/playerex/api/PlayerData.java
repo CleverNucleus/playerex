@@ -1,6 +1,9 @@
 package com.github.clevernucleus.playerex.api;
 
+import java.util.function.BiFunction;
+
 import dev.onyxstudios.cca.api.v3.component.Component;
+import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.attribute.EntityAttribute;
 
 
@@ -20,4 +23,15 @@ public interface PlayerData extends Component {
 	
 	
 	void reset();
+	
+	
+	int addRefundPoints(final int pointsIn);
+	
+	
+	int refundPoints();
+	
+	
+	public static void registerRefundCondition(final BiFunction<PlayerData, LivingEntity, Double> condition) {
+		com.github.clevernucleus.playerex.impl.PlayerDataManager.addRefundCondition(condition);
+	}
 }
