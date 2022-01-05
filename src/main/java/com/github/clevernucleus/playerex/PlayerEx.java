@@ -3,7 +3,6 @@ package com.github.clevernucleus.playerex;
 import com.github.clevernucleus.dataattributes.api.DataAttributesAPI;
 import com.github.clevernucleus.dataattributes.api.event.EntityAttributeModifiedEvents;
 import com.github.clevernucleus.playerex.api.ExAPI;
-import com.github.clevernucleus.playerex.api.PacketType;
 import com.github.clevernucleus.playerex.api.PlayerData;
 import com.github.clevernucleus.playerex.api.damage.DamageModificationRegistry;
 import com.github.clevernucleus.playerex.api.event.LivingEntityEvents;
@@ -14,7 +13,6 @@ import com.github.clevernucleus.playerex.handler.EventHandler;
 import com.github.clevernucleus.playerex.handler.ExScreenHandler;
 import com.github.clevernucleus.playerex.handler.NetworkHandler;
 import com.github.clevernucleus.playerex.impl.ModifierJsonManager;
-import com.github.clevernucleus.playerex.impl.PacketTypes;
 
 import me.shedaniel.autoconfig.AutoConfig;
 import me.shedaniel.autoconfig.serializer.GsonConfigSerializer;
@@ -70,7 +68,6 @@ public class PlayerEx implements ModInitializer {
 		PlayerData.registerRefundCondition((data, player) -> DataAttributesAPI.ifPresent(player, ExAPI.DEXTERITY, 0.0D, value -> data.get(ExAPI.DEXTERITY.get())));
 		PlayerData.registerRefundCondition((data, player) -> DataAttributesAPI.ifPresent(player, ExAPI.INTELLIGENCE, 0.0D, value -> data.get(ExAPI.INTELLIGENCE.get())));
 		PlayerData.registerRefundCondition((data, player) -> DataAttributesAPI.ifPresent(player, ExAPI.LUCKINESS, 0.0D, value -> data.get(ExAPI.LUCKINESS.get())));
-		PacketType.registerPacketTypes(PacketTypes.LEVEL, PacketTypes.SKILL, PacketTypes.REFUND);
 		
 		Registry.register(Registry.SOUND_EVENT, LEVEL_UP_SOUND.getId(), LEVEL_UP_SOUND);
 		Registry.register(Registry.SOUND_EVENT, SP_SPEND_SOUND.getId(), SP_SPEND_SOUND);

@@ -6,9 +6,6 @@
         "playerex:level": {
             "integer": "0.0"
         },
-        "playerex:skill_points": {
-            "integer": "0.0"
-        },
         "playerex:constitution": {
             "integer": "0.0"
         },

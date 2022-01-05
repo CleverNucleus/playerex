@@ -35,7 +35,7 @@ public final class PlayerDataManager implements PlayerData, AutoSyncedComponent 
 	private static final List<BiFunction<PlayerData, LivingEntity, Double>> REFUND_CONDITIONS = new ArrayList<BiFunction<PlayerData, LivingEntity, Double>>();
 	private final PlayerEntity player;
 	private final Map<Identifier, Double> data;
-	private int refundPoints;
+	private int refundPoints, skillPoints;
 	
 	public PlayerDataManager(PlayerEntity player) {
 		this.player = player;
@@ -102,7 +102,7 @@ public final class PlayerDataManager implements PlayerData, AutoSyncedComponent 
 	
 	@Override
 	public void set(final EntityAttribute attributeIn, final double valueIn) {
-		double value = attributeIn.clamp(valueIn);
+		double value = valueIn;//attributeIn.clamp(valueIn);
 		
 		Identifier registryKey = Registry.ATTRIBUTE.getId(attributeIn);
 		if(!this.trySet(registryKey, value)) return;
@@ -154,6 +154,16 @@ public final class PlayerDataManager implements PlayerData, AutoSyncedComponent 
 	}
 	
 	@Override
+	public void addSkillPoints(final int pointsIn) {
+		this.skillPoints += pointsIn;
+		
+		ExAPI.INSTANCE.sync(this.player, (buf, player) -> {
+			NbtCompound tag = new NbtCompound();
+			tag.putInt("SkillPoints", this.skillPoints);
+		});
+	}
+	
+	@Override
 	public int addRefundPoints(final int pointsIn) {
 		final int previous = this.refundPoints;
 		double maxRefundPt = 0.0D;
@@ -171,6 +181,11 @@ public final class PlayerDataManager implements PlayerData, AutoSyncedComponent 
 		});
 		
 		return this.refundPoints - previous;
+	}
+	
+	@Override
+	public int skillPoints() {
+		return this.skillPoints;
 	}
 	
 	@Override
@@ -208,6 +223,9 @@ public final class PlayerDataManager implements PlayerData, AutoSyncedComponent 
 				Identifier identifier = new Identifier(list.getString(i));
 				this.data.remove(identifier);
 			}
+			
+			this.refundPoints = 0;
+			this.skillPoints = 0;
 		}
 		
 		if(tag.contains("Modifiers")) {
@@ -216,6 +234,10 @@ public final class PlayerDataManager implements PlayerData, AutoSyncedComponent 
 		
 		if(tag.contains("RefundPoints")) {
 			this.refundPoints = tag.getInt("RefundPoints");
+		}
+		
+		if(tag.contains("SkillPoints")) {
+			this.skillPoints = tag.getInt("SkillPoints");
 		}
 	}
 	
@@ -231,6 +253,7 @@ public final class PlayerDataManager implements PlayerData, AutoSyncedComponent 
 		}
 		
 		this.refundPoints = tag.getInt("RefundPoints");
+		this.skillPoints = tag.getInt("SkillPoints");
 	}
 	
 	@Override
@@ -247,5 +270,6 @@ public final class PlayerDataManager implements PlayerData, AutoSyncedComponent 
 		
 		tag.put("Modifiers", modifiers);
 		tag.putInt("RefundPoints", this.refundPoints);
+		tag.putInt("SkillPoints", this.skillPoints);
 	}
 }

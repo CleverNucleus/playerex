@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.function.Consumer;
+import java.util.function.Supplier;
 
 import com.github.clevernucleus.playerex.api.client.Page;
 import com.github.clevernucleus.playerex.api.client.PageLayer;
@@ -35,16 +36,12 @@ public class ExScreen extends AbstractInventoryScreen<ExScreenHandler> {
 		this.pages.add(0, PageRegistryImpl.findPage(PlayerExClient.ATTRIBUTES_PAGE));
 		this.pages.add(1, PageRegistryImpl.findPage(PlayerExClient.COMBAT_PAGE));
 		
-		PageRegistryImpl.pages().entrySet().stream().filter(this::filter).forEach(this::addPage);
+		PageRegistryImpl.pages().entrySet().stream().filter(this::filter).map(Map.Entry::getValue).forEach(page -> this.pages.add(page.get()));
 		this.pages.forEach(page -> this.addLayers(page, screenHandler, playerInventory, text));
 	}
 	
-	private boolean filter(Map.Entry<Identifier, Page> entry) {
+	private boolean filter(Map.Entry<Identifier, Supplier<Page>> entry) {
 		return !(entry.getKey().equals(PlayerExClient.ATTRIBUTES_PAGE) || entry.getKey().equals(PlayerExClient.COMBAT_PAGE));
-	}
-	
-	private void addPage(Map.Entry<Identifier, Page> entry) {
-		this.pages.add(entry.getValue());
 	}
 	
 	private void addLayers(Page page, ExScreenHandler screenHandler, PlayerInventory playerInventory, Text text) {

@@ -33,7 +33,6 @@ public final class ExAPI {
 	public static final ComponentKey<PlayerData> INSTANCE = ComponentRegistry.getOrCreate(new Identifier(MODID, "data"), PlayerData.class);
 	
 	public static final Supplier<EntityAttribute> LEVEL = define("level");
-	public static final Supplier<EntityAttribute> SKILL_POINTS = define("skill_points");
 	public static final Supplier<EntityAttribute> CONSTITUTION = define("constitution");
 	public static final Supplier<EntityAttribute> STRENGTH = define("strength");
 	public static final Supplier<EntityAttribute> DEXTERITY = define("dexterity");

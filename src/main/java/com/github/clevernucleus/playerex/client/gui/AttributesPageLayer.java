@@ -9,13 +9,13 @@ import com.github.clevernucleus.dataattributes.api.DataAttributesAPI;
 import com.github.clevernucleus.dataattributes.api.attribute.IEntityAttribute;
 import com.github.clevernucleus.playerex.PlayerEx;
 import com.github.clevernucleus.playerex.api.ExAPI;
+import com.github.clevernucleus.playerex.api.PacketType;
 import com.github.clevernucleus.playerex.api.PlayerData;
 import com.github.clevernucleus.playerex.api.client.ClientUtil;
 import com.github.clevernucleus.playerex.api.client.PageLayer;
 import com.github.clevernucleus.playerex.api.client.RenderComponent;
 import com.github.clevernucleus.playerex.client.PlayerExClient;
 import com.github.clevernucleus.playerex.client.gui.widget.ScreenButtonWidget;
-import com.github.clevernucleus.playerex.impl.PacketTypes;
 import com.google.common.collect.ImmutableList;
 import com.mojang.blaze3d.systems.RenderSystem;
 
@@ -71,7 +71,7 @@ public class AttributesPageLayer extends PageLayer {
 		DataAttributesAPI.ifPresent(this.client.player, attribute, (Object)null, amount -> {
 			double value = this.canRefund() ? -1.0D : 1.0D;
 			
-			ClientUtil.modifyAttributes(this.canRefund() ? PacketTypes.REFUND : PacketTypes.SKILL, c -> c.accept(attribute, value), c -> c.accept(ExAPI.SKILL_POINTS, (-1.0D) * value));
+			ClientUtil.modifyAttributes(this.canRefund() ? PacketType.REFUND : PacketType.SKILL, c -> c.accept(attribute, value));
 			this.client.player.playSound(PlayerEx.SP_SPEND_SOUND, SoundCategory.NEUTRAL, ExAPI.getConfig().skillUpVolume(), 1.5F);
 			return (Object)null;
 		});
@@ -141,7 +141,7 @@ public class AttributesPageLayer extends PageLayer {
 						if(this.canRefund()) {
 							button.active = modifierValue >= 1.0D;
 						} else {
-							button.active = DataAttributesAPI.ifPresent(player, ExAPI.SKILL_POINTS, false, skillPoints -> (modifierValue < ((IEntityAttribute)ExAPI.SKILL_POINTS.get()).getMaxValue()) && (skillPoints >= 1.0D));
+							button.active = this.playerData.skillPoints() >= 1;
 						}
 						
 						button.alt = this.canRefund();
@@ -158,7 +158,7 @@ public class AttributesPageLayer extends PageLayer {
 		super.init();
 		this.playerData = ExAPI.INSTANCE.get(this.client.player);
 		
-		this.addDrawableChild(new ScreenButtonWidget(this.parent, 8, 23, 204, 0, 11, 10, BUTTON_KEYS.get(0), btn -> ClientUtil.modifyAttributes(PacketTypes.LEVEL, c -> c.accept(ExAPI.LEVEL, 1.0D)), this::buttonTooltip));
+		this.addDrawableChild(new ScreenButtonWidget(this.parent, 8, 23, 204, 0, 11, 10, BUTTON_KEYS.get(0), btn -> ClientUtil.modifyAttributes(PacketType.LEVEL, c -> c.accept(ExAPI.LEVEL, 1.0D)), this::buttonTooltip));
 		this.addDrawableChild(new ScreenButtonWidget(this.parent, 8, 56, 204, 0, 11, 10, BUTTON_KEYS.get(1), this::buttonPressed, this::buttonTooltip));
 		this.addDrawableChild(new ScreenButtonWidget(this.parent, 8, 67, 204, 0, 11, 10, BUTTON_KEYS.get(2), this::buttonPressed, this::buttonTooltip));
 		this.addDrawableChild(new ScreenButtonWidget(this.parent, 8, 78, 204, 0, 11, 10, BUTTON_KEYS.get(3), this::buttonPressed, this::buttonTooltip));
@@ -178,9 +178,9 @@ public class AttributesPageLayer extends PageLayer {
 			ClientUtil.appendChildrenToTooltip(tooltip, ExAPI.LEVEL);
 			return tooltip;
 		}, 21, 26));
-		COMPONENTS.add(RenderComponent.of(ExAPI.SKILL_POINTS, value -> {
-			return new TranslatableText("playerex.gui.page.attributes.text.skill_points", Math.round(value));
-		}, value -> {
+		COMPONENTS.add(RenderComponent.of(entity -> {
+			return new TranslatableText("playerex.gui.page.attributes.text.skill_points", ExAPI.INSTANCE.get(entity).skillPoints());
+		}, entity -> {
 			List<Text> tooltip = new ArrayList<Text>();
 			tooltip.add((new TranslatableText("playerex.gui.page.attributes.tooltip.skill_points[0]")).formatted(Formatting.GRAY));
 			tooltip.add((new TranslatableText("playerex.gui.page.attributes.tooltip.skill_points[1]")).formatted(Formatting.GRAY));

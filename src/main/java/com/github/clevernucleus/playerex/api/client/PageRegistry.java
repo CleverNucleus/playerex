@@ -1,5 +1,7 @@
 package com.github.clevernucleus.playerex.api.client;
 
+import java.util.function.Supplier;
+
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.minecraft.util.Identifier;
@@ -8,7 +10,7 @@ import net.minecraft.util.Identifier;
 public final class PageRegistry {
 	
 	
-	public static void registerPage(final Page page) {
+	public static void registerPage(final Supplier<Page> page) {
 		com.github.clevernucleus.playerex.client.gui.PageRegistryImpl.addPage(page);
 	}
 	

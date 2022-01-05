@@ -2,7 +2,6 @@
     "values": {
         "minecraft:player": {
             "playerex:level": 0.0,
-            "playerex:skill_points": 0.0,
             "playerex:constitution": 0.0,
             "playerex:strength": 0.0,
             "playerex:dexterity": 0.0,

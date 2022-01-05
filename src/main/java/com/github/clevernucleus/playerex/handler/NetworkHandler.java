@@ -1,7 +1,5 @@
 package com.github.clevernucleus.playerex.handler;
 
-import java.util.HashMap;
-import java.util.Map;
 import java.util.UUID;
 import java.util.function.Supplier;
 
@@ -31,12 +29,6 @@ import net.minecraft.util.Identifier;
 public final class NetworkHandler {
 	public static final Identifier MODIFY = new Identifier(ExAPI.MODID, "modify");
 	public static final Identifier SCREEN = new Identifier(ExAPI.MODID, "screen");
-	
-	private static final Map<String, PacketType> PACKET_TYPES = new HashMap<String, PacketType>();
-	
-	public static void addPacketType(final PacketType packetType) {
-		PACKET_TYPES.put(packetType.id(), packetType);
-	}
 	
 	public static void loginQueryStart(ServerLoginNetworkHandler handler, MinecraftServer server, PacketSender sender, ServerLoginNetworking.LoginSynchronizer synchronizer) {
 		PacketByteBuf buf = PacketByteBufs.create();
@@ -93,7 +85,7 @@ public final class NetworkHandler {
 			if(player != null) {
 				PlayerData data = ExAPI.INSTANCE.get(player);
 				NbtList list = tag.getList("Data", NbtType.COMPOUND);
-				PacketType packetType = PACKET_TYPES.getOrDefault(tag.getString("Type"), PacketType.DEFAULT);
+				PacketType packetType = PacketType.fromId(tag.getByte("Type"));
 				
 				if(packetType.test(server, player, data)) {
 					for(int i = 0; i < list.size(); i++) {

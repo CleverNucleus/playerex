@@ -94,7 +94,7 @@ public final class NetworkHandlerClient {
 		}
 		
 		tag.put("Data", lst);
-		tag.putString("Type", type.id());
+		tag.putByte("Type", type.id());
 		buf.writeNbt(tag);
 		
 		ClientPlayNetworking.send(NetworkHandler.MODIFY, buf);

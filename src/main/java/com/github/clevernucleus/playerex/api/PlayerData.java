@@ -25,7 +25,13 @@ public interface PlayerData extends Component {
 	void reset();
 	
 	
+	void addSkillPoints(final int pointsIn);
+	
+	
 	int addRefundPoints(final int pointsIn);
+	
+	
+	int skillPoints();
 	
 	
 	int refundPoints();

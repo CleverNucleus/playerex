@@ -1,8 +1,5 @@
 {
     "values": {
-        "playerex:level": {
-            "playerex:skill_points": 1.0
-        },
         "playerex:constitution": {
             "minecraft:generic.max_health": 1.0,
             "minecraft:generic.knockback_resistance": 0.01,

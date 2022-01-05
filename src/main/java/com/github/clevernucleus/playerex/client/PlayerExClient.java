@@ -36,8 +36,8 @@ public class PlayerExClient implements ClientModInitializer {
 		keyBinding = KeyBindingHelper.registerKeyBinding(new KeyBinding("playerex.key.screen", InputUtil.Type.KEYSYM, GLFW.GLFW_KEY_R, "key.categories.inventory"));
 		
 		ScreenRegistry.register(PlayerEx.EX_SCREEN, ExScreen::new);
-		PageRegistry.registerPage(new Page(ATTRIBUTES_PAGE, new TranslatableText("playerex.gui.page.attributes.title"), () -> new ItemStack(Items.BOOK)));
-		PageRegistry.registerPage(new Page(COMBAT_PAGE, new TranslatableText("playerex.gui.page.combat.title"), () -> new ItemStack(Items.IRON_SWORD)));
+		PageRegistry.registerPage(() -> new Page(ATTRIBUTES_PAGE, new TranslatableText("playerex.gui.page.attributes.title"), () -> new ItemStack(Items.BOOK)));
+		PageRegistry.registerPage(() -> new Page(COMBAT_PAGE, new TranslatableText("playerex.gui.page.combat.title"), () -> new ItemStack(Items.IRON_SWORD)));
 		PageRegistry.registerLayer(ATTRIBUTES_PAGE, AttributesPageLayer::new);
 		PageRegistry.registerLayer(COMBAT_PAGE, CombatPageLayer::new);
 		
