@@ -90,7 +90,12 @@ public final class ClientUtil {
 		}
 	}
 	
-	
+	/**
+	 * Client-side. Sends a packet to the server to modify the attribute modifiers provided by PlayerEx by the input amount,
+	 * and perform the checks and functions dictated by the PacketType.
+	 * @param type
+	 * @param consumers
+	 */
 	@SafeVarargs
 	public static void modifyAttributes(final PacketType type, Consumer<BiConsumer<Supplier<EntityAttribute>, Double>> ... consumers) {
 		if(consumers != null) {

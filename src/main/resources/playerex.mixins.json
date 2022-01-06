@@ -9,7 +9,7 @@
         "PersistentProjectileEntityMixin"
     ],
     "client": [
-        "client.PlayerEntityRendererMixin",
+    	"client.LivingEntityRendererMixin",
         "client.HandledScreenAccessor"
     ],
     "injectors": {

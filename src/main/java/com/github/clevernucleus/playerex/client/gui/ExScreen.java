@@ -6,7 +6,6 @@ import java.util.Map;
 import java.util.function.Consumer;
 import java.util.function.Supplier;
 
-import com.github.clevernucleus.playerex.api.client.Page;
 import com.github.clevernucleus.playerex.api.client.PageLayer;
 import com.github.clevernucleus.playerex.client.NetworkHandlerClient;
 import com.github.clevernucleus.playerex.client.PlayerExClient;
