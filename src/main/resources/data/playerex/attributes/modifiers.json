@@ -26,6 +26,7 @@
         "playerex:freeze_resistance": "dce46b2e-456c-4df7-9332-9c59d951f77c",
         "playerex:lightning_resistance": "dc13a8ef-da77-41da-9b95-2739a371d4fa",
         "playerex:poison_resistance": "fbdd140f-e273-4beb-9314-b0bc36d1f444",
-        "playerex:wither_resistance": "e16ee641-33be-4bfb-9351-f518bd0fe3c9"
+        "playerex:wither_resistance": "e16ee641-33be-4bfb-9351-f518bd0fe3c9",
+        "playerex:breaking_speed": "0a4eb3ad-6e75-48cd-b067-e951394ad0f8"
     }
 }

@@ -125,6 +125,16 @@ public class AttributesPageLayer extends PageLayer {
 		this.drawTexture(matrices, this.x + 93, this.y + 24, 226, 9, 9, 9);
 		this.drawTexture(matrices, this.x + 93, this.y + 79, 235, 9, 9, 9);
 		
+		DataAttributesAPI.ifPresent(this.client.player, ExAPI.BREAKING_SPEED, (Object)null, value -> {
+			this.drawTexture(matrices, this.x + 9, this.y + 134, 235, 36, 9, 9);
+			return (Object)null;
+		});
+		
+		DataAttributesAPI.ifPresent(this.client.player, ExAPI.REACH_DISTANCE, (Object)null, value -> {
+			this.drawTexture(matrices, this.x + 9, this.y + 145, 244, 0, 9, 9);
+			return (Object)null;
+		});
+		
 		this.forEachScreenButton(button -> {
 			Identifier key = button.key();
 			Identifier lvl = new Identifier("playerex:level");
@@ -174,8 +184,8 @@ public class AttributesPageLayer extends PageLayer {
 			tooltip.add((new TranslatableText("playerex.gui.page.attributes.tooltip.level[0]")).formatted(Formatting.GRAY));
 			tooltip.add((new TranslatableText("playerex.gui.page.attributes.tooltip.level[1]")).formatted(Formatting.GRAY));
 			tooltip.add(LiteralText.EMPTY);
+			tooltip.add((new TranslatableText("playerex.gui.page.attributes.tooltip.level[2]", ExAPI.getConfig().skillPointsPerLevelUp())).formatted(Formatting.GRAY));
 			
-			ClientUtil.appendChildrenToTooltip(tooltip, ExAPI.LEVEL);
 			return tooltip;
 		}, 21, 26));
 		COMPONENTS.add(RenderComponent.of(entity -> {
@@ -246,6 +256,22 @@ public class AttributesPageLayer extends PageLayer {
 			
 			return tooltip;
 		}, 21, 125));
+		COMPONENTS.add(RenderComponent.of(ExAPI.BREAKING_SPEED, value -> {
+			return new TranslatableText("playerex.gui.page.attributes.text.breaking_speed", ClientUtil.FORMATTING_3.format(value));
+		}, value -> {
+			List<Text> tooltip = new ArrayList<Text>();
+			tooltip.add((new TranslatableText("playerex.gui.page.attributes.tooltip.breaking_speed")).formatted(Formatting.GRAY));
+			
+			return tooltip;
+		}, 21, 136));
+		COMPONENTS.add(RenderComponent.of(ExAPI.REACH_DISTANCE, value -> {
+			return new TranslatableText("playerex.gui.page.attributes.text.reach_distance", ClientUtil.FORMATTING_2.format(4.5F + value));
+		}, value -> {
+			List<Text> tooltip = new ArrayList<Text>();
+			tooltip.add((new TranslatableText("playerex.gui.page.attributes.tooltip.reach_distance", ClientUtil.FORMATTING_2.format(4.5F + value))).formatted(Formatting.GRAY));
+			
+			return tooltip;
+		}, 21, 147));
 		COMPONENTS.add(RenderComponent.of(entity -> {
 			String current = ClientUtil.FORMATTING_2.format(entity.getHealth());
 			String maximum = ClientUtil.FORMATTING_2.format(entity.getMaxHealth());

@@ -10,7 +10,8 @@
     ],
     "client": [
     	"client.LivingEntityRendererMixin",
-        "client.HandledScreenAccessor"
+        "client.AbstractInventoryScreenMixin",
+        "client.InventoryScreenMixin"
     ],
     "injectors": {
         "defaultRequire": 1

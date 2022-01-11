@@ -7,8 +7,11 @@ import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.screen.ScreenHandler;
 
 public class ExScreenHandler extends ScreenHandler {
-	public ExScreenHandler(int syncId, PlayerInventory inv) {
+	public final int pageId;
+	
+	public ExScreenHandler(int syncId, PlayerInventory inv, int pageId) {
 		super(PlayerEx.EX_SCREEN, syncId);
+		this.pageId = pageId;
 	}
 	
 	@Override

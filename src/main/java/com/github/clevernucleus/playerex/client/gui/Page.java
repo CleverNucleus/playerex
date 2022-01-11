@@ -22,7 +22,7 @@ public final class Page {
 	private final Supplier<ItemStack> icon;
 	private final Text title;
 	
-	protected Page(final Identifier pageId, final Identifier texture, final Text title, final Supplier<ItemStack> icon) {
+	public Page(final Identifier pageId, final Identifier texture, final Text title, final Supplier<ItemStack> icon) {
 		this.layers = new ArrayList<PageLayer>();
 		this.pageId = pageId;
 		this.texture = texture;
@@ -30,7 +30,7 @@ public final class Page {
 		this.icon = icon;
 	}
 	
-	protected Page(final Identifier pageId, final Text title, final Supplier<ItemStack> icon) {
+	public Page(final Identifier pageId, final Text title, final Supplier<ItemStack> icon) {
 		this(pageId, DEFAULT, title, icon);
 	}
 	

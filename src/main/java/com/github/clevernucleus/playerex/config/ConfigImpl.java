@@ -2,11 +2,13 @@ package com.github.clevernucleus.playerex.config;
 
 import com.github.clevernucleus.dataattributes.api.DataAttributesAPI;
 import com.github.clevernucleus.playerex.api.ExAPI;
+import com.github.clevernucleus.playerex.api.IConfig;
 
 import me.shedaniel.autoconfig.ConfigData;
 import me.shedaniel.autoconfig.annotation.Config;
 import me.shedaniel.autoconfig.annotation.ConfigEntry;
 import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.util.math.MathHelper;
 import net.objecthunter.exp4j.Expression;
 
 @Config(name = ExAPI.MODID)
@@ -22,6 +24,10 @@ public class ConfigImpl implements ConfigData, IConfig {
 	
 	@ConfigEntry.Category(value = "server")
 	@ConfigEntry.Gui.Tooltip(count = 2)
+	protected int skillPointsPerLevelUp = 1;
+	
+	@ConfigEntry.Category(value = "server")
+	@ConfigEntry.Gui.Tooltip(count = 2)
 	protected String levelFormula = "10 + ((0.2 * x) - 2)^3";
 	
 	@ConfigEntry.Category(value = "client")
@@ -33,16 +39,6 @@ public class ConfigImpl implements ConfigData, IConfig {
 	@ConfigEntry.BoundedDiscrete(min = 0, max = 150)
 	@ConfigEntry.Gui.Tooltip
 	private int skillUpVolume = 100;
-	
-	@ConfigEntry.Category(value = "client")
-	@ConfigEntry.BoundedDiscrete(min = -200, max = 200)
-	@ConfigEntry.Gui.Tooltip
-	private int inventoryButtonPosX = 155;
-	
-	@ConfigEntry.Category(value = "client")
-	@ConfigEntry.BoundedDiscrete(min = -200, max = 200)
-	@ConfigEntry.Gui.Tooltip
-	private int inventoryButtonPosY = 7;
 	
 	@ConfigEntry.Category(value = "client")
 	@ConfigEntry.BoundedDiscrete(min = 0, max = 50)
@@ -69,6 +65,11 @@ public class ConfigImpl implements ConfigData, IConfig {
 	}
 	
 	@Override
+	public int skillPointsPerLevelUp() {
+		return MathHelper.clamp(ConfigCache.INSTANCE.skillPointsPerLevelUp, 1, Integer.MAX_VALUE);
+	}
+	
+	@Override
 	public int requiredXp(final PlayerEntity player) {
 		return DataAttributesAPI.ifPresent(player, ExAPI.LEVEL, 1, value -> {
 			Expression expression = ConfigCache.INSTANCE.expression.setVariable("x", Math.round(value));
@@ -85,16 +86,6 @@ public class ConfigImpl implements ConfigData, IConfig {
 	@Override
 	public float skillUpVolume() {
 		return this.skillUpVolume * 0.01F;
-	}
-	
-	@Override
-	public int inventoryButtonPosX() {
-		return this.inventoryButtonPosX;
-	}
-	
-	@Override
-	public int inventoryButtonPosY() {
-		return this.inventoryButtonPosY;
 	}
 	
 	@Override

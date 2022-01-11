@@ -1,15 +1,11 @@
 package com.github.clevernucleus.playerex.client.gui;
 
-import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 import java.util.function.Consumer;
-import java.util.function.Supplier;
 
 import com.github.clevernucleus.playerex.api.client.PageLayer;
 import com.github.clevernucleus.playerex.client.NetworkHandlerClient;
 import com.github.clevernucleus.playerex.client.PlayerExClient;
-import com.github.clevernucleus.playerex.client.gui.widget.ScreenButtonWidget;
 import com.github.clevernucleus.playerex.client.gui.widget.TabButtonWidget;
 import com.github.clevernucleus.playerex.handler.ExScreenHandler;
 import com.mojang.blaze3d.systems.RenderSystem;
@@ -21,26 +17,20 @@ import net.minecraft.client.gui.widget.ButtonWidget;
 import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.text.Text;
-import net.minecraft.util.Identifier;
 import net.minecraft.util.math.MathHelper;
 
 @Environment(EnvType.CLIENT)
 public class ExScreen extends AbstractInventoryScreen<ExScreenHandler> {
-	private List<Page> pages = new ArrayList<Page>();
 	private int tab = 0;
 	
 	public ExScreen(ExScreenHandler screenHandler, PlayerInventory playerInventory, Text text) {
 		super(screenHandler, playerInventory, text);
-		
-		this.pages.add(0, PageRegistryImpl.findPage(PlayerExClient.ATTRIBUTES_PAGE));
-		this.pages.add(1, PageRegistryImpl.findPage(PlayerExClient.COMBAT_PAGE));
-		
-		PageRegistryImpl.pages().entrySet().stream().filter(this::filter).map(Map.Entry::getValue).forEach(page -> this.pages.add(page.get()));
-		this.pages.forEach(page -> this.addLayers(page, screenHandler, playerInventory, text));
+		this.tab = screenHandler.pageId;
+		this.getPages().forEach(page -> this.addLayers(page, screenHandler, playerInventory, text));
 	}
 	
-	private boolean filter(Map.Entry<Identifier, Supplier<Page>> entry) {
-		return !(entry.getKey().equals(PlayerExClient.ATTRIBUTES_PAGE) || entry.getKey().equals(PlayerExClient.COMBAT_PAGE));
+	private List<Page> getPages() {
+		return ((ExScreenData)this).pages();
 	}
 	
 	private void addLayers(Page page, ExScreenHandler screenHandler, PlayerInventory playerInventory, Text text) {
@@ -50,8 +40,8 @@ public class ExScreen extends AbstractInventoryScreen<ExScreenHandler> {
 	}
 	
 	private Page currentPage() {
-		int index = MathHelper.clamp(this.tab, 0, this.pages.size() - 1);
-		return this.pages.get(index);
+		int index = MathHelper.clamp(this.tab, 0, this.getPages().size() - 1);
+		return this.getPages().get(index);
 	}
 	
 	private void forEachButton(Consumer<ButtonWidget> consumer) {
@@ -60,10 +50,6 @@ public class ExScreen extends AbstractInventoryScreen<ExScreenHandler> {
 	
 	private void forEachTab(Consumer<TabButtonWidget> consumer) {
 		this.children().stream().filter(e -> e instanceof TabButtonWidget).forEach(e -> consumer.accept((TabButtonWidget)e));
-	}
-	
-	private void onTooltip(ButtonWidget button, MatrixStack matrices, int mouseX, int mouseY) {
-		this.renderTooltip(matrices, ((TabButtonWidget)button).page().title(), mouseX, mouseY);
 	}
 	
 	@Override
@@ -106,25 +92,26 @@ public class ExScreen extends AbstractInventoryScreen<ExScreenHandler> {
 	protected void init() {
 		super.init();
 		this.clearChildren();
-		this.addDrawableChild(new ScreenButtonWidget(this, 155, 7, 190, 0, 14, 13, NetworkHandlerClient::openInventoryScreen));
+		this.addDrawableChild(new TabButtonWidget(this, PlayerExClient.INVENTORY, 0, 0, -28, true, NetworkHandlerClient::openInventoryScreen));
 		
-		for(int i = 0; i < this.pages.size(); i++) {
-			Page page = this.pages.get(i);
-			int u = ((i % 6) * 29) + (i < 6 ? 0 : 3);
-			int v = i < 6 ? -28 : (this.backgroundHeight - 4);
+		for(int i = 0; i < this.getPages().size(); i++) {
+			Page page = this.getPages().get(i);
+			int j = i + 1;
+			int u = ((j % 5) * 29) + (j < 6 ? 0 : 3);
+			int v = j < 6 ? -28 : 162;
 			
-			this.addDrawableChild(new TabButtonWidget(this, page, i, u, v, btn -> {
+			this.addDrawableChild(new TabButtonWidget(this, page, j, u, v, true, btn -> {
 				TabButtonWidget button = (TabButtonWidget)btn;
-				this.tab = button.index();
+				this.tab = button.index() - 1;
 				this.forEachTab(tab -> tab.active = true);
 				button.active = false;
 				this.init();
-			}, this::onTooltip));
+			}));
 		}
 		
-		this.forEachTab(btn -> {
-			if(btn.index() == this.tab) {
-				btn.active = false;
+		this.forEachTab(tab -> {
+			if(tab.index() - 1 == this.tab) {
+				tab.active = false;
 			}
 		});
 		

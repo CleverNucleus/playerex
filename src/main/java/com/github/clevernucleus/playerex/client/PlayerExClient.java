@@ -8,6 +8,7 @@ import com.github.clevernucleus.playerex.api.client.PageRegistry;
 import com.github.clevernucleus.playerex.client.gui.AttributesPageLayer;
 import com.github.clevernucleus.playerex.client.gui.CombatPageLayer;
 import com.github.clevernucleus.playerex.client.gui.ExScreen;
+import com.github.clevernucleus.playerex.client.gui.Page;
 
 import net.fabricmc.api.ClientModInitializer;
 import net.fabricmc.fabric.api.client.event.lifecycle.v1.ClientTickEvents;
@@ -26,6 +27,7 @@ public class PlayerExClient implements ClientModInitializer {
 	public static final Identifier GUI = new Identifier(ExAPI.MODID, "textures/gui/gui.png");
 	public static final Identifier ATTRIBUTES_PAGE = new Identifier(ExAPI.MODID, "attributes");
 	public static final Identifier COMBAT_PAGE = new Identifier(ExAPI.MODID, "combat");
+	public static final Page INVENTORY = new Page(new Identifier(ExAPI.MODID, "inventory"), new TranslatableText("playerex.gui.page.inventory.title"), () -> new ItemStack(Items.BUNDLE));
 	public static KeyBinding keyBinding;
 	
 	@Override

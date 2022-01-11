@@ -20,7 +20,8 @@
             "playerex:freeze_resistance": 0.0,
             "playerex:lightning_resistance": 0.0,
             "playerex:poison_resistance": 0.0,
-            "playerex:wither_resistance": 0.0
+            "playerex:wither_resistance": 0.0,
+            "playerex:breaking_speed": 1.0
         }
     }
 }

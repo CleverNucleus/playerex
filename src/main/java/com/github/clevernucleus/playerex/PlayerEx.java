@@ -26,10 +26,13 @@ import net.fabricmc.fabric.api.resource.ResourceManagerHelper;
 import net.fabricmc.fabric.api.screenhandler.v1.ScreenHandlerRegistry;
 import net.fabricmc.loader.api.FabricLoader;
 import net.minecraft.entity.attribute.EntityAttribute;
+import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.Item;
+import net.minecraft.item.ItemStack;
 import net.minecraft.resource.ResourceType;
 import net.minecraft.screen.ScreenHandlerType;
 import net.minecraft.sound.SoundEvent;
+import net.minecraft.util.Hand;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.registry.Registry;
 
@@ -39,7 +42,7 @@ public class PlayerEx implements ModInitializer {
 	public static final ModifierJsonManager MANAGER = new ModifierJsonManager();
 	public static final SoundEvent LEVEL_UP_SOUND = new SoundEvent(new Identifier(ExAPI.MODID, "level_up"));
 	public static final SoundEvent SP_SPEND_SOUND = new SoundEvent(new Identifier(ExAPI.MODID, "sp_spend"));
-	public static final ScreenHandlerType<ExScreenHandler> EX_SCREEN = ScreenHandlerRegistry.registerSimple(new Identifier(ExAPI.MODID, "ex_screen"), ExScreenHandler::new);
+	public static final ScreenHandlerType<ExScreenHandler> EX_SCREEN = ScreenHandlerRegistry.registerExtended(new Identifier(ExAPI.MODID, "ex_screen"), (syncId, inv, buf) -> new ExScreenHandler(syncId, inv, buf.readInt()));
 	
 	@Override
 	public void onInitialize() {
@@ -73,26 +76,19 @@ public class PlayerEx implements ModInitializer {
 		Registry.register(Registry.SOUND_EVENT, SP_SPEND_SOUND.getId(), SP_SPEND_SOUND);
 		
 		Registry.register(Registry.ITEM, new Identifier("playerex:test"), new Item(new Item.Settings()) {
-			
 			@Override
-			public net.minecraft.util.TypedActionResult<net.minecraft.item.ItemStack> use(net.minecraft.world.World world, net.minecraft.entity.player.PlayerEntity user, net.minecraft.util.Hand hand) {
+			public net.minecraft.util.TypedActionResult<ItemStack> use(net.minecraft.world.World world, PlayerEntity user, Hand hand) {
 				boolean i = user.isSneaking();
-				
-				EntityAttribute attribute = ExAPI.LEVEL.get();
+				EntityAttribute attribute = ExAPI.WITHER_RESISTANCE.get();
 				PlayerData data = ExAPI.INSTANCE.get(user);
-				//String side = world.isClient ? "CLIENT" : "SERVER";
 				
 				if(i) {
-					//user.sendMessage(new LiteralText("Data -> " + side + ": " + data.get(attribute)), false);
-					//user.sendMessage(new LiteralText("Game -> " + side + ": " + user.getAttributeValue(attribute)), false);
-					if(!world.isClient) {
-						data.add(attribute, 1.0D);
-					}
+					data.add(attribute, 1.0D);
 				} else {
-					if(!world.isClient) {
-						data.add(attribute, -1.0D);
-					}
+					data.add(attribute, -1.0D);
 				}
+				
+				
 				
 				return super.use(world, user, hand);
 			}

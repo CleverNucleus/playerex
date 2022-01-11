@@ -102,7 +102,7 @@ public final class PlayerDataManager implements PlayerData, AutoSyncedComponent 
 	
 	@Override
 	public void set(final EntityAttribute attributeIn, final double valueIn) {
-		double value = valueIn;//attributeIn.clamp(valueIn);
+		double value = attributeIn.clamp(valueIn);
 		
 		Identifier registryKey = Registry.ATTRIBUTE.getId(attributeIn);
 		if(!this.trySet(registryKey, value)) return;
@@ -160,6 +160,7 @@ public final class PlayerDataManager implements PlayerData, AutoSyncedComponent 
 		ExAPI.INSTANCE.sync(this.player, (buf, player) -> {
 			NbtCompound tag = new NbtCompound();
 			tag.putInt("SkillPoints", this.skillPoints);
+			buf.writeNbt(tag);
 		});
 	}
 	
@@ -178,6 +179,7 @@ public final class PlayerDataManager implements PlayerData, AutoSyncedComponent 
 		ExAPI.INSTANCE.sync(this.player, (buf, player) -> {
 			NbtCompound tag = new NbtCompound();
 			tag.putInt("RefundPoints", this.refundPoints);
+			buf.writeNbt(tag);
 		});
 		
 		return this.refundPoints - previous;

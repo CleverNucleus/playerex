@@ -33,11 +33,11 @@ public final class PageRegistryImpl {
 		LAYERS.put(pageId, builder);
 	}
 	
-	protected static Map<Identifier, Supplier<Page>> pages() {
+	public static Map<Identifier, Supplier<Page>> pages() {
 		return PAGES;
 	}
 	
-	protected static Page findPage(final Identifier pageId) {
+	public static Page findPage(final Identifier pageId) {
 		return PAGES.getOrDefault(pageId, () -> new Page(pageId, LiteralText.EMPTY, () -> ItemStack.EMPTY)).get();
 	}
 	

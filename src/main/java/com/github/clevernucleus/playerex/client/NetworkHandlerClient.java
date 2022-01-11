@@ -58,16 +58,16 @@ public final class NetworkHandlerClient {
 		return CompletableFuture.completedFuture(bufOut);
 	}
 	
-	public static void openAttributesScreen() {
+	public static void openAttributesScreen(final int pageId) {
 		PacketByteBuf buf = PacketByteBufs.create();
-		buf.writeBoolean(false);
+		buf.writeInt(pageId);
 		
 		ClientPlayNetworking.send(NetworkHandler.SCREEN, buf);
 	}
 	
 	public static void openInventoryScreen(ButtonWidget button) {
 		PacketByteBuf buf = PacketByteBufs.create();
-		buf.writeBoolean(true);
+		buf.writeInt(-1);
 		
 		ClientPlayNetworking.send(NetworkHandler.SCREEN, buf);
 		MinecraftClient client = MinecraftClient.getInstance();

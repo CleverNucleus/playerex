@@ -3,7 +3,6 @@ package com.github.clevernucleus.playerex.api;
 import java.util.function.Supplier;
 
 import com.github.clevernucleus.dataattributes.api.DataAttributesAPI;
-import com.github.clevernucleus.playerex.config.IConfig;
 
 import dev.onyxstudios.cca.api.v3.component.ComponentKey;
 import dev.onyxstudios.cca.api.v3.component.ComponentRegistry;
@@ -52,6 +51,12 @@ public final class ExAPI {
 	public static final Supplier<EntityAttribute> LIGHTNING_RESISTANCE = define("lightning_resistance");
 	public static final Supplier<EntityAttribute> POISON_RESISTANCE = define("poison_resistance");
 	public static final Supplier<EntityAttribute> WITHER_RESISTANCE = define("wither_resistance");
+	/** Implemented for the player only. */
+	public static final Supplier<EntityAttribute> BREAKING_SPEED = define("breaking_speed");
+	/** If JamieWhiteShirt reach-entity-attributes exist then this accesses the reach distance attribute. */
+	public static final Supplier<EntityAttribute> REACH_DISTANCE = DataAttributesAPI.getAttribute(new Identifier("reach-entity-attributes:reach"));
+	/** If JamieWhiteShirt reach-entity-attributes exist then this accesses the attack range attribute. */
+	public static final Supplier<EntityAttribute> ATTACK_RANGE = DataAttributesAPI.getAttribute(new Identifier("reach-entity-attributes:attack_range"));
 	
 	/**
 	 * @return Access to the PlayerEx config.

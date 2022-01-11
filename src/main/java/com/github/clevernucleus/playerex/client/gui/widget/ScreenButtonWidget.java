@@ -1,7 +1,7 @@
 package com.github.clevernucleus.playerex.client.gui.widget;
 
 import com.github.clevernucleus.playerex.client.PlayerExClient;
-import com.github.clevernucleus.playerex.mixin.client.HandledScreenAccessor;
+import com.github.clevernucleus.playerex.client.gui.ExScreenData;
 import com.mojang.blaze3d.systems.RenderSystem;
 
 import net.fabricmc.api.EnvType;
@@ -53,7 +53,7 @@ public class ScreenButtonWidget extends ButtonWidget {
 	
 	@Override
 	public void renderButton(MatrixStack matrices, int mouseX, int mouseY, float delta) {
-		HandledScreenAccessor handledScreen = (HandledScreenAccessor)this.parent;
+		ExScreenData handledScreen = (ExScreenData)this.parent;
 		this.x = handledScreen.getX() + this.dx;
 		this.y = handledScreen.getY() + this.dy;
 		

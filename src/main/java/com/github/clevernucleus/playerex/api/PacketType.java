@@ -47,11 +47,13 @@ public enum PacketType {
 	}
 	
 	private static boolean level(final MinecraftServer server, final ServerPlayerEntity player, final PlayerData data) {
-		int requiredXp = ExAPI.getConfig().requiredXp(player);
+		IConfig config = ExAPI.getConfig();
+		int requiredXp = config.requiredXp(player);
+		int skillPoint = config.skillPointsPerLevelUp();
 		
 		if(player.experienceLevel >= requiredXp) {
 			player.addExperienceLevels(-requiredXp);
-			data.addSkillPoints(1);
+			data.addSkillPoints(skillPoint);
 			return true;
 		} else {
 			return false;

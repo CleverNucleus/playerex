@@ -65,14 +65,14 @@ public final class NetworkHandler {
 	}
 	
 	public static void switchScreen(MinecraftServer server, ServerPlayerEntity player, ServerPlayNetworkHandler handler, PacketByteBuf buf, PacketSender responseSender) {
-		boolean isPlayerInventory = buf.readBoolean();
+		int pageId = buf.readInt();
 		
 		server.execute(() -> {
 			if(player != null) {
-				if(isPlayerInventory) {
+				if(pageId < 0) {
 					player.closeScreenHandler();
 				} else {
-					player.openHandledScreen(new ExScreenProvider());
+					player.openHandledScreen(new ExScreenProvider(pageId));
 				}
 			}
 		});
