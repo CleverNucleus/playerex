@@ -144,7 +144,7 @@ public class AttributesPageLayer extends PageLayer {
 			DataAttributesAPI.ifPresent(player, attribute, (Object)null, value -> {
 				if(BUTTON_KEYS.contains(key)) {
 					if(key.equals(lvl)) {
-						button.active = (value < ((IEntityAttribute)attribute.get()).getMaxValue()) && (player.experienceLevel >= ExAPI.getConfig().requiredXp(player));
+						button.active = (value < ((IEntityAttribute)attribute.get()).maxValue()) && (player.experienceLevel >= ExAPI.getConfig().requiredXp(player));
 					} else {
 						double modifierValue = this.playerData.get(attribute.get());
 						

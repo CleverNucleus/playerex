@@ -146,6 +146,9 @@ public final class PlayerDataManager implements PlayerData, AutoSyncedComponent 
 			this.tryRemove(attribute);
 		}
 		
+		this.refundPoints = 0;
+		this.skillPoints = 0;
+		
 		ExAPI.INSTANCE.sync(this.player, (buf, player) -> {
 			NbtCompound tag = new NbtCompound();
 			tag.put("Reset", list);

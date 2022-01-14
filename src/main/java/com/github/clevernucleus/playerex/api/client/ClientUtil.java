@@ -85,7 +85,7 @@ public final class ClientUtil {
 			double displ = displayValue(() -> (EntityAttribute)attribute2, value);
 			String formt = formatValue(() -> (EntityAttribute)attribute2, displ);
 			MutableText mutableText = new LiteralText(formt + " ");
-			mutableText.append(new TranslatableText(attribute2.getTranslationKey()));
+			mutableText.append(new TranslatableText(((EntityAttribute)attribute2).getTranslationKey()));
 			tooltip.add(mutableText.formatted(Formatting.GRAY));
 		}
 	}
