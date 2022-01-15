@@ -6,6 +6,7 @@
     "mixins": [
         "LivingEntityMixin",
         "PlayerEntityMixin",
+        "ServerPlayerEntityMixin",
         "PersistentProjectileEntityMixin"
     ],
     "client": [

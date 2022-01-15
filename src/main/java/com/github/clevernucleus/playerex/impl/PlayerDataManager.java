@@ -15,6 +15,7 @@ import com.github.clevernucleus.playerex.api.ExAPI;
 import com.github.clevernucleus.playerex.api.PlayerData;
 
 import dev.onyxstudios.cca.api.v3.component.sync.AutoSyncedComponent;
+import dev.onyxstudios.cca.api.v3.component.sync.ComponentPacketWriter;
 import net.fabricmc.fabric.api.util.NbtType;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.attribute.AttributeContainer;
@@ -36,10 +37,12 @@ public final class PlayerDataManager implements PlayerData, AutoSyncedComponent 
 	private final PlayerEntity player;
 	private final Map<Identifier, Double> data;
 	private int refundPoints, skillPoints;
+	public boolean hasNotifiedLevelUp;
 	
 	public PlayerDataManager(PlayerEntity player) {
 		this.player = player;
 		this.data = new HashMap<Identifier, Double>();
+		this.hasNotifiedLevelUp = false;
 	}
 	
 	public static void addRefundCondition(final BiFunction<PlayerData, LivingEntity, Double> condition) {
@@ -48,6 +51,22 @@ public final class PlayerDataManager implements PlayerData, AutoSyncedComponent 
 	
 	private UUID uuid(final Identifier registryKey) {
 		return PlayerEx.MANAGER.modifiers.getOrDefault(registryKey, (UUID)null);
+	}
+	
+	private void sync(ComponentPacketWriter packet) {
+		if(this.player.world.isClient) return;
+		ExAPI.INSTANCE.sync(this.player, packet);
+	}
+	
+	private void readModifiersFromNbt(NbtCompound tag, BiFunction<Identifier, Double, Object> input) {
+		NbtList modifiers = tag.getList("Modifiers", NbtType.COMPOUND);
+		
+		for(int i = 0; i < modifiers.size(); i++) {
+			NbtCompound entry = modifiers.getCompound(i);
+			Identifier key = new Identifier(entry.getString("Key"));
+			double value = entry.getDouble("Value");
+			input.apply(key, value);
+		}
 	}
 	
 	private Optional<Identifier> tryRemove(final EntityAttribute attributeIn) {
@@ -107,7 +126,7 @@ public final class PlayerDataManager implements PlayerData, AutoSyncedComponent 
 		Identifier registryKey = Registry.ATTRIBUTE.getId(attributeIn);
 		if(!this.trySet(registryKey, value)) return;
 		
-		ExAPI.INSTANCE.sync(this.player, (buf, player) -> {
+		this.sync((buf, player) -> {
 			NbtCompound tag = new NbtCompound();
 			NbtCompound entry = new NbtCompound();
 			entry.putString("Key", registryKey.toString());
@@ -126,7 +145,7 @@ public final class PlayerDataManager implements PlayerData, AutoSyncedComponent 
 	@Override
 	public void remove(final EntityAttribute attributeIn) {
 		this.tryRemove(attributeIn).ifPresent(identifier -> {
-			ExAPI.INSTANCE.sync(this.player, (buf, player) -> {
+			this.sync((buf, player) -> {
 				NbtCompound tag = new NbtCompound();
 				tag.putString("Remove", identifier.toString());
 				buf.writeNbt(tag);
@@ -148,8 +167,7 @@ public final class PlayerDataManager implements PlayerData, AutoSyncedComponent 
 		
 		this.refundPoints = 0;
 		this.skillPoints = 0;
-		
-		ExAPI.INSTANCE.sync(this.player, (buf, player) -> {
+		this.sync((buf, player) -> {
 			NbtCompound tag = new NbtCompound();
 			tag.put("Reset", list);
 			buf.writeNbt(tag);
@@ -159,8 +177,7 @@ public final class PlayerDataManager implements PlayerData, AutoSyncedComponent 
 	@Override
 	public void addSkillPoints(final int pointsIn) {
 		this.skillPoints += pointsIn;
-		
-		ExAPI.INSTANCE.sync(this.player, (buf, player) -> {
+		this.sync((buf, player) -> {
 			NbtCompound tag = new NbtCompound();
 			tag.putInt("SkillPoints", this.skillPoints);
 			buf.writeNbt(tag);
@@ -172,14 +189,13 @@ public final class PlayerDataManager implements PlayerData, AutoSyncedComponent 
 		final int previous = this.refundPoints;
 		double maxRefundPt = 0.0D;
 		
-		for(BiFunction<PlayerData, LivingEntity, Double> condition : REFUND_CONDITIONS) {
+		for(var condition : REFUND_CONDITIONS) {
 			maxRefundPt += condition.apply(this, this.player);
 		}
 		
 		double refund = MathHelper.clamp((double)(this.refundPoints + pointsIn), 0.0D, maxRefundPt);
 		this.refundPoints = Math.round((float)refund);
-		
-		ExAPI.INSTANCE.sync(this.player, (buf, player) -> {
+		this.sync((buf, player) -> {
 			NbtCompound tag = new NbtCompound();
 			tag.putInt("RefundPoints", this.refundPoints);
 			buf.writeNbt(tag);
@@ -231,10 +247,11 @@ public final class PlayerDataManager implements PlayerData, AutoSyncedComponent 
 			
 			this.refundPoints = 0;
 			this.skillPoints = 0;
+			this.hasNotifiedLevelUp = false;
 		}
 		
 		if(tag.contains("Modifiers")) {
-			this.readFromNbt(tag);
+			this.readModifiersFromNbt(tag, this.data::put);
 		}
 		
 		if(tag.contains("RefundPoints")) {
@@ -248,17 +265,10 @@ public final class PlayerDataManager implements PlayerData, AutoSyncedComponent 
 	
 	@Override
 	public void readFromNbt(NbtCompound tag) {
-		NbtList modifiers = tag.getList("Modifiers", NbtType.COMPOUND);
-		
-		for(int i = 0; i < modifiers.size(); i++) {
-			NbtCompound entry = modifiers.getCompound(i);
-			Identifier key = new Identifier(entry.getString("Key"));
-			double value = entry.getDouble("Value");
-			this.trySet(key, value);
-		}
-		
+		this.readModifiersFromNbt(tag, this::trySet);
 		this.refundPoints = tag.getInt("RefundPoints");
 		this.skillPoints = tag.getInt("SkillPoints");
+		this.hasNotifiedLevelUp = tag.getBoolean("NotifiedLevelUp");
 	}
 	
 	@Override
@@ -276,5 +286,6 @@ public final class PlayerDataManager implements PlayerData, AutoSyncedComponent 
 		tag.put("Modifiers", modifiers);
 		tag.putInt("RefundPoints", this.refundPoints);
 		tag.putInt("SkillPoints", this.skillPoints);
+		tag.putBoolean("NotifiedLevelUp", this.hasNotifiedLevelUp);
 	}
 }

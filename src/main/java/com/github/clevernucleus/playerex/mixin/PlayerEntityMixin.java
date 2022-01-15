@@ -36,7 +36,10 @@ abstract class PlayerEntityMixin {
 	@Inject(method = "getBlockBreakingSpeed", at = @At("RETURN"), cancellable = true)
 	private void onGetBlockBreakingSpeed(BlockState block, CallbackInfoReturnable<Float> info) {
 		float f = info.getReturnValue();
-		float r = DataAttributesAPI.ifPresent(this.get(), ExAPI.BREAKING_SPEED, 0.0F, value -> value - 1.0F);
+		float r = DataAttributesAPI.ifPresent(this.get(), ExAPI.BREAKING_SPEED, 0.0F, value -> {
+			float base = (float)this.get().getAttributeInstance(ExAPI.BREAKING_SPEED.get()).getBaseValue();
+			return value - base;
+		});
 		
 		info.setReturnValue(f + r);
 	}

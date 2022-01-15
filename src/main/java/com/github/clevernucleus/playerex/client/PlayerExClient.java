@@ -9,11 +9,13 @@ import com.github.clevernucleus.playerex.client.gui.AttributesPageLayer;
 import com.github.clevernucleus.playerex.client.gui.CombatPageLayer;
 import com.github.clevernucleus.playerex.client.gui.ExScreen;
 import com.github.clevernucleus.playerex.client.gui.Page;
+import com.github.clevernucleus.playerex.handler.NetworkHandler;
 
 import net.fabricmc.api.ClientModInitializer;
 import net.fabricmc.fabric.api.client.event.lifecycle.v1.ClientTickEvents;
 import net.fabricmc.fabric.api.client.keybinding.v1.KeyBindingHelper;
 import net.fabricmc.fabric.api.client.networking.v1.ClientLoginNetworking;
+import net.fabricmc.fabric.api.client.networking.v1.ClientPlayNetworking;
 import net.fabricmc.fabric.api.client.screen.v1.ScreenEvents;
 import net.fabricmc.fabric.api.client.screenhandler.v1.ScreenRegistry;
 import net.minecraft.client.option.KeyBinding;
@@ -33,6 +35,7 @@ public class PlayerExClient implements ClientModInitializer {
 	@Override
 	public void onInitializeClient() {
 		ClientLoginNetworking.registerGlobalReceiver(PlayerEx.HANDSHAKE, NetworkHandlerClient::loginQueryReceived);
+		ClientPlayNetworking.registerGlobalReceiver(NetworkHandler.NOTIFY, NetworkHandlerClient::notifiedLevelUp);
 		
 		keyBinding = KeyBindingHelper.registerKeyBinding(new KeyBinding("playerex.key.screen", InputUtil.Type.KEYSYM, GLFW.GLFW_KEY_R, "key.categories.inventory"));
 		

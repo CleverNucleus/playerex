@@ -92,7 +92,7 @@
     "playerex.gui.page.combat.tooltip.melee_crit_damage[1]": "melee damage on a critical hit.",
     "playerex.gui.page.combat.tooltip.melee_crit_chance[0]": "The chance that your melee ",
     "playerex.gui.page.combat.tooltip.melee_crit_chance[1]": "attack is a critical hit.",
-    "playerex.gui.page.combat.tooltip.armor[0]": "Total armor points;",
+    "playerex.gui.page.combat.tooltip.armor[0]": "Total armor points; ",
     "playerex.gui.page.combat.tooltip.armor[1]": "reduces incoming damage.",
     "playerex.gui.page.combat.tooltip.armor_toughness[0]": "Increases the effectiveness ",
     "playerex.gui.page.combat.tooltip.armor_toughness[1]": "of your armor's defense.",

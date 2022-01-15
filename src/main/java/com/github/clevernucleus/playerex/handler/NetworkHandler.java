@@ -14,6 +14,7 @@ import net.fabricmc.fabric.api.networking.v1.PacketByteBufs;
 import net.fabricmc.fabric.api.networking.v1.PacketSender;
 import net.fabricmc.fabric.api.networking.v1.ServerLoginNetworking;
 import net.fabricmc.fabric.api.networking.v1.ServerLoginNetworking.LoginSynchronizer;
+import net.fabricmc.fabric.api.networking.v1.ServerPlayNetworking;
 import net.fabricmc.fabric.api.util.NbtType;
 import net.minecraft.entity.attribute.EntityAttribute;
 import net.minecraft.nbt.NbtCompound;
@@ -29,6 +30,7 @@ import net.minecraft.util.Identifier;
 public final class NetworkHandler {
 	public static final Identifier MODIFY = new Identifier(ExAPI.MODID, "modify");
 	public static final Identifier SCREEN = new Identifier(ExAPI.MODID, "screen");
+	public static final Identifier NOTIFY = new Identifier(ExAPI.MODID, "notify");
 	
 	public static void loginQueryStart(ServerLoginNetworkHandler handler, MinecraftServer server, PacketSender sender, ServerLoginNetworking.LoginSynchronizer synchronizer) {
 		PacketByteBuf buf = PacketByteBufs.create();
@@ -102,5 +104,9 @@ public final class NetworkHandler {
 				}
 			}
 		});
+	}
+	
+	public static void notifyLevelUp(final ServerPlayerEntity player) {
+		ServerPlayNetworking.send(player, NOTIFY, PacketByteBufs.empty());
 	}
 }
