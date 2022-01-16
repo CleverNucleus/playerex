@@ -19,10 +19,12 @@ import net.minecraft.client.render.entity.model.EntityModel;
 import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.LivingEntity;
+import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.scoreboard.AbstractTeam;
 import net.minecraft.text.StringVisitable;
 import net.minecraft.text.Text;
 import net.minecraft.text.TranslatableText;
+import net.minecraft.util.Formatting;
 import net.minecraft.util.math.Matrix4f;
 
 @Mixin(LivingEntityRenderer.class)
@@ -106,7 +108,8 @@ abstract class LivingEntityRendererMixin<T extends LivingEntity, M extends Entit
 	private void onRender(T livingEntity, float f, float g, MatrixStack matrixStack, VertexConsumerProvider vertexConsumerProvider, int i, CallbackInfo info) {
 		if(this.shouldRenderLevel(livingEntity) && ExAPI.getConfig().showLevelNameplates()) {
 			DataAttributesAPI.ifPresent(livingEntity, ExAPI.LEVEL, (Object)null, value -> {
-				Text tag = new TranslatableText("playerex.gui.text.nameplate", Math.round(value));
+				boolean coder = (livingEntity instanceof PlayerEntity) && "CleverNucleus".equals(((PlayerEntity)livingEntity).getGameProfile().getName());
+				Text tag = (new TranslatableText("playerex.gui.text.nameplate", (coder ? "§k" : "") + String.valueOf(Math.round(value)))).formatted(coder ? Formatting.GOLD : Formatting.WHITE);
 				this.renderLevel(livingEntity, tag, matrixStack, vertexConsumerProvider, i);
 				return (Object)null;
 			});

@@ -83,9 +83,9 @@ public class PlayerEx implements ModInitializer {
 				PlayerData data = ExAPI.INSTANCE.get(user);
 				
 				if(i) {
-					data.add(attribute, 1.0D);
+					data.addRefundPoints(1);
 				} else {
-					data.add(attribute, -1.0D);
+					//data.
 				}
 				
 				
