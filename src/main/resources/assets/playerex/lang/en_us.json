@@ -22,6 +22,8 @@
     "text.autoconfig.playerex.option.textScaleX.@Tooltip": "The x-squeeze of the gui text.",
     "text.autoconfig.playerex.option.textScaleY": "Vertical Text Scale",
     "text.autoconfig.playerex.option.textScaleY.@Tooltip": "The y-squeeze of the gui text.",
+    "text.autoconfig.playerex.option.tooltip": "Tooltip Attributes",
+    "text.autoconfig.playerex.option.tooltip.@Tooltip": "DEFAULT: no change to the tooltip (for mod compatibility).\nVANILLA: fixes attack damage/speed not showing their true value.\nPLAYEREX: attack damage/speed display as regular attribute modifiers.",
     "playerex.key.screen": "Open/Close Attributes Screen",
     "playerex.gui.text.nameplate": "lvl %s",
     "playerex.gui.page.inventory.title": "Inventory",

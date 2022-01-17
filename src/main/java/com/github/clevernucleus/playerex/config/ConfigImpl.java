@@ -13,6 +13,7 @@ import net.objecthunter.exp4j.Expression;
 
 @Config(name = ExAPI.MODID)
 public class ConfigImpl implements ConfigData, IConfig {
+	public static enum Tooltip { DEFAULT, VANILLA, PLAYEREX; }
 	
 	@ConfigEntry.Category(value = "server")
 	@ConfigEntry.Gui.Tooltip(count = 2)
@@ -49,6 +50,10 @@ public class ConfigImpl implements ConfigData, IConfig {
 	@ConfigEntry.BoundedDiscrete(min = 0, max = 50)
 	@ConfigEntry.Gui.Tooltip
 	private int textScaleY = 50;
+	
+	@ConfigEntry.Category(value = "client")
+	@ConfigEntry.Gui.Tooltip
+	public Tooltip tooltip = Tooltip.PLAYEREX;
 	
 	public void init() {
 		ConfigCache.INSTANCE.set(this);

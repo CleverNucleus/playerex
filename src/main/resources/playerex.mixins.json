@@ -12,7 +12,8 @@
     "client": [
     	"client.LivingEntityRendererMixin",
         "client.AbstractInventoryScreenMixin",
-        "client.InventoryScreenMixin"
+        "client.InventoryScreenMixin",
+        "client.ItemStackMixin"
     ],
     "injectors": {
         "defaultRequire": 1

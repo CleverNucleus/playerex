@@ -25,7 +25,6 @@ import net.fabricmc.fabric.api.networking.v1.ServerPlayNetworking;
 import net.fabricmc.fabric.api.resource.ResourceManagerHelper;
 import net.fabricmc.fabric.api.screenhandler.v1.ScreenHandlerRegistry;
 import net.fabricmc.loader.api.FabricLoader;
-import net.minecraft.entity.attribute.EntityAttribute;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
@@ -79,7 +78,7 @@ public class PlayerEx implements ModInitializer {
 			@Override
 			public net.minecraft.util.TypedActionResult<ItemStack> use(net.minecraft.world.World world, PlayerEntity user, Hand hand) {
 				boolean i = user.isSneaking();
-				EntityAttribute attribute = ExAPI.WITHER_RESISTANCE.get();
+				//EntityAttribute attribute = ExAPI.WITHER_RESISTANCE.get();
 				PlayerData data = ExAPI.INSTANCE.get(user);
 				
 				if(i) {
