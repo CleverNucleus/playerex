@@ -30,6 +30,7 @@ import net.minecraft.entity.attribute.EntityAttributes;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.text.LiteralText;
+import net.minecraft.text.MutableText;
 import net.minecraft.text.Text;
 import net.minecraft.text.TranslatableText;
 import net.minecraft.util.Formatting;
@@ -98,17 +99,17 @@ abstract class ItemStackMixin {
 	}
 	
 	@Inject(method = "getTooltip", at = @At(value = "INVOKE", target = "Ljava/util/List;add(Ljava/lang/Object;)Z", ordinal = 7, shift = Shift.AFTER), locals = LocalCapture.CAPTURE_FAILHARD)
-	private void insertModifierEqualsTooltip(PlayerEntity player, TooltipContext context, CallbackInfoReturnable<List<Text>> info, List<Text> list, int arg4, EquipmentSlot[] arg5, int arg6, int arg7, EquipmentSlot arg8, Multimap<?, ?> arg9, Iterator<?> arg10, Map.Entry<EntityAttribute, EntityAttributeModifier> entry, EntityAttributeModifier entityAttributeModifier, double arg13, double e) {
+	private void insertModifierEqualsTooltip(PlayerEntity player, TooltipContext context, CallbackInfoReturnable<List<Text>> info, List<Text> list, MutableText arg3, int arg4, EquipmentSlot[] arg5, int arg6, int arg7, EquipmentSlot arg8, Multimap<?, ?> arg9, Iterator<?> arg10, Map.Entry<EntityAttribute, EntityAttributeModifier> entry, EntityAttributeModifier entityAttributeModifier, double arg13, double e) {
 		list.set(list.size() - 1, new LiteralText(" ").append(new TranslatableText("attribute.modifier.equals." + entityAttributeModifier.getOperation().getId(), playerex_value(e, entry, entityAttributeModifier), new TranslatableText(entry.getKey().getTranslationKey()))).formatted(Formatting.DARK_GREEN));
 	}
 	
 	@Inject(method = "getTooltip", at = @At(value = "INVOKE", target = "Ljava/util/List;add(Ljava/lang/Object;)Z", ordinal = 8, shift = Shift.AFTER), locals = LocalCapture.CAPTURE_FAILHARD)
-	private void insertModifierPlusTooltip(PlayerEntity player, TooltipContext context, CallbackInfoReturnable<List<Text>> info, List<Text> list, int arg4, EquipmentSlot[] arg5, int arg6, int arg7, EquipmentSlot arg8, Multimap<?, ?> arg9, Iterator<?> arg10, Map.Entry<EntityAttribute, EntityAttributeModifier> entry, EntityAttributeModifier entityAttributeModifier, double arg13, double e) {
+	private void insertModifierPlusTooltip(PlayerEntity player, TooltipContext context, CallbackInfoReturnable<List<Text>> info, List<Text> list, MutableText arg3, int arg4, EquipmentSlot[] arg5, int arg6, int arg7, EquipmentSlot arg8, Multimap<?, ?> arg9, Iterator<?> arg10, Map.Entry<EntityAttribute, EntityAttributeModifier> entry, EntityAttributeModifier entityAttributeModifier, double arg13, double e) {
 		list.set(list.size() - 1, new TranslatableText("attribute.modifier.plus." + entityAttributeModifier.getOperation().getId(), playerex_value(e, entry, entityAttributeModifier), new TranslatableText(entry.getKey().getTranslationKey())).formatted(Formatting.BLUE));
 	}
 	
 	@Inject(method = "getTooltip", at = @At(value = "INVOKE", target = "Ljava/util/List;add(Ljava/lang/Object;)Z", ordinal = 9, shift = Shift.AFTER), locals = LocalCapture.CAPTURE_FAILHARD)
-	private void insertModifierTakeTooltip(PlayerEntity player, TooltipContext context, CallbackInfoReturnable<List<Text>> info, List<Text> list, int arg4, EquipmentSlot[] arg5, int arg6, int arg7, EquipmentSlot arg8, Multimap<?, ?> arg9, Iterator<?> arg10, Map.Entry<EntityAttribute, EntityAttributeModifier> entry, EntityAttributeModifier entityAttributeModifier, double arg13, double e) {
+	private void insertModifierTakeTooltip(PlayerEntity player, TooltipContext context, CallbackInfoReturnable<List<Text>> info, List<Text> list, MutableText arg3, int arg4, EquipmentSlot[] arg5, int arg6, int arg7, EquipmentSlot arg8, Multimap<?, ?> arg9, Iterator<?> arg10, Map.Entry<EntityAttribute, EntityAttributeModifier> entry, EntityAttributeModifier entityAttributeModifier, double arg13, double e) {
 		list.set(list.size() - 1, new TranslatableText("attribute.modifier.take." + entityAttributeModifier.getOperation().getId(), playerex_value(e, entry, entityAttributeModifier), new TranslatableText(entry.getKey().getTranslationKey())).formatted(Formatting.RED));
 	}
 }

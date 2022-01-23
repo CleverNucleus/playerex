@@ -22,6 +22,9 @@ repositories {
 	maven {
 		url "https://maven.terraformersmc.com/"
 	}
+	maven {
+		url "https://maven.nucleoid.xyz/"
+	}
 	mavenLocal()
 }
 
@@ -33,6 +36,8 @@ dependencies {
 	modImplementation "net.fabricmc.fabric-api:fabric-api:${project.fabric_version}"
 	
 	modImplementation "com.github.clevernucleus:DataAttributes:${project.dataattributes_version}"
+	modImplementation "com.github.clevernucleus:OfflinePlayerCache:${project.opc_version}"
+	include "com.github.clevernucleus:OfflinePlayerCache:${project.opc_version}"
 	
 	modImplementation "io.github.onyxstudios.Cardinal-Components-API:cardinal-components-base:${project.cardinal_components_version}"
     include "io.github.onyxstudios.Cardinal-Components-API:cardinal-components-base:${project.cardinal_components_version}"
@@ -44,6 +49,8 @@ dependencies {
 	}
 	
 	modImplementation "com.terraformersmc:modmenu:${project.modmenu_version}"
+	
+	modImplementation include("eu.pb4:placeholder-api:${project.placeholder_api}")
 	
 	implementation 'net.objecthunter:exp4j:0.4.8'
 	include 'net.objecthunter:exp4j:0.4.8'

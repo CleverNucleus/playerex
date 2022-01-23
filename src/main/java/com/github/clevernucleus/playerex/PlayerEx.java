@@ -13,7 +13,9 @@ import com.github.clevernucleus.playerex.handler.EventHandler;
 import com.github.clevernucleus.playerex.handler.ExScreenHandler;
 import com.github.clevernucleus.playerex.handler.NetworkHandler;
 import com.github.clevernucleus.playerex.impl.ModifierJsonManager;
+import com.github.clevernucleus.playerex.impl.PlaceholderStore;
 
+import eu.pb4.placeholders.PlaceholderAPI;
 import me.shedaniel.autoconfig.AutoConfig;
 import me.shedaniel.autoconfig.serializer.GsonConfigSerializer;
 import net.fabricmc.api.ModInitializer;
@@ -25,13 +27,9 @@ import net.fabricmc.fabric.api.networking.v1.ServerPlayNetworking;
 import net.fabricmc.fabric.api.resource.ResourceManagerHelper;
 import net.fabricmc.fabric.api.screenhandler.v1.ScreenHandlerRegistry;
 import net.fabricmc.loader.api.FabricLoader;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemStack;
 import net.minecraft.resource.ResourceType;
 import net.minecraft.screen.ScreenHandlerType;
 import net.minecraft.sound.SoundEvent;
-import net.minecraft.util.Hand;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.registry.Registry;
 
@@ -64,6 +62,7 @@ public class PlayerEx implements ModInitializer {
 		PlayerEntityEvents.ATTACK_CRIT_DAMAGE.register(EventHandler::attackCritDamage);
 		
 		DamageHandler.STORE.forEach(DamageModificationRegistry::register);
+		PlaceholderStore.STORE.forEach(PlaceholderAPI::register);
 		
 		PlayerData.registerRefundCondition((data, player) -> DataAttributesAPI.ifPresent(player, ExAPI.CONSTITUTION, 0.0D, value -> data.get(ExAPI.CONSTITUTION.get())));
 		PlayerData.registerRefundCondition((data, player) -> DataAttributesAPI.ifPresent(player, ExAPI.STRENGTH, 0.0D, value -> data.get(ExAPI.STRENGTH.get())));
@@ -73,24 +72,5 @@ public class PlayerEx implements ModInitializer {
 		
 		Registry.register(Registry.SOUND_EVENT, LEVEL_UP_SOUND.getId(), LEVEL_UP_SOUND);
 		Registry.register(Registry.SOUND_EVENT, SP_SPEND_SOUND.getId(), SP_SPEND_SOUND);
-		
-		Registry.register(Registry.ITEM, new Identifier("playerex:test"), new Item(new Item.Settings()) {
-			@Override
-			public net.minecraft.util.TypedActionResult<ItemStack> use(net.minecraft.world.World world, PlayerEntity user, Hand hand) {
-				boolean i = user.isSneaking();
-				//EntityAttribute attribute = ExAPI.WITHER_RESISTANCE.get();
-				PlayerData data = ExAPI.INSTANCE.get(user);
-				
-				if(i) {
-					data.addRefundPoints(1);
-				} else {
-					//data.
-				}
-				
-				
-				
-				return super.use(world, user, hand);
-			}
-		});
 	}
 }

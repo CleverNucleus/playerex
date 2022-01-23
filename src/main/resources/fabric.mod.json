@@ -38,7 +38,7 @@
         "playerex.mixins.json"
     ],
     "depends": {
-        "fabricloader": ">=0.11.3",
+        "fabricloader": ">=0.12.10",
         "fabric": ">=0.44.0",
         "minecraft": "1.18.x",
         "dataattributes": ">=1.1.2",

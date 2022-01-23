@@ -3,6 +3,8 @@ package com.github.clevernucleus.playerex.api;
 import java.util.function.Supplier;
 
 import com.github.clevernucleus.dataattributes.api.DataAttributesAPI;
+import com.github.clevernucleus.opc.api.CacheableValue;
+import com.github.clevernucleus.opc.api.PlayerCacheAPI;
 
 import dev.onyxstudios.cca.api.v3.component.ComponentKey;
 import dev.onyxstudios.cca.api.v3.component.ComponentRegistry;
@@ -30,6 +32,8 @@ public final class ExAPI {
 	public static final String REFUNDABLE_PROPERTY = "refundable";
 	/** The Cardinal Components Key for PlayerEx modifier data. */
 	public static final ComponentKey<PlayerData> INSTANCE = ComponentRegistry.getOrCreate(new Identifier(MODID, "data"), PlayerData.class);
+	/** The CacheableValue key to access player's level. */
+	public static final CacheableValue<Integer> LEVEL_VALUE = PlayerCacheAPI.registerCacheableValue(new com.github.clevernucleus.playerex.impl.LevelValue());
 	
 	public static final Supplier<EntityAttribute> LEVEL = define("level");
 	public static final Supplier<EntityAttribute> CONSTITUTION = define("constitution");
