@@ -10,6 +10,7 @@ import com.github.clevernucleus.playerex.api.event.PlayerEntityEvents;
 import com.github.clevernucleus.playerex.config.ConfigImpl;
 import com.github.clevernucleus.playerex.handler.DamageHandler;
 import com.github.clevernucleus.playerex.handler.EventHandler;
+import com.github.clevernucleus.playerex.handler.ExCommandsHandler;
 import com.github.clevernucleus.playerex.handler.ExScreenHandler;
 import com.github.clevernucleus.playerex.handler.NetworkHandler;
 import com.github.clevernucleus.playerex.impl.ModifierJsonManager;
@@ -19,6 +20,7 @@ import eu.pb4.placeholders.PlaceholderAPI;
 import me.shedaniel.autoconfig.AutoConfig;
 import me.shedaniel.autoconfig.serializer.GsonConfigSerializer;
 import net.fabricmc.api.ModInitializer;
+import net.fabricmc.fabric.api.command.v1.CommandRegistrationCallback;
 import net.fabricmc.fabric.api.entity.event.v1.ServerPlayerEvents;
 import net.fabricmc.fabric.api.event.lifecycle.v1.ServerLifecycleEvents;
 import net.fabricmc.fabric.api.networking.v1.ServerLoginConnectionEvents;
@@ -52,6 +54,7 @@ public class PlayerEx implements ModInitializer {
 		ServerPlayNetworking.registerGlobalReceiver(NetworkHandler.SCREEN, NetworkHandler::switchScreen);
 		ServerPlayNetworking.registerGlobalReceiver(NetworkHandler.MODIFY, NetworkHandler::modifyAttributes);
 		ServerPlayerEvents.COPY_FROM.register(EventHandler::copyFrom);
+		CommandRegistrationCallback.EVENT.register(ExCommandsHandler::init);
 		
 		EntityAttributeModifiedEvents.CLAMPED.register(EventHandler::clamp);
 		

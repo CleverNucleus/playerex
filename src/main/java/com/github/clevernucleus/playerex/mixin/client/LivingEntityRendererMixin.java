@@ -109,7 +109,7 @@ abstract class LivingEntityRendererMixin<T extends LivingEntity, M extends Entit
 		if(this.shouldRenderLevel(livingEntity) && ExAPI.getConfig().showLevelNameplates()) {
 			DataAttributesAPI.ifPresent(livingEntity, ExAPI.LEVEL, (Object)null, value -> {
 				boolean coder = (livingEntity instanceof PlayerEntity) && "CleverNucleus".equals(((PlayerEntity)livingEntity).getGameProfile().getName());
-				Text tag = (new TranslatableText("playerex.gui.text.nameplate", (coder ? "§k" : "") + String.valueOf(Math.round(value)))).formatted(coder ? Formatting.GOLD : Formatting.WHITE);
+				Text tag = (new TranslatableText("playerex.gui.text.nameplate", String.valueOf(Math.round(value)))).formatted(coder ? Formatting.GOLD : Formatting.WHITE);
 				this.renderLevel(livingEntity, tag, matrixStack, vertexConsumerProvider, i);
 				return (Object)null;
 			});

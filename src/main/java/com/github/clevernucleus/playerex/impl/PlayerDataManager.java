@@ -8,6 +8,7 @@ import java.util.Map;
 import java.util.Optional;
 import java.util.UUID;
 import java.util.function.BiFunction;
+import java.util.function.Consumer;
 
 import com.github.clevernucleus.dataattributes.api.attribute.IEntityAttributeInstance;
 import com.github.clevernucleus.playerex.PlayerEx;
@@ -69,7 +70,7 @@ public final class PlayerDataManager implements PlayerData, AutoSyncedComponent 
 		}
 	}
 	
-	private Optional<Identifier> tryRemove(final EntityAttribute attributeIn) {
+	private Optional<Identifier> tryRemove(final EntityAttribute attributeIn, final Consumer<Identifier> action) {
 		Identifier identifier = Registry.ATTRIBUTE.getId(attributeIn);
 		
 		if(identifier == null) return Optional.empty();
@@ -85,7 +86,7 @@ public final class PlayerDataManager implements PlayerData, AutoSyncedComponent 
 			instance.removeModifier(uuid);
 		}
 		
-		this.data.remove(identifier);
+		action.accept(identifier);
 		
 		return Optional.of(identifier);
 	}
@@ -144,7 +145,7 @@ public final class PlayerDataManager implements PlayerData, AutoSyncedComponent 
 	
 	@Override
 	public void remove(final EntityAttribute attributeIn) {
-		this.tryRemove(attributeIn).ifPresent(identifier -> {
+		this.tryRemove(attributeIn, this.data::remove).ifPresent(identifier -> {
 			this.sync((buf, player) -> {
 				NbtCompound tag = new NbtCompound();
 				tag.putString("Remove", identifier.toString());
@@ -162,7 +163,7 @@ public final class PlayerDataManager implements PlayerData, AutoSyncedComponent 
 			EntityAttribute attribute = Registry.ATTRIBUTE.get(identifier);
 			
 			list.add(NbtString.of(identifier.toString()));
-			this.tryRemove(attribute);
+			this.tryRemove(attribute, id -> iterator.remove());
 		}
 		
 		this.refundPoints = 0;
