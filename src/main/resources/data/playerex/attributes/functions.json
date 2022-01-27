@@ -19,7 +19,6 @@
         "playerex:intelligence": {
             "playerex:heal_amplification": 0.02,
             "playerex:ranged_crit_damage": 0.005,
-            "playerex:fire_resistance": 0.01,
             "playerex:wither_resistance": 0.01
         },
         "playerex:luckiness": {

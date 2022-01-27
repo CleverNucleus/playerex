@@ -34,7 +34,7 @@ abstract class PersistentProjectileEntityMixin extends Entity {
 		}
 	}
 	
-	@ModifyArg(method = "onEntityHit", at = @At(value = "INVOKE", target = "Lnet/minecraft/entity/Entity;damage(Lnet/minecraft/entity/damage/DamageSource;F)Z"), index = 1)
+	@ModifyArg(method = "onEntityHit", at = @At(value = "INVOKE", target = "Lnet/minecraft/entity/Entity;damage(Lnet/minecraft/entity/damage/DamageSource;F)Z"), index = -1)
 	private float onDamage(float i) {
 		PersistentProjectileEntity persistentProjectileEntity = (PersistentProjectileEntity)(Object)this;
 		Entity owner = persistentProjectileEntity.getOwner();

@@ -6,7 +6,7 @@
     "description": "Adds RPG style attributes to the game, and provides the player with a new levelling system.",
     "authors": [
         "CleverNucleus",
-        "elhertz - spanish translation & helpful feature requests"
+        "elhertz - spanish translation and helpful feature requests"
     ],
     "contact": {
         "homepage": "https://www.curseforge.com/minecraft/mc-mods/playerex",
@@ -41,7 +41,7 @@
         "fabricloader": ">=0.12.10",
         "fabric": ">=0.44.0",
         "minecraft": "1.18.x",
-        "dataattributes": ">=1.1.2",
+        "dataattributes": ">=1.1.4",
         "cloth-config2": ">=6.0.0",
         "java": ">=17"
     }
