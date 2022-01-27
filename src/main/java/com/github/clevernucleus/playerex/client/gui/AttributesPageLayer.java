@@ -143,15 +143,17 @@ public class AttributesPageLayer extends PageLayer {
 			
 			DataAttributesAPI.ifPresent(player, attribute, (Object)null, value -> {
 				if(BUTTON_KEYS.contains(key)) {
+					double max = ((IEntityAttribute)attribute.get()).maxValue();
+					
 					if(key.equals(lvl)) {
-						button.active = (value < ((IEntityAttribute)attribute.get()).maxValue()) && (player.experienceLevel >= ExAPI.getConfig().requiredXp(player));
+						button.active = value < max && player.experienceLevel >= ExAPI.getConfig().requiredXp(player);
 					} else {
 						double modifierValue = this.playerData.get(attribute.get());
 						
 						if(this.canRefund()) {
 							button.active = modifierValue >= 1.0D;
 						} else {
-							button.active = this.playerData.skillPoints() >= 1;
+							button.active = modifierValue < max && this.playerData.skillPoints() >= 1;
 						}
 						
 						button.alt = this.canRefund();
