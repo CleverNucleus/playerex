@@ -5,13 +5,13 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.function.Supplier;
 
+import com.github.clevernucleus.playerex.api.ExAPI;
 import com.github.clevernucleus.playerex.api.client.PageLayer;
 import com.google.common.collect.ArrayListMultimap;
 import com.google.common.collect.Multimap;
 
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
-import net.minecraft.item.ItemStack;
 import net.minecraft.text.LiteralText;
 import net.minecraft.text.Text;
 import net.minecraft.util.Identifier;
@@ -20,13 +20,14 @@ import net.minecraft.util.Identifier;
 public final class PageRegistryImpl {
 	private static final Map<Identifier, Supplier<Page>> PAGES = new HashMap<Identifier, Supplier<Page>>();
 	private static final Multimap<Identifier, PageLayer.Builder> LAYERS = ArrayListMultimap.create();
+	private static final Identifier BLANK = new Identifier(ExAPI.MODID, "textures/gui/blank.png");
 	
-	public static void addPage(final Identifier pageId, final Identifier texture, final Text title, final Supplier<ItemStack> icon) {
-		PAGES.putIfAbsent(pageId, () -> new Page(pageId, texture, title, icon));
+	public static void addPage(final Identifier pageId, final Identifier icon, final Identifier texture, final Text title) {
+		PAGES.putIfAbsent(pageId, () -> new Page(pageId, texture, title));
 	}
 	
-	public static void addPage(final Identifier pageId, final Text title, final Supplier<ItemStack> icon) {
-		PAGES.putIfAbsent(pageId, () -> new Page(pageId, title, icon));
+	public static void addPage(final Identifier pageId, final Identifier icon, final Text title) {
+		PAGES.putIfAbsent(pageId, () -> new Page(pageId, icon, title));
 	}
 	
 	public static void addLayer(final Identifier pageId, PageLayer.Builder builder) {
@@ -38,7 +39,7 @@ public final class PageRegistryImpl {
 	}
 	
 	public static Page findPage(final Identifier pageId) {
-		return PAGES.getOrDefault(pageId, () -> new Page(pageId, LiteralText.EMPTY, () -> ItemStack.EMPTY)).get();
+		return PAGES.getOrDefault(pageId, () -> new Page(pageId, BLANK, LiteralText.EMPTY)).get();
 	}
 	
 	protected static Collection<PageLayer.Builder> findPageLayers(final Identifier pageId) {

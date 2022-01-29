@@ -3,14 +3,12 @@ package com.github.clevernucleus.playerex.client.gui;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.function.Consumer;
-import java.util.function.Supplier;
 
 import com.github.clevernucleus.playerex.api.ExAPI;
 import com.github.clevernucleus.playerex.api.client.PageLayer;
 
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
-import net.minecraft.item.ItemStack;
 import net.minecraft.text.Text;
 import net.minecraft.util.Identifier;
 
@@ -18,20 +16,19 @@ import net.minecraft.util.Identifier;
 public final class Page {
 	private static final Identifier DEFAULT = new Identifier(ExAPI.MODID, "textures/gui/default.png");
 	private final List<PageLayer> layers;
-	private final Identifier pageId, texture;
-	private final Supplier<ItemStack> icon;
+	private final Identifier pageId, icon, texture;
 	private final Text title;
 	
-	public Page(final Identifier pageId, final Identifier texture, final Text title, final Supplier<ItemStack> icon) {
+	public Page(final Identifier pageId, final Identifier icon, final Identifier texture, final Text title) {
 		this.layers = new ArrayList<PageLayer>();
 		this.pageId = pageId;
+		this.icon = icon;
 		this.texture = texture;
 		this.title = title;
-		this.icon = icon;
 	}
 	
-	public Page(final Identifier pageId, final Text title, final Supplier<ItemStack> icon) {
-		this(pageId, DEFAULT, title, icon);
+	public Page(final Identifier pageId, final Identifier icon, final Text title) {
+		this(pageId, icon, DEFAULT, title);
 	}
 	
 	protected final void addLayer(PageLayer layer) {
@@ -46,15 +43,15 @@ public final class Page {
 		return this.pageId;
 	}
 	
+	public Identifier icon() {
+		return this.icon;
+	}
+	
 	public Identifier texture() {
 		return this.texture;
 	}
 	
 	public Text title() {
 		return this.title;
-	}
-	
-	public ItemStack icon() {
-		return this.icon.get();
 	}
 }

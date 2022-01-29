@@ -1,10 +1,7 @@
 package com.github.clevernucleus.playerex.api.client;
 
-import java.util.function.Supplier;
-
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
-import net.minecraft.item.ItemStack;
 import net.minecraft.text.Text;
 import net.minecraft.util.Identifier;
 
@@ -24,8 +21,8 @@ public final class PageRegistry {
 	 * @param title the title of the page.
 	 * @param icon the page's tab icon.
 	 */
-	public static void registerPage(final Identifier pageId, final Identifier texture, final Text title, final Supplier<ItemStack> icon) {
-		com.github.clevernucleus.playerex.client.gui.PageRegistryImpl.addPage(pageId, texture, title, icon);
+	public static void registerPage(final Identifier pageId, final Identifier icon, final Identifier texture, final Text title) {
+		com.github.clevernucleus.playerex.client.gui.PageRegistryImpl.addPage(pageId, icon, texture, title);
 	}
 	
 	/**
@@ -34,8 +31,8 @@ public final class PageRegistry {
 	 * @param title
 	 * @param icon
 	 */
-	public static void registerPage(final Identifier pageId, final Text title, final Supplier<ItemStack> icon) {
-		com.github.clevernucleus.playerex.client.gui.PageRegistryImpl.addPage(pageId, title, icon);
+	public static void registerPage(final Identifier pageId, final Identifier icon, final Text title) {
+		com.github.clevernucleus.playerex.client.gui.PageRegistryImpl.addPage(pageId, icon, title);
 	}
 	
 	/**

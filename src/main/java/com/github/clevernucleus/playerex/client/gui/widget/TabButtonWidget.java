@@ -7,10 +7,8 @@ import com.mojang.blaze3d.systems.RenderSystem;
 
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
-import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gui.screen.ingame.HandledScreen;
 import net.minecraft.client.gui.widget.ButtonWidget;
-import net.minecraft.client.render.item.ItemRenderer;
 import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.text.LiteralText;
 import net.minecraft.util.Identifier;
@@ -21,6 +19,7 @@ public class TabButtonWidget extends ButtonWidget {
 	private HandledScreen<?> parent;
 	private Page page;
 	private int index, dx, dy;
+	private final float scale = 1.0F / 16.0F;
 	
 	public TabButtonWidget(HandledScreen<?> parent, Page page, int index, int x, int y, boolean startingState, PressAction onPress) {
 		super(x, y, 28, 32, LiteralText.EMPTY, onPress);
@@ -67,9 +66,13 @@ public class TabButtonWidget extends ButtonWidget {
 		
 		this.drawTexture(matrices, this.x, this.y, u, v, this.width, this.height);
 		
-		RenderSystem.enableDepthTest();
+		RenderSystem.setShaderTexture(0, this.page.icon());
+		matrices.push();
+		matrices.scale(this.scale, this.scale, 0.75F);
 		
-		ItemRenderer itemRenderer = MinecraftClient.getInstance().getItemRenderer();
-		itemRenderer.renderInGui(this.page.icon(), this.x + 6, this.y + w);
+		this.drawTexture(matrices, (int)((this.x + 6) / this.scale), (int)((this.y + w) / this.scale), 0, 0, 256, 256);
+		
+		matrices.pop();
+		RenderSystem.enableDepthTest();
 	}
 }

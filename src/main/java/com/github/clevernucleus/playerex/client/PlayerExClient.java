@@ -20,8 +20,6 @@ import net.fabricmc.fabric.api.client.screen.v1.ScreenEvents;
 import net.fabricmc.fabric.api.client.screenhandler.v1.ScreenRegistry;
 import net.minecraft.client.option.KeyBinding;
 import net.minecraft.client.util.InputUtil;
-import net.minecraft.item.ItemStack;
-import net.minecraft.item.Items;
 import net.minecraft.text.TranslatableText;
 import net.minecraft.util.Identifier;
 
@@ -29,7 +27,7 @@ public class PlayerExClient implements ClientModInitializer {
 	public static final Identifier GUI = new Identifier(ExAPI.MODID, "textures/gui/gui.png");
 	public static final Identifier ATTRIBUTES_PAGE = new Identifier(ExAPI.MODID, "attributes");
 	public static final Identifier COMBAT_PAGE = new Identifier(ExAPI.MODID, "combat");
-	public static final Page INVENTORY = new Page(new Identifier(ExAPI.MODID, "inventory"), new TranslatableText("playerex.gui.page.inventory.title"), () -> ItemStack.EMPTY);
+	public static final Page INVENTORY = new Page(new Identifier(ExAPI.MODID, "inventory"), new Identifier(ExAPI.MODID, "textures/gui/inventory.png"), new TranslatableText("playerex.gui.page.inventory.title"));
 	public static KeyBinding keyBinding;
 	
 	@Override
@@ -40,8 +38,8 @@ public class PlayerExClient implements ClientModInitializer {
 		keyBinding = KeyBindingHelper.registerKeyBinding(new KeyBinding("playerex.key.screen", InputUtil.Type.KEYSYM, GLFW.GLFW_KEY_R, "key.categories.inventory"));
 		
 		ScreenRegistry.register(PlayerEx.EX_SCREEN, ExScreen::new);
-		PageRegistry.registerPage(ATTRIBUTES_PAGE, new TranslatableText("playerex.gui.page.attributes.title"), () -> new ItemStack(Items.BOOK));
-		PageRegistry.registerPage(COMBAT_PAGE, new TranslatableText("playerex.gui.page.combat.title"), () -> new ItemStack(Items.IRON_SWORD));
+		PageRegistry.registerPage(ATTRIBUTES_PAGE, new Identifier(ExAPI.MODID, "textures/gui/attributes.png"), new TranslatableText("playerex.gui.page.attributes.title"));
+		PageRegistry.registerPage(COMBAT_PAGE, new Identifier(ExAPI.MODID, "textures/gui/combat.png"), new TranslatableText("playerex.gui.page.combat.title"));
 		PageRegistry.registerLayer(ATTRIBUTES_PAGE, AttributesPageLayer::new);
 		PageRegistry.registerLayer(COMBAT_PAGE, CombatPageLayer::new);
 		
