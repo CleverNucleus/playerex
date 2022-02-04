@@ -74,7 +74,9 @@ public final class NetworkHandler {
 				if(pageId < 0) {
 					player.closeScreenHandler();
 				} else {
-					player.openHandledScreen(new ExScreenProvider(pageId));
+					if(!ExAPI.getConfig().isGuiDisabled()) {
+						player.openHandledScreen(new ExScreenProvider(pageId));
+					}
 				}
 			}
 		});

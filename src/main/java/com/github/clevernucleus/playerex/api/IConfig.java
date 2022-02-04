@@ -18,6 +18,9 @@ public interface IConfig {
 	int requiredXp(final PlayerEntity player);
 	
 	
+	boolean isGuiDisabled();
+	
+	
 	float levelUpVolume();
 	
 	

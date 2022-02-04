@@ -17,6 +17,10 @@ public class ConfigImpl implements ConfigData, IConfig {
 	
 	@ConfigEntry.Category(value = "server")
 	@ConfigEntry.Gui.Tooltip(count = 2)
+	protected boolean disableAttributesGui = false;
+	
+	@ConfigEntry.Category(value = "server")
+	@ConfigEntry.Gui.Tooltip(count = 2)
 	protected boolean resetOnDeath = false;
 	
 	@ConfigEntry.Category(value = "server")
@@ -81,6 +85,11 @@ public class ConfigImpl implements ConfigData, IConfig {
 			float amount = (float)expression.evaluate();
 			return Math.abs(Math.round(amount));
 		});
+	}
+	
+	@Override
+	public boolean isGuiDisabled() {
+		return ConfigCache.INSTANCE.disableAttributesGui;
 	}
 	
 	@Override

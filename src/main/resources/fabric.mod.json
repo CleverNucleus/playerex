@@ -38,10 +38,10 @@
         "playerex.mixins.json"
     ],
     "depends": {
-        "fabricloader": ">=0.12.10",
-        "fabric": ">=0.44.0",
+        "fabricloader": ">=0.12.12",
+        "fabric": ">=0.46.1",
         "minecraft": "1.18.x",
-        "dataattributes": ">=1.1.4",
+        "dataattributes": ">=1.1.5",
         "cloth-config2": ">=6.0.0",
         "java": ">=17"
     }

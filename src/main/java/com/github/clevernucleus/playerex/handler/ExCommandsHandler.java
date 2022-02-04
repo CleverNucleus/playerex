@@ -1,25 +1,37 @@
 package com.github.clevernucleus.playerex.handler;
 
+import java.util.Collection;
+import java.util.function.Supplier;
+
 import com.github.clevernucleus.dataattributes.api.DataAttributesAPI;
 import com.github.clevernucleus.dataattributes.api.attribute.IEntityAttribute;
 import com.github.clevernucleus.playerex.api.ExAPI;
+import com.github.clevernucleus.playerex.api.PacketType;
 import com.github.clevernucleus.playerex.api.PlayerData;
+import com.google.common.collect.Sets;
 import com.mojang.brigadier.CommandDispatcher;
 import com.mojang.brigadier.arguments.IntegerArgumentType;
+import com.mojang.brigadier.suggestion.SuggestionProvider;
 import com.mojang.brigadier.tree.ArgumentCommandNode;
 import com.mojang.brigadier.tree.CommandNode;
 import com.mojang.brigadier.tree.LiteralCommandNode;
 
+import net.minecraft.command.CommandSource;
 import net.minecraft.command.EntitySelector;
 import net.minecraft.command.argument.EntityArgumentType;
+import net.minecraft.command.argument.IdentifierArgumentType;
+import net.minecraft.entity.attribute.EntityAttribute;
 import net.minecraft.server.command.CommandManager;
 import net.minecraft.server.command.ServerCommandSource;
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.text.TranslatableText;
 import net.minecraft.util.Formatting;
+import net.minecraft.util.Identifier;
 import net.minecraft.util.math.MathHelper;
 
 public final class ExCommandsHandler {
+	private static final Supplier<Collection<Identifier>> PRIMARIES = () -> Sets.newHashSet(new Identifier(ExAPI.MODID, "constitution"), new Identifier(ExAPI.MODID, "strength"), new Identifier(ExAPI.MODID, "dexterity"), new Identifier(ExAPI.MODID, "intelligence"), new Identifier(ExAPI.MODID, "luckiness"));
+	private static final SuggestionProvider<ServerCommandSource> SUGGESTION_PROVIDER = (context, builder) -> CommandSource.suggestIdentifiers(PRIMARIES.get(), builder);
 	private static void registerReset(CommandNode<ServerCommandSource> root) {
 		LiteralCommandNode<ServerCommandSource> reset = CommandManager.literal("reset").build();
 		root.addChild(reset);
@@ -83,7 +95,7 @@ public final class ExCommandsHandler {
 				IEntityAttribute attribute = (IEntityAttribute)ExAPI.LEVEL.get();
 				
 				if(attribute.maxValue() - value < 1) {
-					ctx.getSource().sendFeedback((new TranslatableText("playerex.command.levelup_max_error", serverPlayerEntity.getName())).formatted(Formatting.RED), false);
+					ctx.getSource().sendFeedback((new TranslatableText("playerex.command.attribute_max_error", new TranslatableText(ExAPI.LEVEL.get().getTranslationKey()), serverPlayerEntity.getName())).formatted(Formatting.RED), false);
 					return -1;
 				}
 				
@@ -104,7 +116,7 @@ public final class ExCommandsHandler {
 				int max = Math.round((float)attribute.maxValue() - value);
 				
 				if(max < 1) {
-					ctx.getSource().sendFeedback((new TranslatableText("playerex.command.levelup_max_error", serverPlayerEntity.getName())).formatted(Formatting.RED), false);
+					ctx.getSource().sendFeedback((new TranslatableText("playerex.command.attribute_max_error", new TranslatableText(ExAPI.LEVEL.get().getTranslationKey()), serverPlayerEntity.getName())).formatted(Formatting.RED), false);
 					return -1;
 				}
 				
@@ -124,6 +136,74 @@ public final class ExCommandsHandler {
 		player.addChild(amount);
 	}
 	
+	private static void registerSkillAttribute(CommandNode<ServerCommandSource> root) {
+		LiteralCommandNode<ServerCommandSource> skillAttribute = CommandManager.literal("skillAttribute").build();
+		root.addChild(skillAttribute);
+		
+		ArgumentCommandNode<ServerCommandSource, EntitySelector> player = CommandManager.argument("player", EntityArgumentType.player()).build();
+		skillAttribute.addChild(player);
+		
+		ArgumentCommandNode<ServerCommandSource, Identifier> attribute = CommandManager.argument("attribute", IdentifierArgumentType.identifier()).suggests(SUGGESTION_PROVIDER).executes(ctx -> {
+			ServerPlayerEntity serverPlayerEntity = EntityArgumentType.getPlayer(ctx, "player");
+			PlayerData playerData = ExAPI.INSTANCE.get(serverPlayerEntity);
+			Identifier identifier = IdentifierArgumentType.getIdentifier(ctx, "attribute");
+			Supplier<EntityAttribute> primary = DataAttributesAPI.getAttribute(identifier);
+			
+			return DataAttributesAPI.ifPresent(serverPlayerEntity, primary, -1, value -> {
+				EntityAttribute attr = primary.get();
+				
+				if(playerData.get(attr) < ((IEntityAttribute)attr).maxValue()) {
+					if(PacketType.SKILL.test(ctx.getSource().getServer(), serverPlayerEntity, playerData)) {
+						playerData.add(attr, 1);
+						ctx.getSource().sendFeedback(new TranslatableText("playerex.command.skill_attribute", new TranslatableText(attr.getTranslationKey()), serverPlayerEntity.getName()), false);
+						return 1;
+					} else {
+						ctx.getSource().sendFeedback((new TranslatableText("playerex.command.skill_attribute_error", serverPlayerEntity.getName())).formatted(Formatting.RED), false);
+						return -1;
+					}
+				} else {
+					ctx.getSource().sendFeedback((new TranslatableText("playerex.command.attribute_max_error", new TranslatableText(attr.getTranslationKey()), serverPlayerEntity.getName())).formatted(Formatting.RED), false);
+					return -1;
+				}
+			});
+		}).build();
+		player.addChild(attribute);
+	}
+	
+	private static void registerRefundAttribute(CommandNode<ServerCommandSource> root) {
+		LiteralCommandNode<ServerCommandSource> refundAttribute = CommandManager.literal("refundAttribute").build();
+		root.addChild(refundAttribute);
+		
+		ArgumentCommandNode<ServerCommandSource, EntitySelector> player = CommandManager.argument("player", EntityArgumentType.player()).build();
+		refundAttribute.addChild(player);
+		
+		ArgumentCommandNode<ServerCommandSource, Identifier> attribute = CommandManager.argument("attribute", IdentifierArgumentType.identifier()).suggests(SUGGESTION_PROVIDER).executes(ctx -> {
+			ServerPlayerEntity serverPlayerEntity = EntityArgumentType.getPlayer(ctx, "player");
+			PlayerData playerData = ExAPI.INSTANCE.get(serverPlayerEntity);
+			Identifier identifier = IdentifierArgumentType.getIdentifier(ctx, "attribute");
+			Supplier<EntityAttribute> primary = DataAttributesAPI.getAttribute(identifier);
+			
+			return DataAttributesAPI.ifPresent(serverPlayerEntity, primary, -1, value -> {
+				EntityAttribute attr = primary.get();
+				
+				if(playerData.get(attr) > 0) {
+					if(PacketType.REFUND.test(ctx.getSource().getServer(), serverPlayerEntity, playerData)) {
+						playerData.add(attr, -1);
+						ctx.getSource().sendFeedback(new TranslatableText("playerex.command.refund_attribute", new TranslatableText(attr.getTranslationKey()), serverPlayerEntity.getName()), false);
+						return 1;
+					} else {
+						ctx.getSource().sendFeedback((new TranslatableText("playerex.command.refund_attribute_error", serverPlayerEntity.getName())).formatted(Formatting.RED), false);
+						return -1;
+					}
+				} else {
+					ctx.getSource().sendFeedback((new TranslatableText("playerex.command.refund_attribute_unskilled", new TranslatableText(attr.getTranslationKey()), serverPlayerEntity.getName())).formatted(Formatting.RED), false);
+					return -1;
+				}
+			});
+		}).build();
+		player.addChild(attribute);
+	}
+	
 	public static void init(CommandDispatcher<ServerCommandSource> dispatcher, boolean dedicated) {
 		LiteralCommandNode<ServerCommandSource> root = CommandManager.literal("playerex").requires(source -> source.hasPermissionLevel(2)).build();
 		dispatcher.getRoot().addChild(root);
@@ -131,5 +211,7 @@ public final class ExCommandsHandler {
 		registerReset(root);
 		registerRefund(root);
 		registerLevelUp(root);
+		registerSkillAttribute(root);
+		registerRefundAttribute(root);
 	}
 }

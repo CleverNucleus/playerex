@@ -9,6 +9,7 @@ public final class ConfigCache {
 	
 	protected boolean resetOnDeath;
 	protected boolean showLevelNameplates;
+	protected boolean disableAttributesGui;
 	protected int skillPointsPerLevelUp;
 	protected String levelFormula;
 	protected Expression expression;
@@ -22,6 +23,7 @@ public final class ConfigCache {
 	protected void set(ConfigImpl config) {
 		this.resetOnDeath = config.resetOnDeath;
 		this.showLevelNameplates = config.showLevelNameplates;
+		this.disableAttributesGui = config.disableAttributesGui;
 		this.skillPointsPerLevelUp = config.skillPointsPerLevelUp;
 		this.levelFormula = config.levelFormula;
 		this.expression = this.expression(this.levelFormula);
@@ -30,6 +32,7 @@ public final class ConfigCache {
 	public void readFromNbt(NbtCompound tag) {
 		this.resetOnDeath = tag.getBoolean("resetOnDeath");
 		this.showLevelNameplates = tag.getBoolean("showLevelNameplates");
+		this.disableAttributesGui = tag.getBoolean("disableAttributesGui");
 		this.skillPointsPerLevelUp = tag.getInt("skillPointsPerLevelUp");
 		this.levelFormula = tag.getString("levelFormula");
 		this.expression = this.expression(this.levelFormula);
@@ -38,6 +41,7 @@ public final class ConfigCache {
 	public void writeToNbt(NbtCompound tag) {
 		tag.putBoolean("resetOnDeath", this.resetOnDeath);
 		tag.putBoolean("showLevelNameplates", this.showLevelNameplates);
+		tag.putBoolean("disableAttributesGui", this.disableAttributesGui);
 		tag.putInt("skillPointsPerLevelUp", this.skillPointsPerLevelUp);
 		tag.putString("levelFormula", this.levelFormula);
 	}

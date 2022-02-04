@@ -2,6 +2,7 @@ package com.github.clevernucleus.playerex.client;
 
 import java.util.List;
 
+import com.github.clevernucleus.playerex.api.ExAPI;
 import com.github.clevernucleus.playerex.client.gui.ExScreenData;
 import com.github.clevernucleus.playerex.client.gui.Page;
 import com.github.clevernucleus.playerex.client.gui.widget.TabButtonWidget;
@@ -14,7 +15,7 @@ import net.minecraft.client.gui.screen.ingame.InventoryScreen;
 
 public final class EventHandlerClient {
 	public static void onScreenInit(MinecraftClient client, Screen screen, int width, int height) {
-		if(screen instanceof InventoryScreen) {
+		if(screen instanceof InventoryScreen && !ExAPI.getConfig().isGuiDisabled()) {
 			HandledScreen<?> handledScreen = (HandledScreen<?>)screen;
 			ExScreenData screenData = (ExScreenData)screen;
 			
@@ -35,6 +36,7 @@ public final class EventHandlerClient {
 	}
 	
 	public static void onKeyPressed(MinecraftClient client) {
+		if(ExAPI.getConfig().isGuiDisabled()) return;
 		while(PlayerExClient.keyBinding.wasPressed()) {
 			if(client.currentScreen == null && !client.interactionManager.hasRidingInventory()) {
 				NetworkHandlerClient.openAttributesScreen(0);
