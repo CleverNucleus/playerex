@@ -28,8 +28,6 @@ public final class ExAPI {
 	public static final String PERCENTAGE_PROPERTY = "percentage";
 	/** Multiply value by property. */
 	public static final String MULTIPLIER_PROPERTY = "multiplier";
-	/** Multiply value by property. */
-	public static final String REFUNDABLE_PROPERTY = "refundable";
 	/** The Cardinal Components Key for PlayerEx modifier data. */
 	public static final ComponentKey<PlayerData> INSTANCE = ComponentRegistry.getOrCreate(new Identifier(MODID, "data"), PlayerData.class);
 	/** The CacheableValue key to access player's level. */
