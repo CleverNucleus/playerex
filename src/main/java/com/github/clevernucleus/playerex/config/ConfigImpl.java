@@ -59,6 +59,9 @@ public class ConfigImpl implements ConfigData, IConfig {
 	@ConfigEntry.Gui.Tooltip
 	public Tooltip tooltip = Tooltip.PLAYEREX;
 	
+	@ConfigEntry.Category(value = "client")
+	public boolean darkMode = false;
+	
 	public void init() {
 		ConfigCache.INSTANCE.set(this);
 	}

@@ -3,6 +3,7 @@ package com.github.clevernucleus.playerex.client.gui.widget;
 import com.github.clevernucleus.playerex.api.ExAPI;
 import com.github.clevernucleus.playerex.client.gui.ExScreenData;
 import com.github.clevernucleus.playerex.client.gui.Page;
+import com.github.clevernucleus.playerex.config.ConfigImpl;
 import com.mojang.blaze3d.systems.RenderSystem;
 
 import net.fabricmc.api.EnvType;
@@ -16,6 +17,7 @@ import net.minecraft.util.Identifier;
 @Environment(EnvType.CLIENT)
 public class TabButtonWidget extends ButtonWidget {
 	private static final Identifier TABS = new Identifier(ExAPI.MODID, "textures/gui/tab.png");
+	private static final Identifier TABS_DARK = new Identifier(ExAPI.MODID, "textures/gui/tab_dark.png");
 	private HandledScreen<?> parent;
 	private Page page;
 	private int index, dx, dy;
@@ -53,7 +55,7 @@ public class TabButtonWidget extends ButtonWidget {
 		this.x = handledScreen.getX() + this.dx;
 		this.y = handledScreen.getY() + this.dy;
 		
-		RenderSystem.setShaderTexture(0, TABS);
+		RenderSystem.setShaderTexture(0, ((ConfigImpl)ExAPI.getConfig()).darkMode ? TABS_DARK : TABS);
 		RenderSystem.disableDepthTest();
 		
 		int u = (this.index % 6) * this.width;

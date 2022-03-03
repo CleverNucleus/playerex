@@ -5,8 +5,7 @@
     "name": "PlayerEx",
     "description": "Adds RPG style attributes to the game, and provides the player with a new levelling system.",
     "authors": [
-        "CleverNucleus",
-        "elhertz - spanish translation and helpful feature requests"
+        "CleverNucleus"
     ],
     "contact": {
         "homepage": "https://www.curseforge.com/minecraft/mc-mods/playerex",

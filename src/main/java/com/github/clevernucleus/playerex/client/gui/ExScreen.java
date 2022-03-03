@@ -3,10 +3,12 @@ package com.github.clevernucleus.playerex.client.gui;
 import java.util.List;
 import java.util.function.Consumer;
 
+import com.github.clevernucleus.playerex.api.ExAPI;
 import com.github.clevernucleus.playerex.api.client.PageLayer;
 import com.github.clevernucleus.playerex.client.NetworkHandlerClient;
 import com.github.clevernucleus.playerex.client.PlayerExClient;
 import com.github.clevernucleus.playerex.client.gui.widget.TabButtonWidget;
+import com.github.clevernucleus.playerex.config.ConfigImpl;
 import com.github.clevernucleus.playerex.handler.ExScreenHandler;
 import com.mojang.blaze3d.systems.RenderSystem;
 
@@ -77,7 +79,7 @@ public class ExScreen extends AbstractInventoryScreen<ExScreenHandler> {
 		RenderSystem.setShaderTexture(0, this.currentPage().texture());
 		this.drawTexture(matrices, u + 6, v + 6, 0, 0, this.backgroundWidth - 12, this.backgroundWidth - 12);
 		
-		RenderSystem.setShaderTexture(0, PlayerExClient.GUI);
+		RenderSystem.setShaderTexture(0, ((ConfigImpl)ExAPI.getConfig()).darkMode ? PlayerExClient.GUI_DARK : PlayerExClient.GUI);
 		this.drawTexture(matrices, u, v, 0, 0, this.backgroundWidth, this.backgroundWidth);
 		this.currentPage().forEachLayer(layer -> layer.drawBackground(matrices, delta, mouseX, mouseY));
 		this.forEachButton(button -> button.render(matrices, mouseX, mouseY, delta));
