@@ -10,6 +10,6 @@ public final class PlayerDataContainer implements EntityComponentInitializer {
 	
 	@Override
 	public void registerEntityComponentFactories(EntityComponentFactoryRegistry registry) {
-		registry.registerForPlayers(ExAPI.INSTANCE, PlayerDataManager::new, RespawnCopyStrategy.ALWAYS_COPY);
+		registry.registerForPlayers(ExAPI.PLAYER_DATA, PlayerDataManager::new, RespawnCopyStrategy.ALWAYS_COPY);
 	}
 }

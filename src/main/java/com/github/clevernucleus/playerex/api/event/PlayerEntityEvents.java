@@ -14,38 +14,36 @@ import net.minecraft.entity.player.PlayerEntity;
 public final class PlayerEntityEvents {
 	
 	/**
-	 * Fired when determining if the player's attack is critical. Return true if it is critical, return false if it is not.
-	 */
-	public static final Event<AttackCritBoolean> ATTACK_CRIT_BOOLEAN = EventFactory.createArrayBacked(AttackCritBoolean.class, listeners -> (player, target, vanilla) -> {
-		for(AttackCritBoolean listener : listeners) {
-			if(listener.shouldCrit(player, target, vanilla)) {
-				return true;
-			}
-		}
-		
-		return false;
-	});
-	
-	/**
 	 * Fired if the player lands a critical hit. The result is the damage.
 	 */
-	public static final Event<AttackCritDamage> ATTACK_CRIT_DAMAGE = EventFactory.createArrayBacked(AttackCritDamage.class, listeners -> (player, target, amount) -> {
+	public static final Event<AttackCritDamage> ON_CRIT = EventFactory.createArrayBacked(AttackCritDamage.class, callbacks -> (player, target, amount) -> {
 		float previous = amount;
 		
-		for(AttackCritDamage listener : listeners) {
-			previous = listener.onCritDamage(player, target, previous);
+		for(AttackCritDamage callback : callbacks) {
+			previous = callback.onCrit(player, target, previous);
 		}
 		
 		return previous;
 	});
 	
-	@FunctionalInterface
-	public interface AttackCritBoolean {
-		boolean shouldCrit(final PlayerEntity player, final Entity target, final boolean vanilla);
-	}
+	/**
+	 * Fired when determining if the player's attack is critical. Return true if it is critical, return false if it is not.
+	 */
+	public static final Event<AttackCritBoolean> SHOULD_CRIT = EventFactory.createArrayBacked(AttackCritBoolean.class, callbacks -> (player, target, vanilla) -> {
+		for(AttackCritBoolean callback : callbacks) {
+			if(callback.shouldCrit(player, target, vanilla)) return true;
+		}
+		
+		return false;
+	});
 	
 	@FunctionalInterface
 	public interface AttackCritDamage {
-		float onCritDamage(final PlayerEntity player, final Entity target, final float amount);
+		float onCrit(final PlayerEntity player, final Entity target, final float amount);
+	}
+	
+	@FunctionalInterface
+	public interface AttackCritBoolean {
+		boolean shouldCrit(final PlayerEntity player, final Entity target, final boolean vanilla);
 	}
 }

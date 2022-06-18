@@ -4,10 +4,11 @@ import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.damage.DamageSource;
 
 /**
- * 
- * @author Another TriFunction.
- *
- */
+* Basically just a dedicated TriFunction
+* 
+* @author CleverNucleus
+*
+*/
 @FunctionalInterface
 public interface DamagePredicate {
 	

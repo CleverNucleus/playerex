@@ -6,7 +6,7 @@ import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 import com.github.clevernucleus.playerex.api.ExAPI;
-import com.github.clevernucleus.playerex.handler.NetworkHandler;
+import com.github.clevernucleus.playerex.factory.NetworkFactory;
 import com.github.clevernucleus.playerex.impl.PlayerDataManager;
 
 import net.minecraft.server.network.ServerPlayerEntity;
@@ -15,15 +15,15 @@ import net.minecraft.server.network.ServerPlayerEntity;
 abstract class ServerPlayerEntityMixin {
 	
 	@Inject(method = "addExperienceLevels", at = @At("TAIL"))
-	private void onAddExperienceLevels(int levels, CallbackInfo info) {
+	private void playerex_addExperienceLevels(int levels, CallbackInfo info) {
 		ServerPlayerEntity player = (ServerPlayerEntity)(Object)this;
-		PlayerDataManager playerDataManager = (PlayerDataManager)ExAPI.INSTANCE.get(player);
+		PlayerDataManager playerDataManager = (PlayerDataManager)ExAPI.PLAYER_DATA.get(player);
 		int currentXp = player.experienceLevel;
-		int requireXp = ExAPI.getConfig().requiredXp(player);
+		int requiredXp = ExAPI.getConfig().requiredXp(player);
 		
-		if(currentXp >= requireXp) {
+		if(currentXp >= requiredXp) {
 			if(!playerDataManager.hasNotifiedLevelUp) {
-				NetworkHandler.notifyLevelUp(player);
+				NetworkFactory.notifyLevelUp(player);
 				playerDataManager.hasNotifiedLevelUp = true;
 			}
 		} else {

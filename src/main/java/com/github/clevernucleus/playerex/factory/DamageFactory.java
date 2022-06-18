@@ -1,4 +1,4 @@
-package com.github.clevernucleus.playerex.handler;
+package com.github.clevernucleus.playerex.factory;
 
 import java.util.function.BiConsumer;
 
@@ -12,22 +12,21 @@ import net.minecraft.entity.damage.DamageSource;
 import net.minecraft.entity.effect.StatusEffects;
 import net.minecraft.entity.projectile.thrown.PotionEntity;
 
-public final class DamageHandler {
-	public static final DamageHandler STORE = new DamageHandler();
+public final class DamageFactory {
+	public static final DamageFactory STORE = new DamageFactory();
 	
-	private DamageHandler() {}
+	private DamageFactory() {}
 	
 	public void forEach(BiConsumer<DamagePredicate, DamageFunction> registry) {
-		registry.accept((living, source, damage) -> source.isFire(), (living, source, damage) -> DataAttributesAPI.ifPresent(living, ExAPI.FIRE_RESISTANCE, damage, value -> damage * (1.0F - value)));
-		registry.accept((living, source, damage) -> source.equals(DamageSource.FREEZE), (living, source, damage) -> DataAttributesAPI.ifPresent(living, ExAPI.FREEZE_RESISTANCE, damage, value -> damage * (1.0F - value)));
-		registry.accept((living, source, damage) -> source.equals(DamageSource.LIGHTNING_BOLT), (living, source, damage) -> DataAttributesAPI.ifPresent(living, ExAPI.LIGHTNING_RESISTANCE, damage, value -> damage * (1.0F - value)));
-		registry.accept((living, source, damage) -> living.hasStatusEffect(StatusEffects.POISON) && source.isMagic() && damage <= 1.0F, (living, source, damage) -> DataAttributesAPI.ifPresent(living, ExAPI.POISON_RESISTANCE, damage, value -> damage * (1.0F - value)));
+		registry.accept((living, source, damage) -> source.isFire(), (living, source, damage) -> DataAttributesAPI.ifPresent(living, ExAPI.FIRE_RESISTANCE, damage, value -> (float)(damage * (1.0 - value))));
+		registry.accept((living, source, damage) -> source.equals(DamageSource.FREEZE), (living, source, damage) -> DataAttributesAPI.ifPresent(living, ExAPI.FREEZE_RESISTANCE, damage, value -> (float)(damage * (1.0 - value))));
+		registry.accept((living, source, damage) -> source.equals(DamageSource.LIGHTNING_BOLT), (living, source, damage) -> DataAttributesAPI.ifPresent(living, ExAPI.LIGHTNING_RESISTANCE, damage, value -> (float)(damage * (1.0 - value))));
+		registry.accept((living, source, damage) -> living.hasStatusEffect(StatusEffects.POISON) && source.isMagic() && damage <= 1.0F, (living, source, damage) -> DataAttributesAPI.ifPresent(living, ExAPI.FREEZE_RESISTANCE, damage, value -> (float)(damage * (1.0 - value))));
 		registry.accept((living, source, damage) -> source.equals(DamageSource.WITHER) || (source.name.equals("indirectMagic") && (source.getSource() instanceof PotionEntity || source.getSource() instanceof AreaEffectCloudEntity)), (living, source, damage) -> {
 			return DataAttributesAPI.ifPresent(living, ExAPI.WITHER_RESISTANCE, damage, value -> {
 				if(source.equals(DamageSource.WITHER) && living.isUndead()) return 0.0F;
 				if(source.name.equals("indirectMagic") && source.getSource() instanceof PotionEntity && living.isUndead()) return damage;
-				
-				return damage * (1.0F - value);
+				return (float)(damage * (1.0 - value));
 			});
 		});
 	}

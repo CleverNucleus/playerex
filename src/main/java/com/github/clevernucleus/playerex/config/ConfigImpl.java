@@ -1,23 +1,43 @@
 package com.github.clevernucleus.playerex.config;
 
+import java.util.Map;
+import java.util.function.Predicate;
+
 import com.github.clevernucleus.dataattributes.api.DataAttributesAPI;
+import com.github.clevernucleus.dataattributes.api.util.Maths;
 import com.github.clevernucleus.playerex.api.ExAPI;
-import com.github.clevernucleus.playerex.api.IConfig;
+import com.github.clevernucleus.playerex.api.ExConfig;
 
 import me.shedaniel.autoconfig.ConfigData;
 import me.shedaniel.autoconfig.annotation.Config;
 import me.shedaniel.autoconfig.annotation.ConfigEntry;
+import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.util.math.MathHelper;
-import net.objecthunter.exp4j.Expression;
 
 @Config(name = ExAPI.MODID)
-public class ConfigImpl implements ConfigData, IConfig {
+public class ConfigImpl implements ConfigData, ExConfig {
+	public static enum LevelNameplate {
+		PLAYERS((byte)0, entity -> entity instanceof PlayerEntity),
+		MOBS((byte)1, entity -> !(entity instanceof PlayerEntity)),
+		ALL((byte)2, entity -> true),
+		NONE((byte)3, entity -> false);
+		
+		private static final Map<Byte, LevelNameplate> VALUES = Maths.enumLookupMap(LevelNameplate.values(), e -> e.id());
+		private final Predicate<LivingEntity> predicate;
+		private final byte id;
+		
+		private LevelNameplate(final byte id, final Predicate<LivingEntity> predicate) {
+			this.id = id;
+			this.predicate = predicate;
+		}
+		
+		public static LevelNameplate from(final byte id) { return VALUES.getOrDefault(id, ALL); }
+		
+		public byte id() { return this.id; }
+		
+		public boolean test(final LivingEntity livingEntity) { return this.predicate.test(livingEntity); }
+	}
 	public static enum Tooltip { DEFAULT, VANILLA, PLAYEREX; }
-	
-	@ConfigEntry.Category(value = "server")
-	@ConfigEntry.Gui.Tooltip(count = 2)
-	protected boolean disableAttributesGui = false;
 	
 	@ConfigEntry.Category(value = "server")
 	@ConfigEntry.Gui.Tooltip(count = 2)
@@ -25,7 +45,7 @@ public class ConfigImpl implements ConfigData, IConfig {
 	
 	@ConfigEntry.Category(value = "server")
 	@ConfigEntry.Gui.Tooltip(count = 2)
-	protected boolean showLevelNameplates = true;
+	protected boolean disableAttributesGui = false;
 	
 	@ConfigEntry.Category(value = "server")
 	@ConfigEntry.Gui.Tooltip(count = 2)
@@ -33,7 +53,11 @@ public class ConfigImpl implements ConfigData, IConfig {
 	
 	@ConfigEntry.Category(value = "server")
 	@ConfigEntry.Gui.Tooltip(count = 2)
-	protected String levelFormula = "10 + ((0.2 * x) - 2)^3";
+	protected LevelNameplate levelNameplate = LevelNameplate.ALL;
+	
+	@ConfigEntry.Category(value = "server")
+	@ConfigEntry.Gui.Tooltip(count = 2)
+	protected String levelFormula = "stairs(x,0.15,2,25,10,22)";
 	
 	@ConfigEntry.Category(value = "client")
 	@ConfigEntry.BoundedDiscrete(min = 0, max = 150)
@@ -57,42 +81,44 @@ public class ConfigImpl implements ConfigData, IConfig {
 	
 	@ConfigEntry.Category(value = "client")
 	@ConfigEntry.Gui.Tooltip
-	public Tooltip tooltip = Tooltip.PLAYEREX;
+	private Tooltip tooltip = Tooltip.PLAYEREX;
 	
-	@ConfigEntry.Category(value = "client")
-	public boolean darkMode = false;
+	public void createServerConfig() {
+		ConfigServer.INSTANCE.init(this);
+	}
 	
-	public void init() {
-		ConfigCache.INSTANCE.set(this);
+	public ConfigServer getServerInstance() {
+		return ConfigServer.INSTANCE;
+	}
+	
+	/** Server & Client */
+	public LevelNameplate levelNameplate() {
+		return ConfigServer.INSTANCE.levelNameplate;
+	}
+	
+	/** Client */
+	public Tooltip tooltip() {
+		return this.tooltip;
 	}
 	
 	@Override
 	public boolean resetOnDeath() {
-		return ConfigCache.INSTANCE.resetOnDeath;
+		return ConfigServer.INSTANCE.resetOnDeath;
 	}
 	
 	@Override
-	public boolean showLevelNameplates() {
-		return ConfigCache.INSTANCE.showLevelNameplates;
+	public boolean isAttributesGuiDisabled() {
+		return ConfigServer.INSTANCE.disableAttributesGui;
 	}
 	
 	@Override
 	public int skillPointsPerLevelUp() {
-		return MathHelper.clamp(ConfigCache.INSTANCE.skillPointsPerLevelUp, 1, Integer.MAX_VALUE);
+		return ConfigServer.INSTANCE.skillPointsPerLevelUp;
 	}
 	
 	@Override
 	public int requiredXp(final PlayerEntity player) {
-		return DataAttributesAPI.ifPresent(player, ExAPI.LEVEL, 1, value -> {
-			Expression expression = ConfigCache.INSTANCE.expression.setVariable("x", Math.round(value));
-			float amount = (float)expression.evaluate();
-			return Math.abs(Math.round(amount));
-		});
-	}
-	
-	@Override
-	public boolean isGuiDisabled() {
-		return ConfigCache.INSTANCE.disableAttributesGui;
+		return DataAttributesAPI.ifPresent(player, ExAPI.LEVEL, 1, ConfigServer.INSTANCE::level);
 	}
 	
 	@Override

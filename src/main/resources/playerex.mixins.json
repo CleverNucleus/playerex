@@ -7,13 +7,12 @@
         "LivingEntityMixin",
         "PlayerEntityMixin",
         "ServerPlayerEntityMixin",
+        "PlayerInventoryMixin",
         "PersistentProjectileEntityMixin"
     ],
     "client": [
-    	"client.LivingEntityRendererMixin",
-        "client.AbstractInventoryScreenMixin",
-        "client.InventoryScreenMixin",
-        "client.ItemStackMixin"
+        "client.ItemStackMixin",
+        "client.LivingEntityRendererMixin"
     ],
     "injectors": {
         "defaultRequire": 1

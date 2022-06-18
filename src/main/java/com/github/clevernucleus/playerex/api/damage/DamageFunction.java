@@ -4,7 +4,7 @@ import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.damage.DamageSource;
 
 /**
- * Essentially a TriFunction.
+ * Basically just a dedicated TriFunction
  * 
  * @author CleverNucleus
  *

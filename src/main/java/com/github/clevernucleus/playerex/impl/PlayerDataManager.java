@@ -1,24 +1,19 @@
 package com.github.clevernucleus.playerex.impl;
 
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
-import java.util.List;
 import java.util.Map;
-import java.util.Optional;
-import java.util.UUID;
 import java.util.function.BiFunction;
 import java.util.function.Consumer;
 
 import com.github.clevernucleus.dataattributes.api.attribute.IEntityAttributeInstance;
-import com.github.clevernucleus.playerex.PlayerEx;
+import com.github.clevernucleus.playerex.api.EntityAttributeSupplier;
 import com.github.clevernucleus.playerex.api.ExAPI;
 import com.github.clevernucleus.playerex.api.PlayerData;
 
 import dev.onyxstudios.cca.api.v3.component.sync.AutoSyncedComponent;
 import dev.onyxstudios.cca.api.v3.component.sync.ComponentPacketWriter;
 import net.fabricmc.fabric.api.util.NbtType;
-import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.attribute.AttributeContainer;
 import net.minecraft.entity.attribute.EntityAttribute;
 import net.minecraft.entity.attribute.EntityAttributeInstance;
@@ -34,123 +29,107 @@ import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.registry.Registry;
 
 public final class PlayerDataManager implements PlayerData, AutoSyncedComponent {
-	private static final List<BiFunction<PlayerData, LivingEntity, Double>> REFUND_CONDITIONS = new ArrayList<BiFunction<PlayerData, LivingEntity, Double>>();
+	private static final String KEY_SET = "Set", KEY_REMOVE = "Remove", KEY_RESET = "Reset", KEY_MODIFIERS = "Modifiers", KEY_REFUND_POINTS = "RefundPoints", KEY_SKILL_POINTS = "SkillPoints";
 	private final PlayerEntity player;
 	private final Map<Identifier, Double> data;
 	private int refundPoints, skillPoints;
 	public boolean hasNotifiedLevelUp;
 	
-	public PlayerDataManager(PlayerEntity player) {
+	public PlayerDataManager(final PlayerEntity player) {
 		this.player = player;
 		this.data = new HashMap<Identifier, Double>();
 		this.hasNotifiedLevelUp = false;
 	}
 	
-	public static void addRefundCondition(final BiFunction<PlayerData, LivingEntity, Double> condition) {
-		REFUND_CONDITIONS.add(condition);
-	}
-	
-	private UUID uuid(final Identifier registryKey) {
-		return PlayerEx.MANAGER.modifiers.getOrDefault(registryKey, (UUID)null);
-	}
-	
 	private void sync(ComponentPacketWriter packet) {
 		if(this.player.world.isClient) return;
-		ExAPI.INSTANCE.sync(this.player, packet);
+		ExAPI.PLAYER_DATA.sync(this.player, packet);
 	}
 	
-	private void readModifiersFromNbt(NbtCompound tag, BiFunction<Identifier, Double, Object> input) {
-		NbtList modifiers = tag.getList("Modifiers", NbtType.COMPOUND);
+	private void readModifiersFromNbt(NbtCompound tag, BiFunction<Identifier, Double, Object> function) {
+		NbtList modifiers = tag.getList(KEY_MODIFIERS, NbtType.COMPOUND);
 		
 		for(int i = 0; i < modifiers.size(); i++) {
 			NbtCompound entry = modifiers.getCompound(i);
-			Identifier key = new Identifier(entry.getString("Key"));
-			double value = entry.getDouble("Value");
-			input.apply(key, value);
+			Identifier identifier = new Identifier(entry.getString("Key"));
+			final double value = entry.getDouble("Value");
+			function.apply(identifier, value);
 		}
 	}
 	
-	private Optional<Identifier> tryRemove(final EntityAttribute attributeIn, final Consumer<Identifier> action) {
-		Identifier identifier = Registry.ATTRIBUTE.getId(attributeIn);
-		
-		if(identifier == null) return Optional.empty();
-		
-		AttributeContainer container = this.player.getAttributes();
-		EntityAttributeInstance instance = container.getCustomInstance(attributeIn);
-		
-		if(instance == null) return Optional.empty();
-		
-		UUID uuid = this.uuid(identifier);
-		
-		if(instance.getModifier(uuid) != null) {
-			instance.removeModifier(uuid);
-		}
-		
-		action.accept(identifier);
-		
-		return Optional.of(identifier);
-	}
-	
-	private boolean trySet(final Identifier registryKey, final double valueIn) {
+	private boolean isValid(final Identifier registryKey, final Consumer<EntityAttributeInstance> ifPresent, final Consumer<EntityAttributeInstance> otherwise) {
 		EntityAttribute attribute = Registry.ATTRIBUTE.get(registryKey);
+		
+		if(attribute == null) return false;
 		AttributeContainer container = this.player.getAttributes();
 		EntityAttributeInstance instance = container.getCustomInstance(attribute);
-		UUID uuid = this.uuid(registryKey);
 		
-		if(instance == null || uuid == null) return false;
-		
-		if(instance.getModifier(uuid) == null) {
-			EntityAttributeModifier modifier = new EntityAttributeModifier(uuid, "PlayerData Attribute", valueIn, EntityAttributeModifier.Operation.ADDITION);
-			instance.addPersistentModifier(modifier);
+		if(instance == null) return false;
+		if(instance.getModifier(ExAPI.PLAYEREX_MODIFIER_ID) != null) {
+			ifPresent.accept(instance);
 		} else {
-			((IEntityAttributeInstance)instance).updateModifier(uuid, valueIn);
+			otherwise.accept(instance);
 		}
-		
-		this.data.put(registryKey, valueIn);
 		
 		return true;
 	}
 	
-	@Override
-	public double get(final EntityAttribute attributeIn) {
-		Identifier identifier = Registry.ATTRIBUTE.getId(attributeIn);
+	private boolean trySet(final Identifier registryKey, final double valueIn) {
+		if(!this.isValid(registryKey, instance -> ((IEntityAttributeInstance)instance).updateModifier(ExAPI.PLAYEREX_MODIFIER_ID, valueIn), instance -> {
+			EntityAttributeModifier modifier = new EntityAttributeModifier(ExAPI.PLAYEREX_MODIFIER_ID, "PlayerEx Attribute", valueIn, EntityAttributeModifier.Operation.ADDITION);
+			instance.addPersistentModifier(modifier);
+		})) return false;
 		
-		if(identifier == null) return 0.0D;
-		
-		return this.data.getOrDefault(identifier, 0.0D);
+		this.data.put(registryKey, valueIn);
+		return true;
+	}
+	
+	private boolean tryRemove(final Identifier registryKey, final Consumer<Identifier> consumer) {
+		if(!this.isValid(registryKey, instance -> instance.removeModifier(ExAPI.PLAYEREX_MODIFIER_ID), instance -> {})) return false;
+		consumer.accept(registryKey);
+		return true;
 	}
 	
 	@Override
-	public void set(final EntityAttribute attributeIn, final double valueIn) {
-		double value = attributeIn.clamp(valueIn);
+	public double get(final EntityAttributeSupplier attributeIn) {
+		if(attributeIn.get() == null) return 0.0D;
+		return this.data.getOrDefault(attributeIn.getId(), 0.0D);
+	}
+	
+	@Override
+	public void set(final EntityAttributeSupplier attributeIn, final double valueIn) {
+		EntityAttribute attribute = attributeIn.get();
 		
-		Identifier registryKey = Registry.ATTRIBUTE.getId(attributeIn);
-		if(!this.trySet(registryKey, value)) return;
+		if(attribute == null) return;
+		Identifier identifier = attributeIn.getId();
+		double value = attribute.clamp(valueIn);
 		
+		if(!this.trySet(identifier, value)) return;
 		this.sync((buf, player) -> {
 			NbtCompound tag = new NbtCompound();
 			NbtCompound entry = new NbtCompound();
-			entry.putString("Key", registryKey.toString());
+			entry.putString("Key", identifier.toString());
 			entry.putDouble("Value", value);
-			tag.put("Set", entry);
+			tag.put(KEY_SET, entry);
 			buf.writeNbt(tag);
 		});
 	}
 	
 	@Override
-	public void add(final EntityAttribute attributeIn, final double valueIn) {
+	public void add(final EntityAttributeSupplier attributeIn, final double valueIn) {
 		final double value = this.get(attributeIn);
 		this.set(attributeIn, value + valueIn);
 	}
 	
 	@Override
-	public void remove(final EntityAttribute attributeIn) {
-		this.tryRemove(attributeIn, this.data::remove).ifPresent(identifier -> {
-			this.sync((buf, player) -> {
-				NbtCompound tag = new NbtCompound();
-				tag.putString("Remove", identifier.toString());
-				buf.writeNbt(tag);
-			});
+	public void remove(final EntityAttributeSupplier attributeIn) {
+		Identifier identifier = attributeIn.getId();
+		
+		if(!this.tryRemove(identifier, this.data::remove)) return;
+		this.sync((buf, player) -> {
+			NbtCompound tag = new NbtCompound();
+			tag.putString(KEY_REMOVE, identifier.toString());
+			buf.writeNbt(tag);
 		});
 	}
 	
@@ -160,17 +139,16 @@ public final class PlayerDataManager implements PlayerData, AutoSyncedComponent 
 		
 		for(Iterator<Identifier> iterator = this.data.keySet().iterator(); iterator.hasNext();) {
 			Identifier identifier = iterator.next();
-			EntityAttribute attribute = Registry.ATTRIBUTE.get(identifier);
 			
+			if(!this.tryRemove(identifier, id -> iterator.remove())) continue;
 			list.add(NbtString.of(identifier.toString()));
-			this.tryRemove(attribute, id -> iterator.remove());
 		}
 		
 		this.refundPoints = 0;
 		this.skillPoints = 0;
 		this.sync((buf, player) -> {
 			NbtCompound tag = new NbtCompound();
-			tag.put("Reset", list);
+			tag.put(KEY_RESET, list);
 			buf.writeNbt(tag);
 		});
 	}
@@ -180,7 +158,7 @@ public final class PlayerDataManager implements PlayerData, AutoSyncedComponent 
 		this.skillPoints += pointsIn;
 		this.sync((buf, player) -> {
 			NbtCompound tag = new NbtCompound();
-			tag.putInt("SkillPoints", this.skillPoints);
+			tag.putInt(KEY_SKILL_POINTS, this.skillPoints);
 			buf.writeNbt(tag);
 		});
 	}
@@ -190,15 +168,15 @@ public final class PlayerDataManager implements PlayerData, AutoSyncedComponent 
 		final int previous = this.refundPoints;
 		double maxRefundPt = 0.0D;
 		
-		for(var condition : REFUND_CONDITIONS) {
-			maxRefundPt += condition.apply(this, this.player);
+		for(var refundCondition : RefundConditionImpl.get()) {
+			maxRefundPt += refundCondition.apply(this, this.player);
 		}
 		
 		double refund = MathHelper.clamp((double)(this.refundPoints + pointsIn), 0.0D, maxRefundPt);
 		this.refundPoints = Math.round((float)refund);
 		this.sync((buf, player) -> {
 			NbtCompound tag = new NbtCompound();
-			tag.putInt("RefundPoints", this.refundPoints);
+			tag.putInt(KEY_REFUND_POINTS, this.refundPoints);
 			buf.writeNbt(tag);
 		});
 		
@@ -225,21 +203,20 @@ public final class PlayerDataManager implements PlayerData, AutoSyncedComponent 
 		NbtCompound tag = buf.readNbt();
 		
 		if(tag == null) return;
-		
-		if(tag.contains("Set")) {
-			NbtCompound entry = tag.getCompound("Set");
+		if(tag.contains(KEY_SET)) {
+			NbtCompound entry = tag.getCompound(KEY_SET);
 			Identifier identifier = new Identifier(entry.getString("Key"));
-			double value = entry.getDouble("Value");
+			final double value = entry.getDouble("Value");
 			this.data.put(identifier, value);
 		}
 		
-		if(tag.contains("Remove")) {
-			Identifier identifier = new Identifier(tag.getString("Remove"));
+		if(tag.contains(KEY_REMOVE)) {
+			Identifier identifier = new Identifier(tag.getString(KEY_REMOVE));
 			this.data.remove(identifier);
 		}
 		
-		if(tag.contains("Reset")) {
-			NbtList list = tag.getList("Reset", NbtType.STRING);
+		if(tag.contains(KEY_RESET)) {
+			NbtList list = tag.getList(KEY_RESET, NbtType.STRING);
 			
 			for(int i = 0; i < list.size(); i++) {
 				Identifier identifier = new Identifier(list.getString(i));
@@ -251,24 +228,24 @@ public final class PlayerDataManager implements PlayerData, AutoSyncedComponent 
 			this.hasNotifiedLevelUp = false;
 		}
 		
-		if(tag.contains("Modifiers")) {
+		if(tag.contains(KEY_MODIFIERS)) {
 			this.readModifiersFromNbt(tag, this.data::put);
 		}
 		
-		if(tag.contains("RefundPoints")) {
-			this.refundPoints = tag.getInt("RefundPoints");
+		if(tag.contains(KEY_REFUND_POINTS)) {
+			this.refundPoints = tag.getInt(KEY_REFUND_POINTS);
 		}
 		
-		if(tag.contains("SkillPoints")) {
-			this.skillPoints = tag.getInt("SkillPoints");
+		if(tag.contains(KEY_SKILL_POINTS)) {
+			this.skillPoints = tag.getInt(KEY_SKILL_POINTS);
 		}
 	}
 	
 	@Override
 	public void readFromNbt(NbtCompound tag) {
 		this.readModifiersFromNbt(tag, this::trySet);
-		this.refundPoints = tag.getInt("RefundPoints");
-		this.skillPoints = tag.getInt("SkillPoints");
+		this.refundPoints = tag.getInt(KEY_REFUND_POINTS);
+		this.skillPoints = tag.getInt(KEY_SKILL_POINTS);
 		this.hasNotifiedLevelUp = tag.getBoolean("NotifiedLevelUp");
 	}
 	
@@ -284,9 +261,9 @@ public final class PlayerDataManager implements PlayerData, AutoSyncedComponent 
 			modifiers.add(entry);
 		}
 		
-		tag.put("Modifiers", modifiers);
-		tag.putInt("RefundPoints", this.refundPoints);
-		tag.putInt("SkillPoints", this.skillPoints);
+		tag.put(KEY_MODIFIERS, modifiers);
+		tag.putInt(KEY_REFUND_POINTS, this.refundPoints);
+		tag.putInt(KEY_SKILL_POINTS, this.skillPoints);
 		tag.putBoolean("NotifiedLevelUp", this.hasNotifiedLevelUp);
 	}
 }

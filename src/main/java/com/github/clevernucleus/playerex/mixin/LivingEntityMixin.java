@@ -8,8 +8,6 @@ import org.spongepowered.asm.mixin.injection.ModifyVariable;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
-import com.github.clevernucleus.dataattributes.api.DataAttributesAPI;
-import com.github.clevernucleus.playerex.api.ExAPI;
 import com.github.clevernucleus.playerex.api.event.LivingEntityEvents;
 
 import net.minecraft.entity.LivingEntity;
@@ -19,21 +17,16 @@ import net.minecraft.entity.damage.DamageSource;
 abstract class LivingEntityMixin {
 	
 	@Unique
-	private int playerex_healTicks;
-	
-	@Unique
-	private LivingEntity get() {
-		return (LivingEntity)(Object)this;
-	}
+	private int playerex_ticks;
 	
 	@ModifyVariable(method = "heal", at = @At("HEAD"))
-	private float onHealModified(float amount) {
-		return LivingEntityEvents.INCOMING_HEAL.invoker().onHeal(this.get(), amount);
+	private float playerex_heal(float amount) {
+		return LivingEntityEvents.ON_HEAL.invoker().onHeal((LivingEntity)(Object)this, amount);
 	}
 	
 	@Inject(method = "heal", at = @At("HEAD"), cancellable = true)
-	private void onHeal(float amount, CallbackInfo info) {
-		final boolean cancel = LivingEntityEvents.HEAL.invoker().onHeal(this.get(), amount);
+	private void playerex_heal(float amount, CallbackInfo info) {
+		final boolean cancel = LivingEntityEvents.SHOULD_HEAL.invoker().shouldHeal((LivingEntity)(Object)this, amount);
 		
 		if(!cancel) {
 			info.cancel();
@@ -41,35 +34,25 @@ abstract class LivingEntityMixin {
 	}
 	
 	@Inject(method = "tick", at = @At("TAIL"))
-	private void onTick(CallbackInfo info) {
-		LivingEntity livingEntity = this.get();
-		LivingEntityEvents.TICK.invoker().onTick(livingEntity);
+	private void playerex_tick(CallbackInfo info) {
+		LivingEntity livingEntity = (LivingEntity)(Object)this;
 		
-		if(!livingEntity.world.isClient) {
-			if(this.playerex_healTicks < 20) {
-				this.playerex_healTicks++;
-			} else {
-				DataAttributesAPI.ifPresent(livingEntity, ExAPI.HEALTH_REGENERATION, (Object)null, value -> {
-					if(value > 0.0F && livingEntity.getHealth() < livingEntity.getMaxHealth()) {
-						livingEntity.heal(value);
-					}
-					
-					return (Object)null;
-				});
-				
-				this.playerex_healTicks = 0;
-			}
+		if(this.playerex_ticks < 20) {
+			this.playerex_ticks++;
+		} else {
+			LivingEntityEvents.EVERY_SECOND.invoker().everySecond(livingEntity);
+			this.playerex_ticks = 0;
 		}
 	}
 	
 	@ModifyVariable(method = "damage", at = @At("HEAD"), ordinal = 0)
-	private float onDamageModified(float amount, DamageSource source) {
-		return LivingEntityEvents.INCOMING_DAMAGE.invoker().onDamage(this.get(), source, amount);
+	private float playerex_damage(float amount, DamageSource source) {
+		return LivingEntityEvents.ON_DAMAGE.invoker().onDamage((LivingEntity)(Object)this, source, amount);
 	}
 	
 	@Inject(method = "damage", at = @At(value = "FIELD", target = "Lnet/minecraft/entity/LivingEntity;despawnCounter:I", ordinal = 0), cancellable = true)
-	private void onDamage(DamageSource source, float amount, CallbackInfoReturnable<Boolean> info) {
-		final boolean cancel = LivingEntityEvents.DAMAGE.invoker().onDamage(this.get(), source, amount);
+	private void playerex_damage(DamageSource source, float amount, CallbackInfoReturnable<Boolean> info) {
+		final boolean cancel = LivingEntityEvents.SHOULD_DAMAGE.invoker().shouldDamage((LivingEntity)(Object)this, source, amount);
 		
 		if(!cancel) {
 			info.setReturnValue(false);
