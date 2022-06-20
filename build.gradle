@@ -41,11 +41,7 @@ dependencies {
 	modImplementation "net.fabricmc:fabric-loader:${project.loader_version}"
 	modImplementation "net.fabricmc.fabric-api:fabric-api:${project.fabric_version}"
     
-    // modImplementation "com.github.clevernucleus:data-attributes:${project.dataattributes_version}"
 	modImplementation "maven.modrinth:data-attributes:${project.dataattributes_version}"
-	
-    // modImplementation "com.github.clevernucleus:offline-player-cache:${project.opc_version}"
-	// include "com.github.clevernucleus:offline-player-cache:${project.opc_version}"
 	
 	modImplementation "maven.modrinth:offline-player-cache:${project.opc_version}"
 	include "maven.modrinth:offline-player-cache:${project.opc_version}"
