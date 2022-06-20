@@ -23,8 +23,8 @@ public final class ConfigServer {
 	protected static final ConfigServer INSTANCE = new ConfigServer();
 	protected boolean resetOnDeath;
 	protected boolean disableAttributesGui;
+	protected boolean showLevelNameplates;
 	protected int skillPointsPerLevelUp;
-	protected ConfigImpl.LevelNameplate levelNameplate;
 	protected String levelFormula;
 	private Expression expression;
 	
@@ -37,8 +37,8 @@ public final class ConfigServer {
 	protected void init(final ConfigImpl config) {
 		this.resetOnDeath = config.resetOnDeath;
 		this.disableAttributesGui = config.disableAttributesGui;
+		this.showLevelNameplates = config.showLevelNameplates;
 		this.skillPointsPerLevelUp = config.skillPointsPerLevelUp;
-		this.levelNameplate = config.levelNameplate;
 		this.levelFormula = config.levelFormula;
 		this.expression = this.createExpression();
 	}
@@ -51,8 +51,8 @@ public final class ConfigServer {
 	public void readFromNbt(NbtCompound tag) {
 		this.resetOnDeath = tag.getBoolean(RESET_ON_DEATH);
 		this.disableAttributesGui = tag.getBoolean(DISABLE_ATTRIBUTES_GUI);
+		this.showLevelNameplates = tag.getBoolean(LEVEL_NAMEPLATE);
 		this.skillPointsPerLevelUp = tag.getInt(SKILL_POINTS_PER_LEVEL_UP);
-		this.levelNameplate = ConfigImpl.LevelNameplate.from(tag.getByte(LEVEL_NAMEPLATE));
 		this.levelFormula = tag.getString(LEVEL_FORMULA);
 		this.expression = this.createExpression();
 	}
@@ -60,8 +60,8 @@ public final class ConfigServer {
 	public void writeToNbt(NbtCompound tag) {
 		tag.putBoolean(RESET_ON_DEATH, this.resetOnDeath);
 		tag.putBoolean(DISABLE_ATTRIBUTES_GUI, this.disableAttributesGui);
+		tag.putBoolean(LEVEL_NAMEPLATE, this.showLevelNameplates);
 		tag.putInt(SKILL_POINTS_PER_LEVEL_UP, this.skillPointsPerLevelUp);
-		tag.putByte(LEVEL_NAMEPLATE, this.levelNameplate.id());
 		tag.putString(LEVEL_FORMULA, this.levelFormula);
 	}
 }

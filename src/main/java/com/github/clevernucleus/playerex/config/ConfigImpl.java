@@ -1,42 +1,16 @@
 package com.github.clevernucleus.playerex.config;
 
-import java.util.Map;
-import java.util.function.Predicate;
-
 import com.github.clevernucleus.dataattributes.api.DataAttributesAPI;
-import com.github.clevernucleus.dataattributes.api.util.Maths;
 import com.github.clevernucleus.playerex.api.ExAPI;
 import com.github.clevernucleus.playerex.api.ExConfig;
 
 import me.shedaniel.autoconfig.ConfigData;
 import me.shedaniel.autoconfig.annotation.Config;
 import me.shedaniel.autoconfig.annotation.ConfigEntry;
-import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.player.PlayerEntity;
 
 @Config(name = ExAPI.MODID)
 public class ConfigImpl implements ConfigData, ExConfig {
-	public static enum LevelNameplate {
-		PLAYERS((byte)0, entity -> entity instanceof PlayerEntity),
-		MOBS((byte)1, entity -> !(entity instanceof PlayerEntity)),
-		ALL((byte)2, entity -> true),
-		NONE((byte)3, entity -> false);
-		
-		private static final Map<Byte, LevelNameplate> VALUES = Maths.enumLookupMap(LevelNameplate.values(), e -> e.id());
-		private final Predicate<LivingEntity> predicate;
-		private final byte id;
-		
-		private LevelNameplate(final byte id, final Predicate<LivingEntity> predicate) {
-			this.id = id;
-			this.predicate = predicate;
-		}
-		
-		public static LevelNameplate from(final byte id) { return VALUES.getOrDefault(id, ALL); }
-		
-		public byte id() { return this.id; }
-		
-		public boolean test(final LivingEntity livingEntity) { return this.predicate.test(livingEntity); }
-	}
 	public static enum Tooltip { DEFAULT, VANILLA, PLAYEREX; }
 	
 	@ConfigEntry.Category(value = "server")
@@ -49,11 +23,11 @@ public class ConfigImpl implements ConfigData, ExConfig {
 	
 	@ConfigEntry.Category(value = "server")
 	@ConfigEntry.Gui.Tooltip(count = 2)
-	protected int skillPointsPerLevelUp = 1;
+	protected boolean showLevelNameplates = true;
 	
 	@ConfigEntry.Category(value = "server")
 	@ConfigEntry.Gui.Tooltip(count = 2)
-	protected LevelNameplate levelNameplate = LevelNameplate.ALL;
+	protected int skillPointsPerLevelUp = 1;
 	
 	@ConfigEntry.Category(value = "server")
 	@ConfigEntry.Gui.Tooltip(count = 2)
@@ -92,8 +66,8 @@ public class ConfigImpl implements ConfigData, ExConfig {
 	}
 	
 	/** Server & Client */
-	public LevelNameplate levelNameplate() {
-		return ConfigServer.INSTANCE.levelNameplate;
+	public boolean levelNameplate() {
+		return ConfigServer.INSTANCE.showLevelNameplates;
 	}
 	
 	/** Client */

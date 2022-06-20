@@ -62,7 +62,7 @@ abstract class ItemStackMixin {
 	private String playerex_value(double e, Map.Entry<EntityAttribute, EntityAttributeModifier> entry, EntityAttributeModifier modifier) {
 		if(modifier.getOperation() != EntityAttributeModifier.Operation.ADDITION) return ItemStack.MODIFIER_FORMAT.format(e);
 		EntityAttribute attribute = entry.getKey();
-		String value = ItemStack.MODIFIER_FORMAT.format(ClientUtil.displayValue(attribute, e));
+		String value = ItemStack.MODIFIER_FORMAT.format(ClientUtil.displayValue(() -> attribute, e));
 		
 		if(((IEntityAttribute)attribute).hasProperty(ExAPI.PERCENTAGE_PROPERTY)) {
 			value += "%";

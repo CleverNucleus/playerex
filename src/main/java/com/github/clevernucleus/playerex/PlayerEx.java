@@ -7,6 +7,7 @@ import com.github.clevernucleus.playerex.api.event.PlayerEntityEvents;
 import com.github.clevernucleus.playerex.config.ConfigImpl;
 import com.github.clevernucleus.playerex.factory.DamageFactory;
 import com.github.clevernucleus.playerex.factory.EventFactory;
+import com.github.clevernucleus.playerex.factory.ExScreenFactory;
 import com.github.clevernucleus.playerex.factory.NetworkFactory;
 import com.github.clevernucleus.playerex.factory.PlaceholderFactory;
 import com.github.clevernucleus.playerex.factory.RefundFactory;
@@ -20,11 +21,13 @@ import net.fabricmc.fabric.api.event.lifecycle.v1.ServerLifecycleEvents;
 import net.fabricmc.fabric.api.networking.v1.ServerLoginConnectionEvents;
 import net.fabricmc.fabric.api.networking.v1.ServerLoginNetworking;
 import net.fabricmc.fabric.api.networking.v1.ServerPlayNetworking;
+import net.minecraft.screen.ScreenHandlerType;
 import net.minecraft.sound.SoundEvent;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.registry.Registry;
 
 public class PlayerEx implements ModInitializer {
+	public static final ScreenHandlerType<ExScreenFactory.Handler> EX_SCREEN = Registry.register(Registry.SCREEN_HANDLER, new Identifier(ExAPI.MODID, "ex_screen"), ExScreenFactory.type());
 	public static final SoundEvent LEVEL_UP_SOUND = new SoundEvent(new Identifier(ExAPI.MODID, "level_up"));
 	public static final SoundEvent SP_SPEND_SOUND = new SoundEvent(new Identifier(ExAPI.MODID, "sp_spend"));
 	
