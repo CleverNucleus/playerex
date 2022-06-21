@@ -13,17 +13,20 @@ group = project.maven_group
 repositories {
 	mavenCentral()
 	maven {
-		name = "Ladysnake Mods"
-		url = 'https://ladysnake.jfrog.io/artifactory/mods'
+		name = "Ladysnake"
+		url = "https://ladysnake.jfrog.io/artifactory/mods"
 	}
 	maven {
-		url "https://maven.shedaniel.me/"
+		name = "Shedaniel"
+		url = "https://maven.shedaniel.me/"
 	}
 	maven {
-		url "https://maven.terraformersmc.com/"
+		name = "TerraformersMC"
+		url = "https://maven.terraformersmc.com"
 	}
 	maven {
-		url "https://maven.nucleoid.xyz/"
+		name = "Nucleoid"
+		url = "https://maven.nucleoid.xyz/"
 	}
 	maven {
 		name = "Modrinth"
@@ -55,7 +58,9 @@ dependencies {
 		exclude(group: "net.fabricmc.fabric-api")
 	}
     
-	modRuntimeOnly("com.terraformersmc:modmenu:${project.modmenu_version}")
+	modImplementation("com.terraformersmc:modmenu:${project.modmenu_version}") {
+		exclude(group: "net.fabricmc.fabric-api")
+	}
 	
 	modImplementation include("eu.pb4:placeholder-api:${project.placeholder_api}")
 	
