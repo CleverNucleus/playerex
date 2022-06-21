@@ -11,11 +11,13 @@ import com.github.clevernucleus.playerex.factory.ExScreenFactory;
 import com.github.clevernucleus.playerex.factory.NetworkFactory;
 import com.github.clevernucleus.playerex.factory.PlaceholderFactory;
 import com.github.clevernucleus.playerex.factory.RefundFactory;
+import com.github.clevernucleus.playerex.impl.CommandsImpl;
 
 import eu.pb4.placeholders.PlaceholderAPI;
 import me.shedaniel.autoconfig.AutoConfig;
 import me.shedaniel.autoconfig.serializer.GsonConfigSerializer;
 import net.fabricmc.api.ModInitializer;
+import net.fabricmc.fabric.api.command.v1.CommandRegistrationCallback;
 import net.fabricmc.fabric.api.entity.event.v1.ServerPlayerEvents;
 import net.fabricmc.fabric.api.event.lifecycle.v1.ServerLifecycleEvents;
 import net.fabricmc.fabric.api.networking.v1.ServerLoginConnectionEvents;
@@ -39,6 +41,7 @@ public class PlayerEx implements ModInitializer {
 		ServerPlayNetworking.registerGlobalReceiver(NetworkFactory.SCREEN, NetworkFactory::switchScreen);
 		ServerPlayNetworking.registerGlobalReceiver(NetworkFactory.MODIFY, NetworkFactory::modifyAttributes);
 		
+		CommandRegistrationCallback.EVENT.register(CommandsImpl::register);
 		ServerLoginConnectionEvents.QUERY_START.register(NetworkFactory::loginQueryStart);
 		ServerLifecycleEvents.SERVER_STARTING.register(EventFactory::serverStarting);
 		ServerPlayerEvents.COPY_FROM.register(EventFactory::reset);
