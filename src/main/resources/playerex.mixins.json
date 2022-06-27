@@ -16,7 +16,7 @@
         "client.AbstractInventoryScreenMixin",
         "client.InventoryScreenMixin"
     ],
-    "injectors": {
+    "injectors" : {
         "defaultRequire": 1
     }
 }

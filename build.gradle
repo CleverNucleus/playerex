@@ -44,11 +44,11 @@ dependencies {
 	modImplementation "net.fabricmc:fabric-loader:${project.loader_version}"
 	modImplementation "net.fabricmc.fabric-api:fabric-api:${project.fabric_version}"
     
-	modImplementation "maven.modrinth:data-attributes:${project.dataattributes_version}"
-	
-	modImplementation "maven.modrinth:offline-player-cache:${project.opc_version}"
-	include "maven.modrinth:offline-player-cache:${project.opc_version}"
-	
+    modImplementation "maven.modrinth:data-attributes:${project.dataattributes_version}"
+    
+    modImplementation "maven.modrinth:offline-player-cache:${project.opc_version}"
+    include "maven.modrinth:offline-player-cache:${project.opc_version}"
+    
     modImplementation "dev.onyxstudios.cardinal-components-api:cardinal-components-base:${project.cardinal_components_version}"
     include "dev.onyxstudios.cardinal-components-api:cardinal-components-base:${project.cardinal_components_version}"
     modImplementation "dev.onyxstudios.cardinal-components-api:cardinal-components-entity:${project.cardinal_components_version}"
