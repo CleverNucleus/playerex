@@ -2,8 +2,6 @@ package com.github.clevernucleus.playerex.api;
 
 import java.util.Map;
 
-import org.apache.commons.lang3.function.TriFunction;
-
 import com.github.clevernucleus.dataattributes.api.util.Maths;
 
 import net.minecraft.server.MinecraftServer;
@@ -38,9 +36,9 @@ public enum PacketType {
 	
 	private static final Map<Byte, PacketType> TYPES = Maths.enumLookupMap(PacketType.values(), v -> v.id());
 	private final byte id;
-	private final TriFunction<MinecraftServer, ServerPlayerEntity, PlayerData, Boolean> function;
+	private final PacketFunction function;
 	
-	private PacketType(final byte id, TriFunction<MinecraftServer, ServerPlayerEntity, PlayerData, Boolean> function) {
+	private PacketType(final byte id, PacketFunction function) {
 		this.id = id;
 		this.function = function;
 	}
@@ -108,5 +106,10 @@ public enum PacketType {
 	@Override
 	public String toString() {
 		return String.valueOf(this.id);
+	}
+	
+	@FunctionalInterface
+	public static interface PacketFunction {
+		boolean apply(final MinecraftServer server, final ServerPlayerEntity player, final PlayerData playerData);
 	}
 }

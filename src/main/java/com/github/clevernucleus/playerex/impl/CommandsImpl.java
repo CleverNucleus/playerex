@@ -3,14 +3,13 @@ package com.github.clevernucleus.playerex.impl;
 import java.util.Collection;
 import java.util.function.Supplier;
 
-import org.apache.commons.compress.utils.Sets;
-
 import com.github.clevernucleus.dataattributes.api.DataAttributesAPI;
 import com.github.clevernucleus.dataattributes.api.attribute.IEntityAttribute;
 import com.github.clevernucleus.playerex.api.EntityAttributeSupplier;
 import com.github.clevernucleus.playerex.api.ExAPI;
 import com.github.clevernucleus.playerex.api.PacketType;
 import com.github.clevernucleus.playerex.api.PlayerData;
+import com.google.common.collect.Sets;
 import com.mojang.brigadier.CommandDispatcher;
 import com.mojang.brigadier.arguments.IntegerArgumentType;
 import com.mojang.brigadier.suggestion.SuggestionProvider;
