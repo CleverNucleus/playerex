@@ -118,6 +118,8 @@ modrinth {
     dependencies = [
         new ModDependency("P7dR8mSH", "required"),
         new ModDependency("9s6osm5g", "required"),
-        new ModDependency("wFyCClLQ", "required")
+        new ModDependency("wFyCClLQ", "required"),
+		new ModDependency("kD9Vl1lR", "embedded"),
+		new ModDependency("K01OU20C", "embedded")
     ]
 }
