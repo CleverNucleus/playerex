@@ -13,7 +13,6 @@ import com.google.common.collect.Multimap;
 
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
-import net.minecraft.text.LiteralText;
 import net.minecraft.text.Text;
 import net.minecraft.util.Identifier;
 
@@ -40,7 +39,7 @@ public final class PageRegistryImpl {
 	}
 	
 	public static Page findPage(final Identifier pageId) {
-		return PAGES.getOrDefault(pageId, () -> new Page(pageId, BLANK, LiteralText.EMPTY)).get();
+		return PAGES.getOrDefault(pageId, () -> new Page(pageId, BLANK, Text.empty())).get();
 	}
 	
 	public static Collection<PageLayer.Builder> findPageLayers(final Identifier pageId) {

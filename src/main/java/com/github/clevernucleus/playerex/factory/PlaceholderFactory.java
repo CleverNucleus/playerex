@@ -12,8 +12,8 @@ import com.github.clevernucleus.dataattributes.api.DataAttributesAPI;
 import com.github.clevernucleus.opc.api.OfflinePlayerCache;
 import com.github.clevernucleus.playerex.api.ExAPI;
 
-import eu.pb4.placeholders.PlaceholderHandler;
-import eu.pb4.placeholders.PlaceholderResult;
+import eu.pb4.placeholders.api.PlaceholderHandler;
+import eu.pb4.placeholders.api.PlaceholderResult;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.util.Identifier;
@@ -38,14 +38,14 @@ public final class PlaceholderFactory {
 	}
 	
 	private static PlaceholderHandler top(Function<NameLevelPair, String> function) {
-		return ctx -> {
-			MinecraftServer server = ctx.getServer();
+		return (ctx, arg) -> {
+			MinecraftServer server = ctx.server();
 			Collection<String> names = OfflinePlayerCache.getOfflinePlayerCache(server, Collections.emptySet(), opc -> opc.playerNames());
 			int index = 1;
 			
-			if(ctx.hasArgument()) {
+			if(arg != null) {
 				try {
-					int i = Integer.parseInt(ctx.getArgument());
+					int i = Integer.parseInt(arg);
 					index = Math.max(1, i);
 				} catch(NumberFormatException e) {
 					return PlaceholderResult.invalid("Invalid argument!");
@@ -59,8 +59,8 @@ public final class PlaceholderFactory {
 	}
 	
 	static {
-		STORE.put(new Identifier(ExAPI.MODID, "level"), ctx -> {
-			ServerPlayerEntity player = ctx.getPlayer();
+		STORE.put(new Identifier(ExAPI.MODID, "level"), (ctx, arg) -> {
+			ServerPlayerEntity player = ctx.player();
 			
 			if(player == null) return PlaceholderResult.invalid("No player!");
 			int level = DataAttributesAPI.ifPresent(player, ExAPI.LEVEL, 0, value -> (int)Math.round(value));

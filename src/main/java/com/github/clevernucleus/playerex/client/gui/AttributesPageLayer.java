@@ -30,9 +30,7 @@ import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.screen.ScreenHandler;
 import net.minecraft.sound.SoundCategory;
-import net.minecraft.text.LiteralText;
 import net.minecraft.text.Text;
-import net.minecraft.text.TranslatableText;
 import net.minecraft.util.Formatting;
 import net.minecraft.util.Identifier;
 
@@ -79,15 +77,15 @@ public class AttributesPageLayer extends PageLayer {
 			int requiredXp = ExAPI.getConfig().requiredXp(this.client.player);
 			int currentXp = this.client.player.experienceLevel;
 			String progress = "(" + currentXp + "/" + requiredXp + ")";
-			Text tooltip = (new TranslatableText("playerex.gui.page.attributes.tooltip.button.level", progress)).formatted(Formatting.GRAY);
+			Text tooltip = (Text.translatable("playerex.gui.page.attributes.tooltip.button.level", progress)).formatted(Formatting.GRAY);
 			
 			this.renderTooltip(matrices, tooltip, mouseX, mouseY);
 		} else {
 			Supplier<EntityAttribute> attribute = DataAttributesAPI.getAttribute(key);
 			DataAttributesAPI.ifPresent(this.client.player, attribute, (Object)null, value -> {
-				Text text = new TranslatableText(attribute.get().getTranslationKey());
+				Text text = Text.translatable(attribute.get().getTranslationKey());
 				String type = "playerex.gui.page.attributes.tooltip.button." + (this.canRefund() ? "refund" : "skill");
-				Text tooltip = (new TranslatableText(type)).append(text).formatted(Formatting.GRAY);
+				Text tooltip = (Text.translatable(type)).append(text).formatted(Formatting.GRAY);
 				
 				this.renderTooltip(matrices, tooltip, mouseX, mouseY);
 				return (Object)null;
@@ -102,8 +100,8 @@ public class AttributesPageLayer extends PageLayer {
 		
 		COMPONENTS.forEach(component -> component.renderText(this.client.player, matrices, this.textRenderer, this.x, this.y, scaleX.get(), scaleY.get()));
 		
-		this.textRenderer.draw(matrices, (new TranslatableText("playerex.gui.page.attributes.text.vitality")), (this.x + 105) / scaleX.get(), (this.y + 26) / scaleY.get(), 4210752);
-		this.textRenderer.draw(matrices, (new TranslatableText("playerex.gui.page.attributes.text.resistances")), (this.x + 105) / scaleX.get(), (this.y + 81) / scaleY.get(), 4210752);
+		this.textRenderer.draw(matrices, (Text.translatable("playerex.gui.page.attributes.text.vitality")), (this.x + 105) / scaleX.get(), (this.y + 26) / scaleY.get(), 4210752);
+		this.textRenderer.draw(matrices, (Text.translatable("playerex.gui.page.attributes.text.resistances")), (this.x + 105) / scaleX.get(), (this.y + 81) / scaleY.get(), 4210752);
 		
 		matrices.pop();
 		
@@ -172,97 +170,97 @@ public class AttributesPageLayer extends PageLayer {
 	
 	static {
 		COMPONENTS.add(RenderComponent.of(ExAPI.LEVEL, value -> {
-			return new TranslatableText("playerex.gui.page.attributes.text.level", Math.round(value));
+			return Text.translatable("playerex.gui.page.attributes.text.level", Math.round(value));
 		}, value -> {
 			List<Text> tooltip = new ArrayList<Text>();
-			tooltip.add((new TranslatableText("playerex.gui.page.attributes.tooltip.level[0]")).formatted(Formatting.GRAY));
-			tooltip.add((new TranslatableText("playerex.gui.page.attributes.tooltip.level[1]")).formatted(Formatting.GRAY));
-			tooltip.add(LiteralText.EMPTY);
-			tooltip.add((new TranslatableText("playerex.gui.page.attributes.tooltip.level[2]", ExAPI.getConfig().skillPointsPerLevelUp())).formatted(Formatting.GRAY));
+			tooltip.add((Text.translatable("playerex.gui.page.attributes.tooltip.level[0]")).formatted(Formatting.GRAY));
+			tooltip.add((Text.translatable("playerex.gui.page.attributes.tooltip.level[1]")).formatted(Formatting.GRAY));
+			tooltip.add(Text.empty());
+			tooltip.add((Text.translatable("playerex.gui.page.attributes.tooltip.level[2]", ExAPI.getConfig().skillPointsPerLevelUp())).formatted(Formatting.GRAY));
 			
 			return tooltip;
 		}, 21, 26));
 		COMPONENTS.add(RenderComponent.of(entity -> {
-			return new TranslatableText("playerex.gui.page.attributes.text.skill_points", ExAPI.PLAYER_DATA.get(entity).skillPoints());
+			return Text.translatable("playerex.gui.page.attributes.text.skill_points", ExAPI.PLAYER_DATA.get(entity).skillPoints());
 		}, entity -> {
 			List<Text> tooltip = new ArrayList<Text>();
-			tooltip.add((new TranslatableText("playerex.gui.page.attributes.tooltip.skill_points[0]")).formatted(Formatting.GRAY));
-			tooltip.add((new TranslatableText("playerex.gui.page.attributes.tooltip.skill_points[1]")).formatted(Formatting.GRAY));
+			tooltip.add((Text.translatable("playerex.gui.page.attributes.tooltip.skill_points[0]")).formatted(Formatting.GRAY));
+			tooltip.add((Text.translatable("playerex.gui.page.attributes.tooltip.skill_points[1]")).formatted(Formatting.GRAY));
 			
 			return tooltip;
 		}, 21, 37));
 		COMPONENTS.add(RenderComponent.of(ExAPI.CONSTITUTION, value -> {
-			return new TranslatableText("playerex.gui.page.attributes.text.constitution", Math.round(value));
+			return Text.translatable("playerex.gui.page.attributes.text.constitution", Math.round(value));
 		}, value -> {
 			List<Text> tooltip = new ArrayList<Text>();
-			tooltip.add((new TranslatableText(ExAPI.CONSTITUTION.get().getTranslationKey())).formatted(Formatting.GRAY));
-			tooltip.add(LiteralText.EMPTY);
+			tooltip.add((Text.translatable(ExAPI.CONSTITUTION.get().getTranslationKey())).formatted(Formatting.GRAY));
+			tooltip.add(Text.empty());
 			
 			ClientUtil.appendChildrenToTooltip(tooltip, ExAPI.CONSTITUTION);
 			return tooltip;
 		}, 21, 59));
 		COMPONENTS.add(RenderComponent.of(ExAPI.STRENGTH, value -> {
-			return new TranslatableText("playerex.gui.page.attributes.text.strength", Math.round(value));
+			return Text.translatable("playerex.gui.page.attributes.text.strength", Math.round(value));
 		}, value -> {
 			List<Text> tooltip = new ArrayList<Text>();
-			tooltip.add((new TranslatableText(ExAPI.STRENGTH.get().getTranslationKey())).formatted(Formatting.GRAY));
-			tooltip.add(LiteralText.EMPTY);
+			tooltip.add((Text.translatable(ExAPI.STRENGTH.get().getTranslationKey())).formatted(Formatting.GRAY));
+			tooltip.add(Text.empty());
 			
 			ClientUtil.appendChildrenToTooltip(tooltip, ExAPI.STRENGTH);
 			return tooltip;
 		}, 21, 70));
 		COMPONENTS.add(RenderComponent.of(ExAPI.DEXTERITY, value -> {
-			return new TranslatableText("playerex.gui.page.attributes.text.dexterity", Math.round(value));
+			return Text.translatable("playerex.gui.page.attributes.text.dexterity", Math.round(value));
 		}, value -> {
 			List<Text> tooltip = new ArrayList<Text>();
-			tooltip.add((new TranslatableText(ExAPI.DEXTERITY.get().getTranslationKey())).formatted(Formatting.GRAY));
-			tooltip.add(LiteralText.EMPTY);
+			tooltip.add((Text.translatable(ExAPI.DEXTERITY.get().getTranslationKey())).formatted(Formatting.GRAY));
+			tooltip.add(Text.empty());
 			
 			ClientUtil.appendChildrenToTooltip(tooltip, ExAPI.DEXTERITY);
 			return tooltip;
 		}, 21, 81));
 		COMPONENTS.add(RenderComponent.of(ExAPI.INTELLIGENCE, value -> {
-			return new TranslatableText("playerex.gui.page.attributes.text.intelligence", Math.round(value));
+			return Text.translatable("playerex.gui.page.attributes.text.intelligence", Math.round(value));
 		}, value -> {
 			List<Text> tooltip = new ArrayList<Text>();
-			tooltip.add((new TranslatableText(ExAPI.INTELLIGENCE.get().getTranslationKey())).formatted(Formatting.GRAY));
-			tooltip.add(LiteralText.EMPTY);
+			tooltip.add((Text.translatable(ExAPI.INTELLIGENCE.get().getTranslationKey())).formatted(Formatting.GRAY));
+			tooltip.add(Text.empty());
 			
 			ClientUtil.appendChildrenToTooltip(tooltip, ExAPI.INTELLIGENCE);
 			return tooltip;
 		}, 21, 92));
 		COMPONENTS.add(RenderComponent.of(ExAPI.LUCKINESS, value -> {
-			return new TranslatableText("playerex.gui.page.attributes.text.luckiness", Math.round(value));
+			return Text.translatable("playerex.gui.page.attributes.text.luckiness", Math.round(value));
 		}, value -> {
 			List<Text> tooltip = new ArrayList<Text>();
-			tooltip.add((new TranslatableText(ExAPI.LUCKINESS.get().getTranslationKey())).formatted(Formatting.GRAY));
-			tooltip.add(LiteralText.EMPTY);
+			tooltip.add((Text.translatable(ExAPI.LUCKINESS.get().getTranslationKey())).formatted(Formatting.GRAY));
+			tooltip.add(Text.empty());
 			
 			ClientUtil.appendChildrenToTooltip(tooltip, ExAPI.LUCKINESS);
 			return tooltip;
 		}, 21, 103));
 		COMPONENTS.add(RenderComponent.of(entity -> {
-			return new TranslatableText("playerex.gui.page.attributes.text.movement_speed", ClientUtil.FORMATTING_3.format(entity.getMovementSpeed()));
+			return Text.translatable("playerex.gui.page.attributes.text.movement_speed", ClientUtil.FORMATTING_3.format(entity.getMovementSpeed()));
 		}, entity -> {
 			List<Text> tooltip = new ArrayList<Text>();
 			String formatted = ClientUtil.FORMATTING_3.format(20.0D * entity.getMovementSpeed());
-			tooltip.add((new TranslatableText("playerex.gui.page.attributes.tooltip.movement_speed", formatted)).formatted(Formatting.GRAY));
+			tooltip.add((Text.translatable("playerex.gui.page.attributes.tooltip.movement_speed", formatted)).formatted(Formatting.GRAY));
 			
 			return tooltip;
 		}, 21, 125));
 		COMPONENTS.add(RenderComponent.of(ExAPI.BREAKING_SPEED, value -> {
-			return new TranslatableText("playerex.gui.page.attributes.text.breaking_speed", ClientUtil.FORMATTING_3.format(value));
+			return Text.translatable("playerex.gui.page.attributes.text.breaking_speed", ClientUtil.FORMATTING_3.format(value));
 		}, value -> {
 			List<Text> tooltip = new ArrayList<Text>();
-			tooltip.add((new TranslatableText("playerex.gui.page.attributes.tooltip.breaking_speed")).formatted(Formatting.GRAY));
+			tooltip.add((Text.translatable("playerex.gui.page.attributes.tooltip.breaking_speed")).formatted(Formatting.GRAY));
 			
 			return tooltip;
 		}, 21, 136));
 		COMPONENTS.add(RenderComponent.of(ExAPI.REACH_DISTANCE, value -> {
-			return new TranslatableText("playerex.gui.page.attributes.text.reach_distance", ClientUtil.FORMATTING_2.format(4.5F + value));
+			return Text.translatable("playerex.gui.page.attributes.text.reach_distance", ClientUtil.FORMATTING_2.format(4.5F + value));
 		}, value -> {
 			List<Text> tooltip = new ArrayList<Text>();
-			tooltip.add((new TranslatableText("playerex.gui.page.attributes.tooltip.reach_distance", ClientUtil.FORMATTING_2.format(4.5F + value))).formatted(Formatting.GRAY));
+			tooltip.add((Text.translatable("playerex.gui.page.attributes.tooltip.reach_distance", ClientUtil.FORMATTING_2.format(4.5F + value))).formatted(Formatting.GRAY));
 			
 			return tooltip;
 		}, 21, 147));
@@ -270,79 +268,79 @@ public class AttributesPageLayer extends PageLayer {
 			String current = ClientUtil.FORMATTING_2.format(entity.getHealth());
 			String maximum = ClientUtil.FORMATTING_2.format(entity.getMaxHealth());
 			
-			return new TranslatableText("playerex.gui.page.attributes.text.health", current, maximum);
+			return Text.translatable("playerex.gui.page.attributes.text.health", current, maximum);
 		}, entity -> {
 			List<Text> tooltip = new ArrayList<Text>();
-			tooltip.add((new TranslatableText("playerex.gui.page.attributes.tooltip.health")).formatted(Formatting.GRAY));
+			tooltip.add((Text.translatable("playerex.gui.page.attributes.tooltip.health")).formatted(Formatting.GRAY));
 			
 			return tooltip;
 		}, 93, 37));
 		COMPONENTS.add(RenderComponent.of(ExAPI.HEALTH_REGENERATION, value -> {
-			return new TranslatableText("playerex.gui.page.attributes.text.health_regeneration", value);
+			return Text.translatable("playerex.gui.page.attributes.text.health_regeneration", value);
 		}, value -> {
 			List<Text> tooltip = new ArrayList<Text>();
-			tooltip.add((new TranslatableText("playerex.gui.page.attributes.tooltip.health_regeneration[0]")).formatted(Formatting.GRAY));
-			tooltip.add((new TranslatableText("playerex.gui.page.attributes.tooltip.health_regeneration[1]")).formatted(Formatting.GRAY));
+			tooltip.add((Text.translatable("playerex.gui.page.attributes.tooltip.health_regeneration[0]")).formatted(Formatting.GRAY));
+			tooltip.add((Text.translatable("playerex.gui.page.attributes.tooltip.health_regeneration[1]")).formatted(Formatting.GRAY));
 			
 			return tooltip;
 		}, 93, 48));
 		COMPONENTS.add(RenderComponent.of(ExAPI.HEAL_AMPLIFICATION, value -> {
 			String displ = ClientUtil.FORMATTING_2.format(ClientUtil.displayValue(ExAPI.HEAL_AMPLIFICATION, value));
-			return new TranslatableText("playerex.gui.page.attributes.text.heal_amplification", displ);
+			return Text.translatable("playerex.gui.page.attributes.text.heal_amplification", displ);
 		}, value -> {
 			List<Text> tooltip = new ArrayList<Text>();
-			tooltip.add((new TranslatableText("playerex.gui.page.attributes.tooltip.heal_amplification[0]")).formatted(Formatting.GRAY));
-			tooltip.add((new TranslatableText("playerex.gui.page.attributes.tooltip.heal_amplification[1]")).formatted(Formatting.GRAY));
+			tooltip.add((Text.translatable("playerex.gui.page.attributes.tooltip.heal_amplification[0]")).formatted(Formatting.GRAY));
+			tooltip.add((Text.translatable("playerex.gui.page.attributes.tooltip.heal_amplification[1]")).formatted(Formatting.GRAY));
 			
 			return tooltip;
 		}, 93, 59));
 		COMPONENTS.add(RenderComponent.of(ExAPI.FIRE_RESISTANCE, value -> {
 			String displ = ClientUtil.FORMATTING_2.format(ClientUtil.displayValue(ExAPI.FIRE_RESISTANCE, value));
-			return new TranslatableText("playerex.gui.page.attributes.text.fire_resistance", displ);
+			return Text.translatable("playerex.gui.page.attributes.text.fire_resistance", displ);
 		}, value -> {
 			List<Text> tooltip = new ArrayList<Text>();
 			String displ = ClientUtil.FORMATTING_2.format(100.0F * value);
-			tooltip.add((new TranslatableText("playerex.gui.page.attributes.tooltip.fire_resistance", displ)).formatted(Formatting.GRAY));
+			tooltip.add((Text.translatable("playerex.gui.page.attributes.tooltip.fire_resistance", displ)).formatted(Formatting.GRAY));
 			
 			return tooltip;
 		}, 93, 92));
 		COMPONENTS.add(RenderComponent.of(ExAPI.FREEZE_RESISTANCE, value -> {
 			String displ = ClientUtil.FORMATTING_2.format(ClientUtil.displayValue(ExAPI.FREEZE_RESISTANCE, value));
-			return new TranslatableText("playerex.gui.page.attributes.text.freeze_resistance", displ);
+			return Text.translatable("playerex.gui.page.attributes.text.freeze_resistance", displ);
 		}, value -> {
 			List<Text> tooltip = new ArrayList<Text>();
 			String displ = ClientUtil.FORMATTING_2.format(100.0F * value);
-			tooltip.add((new TranslatableText("playerex.gui.page.attributes.tooltip.freeze_resistance", displ)).formatted(Formatting.GRAY));
+			tooltip.add((Text.translatable("playerex.gui.page.attributes.tooltip.freeze_resistance", displ)).formatted(Formatting.GRAY));
 			
 			return tooltip;
 		}, 93, 103));
 		COMPONENTS.add(RenderComponent.of(ExAPI.LIGHTNING_RESISTANCE, value -> {
 			String displ = ClientUtil.FORMATTING_2.format(ClientUtil.displayValue(ExAPI.LIGHTNING_RESISTANCE, value));
-			return new TranslatableText("playerex.gui.page.attributes.text.lightning_resistance", displ);
+			return Text.translatable("playerex.gui.page.attributes.text.lightning_resistance", displ);
 		}, value -> {
 			List<Text> tooltip = new ArrayList<Text>();
 			String displ = ClientUtil.FORMATTING_2.format(100.0F * value);
-			tooltip.add((new TranslatableText("playerex.gui.page.attributes.tooltip.lightning_resistance", displ)).formatted(Formatting.GRAY));
+			tooltip.add((Text.translatable("playerex.gui.page.attributes.tooltip.lightning_resistance", displ)).formatted(Formatting.GRAY));
 			
 			return tooltip;
 		}, 93, 114));
 		COMPONENTS.add(RenderComponent.of(ExAPI.POISON_RESISTANCE, value -> {
 			String displ = ClientUtil.FORMATTING_2.format(ClientUtil.displayValue(ExAPI.POISON_RESISTANCE, value));
-			return new TranslatableText("playerex.gui.page.attributes.text.poison_resistance", displ);
+			return Text.translatable("playerex.gui.page.attributes.text.poison_resistance", displ);
 		}, value -> {
 			List<Text> tooltip = new ArrayList<Text>();
 			String displ = ClientUtil.FORMATTING_2.format(100.0F * value);
-			tooltip.add((new TranslatableText("playerex.gui.page.attributes.tooltip.poison_resistance", displ)).formatted(Formatting.GRAY));
+			tooltip.add((Text.translatable("playerex.gui.page.attributes.tooltip.poison_resistance", displ)).formatted(Formatting.GRAY));
 			
 			return tooltip;
 		}, 93, 125));
 		COMPONENTS.add(RenderComponent.of(ExAPI.WITHER_RESISTANCE, value -> {
 			String displ = ClientUtil.FORMATTING_2.format(ClientUtil.displayValue(ExAPI.WITHER_RESISTANCE, value));
-			return new TranslatableText("playerex.gui.page.attributes.text.wither_resistance", displ);
+			return Text.translatable("playerex.gui.page.attributes.text.wither_resistance", displ);
 		}, value -> {
 			List<Text> tooltip = new ArrayList<Text>();
 			String displ = ClientUtil.FORMATTING_2.format(100.0F * value);
-			tooltip.add((new TranslatableText("playerex.gui.page.attributes.tooltip.wither_resistance", displ)).formatted(Formatting.GRAY));
+			tooltip.add((Text.translatable("playerex.gui.page.attributes.tooltip.wither_resistance", displ)).formatted(Formatting.GRAY));
 			
 			return tooltip;
 		}, 93, 136));

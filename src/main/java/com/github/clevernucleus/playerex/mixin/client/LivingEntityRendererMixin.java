@@ -24,7 +24,6 @@ import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.scoreboard.AbstractTeam;
 import net.minecraft.text.StringVisitable;
 import net.minecraft.text.Text;
-import net.minecraft.text.TranslatableText;
 import net.minecraft.util.Formatting;
 import net.minecraft.util.math.Matrix4f;
 
@@ -102,7 +101,7 @@ abstract class LivingEntityRendererMixin<T extends LivingEntity, M extends Entit
 		if(this.playerex_shouldRenderLevel(livingEntity) && ((ConfigImpl)ExAPI.getConfig()).levelNameplate()) {
 			DataAttributesAPI.ifPresent(livingEntity, ExAPI.LEVEL, (Object)null, value -> {
 				boolean coder = (livingEntity instanceof PlayerEntity) && "CleverNucleus".equals(((PlayerEntity)livingEntity).getGameProfile().getName());
-				Text tag = (new TranslatableText("playerex.gui.text.nameplate", String.valueOf(Math.round(value)))).formatted(coder ? Formatting.GOLD : Formatting.WHITE);
+				Text tag = (Text.translatable("playerex.gui.text.nameplate", String.valueOf(Math.round(value)))).formatted(coder ? Formatting.GOLD : Formatting.WHITE);
 				this.playerex_renderLevel(livingEntity, tag, matrixStack, vertexConsumerProvider, i);
 				return (Object)null;
 			});

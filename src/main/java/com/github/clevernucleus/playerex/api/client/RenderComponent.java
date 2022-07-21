@@ -13,7 +13,6 @@ import net.minecraft.client.font.TextRenderer;
 import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.attribute.EntityAttribute;
-import net.minecraft.text.LiteralText;
 import net.minecraft.text.Text;
 
 /**
@@ -57,7 +56,7 @@ public final class RenderComponent {
 	 * @return
 	 */
 	public static RenderComponent of(final Supplier<EntityAttribute> attributeIn, final Function<Double, Text> functionIn, final Function<Double, List<Text>> tooltipIn, final int dx, final int dy) {
-		return new RenderComponent(livingEntity -> DataAttributesAPI.ifPresent(livingEntity, attributeIn, LiteralText.EMPTY, functionIn), livingEntity -> DataAttributesAPI.ifPresent(livingEntity, attributeIn, new ArrayList<Text>(), tooltipIn), dx, dy);
+		return new RenderComponent(livingEntity -> DataAttributesAPI.ifPresent(livingEntity, attributeIn, Text.empty(), functionIn), livingEntity -> DataAttributesAPI.ifPresent(livingEntity, attributeIn, new ArrayList<Text>(), tooltipIn), dx, dy);
 	}
 	
 	private boolean isMouseOver(float xIn, float yIn, float widthIn, float heightIn, int mouseX, int mouseY) {

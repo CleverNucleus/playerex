@@ -10,7 +10,7 @@ import net.fabricmc.api.Environment;
 import net.minecraft.client.gui.screen.ingame.HandledScreen;
 import net.minecraft.client.gui.widget.ButtonWidget;
 import net.minecraft.client.util.math.MatrixStack;
-import net.minecraft.text.LiteralText;
+import net.minecraft.text.Text;
 import net.minecraft.util.Identifier;
 
 @Environment(EnvType.CLIENT)
@@ -22,7 +22,7 @@ public class TabButtonWidget extends ButtonWidget {
 	private final float scale = 1.0F / 16.0F;
 	
 	public TabButtonWidget(HandledScreen<?> parent, Page page, int index, int x, int y, boolean startingState, PressAction onPress) {
-		super(x, y, 28, 32, LiteralText.EMPTY, onPress);
+		super(x, y, 28, 32, Text.empty(), onPress);
 		
 		this.parent = parent;
 		this.page = page;

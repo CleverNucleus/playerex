@@ -6,11 +6,11 @@ import net.fabricmc.fabric.api.screenhandler.v1.ExtendedScreenHandlerFactory;
 import net.fabricmc.fabric.api.screenhandler.v1.ExtendedScreenHandlerType;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.PlayerInventory;
+import net.minecraft.item.ItemStack;
 import net.minecraft.network.PacketByteBuf;
 import net.minecraft.screen.ScreenHandler;
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.text.Text;
-import net.minecraft.text.TranslatableText;
 
 public class ExScreenFactory implements ExtendedScreenHandlerFactory {
 	private final int pageId;
@@ -35,7 +35,7 @@ public class ExScreenFactory implements ExtendedScreenHandlerFactory {
 	
 	@Override
 	public Text getDisplayName() {
-		return new TranslatableText("playerex.gui.page.attributes.title");
+		return Text.translatable("playerex.gui.page.attributes.title");
 	}
 	
 	public static class Handler extends ScreenHandler {
@@ -49,6 +49,11 @@ public class ExScreenFactory implements ExtendedScreenHandlerFactory {
 		@Override
 		public boolean canUse(PlayerEntity player) {
 			return true;
+		}
+		
+		@Override
+		public ItemStack transferSlot(PlayerEntity player, int index) {
+			return this.slots.get(index).getStack();
 		}
 	}
 }

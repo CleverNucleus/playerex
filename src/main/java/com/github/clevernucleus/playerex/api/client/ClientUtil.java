@@ -15,10 +15,8 @@ import com.github.clevernucleus.playerex.api.PacketType;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.minecraft.entity.attribute.EntityAttribute;
-import net.minecraft.text.LiteralText;
 import net.minecraft.text.MutableText;
 import net.minecraft.text.Text;
-import net.minecraft.text.TranslatableText;
 import net.minecraft.util.Formatting;
 
 @Environment(EnvType.CLIENT)
@@ -84,8 +82,8 @@ public final class ClientUtil {
 			double value = child.getValue();
 			double displ = displayValue(() -> (EntityAttribute)attribute2, value);
 			String formt = formatValue(() -> (EntityAttribute)attribute2, displ);
-			MutableText mutableText = new LiteralText(formt + " ");
-			mutableText.append(new TranslatableText(((EntityAttribute)attribute2).getTranslationKey()));
+			MutableText mutableText = Text.literal(formt + " ");
+			mutableText.append(Text.translatable(((EntityAttribute)attribute2).getTranslationKey()));
 			tooltip.add(mutableText.formatted(Formatting.GRAY));
 		}
 	}

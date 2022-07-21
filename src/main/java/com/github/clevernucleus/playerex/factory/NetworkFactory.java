@@ -20,7 +20,7 @@ import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.network.ServerLoginNetworkHandler;
 import net.minecraft.server.network.ServerPlayNetworkHandler;
 import net.minecraft.server.network.ServerPlayerEntity;
-import net.minecraft.text.LiteralText;
+import net.minecraft.text.Text;
 import net.minecraft.util.Identifier;
 
 public final class NetworkFactory {
@@ -41,7 +41,7 @@ public final class NetworkFactory {
 	
 	public static void loginQueryResponse(MinecraftServer server, ServerLoginNetworkHandler handler, boolean understood, PacketByteBuf buf, LoginSynchronizer synchronizer, PacketSender responseSender) {
 		if(!understood) {
-			handler.disconnect(new LiteralText("Disconnected: network communication issue."));
+			handler.disconnect(Text.literal("Disconnected: network communication issue."));
 		}
 	}
 	

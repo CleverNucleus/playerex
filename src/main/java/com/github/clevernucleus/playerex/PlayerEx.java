@@ -13,11 +13,11 @@ import com.github.clevernucleus.playerex.factory.PlaceholderFactory;
 import com.github.clevernucleus.playerex.factory.RefundFactory;
 import com.github.clevernucleus.playerex.impl.CommandsImpl;
 
-import eu.pb4.placeholders.PlaceholderAPI;
+import eu.pb4.placeholders.api.Placeholders;
 import me.shedaniel.autoconfig.AutoConfig;
 import me.shedaniel.autoconfig.serializer.GsonConfigSerializer;
 import net.fabricmc.api.ModInitializer;
-import net.fabricmc.fabric.api.command.v1.CommandRegistrationCallback;
+import net.fabricmc.fabric.api.command.v2.CommandRegistrationCallback;
 import net.fabricmc.fabric.api.entity.event.v1.ServerPlayerEvents;
 import net.fabricmc.fabric.api.event.lifecycle.v1.ServerLifecycleEvents;
 import net.fabricmc.fabric.api.networking.v1.ServerLoginConnectionEvents;
@@ -55,7 +55,7 @@ public class PlayerEx implements ModInitializer {
 		
 		DamageFactory.STORE.forEach(ExAPI::registerDamageModification);
 		RefundFactory.STORE.forEach(ExAPI::registerRefundCondition);
-		PlaceholderFactory.STORE.forEach(PlaceholderAPI::register);
+		PlaceholderFactory.STORE.forEach(Placeholders::register);
 		
 		Registry.register(Registry.SOUND_EVENT, LEVEL_UP_SOUND.getId(), LEVEL_UP_SOUND);
 		Registry.register(Registry.SOUND_EVENT, SP_SPEND_SOUND.getId(), SP_SPEND_SOUND);

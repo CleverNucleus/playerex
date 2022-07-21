@@ -9,7 +9,7 @@ import net.fabricmc.api.Environment;
 import net.minecraft.client.gui.screen.ingame.HandledScreen;
 import net.minecraft.client.gui.widget.ButtonWidget;
 import net.minecraft.client.util.math.MatrixStack;
-import net.minecraft.text.LiteralText;
+import net.minecraft.text.Text;
 import net.minecraft.util.Identifier;
 
 @Environment(EnvType.CLIENT)
@@ -21,7 +21,7 @@ public class ScreenButtonWidget extends ButtonWidget {
 	public boolean alt;
 	
 	public ScreenButtonWidget(HandledScreen<?> parent, int x, int y, int u, int v, int width, int height, Identifier key, PressAction pressAction, TooltipSupplier tooltipSupplier) {
-		super(x, y, width, height, LiteralText.EMPTY, pressAction, tooltipSupplier);
+		super(x, y, width, height, Text.empty(), pressAction, tooltipSupplier);
 		
 		this.parent = parent;
 		this.key = key;
