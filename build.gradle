@@ -113,7 +113,7 @@ modrinth {
     versionNumber = "${project.mod_version}"
     versionName = "${project.mod_version}"
     uploadFile = remapJar
-    gameVersions = ["1.18.2"]
+    gameVersions = ["${project.minecraft_version}"]
     loaders = ["fabric"]
     dependencies = [
         new ModDependency("P7dR8mSH", "required"),
