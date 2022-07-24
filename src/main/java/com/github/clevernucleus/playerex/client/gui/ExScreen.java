@@ -18,6 +18,7 @@ import net.minecraft.client.gui.widget.ButtonWidget;
 import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.text.Text;
+import net.minecraft.util.Formatting;
 import net.minecraft.util.math.MathHelper;
 
 @Environment(EnvType.CLIENT)
@@ -86,7 +87,7 @@ public class ExScreen extends AbstractInventoryScreen<ExScreenFactory.Handler> {
 	
 	@Override
 	protected void drawForeground(MatrixStack matrices, int mouseX, int mouseY) {
-		this.textRenderer.draw(matrices, this.currentPage().title(), (float)this.titleX, (float)(this.titleY + 2), 4210752);
+		this.textRenderer.draw(matrices, this.currentPage().title().copy().formatted(Formatting.DARK_GRAY), (float)this.titleX, (float)(this.titleY + 2), 4210752);
 	}
 	
 	@Override

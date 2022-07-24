@@ -41,9 +41,9 @@ public class CombatPageLayer extends PageLayer {
 		
 		COMPONENTS.forEach(component -> component.renderText(this.client.player, matrices, this.textRenderer, this.x, this.y, scaleX.get(), scaleY.get()));
 		
-		this.textRenderer.draw(matrices, (Text.translatable("playerex.gui.page.combat.text.melee")), (this.x + 21) / scaleX.get(), (this.y + 26) / scaleY.get(), 4210752);
-		this.textRenderer.draw(matrices, (Text.translatable("playerex.gui.page.combat.text.defense")), (this.x + 21) / scaleX.get(), (this.y + 92) / scaleY.get(), 4210752);
-		this.textRenderer.draw(matrices, (Text.translatable("playerex.gui.page.combat.text.ranged")), (this.x + 105) / scaleX.get(), (this.y + 26) / scaleY.get(), 4210752);
+		this.textRenderer.draw(matrices, Text.translatable("playerex.gui.page.combat.text.melee").formatted(Formatting.DARK_GRAY), (this.x + 21) / scaleX.get(), (this.y + 26) / scaleY.get(), 4210752);
+		this.textRenderer.draw(matrices, Text.translatable("playerex.gui.page.combat.text.defense").formatted(Formatting.DARK_GRAY), (this.x + 21) / scaleX.get(), (this.y + 92) / scaleY.get(), 4210752);
+		this.textRenderer.draw(matrices, Text.translatable("playerex.gui.page.combat.text.ranged").formatted(Formatting.DARK_GRAY), (this.x + 105) / scaleX.get(), (this.y + 26) / scaleY.get(), 4210752);
 		
 		matrices.pop();
 		
@@ -70,7 +70,7 @@ public class CombatPageLayer extends PageLayer {
 	
 	static {
 		COMPONENTS.add(RenderComponent.of(() -> EntityAttributes.GENERIC_ATTACK_SPEED, value -> {
-			return Text.translatable("playerex.gui.page.combat.text.attack_speed", ClientUtil.FORMATTING_2.format(value));
+			return Text.translatable("playerex.gui.page.combat.text.attack_speed", ClientUtil.FORMATTING_2.format(value)).formatted(Formatting.DARK_GRAY);
 		}, value -> {
 			List<Text> tooltip = new ArrayList<Text>();
 			tooltip.add((Text.translatable("playerex.gui.page.combat.tooltip.attack_speed[0]")).formatted(Formatting.GRAY));
@@ -78,7 +78,7 @@ public class CombatPageLayer extends PageLayer {
 			return tooltip;
 		}, 9, 37));
 		COMPONENTS.add(RenderComponent.of(() -> EntityAttributes.GENERIC_ATTACK_DAMAGE, value -> {
-			return Text.translatable("playerex.gui.page.combat.text.attack_damage", ClientUtil.FORMATTING_2.format(value));
+			return Text.translatable("playerex.gui.page.combat.text.attack_damage", ClientUtil.FORMATTING_2.format(value)).formatted(Formatting.DARK_GRAY);
 		}, value -> {
 			List<Text> tooltip = new ArrayList<Text>();
 			tooltip.add((Text.translatable("playerex.gui.page.combat.tooltip.attack_damage[0]")).formatted(Formatting.GRAY));
@@ -87,7 +87,7 @@ public class CombatPageLayer extends PageLayer {
 		}, 9, 48));
 		COMPONENTS.add(RenderComponent.of(ExAPI.MELEE_CRIT_DAMAGE, value -> {
 			double disp = 100.0D + ClientUtil.displayValue(ExAPI.MELEE_CRIT_DAMAGE, value);
-			return Text.translatable("playerex.gui.page.combat.text.melee_crit_damage", ClientUtil.FORMATTING_2.format(disp));
+			return Text.translatable("playerex.gui.page.combat.text.melee_crit_damage", ClientUtil.FORMATTING_2.format(disp)).formatted(Formatting.DARK_GRAY);
 		}, value -> {
 			List<Text> tooltip = new ArrayList<Text>();
 			tooltip.add((Text.translatable("playerex.gui.page.combat.tooltip.melee_crit_damage[0]")).formatted(Formatting.GRAY));
@@ -96,7 +96,7 @@ public class CombatPageLayer extends PageLayer {
 		}, 9, 59));
 		COMPONENTS.add(RenderComponent.of(ExAPI.MELEE_CRIT_CHANCE, value -> {
 			double disp = ClientUtil.displayValue(ExAPI.MELEE_CRIT_CHANCE, value);
-			return Text.translatable("playerex.gui.page.combat.text.melee_crit_chance", ClientUtil.FORMATTING_2.format(disp));
+			return Text.translatable("playerex.gui.page.combat.text.melee_crit_chance", ClientUtil.FORMATTING_2.format(disp)).formatted(Formatting.DARK_GRAY);
 		}, value -> {
 			List<Text> tooltip = new ArrayList<Text>();
 			tooltip.add((Text.translatable("playerex.gui.page.combat.tooltip.melee_crit_chance[0]")).formatted(Formatting.GRAY));
@@ -104,7 +104,7 @@ public class CombatPageLayer extends PageLayer {
 			return tooltip;
 		}, 9, 71));
 		COMPONENTS.add(RenderComponent.of(() -> EntityAttributes.GENERIC_ARMOR, value -> {
-			return Text.translatable("playerex.gui.page.combat.text.armor", ClientUtil.FORMATTING_2.format(value));
+			return Text.translatable("playerex.gui.page.combat.text.armor", ClientUtil.FORMATTING_2.format(value)).formatted(Formatting.DARK_GRAY);
 		}, value -> {
 			List<Text> tooltip = new ArrayList<Text>();
 			tooltip.add((Text.translatable("playerex.gui.page.combat.tooltip.armor[0]")).formatted(Formatting.GRAY));
@@ -112,7 +112,7 @@ public class CombatPageLayer extends PageLayer {
 			return tooltip;
 		}, 9, 103));
 		COMPONENTS.add(RenderComponent.of(() -> EntityAttributes.GENERIC_ARMOR_TOUGHNESS, value -> {
-			return Text.translatable("playerex.gui.page.combat.text.armor_toughness", ClientUtil.FORMATTING_2.format(value));
+			return Text.translatable("playerex.gui.page.combat.text.armor_toughness", ClientUtil.FORMATTING_2.format(value)).formatted(Formatting.DARK_GRAY);
 		}, value -> {
 			List<Text> tooltip = new ArrayList<Text>();
 			tooltip.add((Text.translatable("playerex.gui.page.combat.tooltip.armor_toughness[0]")).formatted(Formatting.GRAY));
@@ -121,7 +121,7 @@ public class CombatPageLayer extends PageLayer {
 		}, 9, 114));
 		COMPONENTS.add(RenderComponent.of(() -> EntityAttributes.GENERIC_KNOCKBACK_RESISTANCE, value -> {
 			double disp = ClientUtil.displayValue(() -> EntityAttributes.GENERIC_KNOCKBACK_RESISTANCE, value);
-			return Text.translatable("playerex.gui.page.combat.text.knockback_resistance", ClientUtil.FORMATTING_2.format(disp));
+			return Text.translatable("playerex.gui.page.combat.text.knockback_resistance", ClientUtil.FORMATTING_2.format(disp)).formatted(Formatting.DARK_GRAY);
 		}, value -> {
 			List<Text> tooltip = new ArrayList<Text>();
 			double disp = 100.0D * value;
@@ -131,7 +131,7 @@ public class CombatPageLayer extends PageLayer {
 		}, 9, 125));
 		COMPONENTS.add(RenderComponent.of(ExAPI.EVASION, value -> {
 			double disp = ClientUtil.displayValue(ExAPI.EVASION, value);
-			return Text.translatable("playerex.gui.page.combat.text.evasion", ClientUtil.FORMATTING_2.format(disp));
+			return Text.translatable("playerex.gui.page.combat.text.evasion", ClientUtil.FORMATTING_2.format(disp)).formatted(Formatting.DARK_GRAY);
 		}, value -> {
 			List<Text> tooltip = new ArrayList<Text>();
 			tooltip.add((Text.translatable("playerex.gui.page.combat.tooltip.evasion[0]")).formatted(Formatting.GRAY));
@@ -140,7 +140,7 @@ public class CombatPageLayer extends PageLayer {
 		}, 9, 136));
 		COMPONENTS.add(RenderComponent.of(ExAPI.RANGED_DAMAGE, value -> {
 			double disp = ClientUtil.displayValue(ExAPI.RANGED_DAMAGE, value);
-			return Text.translatable("playerex.gui.page.combat.text.ranged_damage", ClientUtil.FORMATTING_2.format(disp));
+			return Text.translatable("playerex.gui.page.combat.text.ranged_damage", ClientUtil.FORMATTING_2.format(disp)).formatted(Formatting.DARK_GRAY);
 		}, value -> {
 			List<Text> tooltip = new ArrayList<Text>();
 			tooltip.add((Text.translatable("playerex.gui.page.combat.tooltip.ranged_damage[0]")).formatted(Formatting.GRAY));
@@ -149,7 +149,7 @@ public class CombatPageLayer extends PageLayer {
 		}, 93, 37));
 		COMPONENTS.add(RenderComponent.of(ExAPI.RANGED_CRIT_DAMAGE, value -> {
 			double disp = 100.0D + ClientUtil.displayValue(ExAPI.RANGED_CRIT_DAMAGE, value);
-			return Text.translatable("playerex.gui.page.combat.text.ranged_crit_damage", ClientUtil.FORMATTING_2.format(disp));
+			return Text.translatable("playerex.gui.page.combat.text.ranged_crit_damage", ClientUtil.FORMATTING_2.format(disp)).formatted(Formatting.DARK_GRAY);
 		}, value -> {
 			List<Text> tooltip = new ArrayList<Text>();
 			tooltip.add((Text.translatable("playerex.gui.page.combat.tooltip.ranged_crit_damage[0]")).formatted(Formatting.GRAY));
@@ -158,7 +158,7 @@ public class CombatPageLayer extends PageLayer {
 		}, 93, 48));
 		COMPONENTS.add(RenderComponent.of(ExAPI.RANGED_CRIT_CHANCE, value -> {
 			double disp = ClientUtil.displayValue(ExAPI.RANGED_CRIT_CHANCE, value);
-			return Text.translatable("playerex.gui.page.combat.text.ranged_crit_chance", ClientUtil.FORMATTING_2.format(disp));
+			return Text.translatable("playerex.gui.page.combat.text.ranged_crit_chance", ClientUtil.FORMATTING_2.format(disp)).formatted(Formatting.DARK_GRAY);
 		}, value -> {
 			List<Text> tooltip = new ArrayList<Text>();
 			tooltip.add((Text.translatable("playerex.gui.page.combat.tooltip.ranged_crit_chance[0]")).formatted(Formatting.GRAY));
@@ -166,7 +166,7 @@ public class CombatPageLayer extends PageLayer {
 			return tooltip;
 		}, 93, 59));
 		COMPONENTS.add(RenderComponent.of(ExAPI.ATTACK_RANGE, value -> {
-			return Text.translatable("playerex.gui.page.combat.text.attack_range", ClientUtil.FORMATTING_2.format(3.0F + value));
+			return Text.translatable("playerex.gui.page.combat.text.attack_range", ClientUtil.FORMATTING_2.format(3.0F + value)).formatted(Formatting.DARK_GRAY);
 		}, value -> {
 			List<Text> tooltip = new ArrayList<Text>();
 			tooltip.add((Text.translatable("playerex.gui.page.combat.tooltip.attack_range", ClientUtil.FORMATTING_2.format(3.0F + value))).formatted(Formatting.GRAY));
@@ -174,7 +174,7 @@ public class CombatPageLayer extends PageLayer {
 		}, 105, 81));
 		COMPONENTS.add(RenderComponent.of(ExAPI.LIFESTEAL, value -> {
 			double disp = ClientUtil.displayValue(ExAPI.LIFESTEAL, value);
-			return Text.translatable("playerex.gui.page.combat.text.lifesteal", ClientUtil.FORMATTING_2.format(disp));
+			return Text.translatable("playerex.gui.page.combat.text.lifesteal", ClientUtil.FORMATTING_2.format(disp)).formatted(Formatting.DARK_GRAY);
 		}, value -> {
 			List<Text> tooltip = new ArrayList<Text>();
 			tooltip.add((Text.translatable("playerex.gui.page.combat.tooltip.lifesteal[0]")).formatted(Formatting.GRAY));
