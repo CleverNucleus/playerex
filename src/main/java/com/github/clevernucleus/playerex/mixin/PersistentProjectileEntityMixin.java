@@ -21,7 +21,6 @@ abstract class PersistentProjectileEntityMixin {
 	private void playerex_onEntityHit(EntityHitResult entityHitResult, CallbackInfo info) {
 		PersistentProjectileEntity persistentProjectileEntity = (PersistentProjectileEntity)(Object)this;
 		Entity owner = persistentProjectileEntity.getOwner();
-		
 		if(owner instanceof LivingEntity) {
 			DataAttributesAPI.ifPresent((LivingEntity)owner, ExAPI.RANGED_CRIT_CHANCE, (Object)null, value -> {
 				persistentProjectileEntity.setCritical(false);
@@ -34,7 +33,7 @@ abstract class PersistentProjectileEntityMixin {
 	private float playerex_onEntityHit(float i) {
 		PersistentProjectileEntity persistentProjectileEntity = (PersistentProjectileEntity)(Object)this;
 		Entity owner = persistentProjectileEntity.getOwner();
-		float damage = 0;
+		float damage = i;
 		
 		if(owner instanceof LivingEntity) {
 			LivingEntity livingEntity = (LivingEntity)owner;
