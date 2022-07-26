@@ -34,7 +34,7 @@ abstract class PersistentProjectileEntityMixin {
 	private float playerex_onEntityHit(float i) {
 		PersistentProjectileEntity persistentProjectileEntity = (PersistentProjectileEntity)(Object)this;
 		Entity owner = persistentProjectileEntity.getOwner();
-		float damage = 0;
+		float damage = i;
 		
 		if(owner instanceof LivingEntity) {
 			LivingEntity livingEntity = (LivingEntity)owner;
