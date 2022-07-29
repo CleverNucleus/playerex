@@ -73,7 +73,7 @@ public final class EventFactory {
 	}
 	
 	public static boolean shouldDamage(final LivingEntity livingEntity, final DamageSource source, final float original) {
-		if(original == 0.0F) return false;
+		if(original == 0.0F) return true;
 		Entity origin = source.getSource();
 		Entity attacker = source.getAttacker();
 		
