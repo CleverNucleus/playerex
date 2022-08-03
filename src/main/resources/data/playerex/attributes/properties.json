@@ -28,10 +28,10 @@
             "percentage": "100.0"
         },
         "playerex:lifesteal": {
-            "percentage": "100.0"
+            "percentage": "1000.0"
         },
         "playerex:heal_amplification": {
-            "percentage": "100.0"
+            "percentage": "1000.0"
         },
         "playerex:fire_resistance": {
             "multiplier": "10.0"
