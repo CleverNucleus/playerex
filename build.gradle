@@ -45,9 +45,9 @@ dependencies {
 	mappings "net.fabricmc:yarn:${project.yarn_mappings}:v2"
     
 	modImplementation "net.fabricmc:fabric-loader:${project.loader_version}"
-	modImplementation "net.fabricmc.fabric-api:fabric-api:${project.fabric_version}"
+	modImplementation "net.fabricmc.fabric-api:fabric-api:${project.fabric_api_version}"
     
-    modImplementation "maven.modrinth:data-attributes:${project.dataattributes_version}"
+    modImplementation "maven.modrinth:data-attributes:${project.data_attributes_version}"
     
     modImplementation "maven.modrinth:offline-player-cache:${project.opc_version}"
     include "maven.modrinth:offline-player-cache:${project.opc_version}"

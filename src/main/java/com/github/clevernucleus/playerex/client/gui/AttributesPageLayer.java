@@ -276,7 +276,7 @@ public class AttributesPageLayer extends PageLayer {
 			return tooltip;
 		}, 93, 37));
 		COMPONENTS.add(RenderComponent.of(ExAPI.HEALTH_REGENERATION, value -> {
-			return Text.translatable("playerex.gui.page.attributes.text.health_regeneration", value).formatted(Formatting.DARK_GRAY);
+			return Text.translatable("playerex.gui.page.attributes.text.health_regeneration", ClientUtil.FORMATTING_3.format(value)).formatted(Formatting.DARK_GRAY);
 		}, value -> {
 			List<Text> tooltip = new ArrayList<Text>();
 			tooltip.add((Text.translatable("playerex.gui.page.attributes.tooltip.health_regeneration[0]")).formatted(Formatting.GRAY));

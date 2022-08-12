@@ -31,7 +31,7 @@ public class ConfigImpl implements ConfigData, ExConfig {
 	
 	@ConfigEntry.Category(value = "server")
 	@ConfigEntry.Gui.Tooltip(count = 2)
-	protected String levelFormula = "stairs(x,0.15,2,25,10,22)";
+	protected String levelFormula = "stairs(x,0.2,2.4,17,10,25)";
 	
 	@ConfigEntry.Category(value = "client")
 	@ConfigEntry.BoundedDiscrete(min = 0, max = 150)
