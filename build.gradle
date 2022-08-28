@@ -1,4 +1,4 @@
-import com.modrinth.minotaur.dependencies.ModDependency
+import com.modrinth.minotaur.dependencies.VersionDependency
 
 plugins {
 	id 'fabric-loom' version '0.12-SNAPSHOT'
@@ -116,10 +116,10 @@ modrinth {
     gameVersions = ["${project.minecraft_version}"]
     loaders = ["fabric"]
     dependencies = [
-        new ModDependency("P7dR8mSH", "required"),
-        new ModDependency("9s6osm5g", "required"),
-        new ModDependency("wFyCClLQ", "required"),
-		new ModDependency("kD9Vl1lR", "embedded"),
-		new ModDependency("K01OU20C", "embedded")
+        new VersionDependency("4XRtXhtL", "required"),
+        new VersionDependency("d1D40LRO", "required"),
+        new VersionDependency("HYWRZ5QH", "required"),
+		new VersionDependency("3WtluP76", "embedded"),
+		new VersionDependency("rQt4CSD0", "embedded")
     ]
 }
