@@ -116,10 +116,18 @@ modrinth {
     gameVersions = ["${project.minecraft_version}"]
     loaders = ["fabric"]
     dependencies = [
+<<<<<<< Updated upstream
         new ModDependency("P7dR8mSH", "required"),
         new ModDependency("9s6osm5g", "required"),
         new ModDependency("wFyCClLQ", "required"),
 		new ModDependency("kD9Vl1lR", "embedded"),
 		new ModDependency("K01OU20C", "embedded")
+=======
+        new VersionDependency("EsaWeELS", "required"),
+        new VersionDependency("fiwCOlq9", "required"),
+        new VersionDependency("hg9bSXT3", "required"),
+		new VersionDependency("tPfCTMiZ", "embedded"),
+		new VersionDependency("jtBdOsFq", "embedded")
+>>>>>>> Stashed changes
     ]
 }

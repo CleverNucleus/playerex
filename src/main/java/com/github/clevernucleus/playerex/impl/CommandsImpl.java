@@ -169,6 +169,39 @@ public final class CommandsImpl {
 			});
 		}).build();
 		player.addChild(attribute);
+<<<<<<< Updated upstream
+=======
+		
+		ArgumentCommandNode<ServerCommandSource, String> requiresSkillPoints = CommandManager.argument("requires", StringArgumentType.word()).suggests((ctx, builder) -> CommandSource.suggestMatching(Sets.newHashSet("true", "false"), builder)).executes(ctx -> {
+			ServerPlayerEntity serverPlayerEntity = EntityArgumentType.getPlayer(ctx, "player");
+			PlayerData playerData = ExAPI.PLAYER_DATA.get(serverPlayerEntity);
+			Identifier identifier = IdentifierArgumentType.getIdentifier(ctx, "attribute");
+			EntityAttributeSupplier primary = EntityAttributeSupplier.of(identifier);
+			String requires = StringArgumentType.getString(ctx, "requires");
+			return DataAttributesAPI.ifPresent(serverPlayerEntity, primary, -1, value -> {
+				EntityAttribute attr = primary.get();
+				
+				if(playerData.get(primary) < ((IEntityAttribute)attr).maxValue()) {
+					if(!requires.equals("true")) {
+						playerData.add(primary, 1);
+						ctx.getSource().sendFeedback(Text.translatable("playerex.command.skill_attribute", Text.translatable(attr.getTranslationKey()), serverPlayerEntity.getName()), false);
+						return 1;
+					} else if(PacketType.SKILL.test(ctx.getSource().getServer(), serverPlayerEntity, playerData)) {
+						playerData.add(primary, 1);
+						ctx.getSource().sendFeedback(Text.translatable("playerex.command.skill_attribute", Text.translatable(attr.getTranslationKey()), serverPlayerEntity.getName()), false);
+						return 1;
+					} else {
+						ctx.getSource().sendFeedback((Text.translatable("playerex.command.skill_attribute_error", serverPlayerEntity.getName())).formatted(Formatting.RED), false);
+						return -1;
+					}
+				} else {
+					ctx.getSource().sendFeedback((Text.translatable("playerex.command.attribute_max_error", Text.translatable(attr.getTranslationKey()), serverPlayerEntity.getName())).formatted(Formatting.RED), false);
+					return -1;
+				}
+			});
+		}).build();
+		attribute.addChild(requiresSkillPoints);
+>>>>>>> Stashed changes
 	}
 	
 	private static void registerRefundAttribute(CommandNode<ServerCommandSource> root) {
@@ -202,6 +235,39 @@ public final class CommandsImpl {
 			});
 		}).build();
 		player.addChild(attribute);
+<<<<<<< Updated upstream
+=======
+		
+		ArgumentCommandNode<ServerCommandSource, String> requiresRefundPoints = CommandManager.argument("requires", StringArgumentType.word()).suggests((ctx, builder) -> CommandSource.suggestMatching(Sets.newHashSet("true", "false"), builder)).executes(ctx -> {
+			ServerPlayerEntity serverPlayerEntity = EntityArgumentType.getPlayer(ctx, "player");
+			PlayerData playerData = ExAPI.PLAYER_DATA.get(serverPlayerEntity);
+			Identifier identifier = IdentifierArgumentType.getIdentifier(ctx, "attribute");
+			EntityAttributeSupplier primary = EntityAttributeSupplier.of(identifier);
+			String requires = StringArgumentType.getString(ctx, "requires");
+			return DataAttributesAPI.ifPresent(serverPlayerEntity, primary, -1, value -> {
+				EntityAttribute attr = primary.get();
+				
+				if(playerData.get(primary) > 0) {
+					if(!requires.equals("true")) {
+						playerData.add(primary, -1);
+						ctx.getSource().sendFeedback(Text.translatable("playerex.command.refund_attribute", Text.translatable(attr.getTranslationKey()), serverPlayerEntity.getName()), false);
+						return 1;
+					} else if(PacketType.REFUND.test(ctx.getSource().getServer(), serverPlayerEntity, playerData)) {
+						playerData.add(primary, -1);
+						ctx.getSource().sendFeedback(Text.translatable("playerex.command.refund_attribute", Text.translatable(attr.getTranslationKey()), serverPlayerEntity.getName()), false);
+						return 1;
+					} else {
+						ctx.getSource().sendFeedback((Text.translatable("playerex.command.refund_attribute_error", serverPlayerEntity.getName())).formatted(Formatting.RED), false);
+						return -1;
+					}
+				} else {
+					ctx.getSource().sendFeedback((Text.translatable("playerex.command.refund_attribute_unskilled", Text.translatable(attr.getTranslationKey()), serverPlayerEntity.getName())).formatted(Formatting.RED), false);
+					return -1;
+				}
+			});
+		}).build();
+		attribute.addChild(requiresRefundPoints);
+>>>>>>> Stashed changes
 	}
 	
 	public static void register(CommandDispatcher<ServerCommandSource> dispatcher, CommandRegistryAccess registryAccess, CommandManager.RegistrationEnvironment environment) {
