@@ -101,11 +101,7 @@ abstract class LivingEntityRendererMixin<T extends LivingEntity, M extends Entit
 		if(this.playerex_shouldRenderLevel(livingEntity) && ((ConfigImpl)ExAPI.getConfig()).levelNameplate()) {
 			DataAttributesAPI.ifPresent(livingEntity, ExAPI.LEVEL, (Object)null, value -> {
 				boolean coder = (livingEntity instanceof PlayerEntity) && "CleverNucleus".equals(((PlayerEntity)livingEntity).getGameProfile().getName());
-<<<<<<< Updated upstream
-				Text tag = (Text.translatable("playerex.gui.text.nameplate", String.valueOf(Math.round(value)))).formatted(coder ? Formatting.GOLD : Formatting.WHITE);
-=======
 				Text tag = Text.translatable("playerex.gui.text.nameplate", String.valueOf(Math.round(value))).formatted(coder ? Formatting.GOLD : Formatting.WHITE);
->>>>>>> Stashed changes
 				this.playerex_renderLevel(livingEntity, tag, matrixStack, vertexConsumerProvider, i);
 				return (Object)null;
 			});

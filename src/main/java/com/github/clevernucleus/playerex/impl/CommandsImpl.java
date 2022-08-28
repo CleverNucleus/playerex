@@ -169,8 +169,6 @@ public final class CommandsImpl {
 			});
 		}).build();
 		player.addChild(attribute);
-<<<<<<< Updated upstream
-=======
 		
 		ArgumentCommandNode<ServerCommandSource, String> requiresSkillPoints = CommandManager.argument("requires", StringArgumentType.word()).suggests((ctx, builder) -> CommandSource.suggestMatching(Sets.newHashSet("true", "false"), builder)).executes(ctx -> {
 			ServerPlayerEntity serverPlayerEntity = EntityArgumentType.getPlayer(ctx, "player");
@@ -201,7 +199,6 @@ public final class CommandsImpl {
 			});
 		}).build();
 		attribute.addChild(requiresSkillPoints);
->>>>>>> Stashed changes
 	}
 	
 	private static void registerRefundAttribute(CommandNode<ServerCommandSource> root) {
@@ -235,8 +232,6 @@ public final class CommandsImpl {
 			});
 		}).build();
 		player.addChild(attribute);
-<<<<<<< Updated upstream
-=======
 		
 		ArgumentCommandNode<ServerCommandSource, String> requiresRefundPoints = CommandManager.argument("requires", StringArgumentType.word()).suggests((ctx, builder) -> CommandSource.suggestMatching(Sets.newHashSet("true", "false"), builder)).executes(ctx -> {
 			ServerPlayerEntity serverPlayerEntity = EntityArgumentType.getPlayer(ctx, "player");
@@ -267,7 +262,6 @@ public final class CommandsImpl {
 			});
 		}).build();
 		attribute.addChild(requiresRefundPoints);
->>>>>>> Stashed changes
 	}
 	
 	public static void register(CommandDispatcher<ServerCommandSource> dispatcher, CommandRegistryAccess registryAccess, CommandManager.RegistrationEnvironment environment) {
