@@ -12,6 +12,7 @@ import com.github.clevernucleus.playerex.api.PlayerData;
 import com.google.common.collect.Sets;
 import com.mojang.brigadier.CommandDispatcher;
 import com.mojang.brigadier.arguments.IntegerArgumentType;
+import com.mojang.brigadier.arguments.StringArgumentType;
 import com.mojang.brigadier.suggestion.SuggestionProvider;
 import com.mojang.brigadier.tree.ArgumentCommandNode;
 import com.mojang.brigadier.tree.CommandNode;
@@ -168,6 +169,36 @@ public final class CommandsImpl {
 			});
 		}).build();
 		player.addChild(attribute);
+		
+		ArgumentCommandNode<ServerCommandSource, String> requiresSkillPoints = CommandManager.argument("requires", StringArgumentType.word()).suggests((ctx, builder) -> CommandSource.suggestMatching(Sets.newHashSet("true", "false"), builder)).executes(ctx -> {
+			ServerPlayerEntity serverPlayerEntity = EntityArgumentType.getPlayer(ctx, "player");
+			PlayerData playerData = ExAPI.PLAYER_DATA.get(serverPlayerEntity);
+			Identifier identifier = IdentifierArgumentType.getIdentifier(ctx, "attribute");
+			EntityAttributeSupplier primary = EntityAttributeSupplier.of(identifier);
+			String requires = StringArgumentType.getString(ctx, "requires");
+			return DataAttributesAPI.ifPresent(serverPlayerEntity, primary, -1, value -> {
+				EntityAttribute attr = primary.get();
+				
+				if(playerData.get(primary) < ((IEntityAttribute)attr).maxValue()) {
+					if(!requires.equals("true")) {
+						playerData.add(primary, 1);
+						ctx.getSource().sendFeedback(new TranslatableText("playerex.command.skill_attribute", new TranslatableText(attr.getTranslationKey()), serverPlayerEntity.getName()), false);
+						return 1;
+					} else if(PacketType.SKILL.test(ctx.getSource().getServer(), serverPlayerEntity, playerData)) {
+						playerData.add(primary, 1);
+						ctx.getSource().sendFeedback(new TranslatableText("playerex.command.skill_attribute", new TranslatableText(attr.getTranslationKey()), serverPlayerEntity.getName()), false);
+						return 1;
+					} else {
+						ctx.getSource().sendFeedback((new TranslatableText("playerex.command.skill_attribute_error", serverPlayerEntity.getName())).formatted(Formatting.RED), false);
+						return -1;
+					}
+				} else {
+					ctx.getSource().sendFeedback((new TranslatableText("playerex.command.attribute_max_error", new TranslatableText(attr.getTranslationKey()), serverPlayerEntity.getName())).formatted(Formatting.RED), false);
+					return -1;
+				}
+			});
+		}).build();
+		attribute.addChild(requiresSkillPoints);
 	}
 	
 	private static void registerRefundAttribute(CommandNode<ServerCommandSource> root) {
@@ -201,6 +232,36 @@ public final class CommandsImpl {
 			});
 		}).build();
 		player.addChild(attribute);
+		
+		ArgumentCommandNode<ServerCommandSource, String> requiresRefundPoints = CommandManager.argument("requires", StringArgumentType.word()).suggests((ctx, builder) -> CommandSource.suggestMatching(Sets.newHashSet("true", "false"), builder)).executes(ctx -> {
+			ServerPlayerEntity serverPlayerEntity = EntityArgumentType.getPlayer(ctx, "player");
+			PlayerData playerData = ExAPI.PLAYER_DATA.get(serverPlayerEntity);
+			Identifier identifier = IdentifierArgumentType.getIdentifier(ctx, "attribute");
+			EntityAttributeSupplier primary = EntityAttributeSupplier.of(identifier);
+			String requires = StringArgumentType.getString(ctx, "requires");
+			return DataAttributesAPI.ifPresent(serverPlayerEntity, primary, -1, value -> {
+				EntityAttribute attr = primary.get();
+				
+				if(playerData.get(primary) > 0) {
+					if(!requires.equals("true")) {
+						playerData.add(primary, -1);
+						ctx.getSource().sendFeedback(new TranslatableText("playerex.command.refund_attribute", new TranslatableText(attr.getTranslationKey()), serverPlayerEntity.getName()), false);
+						return 1;
+					} else if(PacketType.REFUND.test(ctx.getSource().getServer(), serverPlayerEntity, playerData)) {
+						playerData.add(primary, -1);
+						ctx.getSource().sendFeedback(new TranslatableText("playerex.command.refund_attribute", new TranslatableText(attr.getTranslationKey()), serverPlayerEntity.getName()), false);
+						return 1;
+					} else {
+						ctx.getSource().sendFeedback((new TranslatableText("playerex.command.refund_attribute_error", serverPlayerEntity.getName())).formatted(Formatting.RED), false);
+						return -1;
+					}
+				} else {
+					ctx.getSource().sendFeedback((new TranslatableText("playerex.command.refund_attribute_unskilled", new TranslatableText(attr.getTranslationKey()), serverPlayerEntity.getName())).formatted(Formatting.RED), false);
+					return -1;
+				}
+			});
+		}).build();
+		attribute.addChild(requiresRefundPoints);
 	}
 	
 	public static void register(CommandDispatcher<ServerCommandSource> dispatcher, boolean dedicated) {
