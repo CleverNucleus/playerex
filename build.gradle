@@ -45,9 +45,9 @@ dependencies {
 	mappings "net.fabricmc:yarn:${project.yarn_mappings}:v2"
     
 	modImplementation "net.fabricmc:fabric-loader:${project.loader_version}"
-	modImplementation "net.fabricmc.fabric-api:fabric-api:${project.fabric_api_version}"
+	modImplementation "net.fabricmc.fabric-api:fabric-api:${project.fabric_version}"
     
-    modImplementation "maven.modrinth:data-attributes:${project.data_attributes_version}"
+    modImplementation "maven.modrinth:data-attributes:${project.dataattributes_version}"
     
     modImplementation "maven.modrinth:offline-player-cache:${project.opc_version}"
     include "maven.modrinth:offline-player-cache:${project.opc_version}"
@@ -116,10 +116,10 @@ modrinth {
     gameVersions = ["${project.minecraft_version}"]
     loaders = ["fabric"]
     dependencies = [
-        new VersionDependency("EsaWeELS", "required"),
-        new VersionDependency("fiwCOlq9", "required"),
+        new VersionDependency("3KmOcp6b", "required"),
+        new VersionDependency("q9zm4Qgj", "required"),
         new VersionDependency("hg9bSXT3", "required"),
 		new VersionDependency("tPfCTMiZ", "embedded"),
-		new VersionDependency("jtBdOsFq", "embedded")
+		new VersionDependency("Kns26Uz1", "embedded")
     ]
 }
