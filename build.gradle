@@ -116,9 +116,9 @@ modrinth {
     gameVersions = ["${project.minecraft_version}"]
     loaders = ["fabric"]
     dependencies = [
-        new VersionDependency("EsaWeELS", "required"),
+        new VersionDependency("8rIblgME", "required"),
+		new VersionDependency("EXrxCjl6", "required"),
         new VersionDependency("fiwCOlq9", "required"),
-        new VersionDependency("hg9bSXT3", "required"),
 		new VersionDependency("tPfCTMiZ", "embedded"),
 		new VersionDependency("jtBdOsFq", "embedded")
     ]
