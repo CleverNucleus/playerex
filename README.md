@@ -16,5 +16,6 @@ In addition to attributes, PlayerEx adds a levelling system and skill points to 
  - [gyular](https://github.com/gyular) - Korean translation.
  - [Hertz](https://github.com/elhertz) - Spanish translation.
  - [MrTYZzik](https://github.com/MrTYZzik) - Russian translation.
+ - [Orygeunik](https://github.com/Orygeunik) - Russian translation improvements.
  - [NianGuu](https://github.com/NianGuu) - Simplified Chinese
  - [sky_bai](https://github.com/a1640727878) - Simplified Chinese (legacy release)
