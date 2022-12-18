@@ -7,6 +7,8 @@
         "LivingEntityMixin",
         "PlayerEntityMixin",
         "ServerPlayerEntityMixin",
+        "ExperienceOrbEntityMixin",
+        "ServerWorldMixin",
         "PlayerInventoryMixin",
         "PersistentProjectileEntityMixin"
     ],

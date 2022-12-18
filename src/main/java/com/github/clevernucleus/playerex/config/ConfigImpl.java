@@ -33,6 +33,19 @@ public class ConfigImpl implements ConfigData, ExConfig {
 	@ConfigEntry.Gui.Tooltip(count = 2)
 	protected String levelFormula = "stairs(x,0.2,2.4,17,10,25)";
 	
+	@ConfigEntry.Category(value = "server")
+	@ConfigEntry.Gui.Tooltip(count = 2)
+	private int restorativeForceTicks = 600;
+	
+	@ConfigEntry.Category(value = "server")
+	@ConfigEntry.Gui.Tooltip(count = 2)
+	private int restorativeForceMultiplier = 110;
+	
+	@ConfigEntry.Category(value = "server")
+	@ConfigEntry.BoundedDiscrete(min = 1, max = 100)
+	@ConfigEntry.Gui.Tooltip(count = 2)
+	private int expNegationFactor = 95;
+	
 	@ConfigEntry.Category(value = "client")
 	@ConfigEntry.BoundedDiscrete(min = 0, max = 150)
 	@ConfigEntry.Gui.Tooltip
@@ -93,6 +106,21 @@ public class ConfigImpl implements ConfigData, ExConfig {
 	@Override
 	public int requiredXp(final PlayerEntity player) {
 		return DataAttributesAPI.ifPresent(player, ExAPI.LEVEL, 1, ConfigServer.INSTANCE::level);
+	}
+	
+	@Override
+	public int restorativeForceTicks() {
+		return this.restorativeForceTicks;
+	}
+	
+	@Override
+	public float restorativeForceMultiplier() {
+		return (float)this.restorativeForceMultiplier * 0.01F;
+	}
+	
+	@Override
+	public float expNegationFactor() {
+		return (float)this.expNegationFactor * 0.01F;
 	}
 	
 	@Override

@@ -36,6 +36,8 @@ public final class ExAPI {
 	public static final CacheableValue<Integer> LEVEL_VALUE = OfflinePlayerCache.register(new com.github.clevernucleus.playerex.impl.LevelValue());
 	/** The Cardinal Components Key for PlayerEx player data. */
 	public static final ComponentKey<PlayerData> PLAYER_DATA = ComponentRegistry.getOrCreate(new Identifier(MODID, "player_data"), PlayerData.class);
+	/** The Cardinal Components Key for PlayerEx experience data. */
+	public static final ComponentKey<ExperienceData> EXPERIENCE_DATA = ComponentRegistry.getOrCreate(new Identifier(MODID, "experience_data"), ExperienceData.class);
 	
 	public static final EntityAttributeSupplier LEVEL = define("level");
 	public static final EntityAttributeSupplier CONSTITUTION = define("constitution");

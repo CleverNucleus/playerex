@@ -37,6 +37,21 @@ public interface ExConfig {
 	int requiredXp(final PlayerEntity player);
 	
 	/**
+	 * @return The number of ticks taken for a chunk to restore the experience negation factor.
+	 */
+	int restorativeForceTicks();
+	
+	/**
+	 * @return The restorative force multiplier.
+	 */
+	float restorativeForceMultiplier();
+	
+	/**
+	 * @return The multiplier for experience negation.
+	 */
+	float expNegationFactor();
+	
+	/**
 	 * Client option.
 	 * @return 0 - 1.5. Volume multiplier for level up event.
 	 */

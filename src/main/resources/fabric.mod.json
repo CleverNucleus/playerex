@@ -22,7 +22,8 @@
             "com.github.clevernucleus.playerex.client.PlayerExClient"
         ],
         "cardinal-components": [
-            "com.github.clevernucleus.playerex.impl.PlayerDataContainer"
+            "com.github.clevernucleus.playerex.impl.PlayerDataContainer",
+            "com.github.clevernucleus.playerex.impl.ExperienceDataContainer"
         ],
         "modmenu": [
             "com.github.clevernucleus.playerex.config.ModMenuCompat"
@@ -30,7 +31,8 @@
     },
     "custom": {
         "cardinal-components": [
-            "playerex:player_data"
+            "playerex:player_data",
+            "playerex:experience_data"
         ]
     },
     "mixins": [
