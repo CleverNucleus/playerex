@@ -21,7 +21,6 @@ public final class ExperienceDataManager implements ExperienceData {
 	
 	public ExperienceDataManager(final Chunk chunk) {
 		this.chunk = chunk;
-		this.chunk.setNeedsSaving(true);
 		this.expNegationFactor = 1.0F;
 		this.ticks = 0;
 		
@@ -49,7 +48,6 @@ public final class ExperienceDataManager implements ExperienceData {
 			this.ticks = 0;
 			this.expNegationFactor = Math.min(this.expNegationFactor * this.restorativeForce, 1.0F);
 			this.chunk.setNeedsSaving(true);
-			System.out.println("T: " + this.expNegationFactor);
 		}
 	}
 	
