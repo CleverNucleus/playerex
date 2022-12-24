@@ -38,6 +38,7 @@ public class ConfigImpl implements ConfigData, ExConfig {
 	private int restorativeForceTicks = 600;
 	
 	@ConfigEntry.Category(value = "server")
+	@ConfigEntry.BoundedDiscrete(min = 101, max = 200)
 	@ConfigEntry.Gui.Tooltip(count = 2)
 	private int restorativeForceMultiplier = 110;
 	
