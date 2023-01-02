@@ -120,7 +120,7 @@ modrinth {
     dependencies = [
         new VersionDependency("8rIblgME", "required"),
 		new VersionDependency("EXrxCjl6", "required"),
-        new VersionDependency("fiwCOlq9", "required"),
+        new VersionDependency("kTrUjvP9", "required"),
 		new VersionDependency("tPfCTMiZ", "embedded"),
 		new VersionDependency("jtBdOsFq", "embedded")
     ]
