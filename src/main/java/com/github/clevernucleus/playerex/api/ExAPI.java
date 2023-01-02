@@ -1,5 +1,6 @@
 package com.github.clevernucleus.playerex.api;
 
+import java.util.Collection;
 import java.util.UUID;
 import java.util.function.BiFunction;
 
@@ -88,6 +89,15 @@ public final class ExAPI {
 	 */
 	public static void registerRefundCondition(final BiFunction<PlayerData, PlayerEntity, Double> refundCondition) {
 		com.github.clevernucleus.playerex.impl.RefundConditionImpl.add(refundCondition);
+	}
+	
+	/**
+	 * @return Returns all the registered refund conditions. Note that while this is mutable and backed by the original registry, 
+	 * you should avoid modification and treat as read-only!
+	 * @since 3.5.0
+	 */
+	public static Collection<BiFunction<PlayerData, PlayerEntity, Double>> getRefundConditions() {
+		return com.github.clevernucleus.playerex.impl.RefundConditionImpl.get();
 	}
 	
 	private static EntityAttributeSupplier define(final String path) {
