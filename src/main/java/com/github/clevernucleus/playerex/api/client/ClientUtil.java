@@ -6,6 +6,8 @@ import java.util.function.BiConsumer;
 import java.util.function.Consumer;
 import java.util.function.Supplier;
 
+import com.github.clevernucleus.dataattributes.api.attribute.FunctionBehaviour;
+import com.github.clevernucleus.dataattributes.api.attribute.IAttributeFunction;
 import com.github.clevernucleus.dataattributes.api.attribute.IEntityAttribute;
 import com.github.clevernucleus.dataattributes.api.util.Maths;
 import com.github.clevernucleus.playerex.api.EntityAttributeSupplier;
@@ -47,12 +49,14 @@ public final class ClientUtil {
 	
 	/**
 	 * If the input value is positive, adds the "+" prefix. If the input attribute has the {@link ExAPI#PERCENTAGE_PROPERTY}
-	 * property, appends the "%" suffix.
+	 * property or the input FunctionBehaviour is {@link FunctionBehaviour#MULTIPLY}, appends the "%" suffix.
 	 * @param attributeIn
+	 * @param behaviourIn
 	 * @param valueIn
 	 * @return
+	 * @since 3.4.0
 	 */
-	public static String formatValue(final Supplier<EntityAttribute> attributeIn, double valueIn) {
+	public static String formatValue(final Supplier<EntityAttribute> attributeIn, FunctionBehaviour behaviourIn, double valueIn) {
 		String value = FORMATTING_3.format(valueIn);
 		
 		if(valueIn > 0.0D) {
@@ -62,7 +66,7 @@ public final class ClientUtil {
 		IEntityAttribute attribute = (IEntityAttribute)attributeIn.get();
 		
 		if(attribute == null) return value;
-		if(attribute.hasProperty(ExAPI.PERCENTAGE_PROPERTY)) {
+		if(attribute.hasProperty(ExAPI.PERCENTAGE_PROPERTY) || behaviourIn == FunctionBehaviour.MULTIPLY) {
 			value = value + "%";
 		}
 		
@@ -81,9 +85,10 @@ public final class ClientUtil {
 		
 		for(var child : attribute.children().entrySet()) {
 			IEntityAttribute attribute2 = child.getKey();
-			double value = child.getValue();
+			IAttributeFunction function = child.getValue();
+			double value = function.value() * (function.behaviour() == FunctionBehaviour.MULTIPLY ? 100.0D : 1.0D);
 			double displ = displayValue(() -> (EntityAttribute)attribute2, value);
-			String formt = formatValue(() -> (EntityAttribute)attribute2, displ);
+			String formt = formatValue(() -> (EntityAttribute)attribute2, function.behaviour(), displ);
 			MutableText mutableText = new LiteralText(formt + " ");
 			mutableText.append(new TranslatableText(((EntityAttribute)attribute2).getTranslationKey()));
 			tooltip.add(mutableText.formatted(Formatting.GRAY));

@@ -1,31 +1,82 @@
 {
     "values": {
         "playerex:constitution": {
-            "minecraft:generic.max_health": 1.0,
-            "minecraft:generic.knockback_resistance": 0.01,
-            "playerex:poison_resistance": 0.01
+            "minecraft:generic.max_health": {
+            	"behaviour": "ADDITION",
+            	"value": 1.0
+            },
+            "minecraft:generic.knockback_resistance": {
+            	"behaviour": "ADDITION",
+            	"value": 0.01
+            },
+            "playerex:poison_resistance": {
+            	"behaviour": "ADDITION",
+            	"value": 0.01
+            }
         },
         "playerex:strength": {
-            "minecraft:generic.attack_damage": 0.25,
-            "minecraft:generic.armor": 0.5,
-            "playerex:health_regeneration": 0.01
+        	"minecraft:generic.attack_damage": {
+            	"behaviour": "ADDITION",
+            	"value": 0.25
+            },
+            "minecraft:generic.armor": {
+            	"behaviour": "ADDITION",
+            	"value": 0.5
+            },
+            "playerex:health_regeneration": {
+            	"behaviour": "ADDITION",
+            	"value": 0.01
+            }
         },
         "playerex:dexterity": {
-            "minecraft:generic.attack_speed": 0.1,
-            "playerex:ranged_damage": 0.25,
-            "playerex:melee_crit_damage": 0.005,
-            "playerex:lightning_resistance": 0.01
+        	"minecraft:generic.attack_speed": {
+            	"behaviour": "MULTIPLY",
+            	"value": 0.02
+            },
+            "playerex:ranged_damage": {
+            	"behaviour": "ADDITION",
+            	"value": 0.25
+            },
+            "playerex:melee_crit_damage": {
+            	"behaviour": "ADDITION",
+            	"value": 0.005
+            },
+            "playerex:lightning_resistance": {
+            	"behaviour": "ADDITION",
+            	"value": 0.01
+            }
         },
         "playerex:intelligence": {
-            "playerex:heal_amplification": 0.002,
-            "playerex:ranged_crit_damage": 0.005,
-            "playerex:wither_resistance": 0.01
+        	"playerex:heal_amplification": {
+            	"behaviour": "ADDITION",
+            	"value": 0.002
+            },
+            "playerex:ranged_crit_damage": {
+            	"behaviour": "ADDITION",
+            	"value": 0.005
+            },
+            "playerex:wither_resistance": {
+            	"behaviour": "ADDITION",
+            	"value": 0.01
+            }
         },
         "playerex:luckiness": {
-            "minecraft:generic.luck": 0.1,
-            "playerex:evasion": 0.02,
-            "playerex:melee_crit_chance": 0.02,
-            "playerex:ranged_crit_chance": 0.02
+        	"minecraft:generic.luck": {
+            	"behaviour": "ADDITION",
+            	"value": 0.1
+            },
+            "playerex:evasion": {
+            	"behaviour": "ADDITION",
+            	"value": 0.02
+            },
+            "playerex:melee_crit_chance": {
+            	"behaviour": "ADDITION",
+            	"value": 0.02
+            },
+            "playerex:ranged_crit_chance": {
+            	"behaviour": "ADDITION",
+            	"value": 0.02
+            }
         }
     }
 }
