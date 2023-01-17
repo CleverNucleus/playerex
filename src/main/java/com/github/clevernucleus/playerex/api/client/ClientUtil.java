@@ -84,7 +84,7 @@ public final class ClientUtil {
 		for(var child : attribute.children().entrySet()) {
 			IEntityAttribute attribute2 = child.getKey();
 			IAttributeFunction function = child.getValue();
-			double value = function.value() * (function.behaviour() == FunctionBehaviour.MULTIPLY ? 100.0D : 1.0D);
+			double value = function.value() * ((function.behaviour() == FunctionBehaviour.MULTIPLY && !attribute2.hasProperty(ExAPI.MULTIPLIER_PROPERTY) && !attribute2.hasProperty(ExAPI.PERCENTAGE_PROPERTY)) ? 100.0D : 1.0D);
 			double displ = displayValue(() -> (EntityAttribute)attribute2, value);
 			String formt = formatValue(() -> (EntityAttribute)attribute2, function.behaviour(), displ);
 			MutableText mutableText = Text.literal(formt + " ");

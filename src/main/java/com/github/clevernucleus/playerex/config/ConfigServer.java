@@ -8,7 +8,7 @@ import net.objecthunter.exp4j.ExpressionBuilder;
 import net.objecthunter.exp4j.function.Function;
 
 public final class ConfigServer {
-	private static final String RESET_ON_DEATH = "ResetOnDeath", DISABLE_ATTRIBUTES_GUI = "DisableAttributesGui", SKILL_POINTS_PER_LEVEL_UP = "SkillPointsPerLevelUp", LEVEL_NAMEPLATE = "LevelNameplate", LEVEL_FORMULA = "LevelFormula", VARIABLE = "x";
+	private static final String RESET_ON_DEATH = "ResetOnDeath", DISABLE_ATTRIBUTES_GUI = "DisableAttributesGui", SKILL_POINTS_PER_LEVEL_UP = "SkillPointsPerLevelUp", LEVEL_NAMEPLATE = "LevelNameplate", LEVEL_FORMULA = "LevelFormula", VARIABLE = "x", RESTORATIVE_FORCE_TICKS = "RestorativeForceTicks", RESTORATIVE_FORCE_MULTIPLIER = "RestorativeForceMultiplier", EXP_NEGATION_FACTOR = "ExpNegationFactor";
 	
 	/**
 	 * stairs(x, stretch, steepness, x-offset, y-offset, y-limit)
@@ -25,6 +25,9 @@ public final class ConfigServer {
 	protected boolean disableAttributesGui;
 	protected boolean showLevelNameplates;
 	protected int skillPointsPerLevelUp;
+	protected int restorativeForceTicks;
+	protected int restorativeForceMultiplier;
+	protected int expNegationFactor;
 	protected String levelFormula;
 	private Expression expression;
 	
@@ -39,6 +42,9 @@ public final class ConfigServer {
 		this.disableAttributesGui = config.disableAttributesGui;
 		this.showLevelNameplates = config.showLevelNameplates;
 		this.skillPointsPerLevelUp = config.skillPointsPerLevelUp;
+		this.restorativeForceTicks = config.restorativeForceTicks;
+		this.restorativeForceMultiplier = config.restorativeForceMultiplier;
+		this.expNegationFactor = config.expNegationFactor;
 		this.levelFormula = config.levelFormula;
 		this.expression = this.createExpression();
 	}
@@ -53,6 +59,9 @@ public final class ConfigServer {
 		this.disableAttributesGui = tag.getBoolean(DISABLE_ATTRIBUTES_GUI);
 		this.showLevelNameplates = tag.getBoolean(LEVEL_NAMEPLATE);
 		this.skillPointsPerLevelUp = tag.getInt(SKILL_POINTS_PER_LEVEL_UP);
+		this.restorativeForceTicks = tag.getInt(RESTORATIVE_FORCE_TICKS);
+		this.restorativeForceMultiplier = tag.getInt(RESTORATIVE_FORCE_MULTIPLIER);
+		this.expNegationFactor = tag.getInt(EXP_NEGATION_FACTOR);
 		this.levelFormula = tag.getString(LEVEL_FORMULA);
 		this.expression = this.createExpression();
 	}
@@ -62,6 +71,9 @@ public final class ConfigServer {
 		tag.putBoolean(DISABLE_ATTRIBUTES_GUI, this.disableAttributesGui);
 		tag.putBoolean(LEVEL_NAMEPLATE, this.showLevelNameplates);
 		tag.putInt(SKILL_POINTS_PER_LEVEL_UP, this.skillPointsPerLevelUp);
+		tag.putInt(RESTORATIVE_FORCE_TICKS, this.restorativeForceTicks);
+		tag.putInt(RESTORATIVE_FORCE_MULTIPLIER, this.restorativeForceMultiplier);
+		tag.putInt(EXP_NEGATION_FACTOR, this.expNegationFactor);
 		tag.putString(LEVEL_FORMULA, this.levelFormula);
 	}
 }

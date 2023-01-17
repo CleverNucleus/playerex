@@ -35,17 +35,17 @@ public class ConfigImpl implements ConfigData, ExConfig {
 	
 	@ConfigEntry.Category(value = "server")
 	@ConfigEntry.Gui.Tooltip(count = 2)
-	private int restorativeForceTicks = 600;
+	protected int restorativeForceTicks = 600;
 	
 	@ConfigEntry.Category(value = "server")
 	@ConfigEntry.BoundedDiscrete(min = 101, max = 200)
 	@ConfigEntry.Gui.Tooltip(count = 2)
-	private int restorativeForceMultiplier = 110;
+	protected int restorativeForceMultiplier = 110;
 	
 	@ConfigEntry.Category(value = "server")
 	@ConfigEntry.BoundedDiscrete(min = 1, max = 100)
 	@ConfigEntry.Gui.Tooltip(count = 2)
-	private int expNegationFactor = 95;
+	protected int expNegationFactor = 95;
 	
 	@ConfigEntry.Category(value = "client")
 	@ConfigEntry.BoundedDiscrete(min = 0, max = 150)
@@ -66,6 +66,10 @@ public class ConfigImpl implements ConfigData, ExConfig {
 	@ConfigEntry.BoundedDiscrete(min = 0, max = 50)
 	@ConfigEntry.Gui.Tooltip
 	private int textScaleY = 50;
+	
+	@ConfigEntry.Category(value = "client")
+	@ConfigEntry.Gui.Tooltip
+	private float levelNameplateHeight = 0.3F;
 	
 	@ConfigEntry.Category(value = "client")
 	@ConfigEntry.Gui.Tooltip
@@ -111,17 +115,17 @@ public class ConfigImpl implements ConfigData, ExConfig {
 	
 	@Override
 	public int restorativeForceTicks() {
-		return this.restorativeForceTicks;
+		return ConfigServer.INSTANCE.restorativeForceTicks;
 	}
 	
 	@Override
 	public float restorativeForceMultiplier() {
-		return (float)this.restorativeForceMultiplier * 0.01F;
+		return (float)ConfigServer.INSTANCE.restorativeForceMultiplier * 0.01F;
 	}
 	
 	@Override
 	public float expNegationFactor() {
-		return (float)this.expNegationFactor * 0.01F;
+		return (float)ConfigServer.INSTANCE.expNegationFactor * 0.01F;
 	}
 	
 	@Override
@@ -142,5 +146,10 @@ public class ConfigImpl implements ConfigData, ExConfig {
 	@Override
 	public float textScaleY() {
 		return (this.textScaleY + 25) * 0.01F;
+	}
+	
+	@Override
+	public float levelNameplateHeight() {
+		return this.levelNameplateHeight;
 	}
 }

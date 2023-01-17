@@ -74,4 +74,10 @@ public interface ExConfig {
 	 * @return 0 - 0.75. Size multiplier for PlayerEx gui text in the y-axis.
 	 */
 	float textScaleY();
+	
+	/**
+	 * Client option.
+	 * @return If nameplates have been enabled by the server, this determines for the client the height offset.
+	 */
+	float levelNameplateHeight();
 }
