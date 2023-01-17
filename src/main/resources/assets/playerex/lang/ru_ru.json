@@ -17,6 +17,17 @@
     "text.autoconfig.playerex.option.levelFormula": "Формула повышения уровня",
     "text.autoconfig.playerex.option.levelFormula.@Tooltip[0]": "Количество очков опыта, необходимое для повышения уровня.\n'x' переменная относится к текущему уровню игрока; 'x' обязательна.",
     "text.autoconfig.playerex.option.levelFormula.@Tooltip[1]": "(Требуется перезагрузка)",
+    
+    "text.autoconfig.playerex.option.restorativeForceTicks": "Restorative Force Ticks",
+    "text.autoconfig.playerex.option.restorativeForceTicks.@Tooltip[0]": "The number of ticks between every restorative event. \nNote that 20 ticks is 1 second.",
+    "text.autoconfig.playerex.option.restorativeForceTicks.@Tooltip[1]": "(Requires restart)",
+    "text.autoconfig.playerex.option.restorativeForceMultiplier": "Restorative Force",
+    "text.autoconfig.playerex.option.restorativeForceMultiplier.@Tooltip[0]": "The restorative force multiplier.",
+    "text.autoconfig.playerex.option.restorativeForceMultiplier.@Tooltip[1]": "(Requires restart)",
+    "text.autoconfig.playerex.option.expNegationFactor": "XP Negation Factor",
+    "text.autoconfig.playerex.option.expNegationFactor.@Tooltip[0]": "The chance for xp orbs to drop in a given chunk. \nSet to 100 for vanilla behaviour.",
+    "text.autoconfig.playerex.option.expNegationFactor.@Tooltip[1]": "(Requires restart)",
+    
 	"text.autoconfig.playerex.option.levelUpVolume": "Громкость повышения уровня",
     "text.autoconfig.playerex.option.levelUpVolume.@Tooltip": "Множитель громкости в процентах.",
     "text.autoconfig.playerex.option.skillUpVolume": "Громкость повышения навыков",
@@ -25,9 +36,12 @@
     "text.autoconfig.playerex.option.textScaleX.@Tooltip": "Сжатие текста по 'x'.",
     "text.autoconfig.playerex.option.textScaleY": "Масштаб вертикального текста",
     "text.autoconfig.playerex.option.textScaleY.@Tooltip": "Сжатие текста по 'y'.",
+    
+    "text.autoconfig.playerex.option.levelNameplateHeight": "Level Nameplate Height",
+    "text.autoconfig.playerex.option.levelNameplateHeight.@Tooltip": "The level nameplate height offset.",
+    
     "text.autoconfig.playerex.option.tooltip": "Подсказки характеристик",
     "text.autoconfig.playerex.option.tooltip.@Tooltip": "ПО УМОЛЧАНИЮ: всплывающая подсказка не изменяется (для совместимости с модами).\nVANILLA: исправляет урон/скорость атаки, не отображающие их истинное значение.\nPLAYEREX: отображение урона/скорости атаки в качестве обычных параметров характеристик.",
-    "text.autoconfig.playerex.option.darkMode": "Темный режим",
     "playerex.command.reset": "Сбросить характеристики по умолчанию для игрока %s",
     "playerex.command.refund": "Вернуть %s очков навыка для игрока %s",
     "playerex.command.refund_alt": "Возвращено 1 очко умений для игрока %s",

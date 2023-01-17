@@ -75,7 +75,7 @@ abstract class LivingEntityRendererMixin<T extends LivingEntity, M extends Entit
 		
 		if(!(d > 4096.0D)) {
 			boolean bl = !entity.isSneaky();
-			float f = entity.getHeight() + 0.3F;
+			float f = entity.getHeight() + ExAPI.getConfig().levelNameplateHeight();
 			int i = 0;
 			matrices.push();
 			matrices.translate(0.0D, (double)f, 0.0D);
