@@ -7,6 +7,7 @@ import com.github.clevernucleus.dataattributes.api.DataAttributesAPI;
 import com.github.clevernucleus.dataattributes.api.attribute.IEntityAttribute;
 import com.github.clevernucleus.playerex.api.EntityAttributeSupplier;
 import com.github.clevernucleus.playerex.api.ExAPI;
+import com.github.clevernucleus.playerex.api.ExperienceData;
 import com.github.clevernucleus.playerex.api.PacketType;
 import com.github.clevernucleus.playerex.api.PlayerData;
 import com.google.common.collect.Sets;
@@ -30,7 +31,11 @@ import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.text.Text;
 import net.minecraft.util.Formatting;
 import net.minecraft.util.Identifier;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
+import net.minecraft.util.math.Vec3d;
+import net.minecraft.world.World;
+import net.minecraft.world.chunk.Chunk;
 
 public final class CommandsImpl {
 	private static final Supplier<Collection<Identifier>> PRIMARIES = () -> Sets.newHashSet(ExAPI.CONSTITUTION.getId(), ExAPI.STRENGTH.getId(), ExAPI.DEXTERITY.getId(), ExAPI.INTELLIGENCE.getId(), ExAPI.LUCKINESS.getId());
@@ -265,6 +270,20 @@ public final class CommandsImpl {
 		attribute.addChild(requiresRefundPoints);
 	}
 	
+	private static void registerResetChunk(CommandNode<ServerCommandSource> root) {
+		LiteralCommandNode<ServerCommandSource> reset = CommandManager.literal("resetChunk").executes(ctx -> {
+			World world = ctx.getSource().getWorld();
+			Vec3d vec3d = ctx.getSource().getPosition();
+			BlockPos pos = new BlockPos(vec3d);
+			Chunk chunk = world.getChunk(pos);
+			
+			ExAPI.EXPERIENCE_DATA.maybeGet(chunk).ifPresent(ExperienceData::resetExperienceNegationFactor);
+			ctx.getSource().sendFeedback(Text.translatable("playerex.command.reset_chunk", pos), false);
+			return 1;
+		}).build();
+		root.addChild(reset);
+	}
+	
 	public static void register(CommandDispatcher<ServerCommandSource> dispatcher, CommandRegistryAccess registryAccess, CommandManager.RegistrationEnvironment environment) {
 		LiteralCommandNode<ServerCommandSource> root = CommandManager.literal("playerex").requires(source -> source.hasPermissionLevel(2)).build();
 		dispatcher.getRoot().addChild(root);
@@ -274,5 +293,6 @@ public final class CommandsImpl {
 		registerLevelUp(root);
 		registerSkillAttribute(root);
 		registerRefundAttribute(root);
+		registerResetChunk(root);
 	}
 }

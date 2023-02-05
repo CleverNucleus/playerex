@@ -43,6 +43,7 @@
     "text.autoconfig.playerex.option.tooltip": "Подсказки характеристик",
     "text.autoconfig.playerex.option.tooltip.@Tooltip": "ПО УМОЛЧАНИЮ: всплывающая подсказка не изменяется (для совместимости с модами).\nVANILLA: исправляет урон/скорость атаки, не отображающие их истинное значение.\nPLAYEREX: отображение урона/скорости атаки в качестве обычных параметров характеристик.",
     "playerex.command.reset": "Сбросить характеристики по умолчанию для игрока %s",
+    "playerex.command.reset_chunk": "Reset experience negation factor for chunk at %s",
     "playerex.command.refund": "Вернуть %s очков навыка для игрока %s",
     "playerex.command.refund_alt": "Возвращено 1 очко умений для игрока %s",
     "playerex.command.levelup": "Добавлено %s уровней для игрока %s",

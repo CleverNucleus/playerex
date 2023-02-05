@@ -40,6 +40,11 @@ public final class ExperienceDataManager implements ExperienceData {
 	}
 	
 	@Override
+	public void resetExperienceNegationFactor() {
+		this.expNegationFactor = 1.0F;
+	}
+	
+	@Override
 	public void serverTick() {
 		if(this.expNegationFactor == 1.0F) return;
 		if(this.ticks < this.restorativeForceTicks) {

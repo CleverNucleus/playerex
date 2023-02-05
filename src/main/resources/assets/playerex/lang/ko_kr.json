@@ -43,6 +43,7 @@
     "text.autoconfig.playerex.option.tooltip": "특성 툴팁",
     "text.autoconfig.playerex.option.tooltip.@Tooltip": "DEFAULT: 툴팁 (모드 호환)을 변경하지 않습니다.\nVANILLA: 공격 데미지/속도 값을 실제 값으로 표시하지 않습니다.\nPLAYEREX: 공격 데미지/속도 값을 일반 특성 수정자로 표시합니다.",
     "playerex.command.reset": "플레이어 %s 값을 기본값으로 초기화합니다.",
+    "playerex.command.reset_chunk": "Reset experience negation factor for chunk at %s",
     "playerex.command.refund": "스킬 포인트 %s를 플레이어 %s에게 돌려줍니다.",
     "playerex.command.refund_alt": "스킬 포인트 1을 플레이어 %s에게 돌려줍니다.",
     "playerex.command.levelup": "%s레벨을 플레이어 %s에게 추가합니다.",

@@ -43,6 +43,7 @@
     "text.autoconfig.playerex.option.tooltip": "Descripciones de atributos",
     "text.autoconfig.playerex.option.tooltip.@Tooltip": "DEFAULT: sin cambios en las descripciones (para compatibilidad con mods).\nVANILLA: corrige el da�o de ataque/velocidad que no muestra su verdadero valor.\nPLAYEREX: el da�o de ataque/la velocidad se muestran como otros atributos.",
     "command.playerex.reset": "Reinicia los atributos a sus valores predeterminados para %s",
+    "playerex.command.reset_chunk": "Reset experience negation factor for chunk at %s",
     "command.playerex.refund": "Se le devolvieron %s puntos de habilidad al jugador %s",
     "command.playerex.refund_alt": "Se le devolvi� 1 punto de habilidad al jugador %s",
     "command.playerex.levelup": "Se le agregaron %s niveles al jugador %s",

@@ -43,6 +43,7 @@
     "text.autoconfig.playerex.option.tooltip": "工具提示属性",
     "text.autoconfig.playerex.option.tooltip.@Tooltip": "默认：不更改工具提示（为了模组兼容性）。/nVANILLA：修复了攻击伤害/速度显示错误的问题。/nPLAYEREX：攻击伤害/速度显示为常规属性修饰符。",
     "playerex.command.reset": "将玩家%s的属性设为默认值。",
+    "playerex.command.reset_chunk": "Reset experience negation factor for chunk at %s",
     "playerex.command.refund": "玩家%2$s获得%1$s回退点。",
     "playerex.command.refund_alt": "玩家%2$s获得1回退点。",
     "playerex.command.levelup": "玩家%2$s获得%1$s技能点",
