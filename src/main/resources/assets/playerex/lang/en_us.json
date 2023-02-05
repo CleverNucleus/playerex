@@ -39,6 +39,7 @@
     "text.autoconfig.playerex.option.tooltip": "Tooltip Attributes",
     "text.autoconfig.playerex.option.tooltip.@Tooltip": "DEFAULT: no change to the tooltip (for mod compatibility).\nVANILLA: fixes attack damage/speed not showing their true value.\nPLAYEREX: attack damage/speed display as regular attribute modifiers.",
     "playerex.command.reset": "Reset attributes to default values for player %s",
+    "playerex.command.reset_chunk": "Reset experience negation factor for chunk at %s",
     "playerex.command.refund": "Refunded %s skill points for player %s",
     "playerex.command.refund_alt": "Refunded 1 skill point for player %s",
     "playerex.command.levelup": "Added %s levels to player %s",

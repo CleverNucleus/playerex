@@ -1,7 +1,9 @@
 package com.github.clevernucleus.playerex.client.gui;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.function.Consumer;
 import java.util.function.Supplier;
 
@@ -46,9 +48,16 @@ public class AttributesPageLayer extends PageLayer {
 	private static final List<Identifier> BUTTON_KEYS = ImmutableList.of(ExAPI.LEVEL.getId(), ExAPI.CONSTITUTION.getId(), ExAPI.STRENGTH.getId(), ExAPI.DEXTERITY.getId(), ExAPI.INTELLIGENCE.getId(), ExAPI.LUCKINESS.getId());
 	
 	private PlayerData playerData;
+	private final Map<Identifier, Integer> buttonDelay = new HashMap<Identifier, Integer>();
 	
 	public AttributesPageLayer(HandledScreen<?> parent, ScreenHandler handler, PlayerInventory inventory, Text title) {
 		super(parent, handler, inventory, title);
+		this.buttonDelay.put(ExAPI.LEVEL.getId(), 0);
+		this.buttonDelay.put(ExAPI.CONSTITUTION.getId(), 0);
+		this.buttonDelay.put(ExAPI.STRENGTH.getId(), 0);
+		this.buttonDelay.put(ExAPI.DEXTERITY.getId(), 0);
+		this.buttonDelay.put(ExAPI.INTELLIGENCE.getId(), 0);
+		this.buttonDelay.put(ExAPI.LUCKINESS.getId(), 0);
 	}
 	
 	private boolean canRefund() {
@@ -61,13 +70,15 @@ public class AttributesPageLayer extends PageLayer {
 	
 	private void buttonPressed(ButtonWidget buttonIn) {
 		ScreenButtonWidget button = (ScreenButtonWidget)buttonIn;
-		EntityAttributeSupplier attribute = EntityAttributeSupplier.of(button.key());
+		Identifier key = button.key();
+		EntityAttributeSupplier attribute = EntityAttributeSupplier.of(key);
 		DataAttributesAPI.ifPresent(this.client.player, attribute, (Object)null, amount -> {
 			double value = this.canRefund() ? -1.0D : 1.0D;
 			ClientUtil.modifyAttributes(this.canRefund() ? PacketType.REFUND : PacketType.SKILL, c -> c.accept(attribute, value));
 			this.client.player.playSound(PlayerEx.SP_SPEND_SOUND, SoundCategory.NEUTRAL, ExAPI.getConfig().skillUpVolume(), 1.5F);
 			return (Object)null;
 		});
+		this.buttonDelay.put(key, 40);
 	}
 	
 	private void buttonTooltip(ButtonWidget buttonIn, MatrixStack matrices, int mouseX, int mouseY) {
@@ -151,6 +162,13 @@ public class AttributesPageLayer extends PageLayer {
 						
 						button.alt = this.canRefund();
 					}
+					
+					int buttonDelay = this.buttonDelay.getOrDefault(key, 0);
+					button.active &= (buttonDelay == 0);
+					
+					if(buttonDelay > 0) {
+						this.buttonDelay.put(key, Math.max(0, buttonDelay - 1));
+					}
 				}
 				
 				return (Object)null;
@@ -162,7 +180,10 @@ public class AttributesPageLayer extends PageLayer {
 	protected void init() {
 		super.init();
 		this.playerData = ExAPI.PLAYER_DATA.get(this.client.player);
-		this.addDrawableChild(new ScreenButtonWidget(this.parent, 8, 23, 204, 0, 11, 10, BUTTON_KEYS.get(0), btn -> ClientUtil.modifyAttributes(PacketType.LEVEL, c -> c.accept(ExAPI.LEVEL, 1.0D)), this::buttonTooltip));
+		this.addDrawableChild(new ScreenButtonWidget(this.parent, 8, 23, 204, 0, 11, 10, BUTTON_KEYS.get(0), btn -> {
+			ClientUtil.modifyAttributes(PacketType.LEVEL, c -> c.accept(ExAPI.LEVEL, 1.0D));
+			this.buttonDelay.put(((ScreenButtonWidget)btn).key(), 40);
+		}, this::buttonTooltip));
 		this.addDrawableChild(new ScreenButtonWidget(this.parent, 8, 56, 204, 0, 11, 10, BUTTON_KEYS.get(1), this::buttonPressed, this::buttonTooltip));
 		this.addDrawableChild(new ScreenButtonWidget(this.parent, 8, 67, 204, 0, 11, 10, BUTTON_KEYS.get(2), this::buttonPressed, this::buttonTooltip));
 		this.addDrawableChild(new ScreenButtonWidget(this.parent, 8, 78, 204, 0, 11, 10, BUTTON_KEYS.get(3), this::buttonPressed, this::buttonTooltip));
