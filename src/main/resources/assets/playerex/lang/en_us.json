@@ -44,7 +44,7 @@
     "playerex.command.refund_alt": "Refunded 1 skill point for player %s",
     "playerex.command.levelup": "Added %s levels to player %s",
     "playerex.command.levelup_alt": "Added 1 level to player %s",
-    "playerex.command.attribute_max_error": "% attribute is already at maximum value for player %s",
+    "playerex.command.attribute_max_error": "%s attribute is already at maximum value for player %s",
     "playerex.command.skill_attribute": "Skilled %s for player %s.",
     "playerex.command.skill_attribute_error": "%s has no Skill Points to spend!",
     "playerex.command.refund_attribute": "Refunded %s for player %s.",
