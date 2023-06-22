@@ -37,11 +37,11 @@
         "playerex.mixins.json"
     ],
     "depends": {
-		"fabricloader": ">=0.14.9",
-        "fabric": ">=0.58.0",
-        "minecraft": "1.19",
-		"dataattributes": ">=1.2.6",
-        "cloth-config2": ">=8.0.0",
+		"fabricloader": ">=0.14.21",
+        "fabric": ">=0.84.0",
+        "minecraft": ">=1.20",
+		"dataattributes": ">=1.5.0",
+        "cloth-config2": ">=11.0.99",
         "java": ">=17"
     }
 }

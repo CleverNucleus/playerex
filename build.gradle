@@ -1,7 +1,7 @@
 import com.modrinth.minotaur.dependencies.VersionDependency
 
 plugins {
-	id 'fabric-loom' version '0.12-SNAPSHOT'
+	id 'fabric-loom' version '1.2-SNAPSHOT'
 	id 'maven-publish'
     id "com.modrinth.minotaur" version "2.+"
 }
@@ -15,6 +15,7 @@ group = project.maven_group
 
 repositories {
 	mavenCentral()
+	mavenLocal()
 	maven {
 		name = "Ladysnake"
 		url = "https://ladysnake.jfrog.io/artifactory/mods"
@@ -42,14 +43,17 @@ repositories {
 
 dependencies {
 	minecraft "com.mojang:minecraft:${project.minecraft_version}"
-	mappings "net.fabricmc:yarn:${project.yarn_mappings}:v2"
+	mappings "net.fabricmc:yarn:${project.yarn_mappings}"
 	modImplementation "net.fabricmc:fabric-loader:${project.loader_version}"
 	modImplementation "net.fabricmc.fabric-api:fabric-api:${project.fabric_version}"
 	
-	 modImplementation "maven.modrinth:data-attributes:${project.dataattributes_version}"
+	//modImplementation "maven.modrinth:data-attributes:${project.dataattributes_version}"
+	modImplementation "com.github.clevernucleus:data-attributes:${project.dataattributes_version}"
     
-    modImplementation "maven.modrinth:offline-player-cache:${project.opc_version}"
-    include "maven.modrinth:offline-player-cache:${project.opc_version}"
+    //modImplementation "maven.modrinth:offline-player-cache:${project.opc_version}"
+    //include "maven.modrinth:offline-player-cache:${project.opc_version}"
+	modImplementation "com.github.clevernucleus:Offline-Player-Cache:${project.opc_version}"
+	include "com.github.clevernucleus:Offline-Player-Cache:${project.opc_version}"
     
     modImplementation include("dev.onyxstudios.cardinal-components-api:cardinal-components-base:${project.cardinal_components_version}") {
 		exclude(group: "net.fabricmc.fabric-api")
