@@ -52,7 +52,7 @@ public class ExScreenFactory implements ExtendedScreenHandlerFactory {
 		}
 		
 		@Override
-		public ItemStack transferSlot(PlayerEntity player, int index) {
+		public ItemStack quickMove(PlayerEntity player, int index) {
 			return this.slots.get(index).getStack();
 		}
 	}

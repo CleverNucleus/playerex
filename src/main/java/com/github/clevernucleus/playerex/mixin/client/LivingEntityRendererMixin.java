@@ -25,7 +25,7 @@ import net.minecraft.scoreboard.AbstractTeam;
 import net.minecraft.text.StringVisitable;
 import net.minecraft.text.Text;
 import net.minecraft.util.Formatting;
-import net.minecraft.util.math.Matrix4f;
+import org.joml.Matrix4f;
 
 @Mixin(LivingEntityRenderer.class)
 abstract class LivingEntityRendererMixin<T extends LivingEntity, M extends EntityModel<T>> extends EntityRenderer<T> {
@@ -74,6 +74,7 @@ abstract class LivingEntityRendererMixin<T extends LivingEntity, M extends Entit
 		
 		if(!(d > 4096.0D)) {
 			boolean bl = !entity.isSneaky();
+			TextRenderer.TextLayerType tl = bl ? TextRenderer.TextLayerType.NORMAL : TextRenderer.TextLayerType.SEE_THROUGH;
 			float f = entity.getHeight() + 0.3F;
 			int i = 0;
 			matrices.push();
@@ -86,10 +87,10 @@ abstract class LivingEntityRendererMixin<T extends LivingEntity, M extends Entit
 			int j = (int)(g * 255.0F) << 24;
 			TextRenderer textRenderer = this.getTextRenderer();
 			float h = (float)(-textRenderer.getWidth((StringVisitable)text) / 2);
-			textRenderer.draw(text, h, (float)i, 553648127, false, matrix4f, vertexConsumers, bl, j, light);
-			
+			textRenderer.draw(text, h, (float)i, 553648127, false, matrix4f, vertexConsumers, tl, j, light);
+
 			if(bl) {
-				textRenderer.draw((Text)text, h, (float)i, -1, false, matrix4f, vertexConsumers, false, 0, light);
+				textRenderer.draw((Text)text, h, (float)i, -1, false, matrix4f, vertexConsumers, tl, 0, light);
 			}
 			
 			matrices.pop();

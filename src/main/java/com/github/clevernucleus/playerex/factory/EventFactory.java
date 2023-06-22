@@ -6,7 +6,7 @@ import com.github.clevernucleus.playerex.api.ExAPI;
 import com.github.clevernucleus.playerex.api.PlayerData;
 import com.github.clevernucleus.playerex.config.ConfigImpl;
 import com.github.clevernucleus.playerex.impl.DamageModificationImpl;
-
+import com.github.clevernucleus.playerex.impl.DamageModificationImpl.DamageModification;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.attribute.EntityAttribute;
@@ -43,7 +43,7 @@ public final class EventFactory {
 	}
 	
 	public static void healthRegeneration(final LivingEntity livingEntity) {
-		if(!livingEntity.world.isClient) {
+		if(!livingEntity.getWorld().isClient) {
 			DataAttributesAPI.ifPresent(livingEntity, ExAPI.HEALTH_REGENERATION, (Object)null, value -> {
 				if(value > 0.0 && livingEntity.getHealth() < livingEntity.getMaxHealth()) {
 					livingEntity.heal((float)(double)value);

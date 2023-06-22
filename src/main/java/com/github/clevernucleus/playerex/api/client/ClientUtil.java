@@ -2,6 +2,7 @@ package com.github.clevernucleus.playerex.api.client;
 
 import java.text.DecimalFormat;
 import java.util.List;
+import java.util.Map.Entry;
 import java.util.function.BiConsumer;
 import java.util.function.Consumer;
 import java.util.function.Supplier;
@@ -79,7 +80,7 @@ public final class ClientUtil {
 		
 		for(var child : attribute.children().entrySet()) {
 			IEntityAttribute attribute2 = child.getKey();
-			double value = child.getValue();
+			double value = child.getValue().value();
 			double displ = displayValue(() -> (EntityAttribute)attribute2, value);
 			String formt = formatValue(() -> (EntityAttribute)attribute2, displ);
 			MutableText mutableText = Text.literal(formt + " ");

@@ -44,7 +44,8 @@ public final class CommandsImpl {
 			ServerPlayerEntity serverPlayerEntity = EntityArgumentType.getPlayer(ctx, "player");
 			PlayerData playerData = ExAPI.PLAYER_DATA.get(serverPlayerEntity);
 			playerData.reset();
-			ctx.getSource().sendFeedback(Text.translatable("playerex.command.reset", serverPlayerEntity.getName()), false);
+			Supplier<Text> text = () -> Text.translatable("playerex.command.reset", serverPlayerEntity.getName());
+			ctx.getSource().sendFeedback(text, false);
 			
 			return 1;
 		}).build();
@@ -61,9 +62,11 @@ public final class CommandsImpl {
 			int refunded = playerData.addRefundPoints(1);
 			
 			if(refunded == 1) {
-				ctx.getSource().sendFeedback(Text.translatable("playerex.command.refund_alt", serverPlayerEntity.getName()), false);
+				Supplier<Text> text = () -> Text.translatable("playerex.command.refund_alt", serverPlayerEntity.getName());
+				ctx.getSource().sendFeedback(text, false);
 			} else {
-				ctx.getSource().sendFeedback(Text.translatable("playerex.command.refund", refunded, serverPlayerEntity.getName()), false);
+				Supplier<Text> text = () -> Text.translatable("playerex.command.refund", refunded, serverPlayerEntity.getName());
+				ctx.getSource().sendFeedback(text, false);
 			}
 			
 			return refunded % 16;
@@ -77,9 +80,11 @@ public final class CommandsImpl {
 			int refunded = playerData.addRefundPoints(value);
 			
 			if(refunded == 1) {
-				ctx.getSource().sendFeedback(Text.translatable("playerex.command.refund_alt", serverPlayerEntity.getName()), false);
+				Supplier<Text> text = () -> Text.translatable("playerex.command.refund_alt", serverPlayerEntity.getName());
+				ctx.getSource().sendFeedback(text, false);
 			} else {
-				ctx.getSource().sendFeedback(Text.translatable("playerex.command.refund", refunded, serverPlayerEntity.getName()), false);
+				Supplier<Text> text = () -> Text.translatable("playerex.command.refund", refunded, serverPlayerEntity.getName());
+				ctx.getSource().sendFeedback(text, false);
 			}
 			
 			return refunded % 16;
@@ -98,13 +103,15 @@ public final class CommandsImpl {
 				EntityAttribute attribute = ExAPI.LEVEL.get();
 				
 				if(((IEntityAttribute)attribute).maxValue() - value < 1) {
-					ctx.getSource().sendFeedback((Text.translatable("playerex.command.attribute_max_error", Text.translatable(attribute.getTranslationKey()), serverPlayerEntity.getName())).formatted(Formatting.RED), false);
+					Supplier<Text> text = () -> Text.translatable("playerex.command.levelup_max", serverPlayerEntity.getName()).formatted(Formatting.RED);
+					ctx.getSource().sendFeedback(text, false);
 					return -1;
 				}
 				
 				playerData.add(ExAPI.LEVEL, 1);
 				playerData.addSkillPoints(ExAPI.getConfig().skillPointsPerLevelUp());
-				ctx.getSource().sendFeedback(Text.translatable("playerex.command.levelup_alt", serverPlayerEntity.getName()), false);
+				Supplier<Text> text = () -> Text.translatable("playerex.command.levelup", serverPlayerEntity.getName());
+				ctx.getSource().sendFeedback(text, false);
 				return 1;
 			});
 		}).build();
@@ -119,7 +126,8 @@ public final class CommandsImpl {
 				int max = Math.round((float)(((IEntityAttribute)attribute).maxValue() - value));
 				
 				if(max < 1) {
-					ctx.getSource().sendFeedback((Text.translatable("playerex.command.attribute_max_error", Text.translatable(attribute.getTranslationKey()), serverPlayerEntity.getName())).formatted(Formatting.RED), false);
+					Supplier<Text> text = () -> Text.translatable("playerex.command.attribute_max_error", Text.translatable(attribute.getTranslationKey()), serverPlayerEntity.getName()).formatted(Formatting.RED);
+					ctx.getSource().sendFeedback(text, false);
 					return -1;
 				}
 				
@@ -128,9 +136,11 @@ public final class CommandsImpl {
 				playerData.addSkillPoints(adding * ExAPI.getConfig().skillPointsPerLevelUp());
 				
 				if(adding == 1) {
-					ctx.getSource().sendFeedback(Text.translatable("playerex.command.levelup_alt", serverPlayerEntity.getName()), false);
+					Supplier<Text> text = () -> Text.translatable("playerex.command.levelup_alt", serverPlayerEntity.getName());
+					ctx.getSource().sendFeedback(text, false);
 				} else {
-					ctx.getSource().sendFeedback(Text.translatable("playerex.command.levelup", adding, serverPlayerEntity.getName()), false);
+					Supplier<Text> text = () -> Text.translatable("playerex.command.levelup", adding, serverPlayerEntity.getName());
+					ctx.getSource().sendFeedback(text, false);
 				}
 				
 				return adding % 16;
@@ -157,14 +167,17 @@ public final class CommandsImpl {
 				if(playerData.get(primary) < ((IEntityAttribute)attr).maxValue()) {
 					if(PacketType.SKILL.test(ctx.getSource().getServer(), serverPlayerEntity, playerData)) {
 						playerData.add(primary, 1);
-						ctx.getSource().sendFeedback(Text.translatable("playerex.command.skill_attribute", Text.translatable(attr.getTranslationKey()), serverPlayerEntity.getName()), false);
+						Supplier<Text> text = () -> Text.translatable("playerex.command.skill_attribute", Text.translatable(attr.getTranslationKey()), serverPlayerEntity.getName());
+						ctx.getSource().sendFeedback(text, false);
 						return 1;
 					} else {
-						ctx.getSource().sendFeedback((Text.translatable("playerex.command.skill_attribute_error", serverPlayerEntity.getName())).formatted(Formatting.RED), false);
+						Supplier<Text> text = () -> Text.translatable("playerex.command.skill_attribute_error", serverPlayerEntity.getName()).formatted(Formatting.RED);
+						ctx.getSource().sendFeedback(text, false);
 						return -1;
 					}
 				} else {
-					ctx.getSource().sendFeedback((Text.translatable("playerex.command.attribute_max_error", Text.translatable(attr.getTranslationKey()), serverPlayerEntity.getName())).formatted(Formatting.RED), false);
+					Supplier<Text> text = () -> Text.translatable("playerex.command.attribute_max_error", Text.translatable(attr.getTranslationKey()), serverPlayerEntity.getName()).formatted(Formatting.RED);
+					ctx.getSource().sendFeedback(text, false);
 					return -1;
 				}
 			});
@@ -183,18 +196,22 @@ public final class CommandsImpl {
 				if(playerData.get(primary) < ((IEntityAttribute)attr).maxValue()) {
 					if(!requires.equals("true")) {
 						playerData.add(primary, 1);
-						ctx.getSource().sendFeedback(Text.translatable("playerex.command.skill_attribute", Text.translatable(attr.getTranslationKey()), serverPlayerEntity.getName()), false);
+						Supplier<Text> text = () -> Text.translatable("playerex.command.skill_attribute", Text.translatable(attr.getTranslationKey()), serverPlayerEntity.getName());
+						ctx.getSource().sendFeedback(text, false);
 						return 1;
 					} else if(PacketType.SKILL.test(ctx.getSource().getServer(), serverPlayerEntity, playerData)) {
 						playerData.add(primary, 1);
-						ctx.getSource().sendFeedback(Text.translatable("playerex.command.skill_attribute", Text.translatable(attr.getTranslationKey()), serverPlayerEntity.getName()), false);
+						Supplier<Text> text = () -> Text.translatable("playerex.command.skill_attribute", Text.translatable(attr.getTranslationKey()), serverPlayerEntity.getName());
+						ctx.getSource().sendFeedback(text, false);
 						return 1;
 					} else {
-						ctx.getSource().sendFeedback((Text.translatable("playerex.command.skill_attribute_error", serverPlayerEntity.getName())).formatted(Formatting.RED), false);
+						Supplier<Text> text = () -> Text.translatable("playerex.command.skill_attribute_error", serverPlayerEntity.getName()).formatted(Formatting.RED);
+						ctx.getSource().sendFeedback(text, false);
 						return -1;
 					}
 				} else {
-					ctx.getSource().sendFeedback((Text.translatable("playerex.command.attribute_max_error", Text.translatable(attr.getTranslationKey()), serverPlayerEntity.getName())).formatted(Formatting.RED), false);
+					Supplier<Text> text = () -> Text.translatable("playerex.command.attribute_max_error", Text.translatable(attr.getTranslationKey()), serverPlayerEntity.getName()).formatted(Formatting.RED);
+					ctx.getSource().sendFeedback(text, false);
 					return -1;
 				}
 			});
@@ -220,14 +237,17 @@ public final class CommandsImpl {
 				if(playerData.get(primary) > 0) {
 					if(PacketType.REFUND.test(ctx.getSource().getServer(), serverPlayerEntity, playerData)) {
 						playerData.add(primary, -1);
-						ctx.getSource().sendFeedback(Text.translatable("playerex.command.refund_attribute", Text.translatable(attr.getTranslationKey()), serverPlayerEntity.getName()), false);
+						Supplier<Text> text = () -> Text.translatable("playerex.command.refund_attribute", Text.translatable(attr.getTranslationKey()), serverPlayerEntity.getName());
+						ctx.getSource().sendFeedback(text, false);
 						return 1;
 					} else {
-						ctx.getSource().sendFeedback((Text.translatable("playerex.command.refund_attribute_error", serverPlayerEntity.getName())).formatted(Formatting.RED), false);
+						Supplier<Text> text = () -> Text.translatable("playerex.command.refund_attribute_error", serverPlayerEntity.getName()).formatted(Formatting.RED);
+						ctx.getSource().sendFeedback(text, false);
 						return -1;
 					}
 				} else {
-					ctx.getSource().sendFeedback((Text.translatable("playerex.command.refund_attribute_unskilled", Text.translatable(attr.getTranslationKey()), serverPlayerEntity.getName())).formatted(Formatting.RED), false);
+					Supplier<Text> text = () -> Text.translatable("playerex.command.refund_attribute_unskilled", Text.translatable(attr.getTranslationKey()), serverPlayerEntity.getName()).formatted(Formatting.RED);
+					ctx.getSource().sendFeedback(text, false);
 					return -1;
 				}
 			});
@@ -246,18 +266,22 @@ public final class CommandsImpl {
 				if(playerData.get(primary) > 0) {
 					if(!requires.equals("true")) {
 						playerData.add(primary, -1);
-						ctx.getSource().sendFeedback(Text.translatable("playerex.command.refund_attribute", Text.translatable(attr.getTranslationKey()), serverPlayerEntity.getName()), false);
+						Supplier<Text> text = () -> Text.translatable("playerex.command.refund_attribute", Text.translatable(attr.getTranslationKey()), serverPlayerEntity.getName());
+						ctx.getSource().sendFeedback(text, false);
 						return 1;
 					} else if(PacketType.REFUND.test(ctx.getSource().getServer(), serverPlayerEntity, playerData)) {
 						playerData.add(primary, -1);
-						ctx.getSource().sendFeedback(Text.translatable("playerex.command.refund_attribute", Text.translatable(attr.getTranslationKey()), serverPlayerEntity.getName()), false);
+						Supplier<Text> text = () -> Text.translatable("playerex.command.refund_attribute", Text.translatable(attr.getTranslationKey()), serverPlayerEntity.getName());
+						ctx.getSource().sendFeedback(text, false);
 						return 1;
 					} else {
-						ctx.getSource().sendFeedback((Text.translatable("playerex.command.refund_attribute_error", serverPlayerEntity.getName())).formatted(Formatting.RED), false);
+						Supplier<Text> text = () -> Text.translatable("playerex.command.refund_attribute_error", serverPlayerEntity.getName()).formatted(Formatting.RED);
+						ctx.getSource().sendFeedback(text, false);
 						return -1;
 					}
 				} else {
-					ctx.getSource().sendFeedback((Text.translatable("playerex.command.refund_attribute_unskilled", Text.translatable(attr.getTranslationKey()), serverPlayerEntity.getName())).formatted(Formatting.RED), false);
+					Supplier<Text> text = () -> Text.translatable("playerex.command.refund_attribute_unskilled", Text.translatable(attr.getTranslationKey()), serverPlayerEntity.getName()).formatted(Formatting.RED);
+					ctx.getSource().sendFeedback(text, false);
 					return -1;
 				}
 			});

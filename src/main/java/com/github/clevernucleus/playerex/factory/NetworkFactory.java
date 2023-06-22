@@ -51,7 +51,8 @@ public final class NetworkFactory {
 		server.execute(() -> {
 			if(player != null) {
 				if(pageId < 0) {
-					player.closeScreenHandler();
+					player.onHandledScreenClosed();
+					//player.closeHandledScreen();
 				} else {
 					if(!ExAPI.getConfig().isAttributesGuiDisabled()) {
 						player.openHandledScreen(new ExScreenFactory(pageId));

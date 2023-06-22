@@ -10,6 +10,7 @@ import com.github.clevernucleus.dataattributes.api.DataAttributesAPI;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.minecraft.client.font.TextRenderer;
+import net.minecraft.client.gui.DrawContext;
 import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.attribute.EntityAttribute;
@@ -66,22 +67,22 @@ public final class RenderComponent {
 	/**
 	 * 
 	 * @param livingEntity
-	 * @param matrices
+	 * @param ctx
 	 * @param textRenderer
 	 * @param x
 	 * @param y
 	 * @param scaleX
 	 * @param scaleY
 	 */
-	public void renderText(LivingEntity livingEntity, MatrixStack matrices, TextRenderer textRenderer, int x, int y, float scaleX, float scaleY) {
-		textRenderer.draw(matrices, this.text.apply(livingEntity), (x + this.dx) / scaleX, (y + this.dy) / scaleY, 4210752);
+	public void renderText(LivingEntity livingEntity, DrawContext ctx, TextRenderer textRenderer, int x, int y, float scaleX, float scaleY) {
+		ctx.drawText(textRenderer, this.text.apply(livingEntity), (int)((x + this.dx) / scaleX), (int)((y + this.dy) / scaleY), 4210752, false);
 	}
 	
 	/**
 	 * 
 	 * @param livingEntity
 	 * @param consumer
-	 * @param matrices
+	 * @param ctx
 	 * @param textRenderer
 	 * @param x
 	 * @param y
@@ -90,9 +91,9 @@ public final class RenderComponent {
 	 * @param scaleX
 	 * @param scaleY
 	 */
-	public void renderTooltip(LivingEntity livingEntity, RenderTooltip consumer, MatrixStack matrices, TextRenderer textRenderer, int x, int y, int mouseX, int mouseY, float scaleX, float scaleY) {
+	public void renderTooltip(LivingEntity livingEntity, RenderTooltip consumer, DrawContext ctx, TextRenderer textRenderer, int x, int y, int mouseX, int mouseY, float scaleX, float scaleY) {
 		if(this.isMouseOver(x + this.dx, y + this.dy, textRenderer.getWidth(this.text.apply(livingEntity)) * scaleX, 7, mouseX, mouseY)) {
-			consumer.renderTooltip(matrices, this.tooltip.apply(livingEntity), mouseX, mouseY);
+			consumer.renderTooltip(ctx, this.tooltip.apply(livingEntity), mouseX, mouseY);
 		}
 	}
 	
@@ -101,11 +102,11 @@ public final class RenderComponent {
 		
 		/**
 		 * 
-		 * @param matrices
+		 * @param ctx
 		 * @param tooltip
 		 * @param mouseX
 		 * @param mouseY
 		 */
-		void renderTooltip(MatrixStack matrices, List<Text> tooltip, int mouseX, int mouseY);
+		void renderTooltip(DrawContext ctx, List<Text> tooltip, int mouseX, int mouseY);
 	}
 }

@@ -2,6 +2,7 @@ package com.github.clevernucleus.playerex.api.client;
 
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
+import net.minecraft.client.gui.DrawContext;
 import net.minecraft.client.gui.screen.ingame.HandledScreen;
 import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.entity.player.PlayerInventory;
@@ -37,13 +38,13 @@ public abstract class PageLayer extends HandledScreen<ScreenHandler> {
 	 * This is where text and tooltips can be rendered, in that order.
 	 */
 	@Override
-	public void render(MatrixStack matrices, int mouseX, int mouseY, float delta) {}
+	public void render(DrawContext ctx, int mouseX, int mouseY, float delta) {}
 	
 	/**
 	 * This is where textures and widgets can be rendered, in that order.
 	 */
 	@Override
-	public void drawBackground(MatrixStack matrices, float delta, int mouseX, int mouseY) {}
+	public void drawBackground(DrawContext ctx, float delta, int mouseX, int mouseY) {}
 	
 	@FunctionalInterface
 	public interface Builder {

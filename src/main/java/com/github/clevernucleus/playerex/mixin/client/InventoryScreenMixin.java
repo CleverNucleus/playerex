@@ -2,6 +2,7 @@ package com.github.clevernucleus.playerex.mixin.client;
 
 import java.util.function.Consumer;
 
+import net.minecraft.client.gui.DrawContext;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
@@ -27,7 +28,7 @@ abstract class InventoryScreenMixin extends AbstractInventoryScreen<PlayerScreen
 	}
 	
 	@Inject(method = "render", at = @At("TAIL"))
-	private void playerex_render(MatrixStack matrices, int mouseX, int mouseY, float delta, CallbackInfo info) {
-		this.playerex_forEachTab(tab -> tab.renderTooltip(matrices, mouseX, mouseY));
+	private void playerex_render(DrawContext ctx, int mouseX, int mouseY, float delta, CallbackInfo info) {
+		this.playerex_forEachTab(tab -> tab.render(ctx, mouseX, mouseY, delta));
 	}
 }

@@ -7,6 +7,7 @@ import com.mojang.blaze3d.systems.RenderSystem;
 
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
+import net.minecraft.client.gui.DrawContext;
 import net.minecraft.client.gui.screen.ingame.HandledScreen;
 import net.minecraft.client.gui.widget.ButtonWidget;
 import net.minecraft.client.util.math.MatrixStack;
@@ -22,7 +23,7 @@ public class TabButtonWidget extends ButtonWidget {
 	private final float scale = 1.0F / 16.0F;
 	
 	public TabButtonWidget(HandledScreen<?> parent, Page page, int index, int x, int y, boolean startingState, PressAction onPress) {
-		super(x, y, 28, 32, Text.empty(), onPress);
+		super(x, y, 28, 32, Text.empty(), onPress, DEFAULT_NARRATION_SUPPLIER);
 		
 		this.parent = parent;
 		this.page = page;
@@ -41,17 +42,10 @@ public class TabButtonWidget extends ButtonWidget {
 	}
 	
 	@Override
-	public void renderTooltip(MatrixStack matrices, int mouseX, int mouseY) {
-		if(this.isHovered()) {
-			this.parent.renderTooltip(matrices, this.page.title(), mouseX, mouseY);
-		}
-	}
-	
-	@Override
-	public void renderButton(MatrixStack matrices, int mouseX, int mouseY, float delta) {
+	public void renderButton(DrawContext ctx, int mouseX, int mouseY, float delta) {
 		ExScreenData handledScreen = (ExScreenData)this.parent;
-		this.x = handledScreen.getX() + this.dx;
-		this.y = handledScreen.getY() + this.dy;
+		setX(handledScreen.getX() + this.dx);
+		setY(handledScreen.getY() + this.dy);
 		
 		RenderSystem.setShaderTexture(0, TABS);
 		RenderSystem.disableDepthTest();
@@ -63,16 +57,11 @@ public class TabButtonWidget extends ButtonWidget {
 		if(!this.active) {
 			v += this.height;
 		}
-		
-		this.drawTexture(matrices, this.x, this.y, u, v, this.width, this.height);
+
+		ctx.drawTexture(TABS, getX(), getY(), u, v, this.width, this.height);
 		
 		RenderSystem.setShaderTexture(0, this.page.icon());
-		matrices.push();
-		matrices.scale(this.scale, this.scale, 0.75F);
-		
-		this.drawTexture(matrices, (int)((this.x + 6) / this.scale), (int)((this.y + w) / this.scale), 0, 0, 256, 256);
-		
-		matrices.pop();
+		ctx.drawTexture(this.page.icon(), (int)((getX() + 6) / this.scale), (int)((getY() + w) / this.scale), 0, 0, 256, 256);
 		RenderSystem.enableDepthTest();
 	}
 }

@@ -13,6 +13,7 @@ import com.mojang.blaze3d.systems.RenderSystem;
 
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
+import net.minecraft.client.gui.DrawContext;
 import net.minecraft.client.gui.screen.ingame.AbstractInventoryScreen;
 import net.minecraft.client.gui.widget.ButtonWidget;
 import net.minecraft.client.util.math.MatrixStack;
@@ -64,30 +65,30 @@ public class ExScreen extends AbstractInventoryScreen<ExScreenFactory.Handler> {
 	}
 	
 	@Override
-	public void render(MatrixStack matrices, int mouseX, int mouseY, float delta) {
-		this.renderBackground(matrices);
-		super.render(matrices, mouseX, mouseY, delta);
-		this.currentPage().forEachLayer(layer -> layer.render(matrices, mouseX, mouseY, delta));
-		this.forEachButton(button -> button.renderTooltip(matrices, mouseX, mouseY));
+	public void render(DrawContext ctx, int mouseX, int mouseY, float delta) {
+		this.renderBackground(ctx);
+		super.render(ctx, mouseX, mouseY, delta);
+		this.currentPage().forEachLayer(layer -> layer.render(ctx, mouseX, mouseY, delta));
+		//this.forEachButton(button -> button.renderTooltip(ctx, mouseX, mouseY));
 	}
 	
 	@Override
-	protected void drawBackground(MatrixStack matrices, float delta, int mouseX, int mouseY) {
+	protected void drawBackground(DrawContext ctx, float delta, int mouseX, int mouseY) {
 		int u = this.x;
 		int v = (this.height - this.backgroundHeight) / 2;
 		
 		RenderSystem.setShaderTexture(0, this.currentPage().texture());
-		this.drawTexture(matrices, u + 6, v + 6, 0, 0, this.backgroundWidth - 12, this.backgroundWidth - 12);
+		ctx.drawTexture(this.currentPage().texture(), this.x + 6, v + 6, 0, 0, this.backgroundWidth - 12, this.backgroundWidth - 12);
 		
 		RenderSystem.setShaderTexture(0, PlayerExClient.GUI);
-		this.drawTexture(matrices, u, v, 0, 0, this.backgroundWidth, this.backgroundWidth);
-		this.currentPage().forEachLayer(layer -> layer.drawBackground(matrices, delta, mouseX, mouseY));
-		this.forEachButton(button -> button.render(matrices, mouseX, mouseY, delta));
+		ctx.drawTexture(PlayerExClient.GUI, u, v, 0, 0, this.backgroundWidth, this.backgroundWidth);
+		this.currentPage().forEachLayer(layer -> layer.drawBackground(ctx, delta, mouseX, mouseY));
+		this.forEachButton(button -> button.render(ctx, mouseX, mouseY, delta));
 	}
 	
 	@Override
-	protected void drawForeground(MatrixStack matrices, int mouseX, int mouseY) {
-		this.textRenderer.draw(matrices, this.currentPage().title().copy().formatted(Formatting.DARK_GRAY), (float)this.titleX, (float)(this.titleY + 2), 4210752);
+	protected void drawForeground(DrawContext ctx, int mouseX, int mouseY) {
+		ctx.drawText(this.textRenderer,this.currentPage().title().copy().formatted(Formatting.DARK_GRAY), this.titleX, (this.titleY + 2), 4210752, false);
 	}
 	
 	@Override

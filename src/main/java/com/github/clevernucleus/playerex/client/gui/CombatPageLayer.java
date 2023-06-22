@@ -14,6 +14,7 @@ import com.mojang.blaze3d.systems.RenderSystem;
 
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
+import net.minecraft.client.gui.DrawContext;
 import net.minecraft.client.gui.screen.ingame.HandledScreen;
 import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.entity.attribute.EntityAttributes;
@@ -35,38 +36,35 @@ public class CombatPageLayer extends PageLayer {
 	}
 	
 	@Override
-	public void render(MatrixStack matrices, int mouseX, int mouseY, float delta) {
-		matrices.push();
-		matrices.scale(scaleX.get(), scaleY.get(), scaleZ);
+	public void render(DrawContext ctx, int mouseX, int mouseY, float delta) {
+		//matrices.scale(scaleX.get(), scaleY.get(), scaleZ);
 		
-		COMPONENTS.forEach(component -> component.renderText(this.client.player, matrices, this.textRenderer, this.x, this.y, scaleX.get(), scaleY.get()));
+		COMPONENTS.forEach(component -> component.renderText(this.client.player, ctx, this.textRenderer, this.x, this.y, scaleX.get(), scaleY.get()));
+
+		ctx.drawText(this.textRenderer, Text.translatable("playerex.gui.page.combat.text.melee").formatted(Formatting.DARK_GRAY), (int)((this.x + 21) / scaleX.get()), (int)((this.y + 26) / scaleY.get()), 4210752, false);
+		ctx.drawText(this.textRenderer, Text.translatable("playerex.gui.page.combat.text.defense").formatted(Formatting.DARK_GRAY), (int)((this.x + 21) / scaleX.get()), (int)((this.y + 92) / scaleY.get()), 4210752, false);
+		ctx.drawText(this.textRenderer, Text.translatable("playerex.gui.page.combat.text.ranged").formatted(Formatting.DARK_GRAY), (int)((this.x + 105) / scaleX.get()), (int)((this.y + 26) / scaleY.get()), 4210752, false);
+		ctx.drawText(this.textRenderer, Text.translatable("playerex.gui.page.combat.text.melee").formatted(Formatting.DARK_GRAY), (int)((this.x + 21) / scaleX.get()), (int)((this.y + 26) / scaleY.get()), 4210752, false);
+		ctx.drawText(this.textRenderer, Text.translatable("playerex.gui.page.combat.text.defense").formatted(Formatting.DARK_GRAY), (int)((this.x + 21) / scaleX.get()), (int)((this.y + 92) / scaleY.get()), 4210752, false);
+		ctx.drawText(this.textRenderer, Text.translatable("playerex.gui.page.combat.text.ranged").formatted(Formatting.DARK_GRAY), (int)((this.x + 105) / scaleX.get()), (int)((this.y + 26) / scaleY.get()), 4210752, false);
 		
-		this.textRenderer.draw(matrices, Text.translatable("playerex.gui.page.combat.text.melee").formatted(Formatting.DARK_GRAY), (this.x + 21) / scaleX.get(), (this.y + 26) / scaleY.get(), 4210752);
-		this.textRenderer.draw(matrices, Text.translatable("playerex.gui.page.combat.text.defense").formatted(Formatting.DARK_GRAY), (this.x + 21) / scaleX.get(), (this.y + 92) / scaleY.get(), 4210752);
-		this.textRenderer.draw(matrices, Text.translatable("playerex.gui.page.combat.text.ranged").formatted(Formatting.DARK_GRAY), (this.x + 105) / scaleX.get(), (this.y + 26) / scaleY.get(), 4210752);
-		this.textRenderer.draw(matrices, (Text.translatable("playerex.gui.page.combat.text.melee")).formatted(Formatting.DARK_GRAY), (this.x + 21) / scaleX.get(), (this.y + 26) / scaleY.get(), 4210752);
-		this.textRenderer.draw(matrices, (Text.translatable("playerex.gui.page.combat.text.defense")).formatted(Formatting.DARK_GRAY), (this.x + 21) / scaleX.get(), (this.y + 92) / scaleY.get(), 4210752);
-		this.textRenderer.draw(matrices, (Text.translatable("playerex.gui.page.combat.text.ranged")).formatted(Formatting.DARK_GRAY), (this.x + 105) / scaleX.get(), (this.y + 26) / scaleY.get(), 4210752);
-		
-		matrices.pop();
-		
-		COMPONENTS.forEach(component -> component.renderTooltip(this.client.player, this::renderTooltip, matrices, this.textRenderer, this.x, this.y, mouseX, mouseY, scaleX.get(), scaleY.get()));
+		//COMPONENTS.forEach(component -> component.renderTooltip(this.client.player, this::renderTooltip, matrices, this.textRenderer, this.x, this.y, mouseX, mouseY, scaleX.get(), scaleY.get()));
 	}
 	
 	@Override
-	public void drawBackground(MatrixStack matrices, float delta, int mouseX, int mouseY) {
+	public void drawBackground(DrawContext ctx, float delta, int mouseX, int mouseY) {
 		RenderSystem.setShaderTexture(0, PlayerExClient.GUI);
-		this.drawTexture(matrices, this.x + 9, this.y + 24, 244, 9, 9, 9);
-		this.drawTexture(matrices, this.x + 9, this.y + 90, 226, 18, 9, 9);
-		this.drawTexture(matrices, this.x + 93, this.y + 24, 235, 18, 9, 9);
-		
+		ctx.drawTexture(PlayerExClient.GUI, this.x + 9, this.y + 24, 244, 9, 9, 9);
+		ctx.drawTexture(PlayerExClient.GUI, this.x + 9, this.y + 90, 226, 18, 9, 9);
+		ctx.drawTexture(PlayerExClient.GUI, this.x + 93, this.y + 24, 235, 18, 9, 9);
+
 		DataAttributesAPI.ifPresent(this.client.player, ExAPI.ATTACK_RANGE, (Object)null, value -> {
-			this.drawTexture(matrices, this.x + 93, this.y + 79, 226, 27, 9, 9);
+			ctx.drawTexture(PlayerExClient.GUI, this.x + 93, this.y + 79, 226, 27, 9, 9);
 			return (Object)null;
 		});
 		
 		DataAttributesAPI.ifPresent(this.client.player, ExAPI.LIFESTEAL, (Object)null, value -> {
-			this.drawTexture(matrices, this.x + 93, this.y + 90, 244, 18, 9, 9);
+			ctx.drawTexture(PlayerExClient.GUI, this.x + 93, this.y + 90, 244, 18, 9, 9);
 			return (Object)null;
 		});
 	}

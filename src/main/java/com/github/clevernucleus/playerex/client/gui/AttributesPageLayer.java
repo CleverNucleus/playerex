@@ -22,6 +22,7 @@ import com.mojang.blaze3d.systems.RenderSystem;
 
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
+import net.minecraft.client.gui.DrawContext;
 import net.minecraft.client.gui.screen.ingame.HandledScreen;
 import net.minecraft.client.gui.widget.ButtonWidget;
 import net.minecraft.client.util.math.MatrixStack;
@@ -30,6 +31,7 @@ import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.screen.ScreenHandler;
 import net.minecraft.sound.SoundCategory;
+import net.minecraft.text.MutableText;
 import net.minecraft.text.Text;
 import net.minecraft.util.Formatting;
 import net.minecraft.util.Identifier;
@@ -79,7 +81,7 @@ public class AttributesPageLayer extends PageLayer {
 			String progress = "(" + currentXp + "/" + requiredXp + ")";
 			Text tooltip = (Text.translatable("playerex.gui.page.attributes.tooltip.button.level", progress)).formatted(Formatting.GRAY);
 			
-			this.renderTooltip(matrices, tooltip, mouseX, mouseY);
+			//this.renderTooltip(matrices, tooltip, mouseX, mouseY);
 		} else {
 			Supplier<EntityAttribute> attribute = DataAttributesAPI.getAttribute(key);
 			DataAttributesAPI.ifPresent(this.client.player, attribute, (Object)null, value -> {
@@ -87,42 +89,38 @@ public class AttributesPageLayer extends PageLayer {
 				String type = "playerex.gui.page.attributes.tooltip.button." + (this.canRefund() ? "refund" : "skill");
 				Text tooltip = (Text.translatable(type)).append(text).formatted(Formatting.GRAY);
 				
-				this.renderTooltip(matrices, tooltip, mouseX, mouseY);
+				//this.renderTooltip(matrices, tooltip, mouseX, mouseY);
 				return (Object)null;
 			});
 		}
 	}
 	
 	@Override
-	public void render(MatrixStack matrices, int mouseX, int mouseY, float delta) {
-		matrices.push();
-		matrices.scale(scaleX.get(), scaleY.get(), scaleZ);
+	public void render(DrawContext ctx, int mouseX, int mouseY, float delta) {
+
+		COMPONENTS.forEach(component -> component.renderText(this.client.player, ctx, this.textRenderer, this.x, this.y, scaleX.get(), scaleY.get()));
+
+		ctx.drawText(textRenderer, Text.translatable("playerex.gui.page.attributes.text.level").formatted(Formatting.DARK_GRAY), (int)((this.x + 105) / scaleX.get()), (int)((this.y + 26) / scaleY.get()), 4210752, false);
+		ctx.drawText(textRenderer, Text.translatable("playerex.gui.page.attributes.text.resistances").formatted(Formatting.DARK_GRAY), (int)((this.x + 105) / scaleX.get()), (int)((this.y + 81) / scaleY.get()), 4210752, false);
 		
-		COMPONENTS.forEach(component -> component.renderText(this.client.player, matrices, this.textRenderer, this.x, this.y, scaleX.get(), scaleY.get()));
-		
-		this.textRenderer.draw(matrices, Text.translatable("playerex.gui.page.attributes.text.vitality").formatted(Formatting.DARK_GRAY), (this.x + 105) / scaleX.get(), (this.y + 26) / scaleY.get(), 4210752);
-		this.textRenderer.draw(matrices, Text.translatable("playerex.gui.page.attributes.text.resistances").formatted(Formatting.DARK_GRAY), (this.x + 105) / scaleX.get(), (this.y + 81) / scaleY.get(), 4210752);
-		
-		matrices.pop();
-		
-		COMPONENTS.forEach(component -> component.renderTooltip(this.client.player, this::renderTooltip, matrices, this.textRenderer, this.x, this.y, mouseX, mouseY, scaleX.get(), scaleY.get()));
+		//COMPONENTS.forEach(component -> component.renderTooltip(this.client.player, this::renderTooltip, matrices, this.textRenderer, this.x, this.y, mouseX, mouseY, scaleX.get(), scaleY.get()));
 	}
 	
 	@Override
-	public void drawBackground(MatrixStack matrices, float delta, int mouseX, int mouseY) {
+	public void drawBackground(DrawContext ctx, float delta, int mouseX, int mouseY) {
 		RenderSystem.setShaderTexture(0, PlayerExClient.GUI);
-		this.drawTexture(matrices, this.x + 9, this.y + 35, 226, 0, 9, 9);
-		this.drawTexture(matrices, this.x + 9, this.y + 123, 235, 0, 9, 9);
-		this.drawTexture(matrices, this.x + 93, this.y + 24, 226, 9, 9, 9);
-		this.drawTexture(matrices, this.x + 93, this.y + 79, 235, 9, 9, 9);
+		ctx.drawTexture(PlayerExClient.GUI, this.x + 9, this.y + 35, 226, 0, 9, 9);
+		ctx.drawTexture(PlayerExClient.GUI, this.x + 9, this.y + 123, 235, 0, 9, 9);
+		ctx.drawTexture(PlayerExClient.GUI, this.x + 93, this.y + 24, 226, 9, 9, 9);
+		ctx.drawTexture(PlayerExClient.GUI, this.x + 93, this.y + 79, 235, 9, 9, 9);
 		
 		DataAttributesAPI.ifPresent(this.client.player, ExAPI.BREAKING_SPEED, (Object)null, value -> {
-			this.drawTexture(matrices, this.x + 9, this.y + 134, 235, 36, 9, 9);
+			ctx.drawTexture(PlayerExClient.GUI, this.x + 9, this.y + 134, 235, 36, 9, 9);
 			return (Object)null;
 		});
 		
 		DataAttributesAPI.ifPresent(this.client.player, ExAPI.REACH_DISTANCE, (Object)null, value -> {
-			this.drawTexture(matrices, this.x + 9, this.y + 145, 244, 0, 9, 9);
+			ctx.drawTexture(PlayerExClient.GUI, this.x + 9, this.y + 145, 244, 0, 9, 9);
 			return (Object)null;
 		});
 		
@@ -160,12 +158,12 @@ public class AttributesPageLayer extends PageLayer {
 	protected void init() {
 		super.init();
 		this.playerData = ExAPI.PLAYER_DATA.get(this.client.player);
-		this.addDrawableChild(new ScreenButtonWidget(this.parent, 8, 23, 204, 0, 11, 10, BUTTON_KEYS.get(0), btn -> ClientUtil.modifyAttributes(PacketType.LEVEL, c -> c.accept(ExAPI.LEVEL, 1.0D)), this::buttonTooltip));
-		this.addDrawableChild(new ScreenButtonWidget(this.parent, 8, 56, 204, 0, 11, 10, BUTTON_KEYS.get(1), this::buttonPressed, this::buttonTooltip));
-		this.addDrawableChild(new ScreenButtonWidget(this.parent, 8, 67, 204, 0, 11, 10, BUTTON_KEYS.get(2), this::buttonPressed, this::buttonTooltip));
-		this.addDrawableChild(new ScreenButtonWidget(this.parent, 8, 78, 204, 0, 11, 10, BUTTON_KEYS.get(3), this::buttonPressed, this::buttonTooltip));
-		this.addDrawableChild(new ScreenButtonWidget(this.parent, 8, 89, 204, 0, 11, 10, BUTTON_KEYS.get(4), this::buttonPressed, this::buttonTooltip));
-		this.addDrawableChild(new ScreenButtonWidget(this.parent, 8, 100, 204, 0, 11, 10, BUTTON_KEYS.get(5), this::buttonPressed, this::buttonTooltip));
+		this.addDrawableChild(new ScreenButtonWidget(this.parent, 8, 23, 204, 0, 11, 10, BUTTON_KEYS.get(0), btn -> ClientUtil.modifyAttributes(PacketType.LEVEL, c -> c.accept(ExAPI.LEVEL, 1.0D)), textSupplier -> (MutableText)textSupplier.get()));
+		this.addDrawableChild(new ScreenButtonWidget(this.parent, 8, 56, 204, 0, 11, 10, BUTTON_KEYS.get(1), this::buttonPressed, textSupplier -> (MutableText)textSupplier.get()));
+		this.addDrawableChild(new ScreenButtonWidget(this.parent, 8, 67, 204, 0, 11, 10, BUTTON_KEYS.get(2), this::buttonPressed, textSupplier -> (MutableText)textSupplier.get()));
+		this.addDrawableChild(new ScreenButtonWidget(this.parent, 8, 78, 204, 0, 11, 10, BUTTON_KEYS.get(3), this::buttonPressed, textSupplier -> (MutableText)textSupplier.get()));
+		this.addDrawableChild(new ScreenButtonWidget(this.parent, 8, 89, 204, 0, 11, 10, BUTTON_KEYS.get(4), this::buttonPressed, textSupplier -> (MutableText)textSupplier.get()));
+		this.addDrawableChild(new ScreenButtonWidget(this.parent, 8, 100, 204, 0, 11, 10, BUTTON_KEYS.get(5), this::buttonPressed, textSupplier -> (MutableText)textSupplier.get()));
 	}
 	
 	static {

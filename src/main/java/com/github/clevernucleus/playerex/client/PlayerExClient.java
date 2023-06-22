@@ -1,5 +1,7 @@
 package com.github.clevernucleus.playerex.client;
 
+import net.minecraft.registry.Registries;
+import net.minecraft.registry.Registry;
 import org.lwjgl.glfw.GLFW;
 
 import com.github.clevernucleus.playerex.PlayerEx;

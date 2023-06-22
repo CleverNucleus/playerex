@@ -23,10 +23,11 @@ import net.minecraft.nbt.NbtCompound;
 import net.minecraft.nbt.NbtList;
 import net.minecraft.nbt.NbtString;
 import net.minecraft.network.PacketByteBuf;
+import net.minecraft.registry.Registries;
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.math.MathHelper;
-import net.minecraft.util.registry.Registry;
+import net.minecraft.registry.Registry;
 
 public final class PlayerDataManager implements PlayerData, AutoSyncedComponent {
 	private static final String KEY_SET = "Set", KEY_REMOVE = "Remove", KEY_RESET = "Reset", KEY_MODIFIERS = "Modifiers", KEY_REFUND_POINTS = "RefundPoints", KEY_SKILL_POINTS = "SkillPoints";
@@ -42,7 +43,7 @@ public final class PlayerDataManager implements PlayerData, AutoSyncedComponent 
 	}
 	
 	private void sync(ComponentPacketWriter packet) {
-		if(this.player.world.isClient) return;
+		if(this.player.getWorld().isClient) return;
 		ExAPI.PLAYER_DATA.sync(this.player, packet);
 	}
 	
@@ -58,7 +59,7 @@ public final class PlayerDataManager implements PlayerData, AutoSyncedComponent 
 	}
 	
 	private boolean isValid(final Identifier registryKey, final Consumer<EntityAttributeInstance> ifPresent, final Consumer<EntityAttributeInstance> otherwise) {
-		EntityAttribute attribute = Registry.ATTRIBUTE.get(registryKey);
+		EntityAttribute attribute = Registries.ATTRIBUTE.get(registryKey);
 		
 		if(attribute == null) return false;
 		AttributeContainer container = this.player.getAttributes();
