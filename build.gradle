@@ -1,9 +1,6 @@
-import com.modrinth.minotaur.dependencies.VersionDependency
-
 plugins {
-	id 'fabric-loom' version '0.12-SNAPSHOT'
+	id 'fabric-loom' version '1.1-SNAPSHOT'
 	id 'maven-publish'
-    id "com.modrinth.minotaur" version "2.+"
 }
 
 sourceCompatibility = JavaVersion.VERSION_17
@@ -67,6 +64,7 @@ dependencies {
 		exclude(group: "net.fabricmc.fabric-api")
 	}
 	
+	modImplementation include("maven.modrinth:projectile-damage-attribute:${project.projectile_damage_version}")
 	modImplementation include("eu.pb4:placeholder-api:${project.placeholder_api}")
 	
 	implementation 'net.objecthunter:exp4j:0.4.8'
@@ -84,6 +82,23 @@ processResources {
 tasks.withType(JavaCompile).configureEach {
 	it.options.release = 17
 }
+
+javadoc {
+	options.addStringOption("Xdoclint:none", "-quiet")
+	classpath = files(sourceSets.main.compileClasspath)
+	include("**/api/**")
+}
+
+task javadocJar(type: Jar) {
+	dependsOn javadoc
+	dependsOn processResources
+	from javadoc.destinationDir
+	from file("build/resources/main/fabric.mod.json")
+	archiveClassifier = "javadoc"
+}
+
+// Modrinth has issues accepting javadocs right now
+// build.dependsOn javadocJar
 
 java {
 	withSourcesJar()
@@ -105,23 +120,4 @@ publishing {
 	repositories {
 		
 	}
-}
-
-modrinth {
-    BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
-    System.out.println("Enter a Modrinth token: ");
-    token = br.readLine();
-    projectId = "o5GUN4b1"
-    versionNumber = "${project.mod_version}"
-    versionName = "${project.mod_version}"
-    uploadFile = remapJar
-    gameVersions = ["${project.minecraft_version}"]
-    loaders = ["fabric"]
-    dependencies = [
-        new VersionDependency("8rIblgME", "required"),
-		new VersionDependency("EXrxCjl6", "required"),
-        new VersionDependency("kTrUjvP9", "required"),
-		new VersionDependency("tPfCTMiZ", "embedded"),
-		new VersionDependency("jtBdOsFq", "embedded")
-    ]
 }
