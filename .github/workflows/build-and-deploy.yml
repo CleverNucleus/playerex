@@ -63,8 +63,6 @@ jobs:
             cloth-config@8.2.88(required){modrinth:9s6osm5g}{curseforge:348521}#(ignore:github)
             projectile-damage-attribute@3.2.1+1.19-fabric(embedded){modrinth:AOyJhFvl}{curseforge:643780}#(ignore:github)
             cardinal-components@5.0.2(embedded){modrinth:K01OU20C}{curseforge:318449}#(ignore:github)
-          curseforge-files: |
-            build/libs/*-@(sources\|javadoc).jar
 
           modrinth-id: o5GUN4b1
           modrinth-token: "${{ secrets.MODRINTH_TOKEN }}"
@@ -80,7 +78,7 @@ jobs:
           github-tag: "${{ steps.mod_version.outputs.mod_version }}"
           github-token: ${{ secrets.REPOSITORY_TOKEN }}
           github-commitish: ${{ steps.minecraft_version.outputs.minecraft_version }}/main
-          github-files: |
+          files: |
             build/libs/*-@(sources\|javadoc).jar
 
           version: "${{ steps.mod_version.outputs.mod_version }}"
