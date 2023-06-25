@@ -78,8 +78,6 @@ jobs:
           github-tag: "${{ steps.mod_version.outputs.mod_version }}"
           github-token: ${{ secrets.REPOSITORY_TOKEN }}
           github-commitish: ${{ steps.minecraft_version.outputs.minecraft_version }}/main
-          files: |
-            build/libs/*-@(sources\|javadoc).jar
 
           version: "${{ steps.mod_version.outputs.mod_version }}"
           version-type: release
