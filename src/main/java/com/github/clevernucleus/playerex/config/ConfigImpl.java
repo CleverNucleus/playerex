@@ -14,8 +14,9 @@ public class ConfigImpl implements ConfigData, ExConfig {
 	public static enum Tooltip { DEFAULT, VANILLA, PLAYEREX; }
 	
 	@ConfigEntry.Category(value = "server")
+	@ConfigEntry.BoundedDiscrete(min = 0, max = 100)
 	@ConfigEntry.Gui.Tooltip(count = 2)
-	protected boolean resetOnDeath = false;
+	protected int resetOnDeath = 100;
 	
 	@ConfigEntry.Category(value = "server")
 	@ConfigEntry.Gui.Tooltip(count = 2)
@@ -58,14 +59,18 @@ public class ConfigImpl implements ConfigData, ExConfig {
 	private int skillUpVolume = 100;
 	
 	@ConfigEntry.Category(value = "client")
+	@ConfigEntry.Gui.Tooltip
+	private boolean disableInventoryTabs = false;
+
+	@ConfigEntry.Category(value = "client")
 	@ConfigEntry.BoundedDiscrete(min = 0, max = 50)
 	@ConfigEntry.Gui.Tooltip
-	private int textScaleX = 50;
+	private int textScaleX = 40;
 	
 	@ConfigEntry.Category(value = "client")
 	@ConfigEntry.BoundedDiscrete(min = 0, max = 50)
 	@ConfigEntry.Gui.Tooltip
-	private int textScaleY = 50;
+	private int textScaleY = 40;
 	
 	@ConfigEntry.Category(value = "client")
 	@ConfigEntry.Gui.Tooltip
@@ -94,7 +99,7 @@ public class ConfigImpl implements ConfigData, ExConfig {
 	}
 	
 	@Override
-	public boolean resetOnDeath() {
+	public int resetOnDeath() {
 		return ConfigServer.INSTANCE.resetOnDeath;
 	}
 	
@@ -136,6 +141,11 @@ public class ConfigImpl implements ConfigData, ExConfig {
 	@Override
 	public float skillUpVolume() {
 		return this.skillUpVolume * 0.01F;
+	}
+
+	@Override
+	public boolean disableInventoryTabs() {
+		return this.disableInventoryTabs;
 	}
 	
 	@Override

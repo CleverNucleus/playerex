@@ -10,22 +10,28 @@ import com.github.clevernucleus.dataattributes.api.DataAttributesAPI;
 import com.github.clevernucleus.playerex.api.ExAPI;
 
 import net.minecraft.entity.Entity;
+import net.minecraft.entity.EntityType;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.projectile.PersistentProjectileEntity;
+import net.minecraft.entity.projectile.ProjectileEntity;
 import net.minecraft.util.hit.EntityHitResult;
+import net.minecraft.world.World;
 
 @Mixin(PersistentProjectileEntity.class)
-abstract class PersistentProjectileEntityMixin {
-	
-	@Inject(method = "onEntityHit", at = @At(value = "INVOKE", target = "Lnet/minecraft/entity/projectile/PersistentProjectileEntity;isCritical()Z"))
+abstract class PersistentProjectileEntityMixin extends ProjectileEntity {
+	private PersistentProjectileEntityMixin(EntityType<? extends ProjectileEntity> entityType, World world) {
+		super(entityType, world);
+	}
+
+	@Inject(method = "onEntityHit", at = @At(value = "INVOKE", target = "Lnet/minecraft/util/math/Vec3d;length()D"))
 	private void playerex_onEntityHit(EntityHitResult entityHitResult, CallbackInfo info) {
 		PersistentProjectileEntity persistentProjectileEntity = (PersistentProjectileEntity)(Object)this;
 		Entity owner = persistentProjectileEntity.getOwner();
 		
 		if(owner instanceof LivingEntity) {
-			DataAttributesAPI.ifPresent((LivingEntity)owner, ExAPI.RANGED_CRIT_CHANCE, (Object)null, value -> {
+			DataAttributesAPI.ifPresent((LivingEntity)owner, ExAPI.RANGED_CRIT_CHANCE, 0, value -> {
 				persistentProjectileEntity.setCritical(false);
-				return (Object)null;
+				return 0;
 			});
 		}
 	}
@@ -38,8 +44,6 @@ abstract class PersistentProjectileEntityMixin {
 		
 		if(owner instanceof LivingEntity) {
 			LivingEntity livingEntity = (LivingEntity)owner;
-			damage = DataAttributesAPI.ifPresent(livingEntity, ExAPI.RANGED_DAMAGE, i, value -> (float)(value + i));
-			
 			final float amount = damage;
 			
 			if(DataAttributesAPI.ifPresent(livingEntity, ExAPI.RANGED_CRIT_CHANCE, persistentProjectileEntity.isCritical(), value -> {
@@ -47,10 +51,12 @@ abstract class PersistentProjectileEntityMixin {
 				persistentProjectileEntity.setCritical(cache);
 				return cache;
 			})) {
-				damage = DataAttributesAPI.ifPresent(livingEntity, ExAPI.RANGED_CRIT_DAMAGE, amount, value -> (float)(amount * (1.0 + (10.0 * value))));
+				final long l = this.random.nextInt(Math.round(i) / 2 + 2);
+				final float fallback = Math.min(l + (long)i, Integer.MAX_VALUE);
+				damage = DataAttributesAPI.ifPresent(livingEntity, ExAPI.RANGED_CRIT_DAMAGE, fallback, value -> (float)(amount * (1.0 + (10.0 * value))));
 			}
 		}
-		
+		System.out.println("DAMAGE: " + damage);
 		return damage;
 	}
 }

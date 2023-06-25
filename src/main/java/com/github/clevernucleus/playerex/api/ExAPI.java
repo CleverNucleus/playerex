@@ -54,7 +54,6 @@ public final class ExAPI {
 	public static final EntityAttributeSupplier MELEE_CRIT_CHANCE = define("melee_crit_chance");
 	public static final EntityAttributeSupplier RANGED_CRIT_DAMAGE = define("ranged_crit_damage");
 	public static final EntityAttributeSupplier RANGED_CRIT_CHANCE = define("ranged_crit_chance");
-	public static final EntityAttributeSupplier RANGED_DAMAGE = define("ranged_damage");
 	public static final EntityAttributeSupplier FIRE_RESISTANCE = define("fire_resistance");
 	public static final EntityAttributeSupplier FREEZE_RESISTANCE = define("freeze_resistance");
 	public static final EntityAttributeSupplier LIGHTNING_RESISTANCE = define("lightning_resistance");

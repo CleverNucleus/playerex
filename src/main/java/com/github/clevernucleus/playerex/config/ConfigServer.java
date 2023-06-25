@@ -21,7 +21,7 @@ public final class ConfigServer {
 		}
 	};
 	protected static final ConfigServer INSTANCE = new ConfigServer();
-	protected boolean resetOnDeath;
+	protected int resetOnDeath;
 	protected boolean disableAttributesGui;
 	protected boolean showLevelNameplates;
 	protected int skillPointsPerLevelUp;
@@ -55,7 +55,7 @@ public final class ConfigServer {
 	}
 	
 	public void readFromNbt(NbtCompound tag) {
-		this.resetOnDeath = tag.getBoolean(RESET_ON_DEATH);
+		this.resetOnDeath = tag.getInt(RESET_ON_DEATH);
 		this.disableAttributesGui = tag.getBoolean(DISABLE_ATTRIBUTES_GUI);
 		this.showLevelNameplates = tag.getBoolean(LEVEL_NAMEPLATE);
 		this.skillPointsPerLevelUp = tag.getInt(SKILL_POINTS_PER_LEVEL_UP);
@@ -67,7 +67,7 @@ public final class ConfigServer {
 	}
 	
 	public void writeToNbt(NbtCompound tag) {
-		tag.putBoolean(RESET_ON_DEATH, this.resetOnDeath);
+		tag.putInt(RESET_ON_DEATH, this.resetOnDeath);
 		tag.putBoolean(DISABLE_ATTRIBUTES_GUI, this.disableAttributesGui);
 		tag.putBoolean(LEVEL_NAMEPLATE, this.showLevelNameplates);
 		tag.putInt(SKILL_POINTS_PER_LEVEL_UP, this.skillPointsPerLevelUp);

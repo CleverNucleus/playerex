@@ -3,6 +3,7 @@ package com.github.clevernucleus.playerex.client.factory;
 import java.util.List;
 
 import com.github.clevernucleus.playerex.api.ExAPI;
+import com.github.clevernucleus.playerex.api.ExConfig;
 import com.github.clevernucleus.playerex.client.PlayerExClient;
 import com.github.clevernucleus.playerex.client.gui.ExScreenData;
 import com.github.clevernucleus.playerex.client.gui.Page;
@@ -16,7 +17,9 @@ import net.minecraft.client.gui.screen.ingame.InventoryScreen;
 
 public final class EventFactoryClient {
 	public static void onScreenInit(MinecraftClient client, Screen screen, int width, int height) {
-		if(screen instanceof InventoryScreen && !ExAPI.getConfig().isAttributesGuiDisabled()) {
+		ExConfig config = ExAPI.getConfig();
+
+		if(screen instanceof InventoryScreen && !config.isAttributesGuiDisabled() && !config.disableInventoryTabs()) {
 			HandledScreen<?> handledScreen = (HandledScreen<?>)screen;
 			ExScreenData screenData = (ExScreenData)screen;
 			

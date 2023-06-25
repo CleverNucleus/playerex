@@ -12,10 +12,10 @@ public interface ExConfig {
 	
 	/**
 	 * Requires world restart. Server option, synced to Client.
-	 * @return true: resets all PlayerEx modifiers to their defaults; false: no change to PlayerEx 
-	 * modifiers.
+	 * @return 100: resets all PlayerEx modifiers to their defaults; 0: no change to PlayerEx 
+	 * modifiers; else: percentage of skill points kept.
 	 */
-	boolean resetOnDeath();
+	int resetOnDeath();
 	
 	/**
 	 * Requires world restart. Server option, synced to Client.
@@ -63,6 +63,12 @@ public interface ExConfig {
 	 */
 	float skillUpVolume();
 	
+	/**
+	 * Client option.
+	 * @return true if inventory tabs are disabled; else false.
+	 */
+	boolean disableInventoryTabs();
+
 	/**
 	 * Client option.
 	 * @return 0 - 0.75. Size multiplier for PlayerEx gui text in the x-axis.

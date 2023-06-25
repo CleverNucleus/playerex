@@ -2,6 +2,9 @@
     "text.autoconfig.playerex.title": "PlayerEx 환경설정 옵션",
     "text.autoconfig.playerex.category.server": "서버 옵션",
     "text.autoconfig.playerex.category.client": "클라이언트 옵션",
+	"text.autoconfig.playerex.option.disableInventoryTabs": "Disable Inventory Tabs",
+    "text.autoconfig.playerex.option.disableInventoryTabs.@Tooltip[0]": "Hides inventory tabs.",
+    "text.autoconfig.playerex.option.disableInventoryTabs.@Tooltip[1]": "Superseded by Disable Attributes GUI option.",
     "text.autoconfig.playerex.option.disableAttributesGui": "특성 GUI 사용 안 함",
     "text.autoconfig.playerex.option.disableAttributesGui.@Tooltip[0]": "소지품 탭을 숨기고 특성 gui 열기를 중단합니다.",
     "text.autoconfig.playerex.option.disableAttributesGui.@Tooltip[1]": "(다시 시작 필요)",
@@ -17,7 +20,6 @@
     "text.autoconfig.playerex.option.levelFormula": "레벨 업 공식",
     "text.autoconfig.playerex.option.levelFormula.@Tooltip[0]": "레벨 업에 필요한 경험치 포인트입니다.\n'x' 변수는 플레이어의 현재 레벨을 의미합니다. 'x'는 필수 값입니다.",
     "text.autoconfig.playerex.option.levelFormula.@Tooltip[1]": "(다시 시작 필요)",
-    
     "text.autoconfig.playerex.option.restorativeForceTicks": "Restorative Force Ticks",
     "text.autoconfig.playerex.option.restorativeForceTicks.@Tooltip[0]": "The number of ticks between every restorative event. \nNote that 20 ticks is 1 second.",
     "text.autoconfig.playerex.option.restorativeForceTicks.@Tooltip[1]": "(Requires restart)",
@@ -27,7 +29,6 @@
     "text.autoconfig.playerex.option.expNegationFactor": "XP Negation Factor",
     "text.autoconfig.playerex.option.expNegationFactor.@Tooltip[0]": "The chance for xp orbs to drop in a given chunk. \nSet to 100 for vanilla behaviour.",
     "text.autoconfig.playerex.option.expNegationFactor.@Tooltip[1]": "(Requires restart)",
-    
 	"text.autoconfig.playerex.option.levelUpVolume": "레벨 업 볼륨",
     "text.autoconfig.playerex.option.levelUpVolume.@Tooltip": "볼륨 배율 (퍼센트)",
     "text.autoconfig.playerex.option.skillUpVolume": "스킬 업 볼륨",
@@ -36,10 +37,8 @@
     "text.autoconfig.playerex.option.textScaleX.@Tooltip": "gui 텍스트의 x 스퀴즈.",
     "text.autoconfig.playerex.option.textScaleY": "세로 텍스트 크기",
     "text.autoconfig.playerex.option.textScaleY.@Tooltip": "gui 텍스트의 y 스퀴즈.",
-    
     "text.autoconfig.playerex.option.levelNameplateHeight": "Level Nameplate Height",
     "text.autoconfig.playerex.option.levelNameplateHeight.@Tooltip": "The level nameplate height offset.",
-    
     "text.autoconfig.playerex.option.tooltip": "특성 툴팁",
     "text.autoconfig.playerex.option.tooltip.@Tooltip": "DEFAULT: 툴팁 (모드 호환)을 변경하지 않습니다.\nVANILLA: 공격 데미지/속도 값을 실제 값으로 표시하지 않습니다.\nPLAYEREX: 공격 데미지/속도 값을 일반 특성 수정자로 표시합니다.",
     "playerex.command.reset": "플레이어 %s 값을 기본값으로 초기화합니다.",
@@ -54,7 +53,9 @@
     "playerex.command.refund_attribute": "%s를(을) 플레이어 %s에게 돌려줍니다.",
     "playerex.command.refund_attribute_error": "%s는(은) 돌려줄 것이 없습니다!",
     "playerex.command.refund_attribute_unskilled": "%s는(은) 플레이어 %s이(가) 배우지 않았습니다!",
-    "playerex.key.screen": "특성 화면 열기/닫기",
+	"sound.playerex.sp_spend": "Spent Skill Points",
+	"sound.playerex.level_up": "Leveled Up",
+	"playerex.key.screen": "특성 화면 열기/닫기",
     "playerex.gui.text.nameplate": "lvl %s",
     "playerex.gui.page.inventory.title": "소지품",
     "playerex.gui.page.attributes.title": "특성",

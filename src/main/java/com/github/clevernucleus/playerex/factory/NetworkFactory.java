@@ -12,8 +12,8 @@ import net.fabricmc.fabric.api.networking.v1.PacketSender;
 import net.fabricmc.fabric.api.networking.v1.ServerLoginNetworking;
 import net.fabricmc.fabric.api.networking.v1.ServerLoginNetworking.LoginSynchronizer;
 import net.fabricmc.fabric.api.networking.v1.ServerPlayNetworking;
-import net.fabricmc.fabric.api.util.NbtType;
 import net.minecraft.nbt.NbtCompound;
+import net.minecraft.nbt.NbtElement;
 import net.minecraft.nbt.NbtList;
 import net.minecraft.network.PacketByteBuf;
 import net.minecraft.server.MinecraftServer;
@@ -67,7 +67,7 @@ public final class NetworkFactory {
 		server.execute(() -> {
 			if(player != null) {
 				PlayerData data = ExAPI.PLAYER_DATA.get(player);
-				NbtList list = tag.getList("Data", NbtType.COMPOUND);
+				NbtList list = tag.getList("Data", NbtElement.COMPOUND_TYPE);
 				PacketType packetType = PacketType.fromId(tag.getByte("Type"));
 				
 				if(packetType.test(server, player, data)) {

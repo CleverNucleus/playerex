@@ -21,6 +21,7 @@ import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.screen.ScreenHandler;
 import net.minecraft.text.Text;
 import net.minecraft.util.Formatting;
+import net.projectile_damage.api.EntityAttributes_ProjectileDamage;
 
 @Environment(EnvType.CLIENT)
 public class CombatPageLayer extends PageLayer {
@@ -152,8 +153,8 @@ public class CombatPageLayer extends PageLayer {
 
 			return tooltip;
 		}, 9, 136));
-		COMPONENTS.add(RenderComponent.of(ExAPI.RANGED_DAMAGE, value -> {
-			double disp = ClientUtil.displayValue(ExAPI.RANGED_DAMAGE, value);
+		COMPONENTS.add(RenderComponent.of(() -> EntityAttributes_ProjectileDamage.GENERIC_PROJECTILE_DAMAGE, value -> {
+			double disp = ClientUtil.displayValue(() -> EntityAttributes_ProjectileDamage.GENERIC_PROJECTILE_DAMAGE, value);
 			return Text.translatable("playerex.gui.page.combat.text.ranged_damage", ClientUtil.FORMATTING_2.format(disp)).formatted(Formatting.DARK_GRAY);
 		}, value -> {
 			List<Text> tooltip = new ArrayList<Text>();

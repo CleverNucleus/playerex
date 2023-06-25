@@ -23,10 +23,8 @@ public final class EventFactory {
 	}
 	
 	public static void reset(final ServerPlayerEntity oldPlayer, final ServerPlayerEntity newPlayer, final boolean isAlive) {
-		if(ExAPI.getConfig().resetOnDeath()) {
-			PlayerData playerData = ExAPI.PLAYER_DATA.get(newPlayer);
-			playerData.reset();
-		}
+		PlayerData playerData = ExAPI.PLAYER_DATA.get(newPlayer);
+		playerData.reset(ExAPI.getConfig().resetOnDeath());
 	}
 	
 	public static double clamped(final EntityAttribute attributeIn, final double valueIn) {

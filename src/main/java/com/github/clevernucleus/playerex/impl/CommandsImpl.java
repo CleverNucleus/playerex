@@ -19,6 +19,7 @@ import com.mojang.brigadier.tree.ArgumentCommandNode;
 import com.mojang.brigadier.tree.CommandNode;
 import com.mojang.brigadier.tree.LiteralCommandNode;
 
+import net.fabricmc.fabric.api.networking.v1.PlayerLookup;
 import net.minecraft.command.CommandRegistryAccess;
 import net.minecraft.command.CommandSource;
 import net.minecraft.command.EntitySelector;
@@ -48,12 +49,26 @@ public final class CommandsImpl {
 		ArgumentCommandNode<ServerCommandSource, EntitySelector> player = CommandManager.argument("player", EntityArgumentType.player()).executes(ctx -> {
 			ServerPlayerEntity serverPlayerEntity = EntityArgumentType.getPlayer(ctx, "player");
 			PlayerData playerData = ExAPI.PLAYER_DATA.get(serverPlayerEntity);
-			playerData.reset();
+			playerData.reset(ExAPI.getConfig().resetOnDeath());
 			ctx.getSource().sendFeedback(Text.translatable("playerex.command.reset", serverPlayerEntity.getName()), false);
 			
 			return 1;
 		}).build();
 		reset.addChild(player);
+	}
+
+	private static void registerResetAll(CommandNode<ServerCommandSource> root) {
+		LiteralCommandNode<ServerCommandSource> reset = CommandManager.literal("reset_all").executes(ctx -> {
+			PlayerLookup.all(ctx.getSource().getServer()).forEach(player -> {
+				PlayerData playerData = ExAPI.PLAYER_DATA.get(player);
+				playerData.reset(ExAPI.getConfig().resetOnDeath());
+			});
+
+			ctx.getSource().sendFeedback(Text.translatable("playerex.command.reset", "*"), false);
+
+			return 1;
+		}).build();
+		root.addChild(reset);
 	}
 	
 	private static void registerRefund(CommandNode<ServerCommandSource> root) {
@@ -145,7 +160,7 @@ public final class CommandsImpl {
 	}
 	
 	private static void registerSkillAttribute(CommandNode<ServerCommandSource> root) {
-		LiteralCommandNode<ServerCommandSource> skillAttribute = CommandManager.literal("skillAttribute").build();
+		LiteralCommandNode<ServerCommandSource> skillAttribute = CommandManager.literal("skill_attribute").build();
 		root.addChild(skillAttribute);
 		
 		ArgumentCommandNode<ServerCommandSource, EntitySelector> player = CommandManager.argument("player", EntityArgumentType.player()).build();
@@ -208,7 +223,7 @@ public final class CommandsImpl {
 	}
 	
 	private static void registerRefundAttribute(CommandNode<ServerCommandSource> root) {
-		LiteralCommandNode<ServerCommandSource> refundAttribute = CommandManager.literal("refundAttribute").build();
+		LiteralCommandNode<ServerCommandSource> refundAttribute = CommandManager.literal("refund_attribute").build();
 		root.addChild(refundAttribute);
 		
 		ArgumentCommandNode<ServerCommandSource, EntitySelector> player = CommandManager.argument("player", EntityArgumentType.player()).build();
@@ -271,7 +286,7 @@ public final class CommandsImpl {
 	}
 	
 	private static void registerResetChunk(CommandNode<ServerCommandSource> root) {
-		LiteralCommandNode<ServerCommandSource> reset = CommandManager.literal("resetChunk").executes(ctx -> {
+		LiteralCommandNode<ServerCommandSource> reset = CommandManager.literal("reset_chunk").executes(ctx -> {
 			World world = ctx.getSource().getWorld();
 			Vec3d vec3d = ctx.getSource().getPosition();
 			BlockPos pos = new BlockPos(vec3d);
@@ -289,6 +304,7 @@ public final class CommandsImpl {
 		dispatcher.getRoot().addChild(root);
 		
 		registerReset(root);
+		registerResetAll(root);
 		registerRefund(root);
 		registerLevelUp(root);
 		registerSkillAttribute(root);

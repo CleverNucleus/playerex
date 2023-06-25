@@ -2,6 +2,9 @@
     "text.autoconfig.playerex.title": "Configuración de PlayerEx",
     "text.autoconfig.playerex.category.server": "Opciones de Servidor",
     "text.autoconfig.playerex.category.client": "Opciones de Cliente",
+	"text.autoconfig.playerex.option.disableInventoryTabs": "Disable Inventory Tabs",
+    "text.autoconfig.playerex.option.disableInventoryTabs.@Tooltip[0]": "Hides inventory tabs.",
+    "text.autoconfig.playerex.option.disableInventoryTabs.@Tooltip[1]": "Superseded by Disable Attributes GUI option.",
     "text.autoconfig.playerex.option.disableAttributesGui": "Deshabilitar GUI de atributos",
     "text.autoconfig.playerex.option.disableAttributesGui.@Tooltip[0]": "Oculta las pesta�as de inventario y detiene la apertura \nde la interfaz gr�fica de usuario de atributos.",
     "text.autoconfig.playerex.option.disableAttributesGui.@Tooltip[1]": "(Requiere reiniciar)",
@@ -17,7 +20,6 @@
     "text.autoconfig.playerex.option.levelFormula": "Fórmula de Nivelación",
     "text.autoconfig.playerex.option.levelFormula.@Tooltip[0]": "El número de puntos de experiencia requeridos para subir de nivel. La variable 'x' \nse refiere a el nivel actual de la entidad; 'x' es requerido.",
     "text.autoconfig.playerex.option.levelFormula.@Tooltip[1]": "(Requiere reiniciar)",
-    
     "text.autoconfig.playerex.option.restorativeForceTicks": "Restorative Force Ticks",
     "text.autoconfig.playerex.option.restorativeForceTicks.@Tooltip[0]": "The number of ticks between every restorative event. \nNote that 20 ticks is 1 second.",
     "text.autoconfig.playerex.option.restorativeForceTicks.@Tooltip[1]": "(Requires restart)",
@@ -27,7 +29,6 @@
     "text.autoconfig.playerex.option.expNegationFactor": "XP Negation Factor",
     "text.autoconfig.playerex.option.expNegationFactor.@Tooltip[0]": "The chance for xp orbs to drop in a given chunk. \nSet to 100 for vanilla behaviour.",
     "text.autoconfig.playerex.option.expNegationFactor.@Tooltip[1]": "(Requires restart)",
-    
 	"text.autoconfig.playerex.option.levelUpVolume": "Volumen al Subir de Nivel",
     "text.autoconfig.playerex.option.levelUpVolume.@Tooltip": "Modifica el porcentaje de volumen del sonido.",
     "text.autoconfig.playerex.option.skillUpVolume": "Volumen al Subir el Nivel de Habilidad",
@@ -36,10 +37,8 @@
     "text.autoconfig.playerex.option.textScaleX.@Tooltip": "Extender el texto en el eje X.",
     "text.autoconfig.playerex.option.textScaleY": "Estiramiento Vertical del Texto",
     "text.autoconfig.playerex.option.textScaleY.@Tooltip": "Extender el texto en el eje Y.",
-    
     "text.autoconfig.playerex.option.levelNameplateHeight": "Level Nameplate Height",
     "text.autoconfig.playerex.option.levelNameplateHeight.@Tooltip": "The level nameplate height offset.",
-    
     "text.autoconfig.playerex.option.tooltip": "Descripciones de atributos",
     "text.autoconfig.playerex.option.tooltip.@Tooltip": "DEFAULT: sin cambios en las descripciones (para compatibilidad con mods).\nVANILLA: corrige el da�o de ataque/velocidad que no muestra su verdadero valor.\nPLAYEREX: el da�o de ataque/la velocidad se muestran como otros atributos.",
     "command.playerex.reset": "Reinicia los atributos a sus valores predeterminados para %s",
@@ -54,7 +53,9 @@
     "playerex.command.refund_attribute": "%s reembolsada para el jugador %s.",
     "playerex.command.refund_attribute_error": "%s no tiene reembolsos para gastar!",
     "playerex.command.refund_attribute_unskilled": "La %s no se ha aumentado para el jugador %s.",
-    "playerex.key.screen": "Abrir/Cerrar Menú de Atributos",
+	"sound.playerex.sp_spend": "Spent Skill Points",
+	"sound.playerex.level_up": "Leveled Up",
+	"playerex.key.screen": "Abrir/Cerrar Menú de Atributos",
     "playerex.gui.text.nameplate": "Nvl %s",
     "playerex.gui.page.inventory.title": "Inventario",
     "playerex.gui.page.attributes.title": "Atributos",

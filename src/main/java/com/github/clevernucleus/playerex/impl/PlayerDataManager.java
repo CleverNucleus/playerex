@@ -13,15 +13,14 @@ import com.github.clevernucleus.playerex.api.PlayerData;
 
 import dev.onyxstudios.cca.api.v3.component.sync.AutoSyncedComponent;
 import dev.onyxstudios.cca.api.v3.component.sync.ComponentPacketWriter;
-import net.fabricmc.fabric.api.util.NbtType;
 import net.minecraft.entity.attribute.AttributeContainer;
 import net.minecraft.entity.attribute.EntityAttribute;
 import net.minecraft.entity.attribute.EntityAttributeInstance;
 import net.minecraft.entity.attribute.EntityAttributeModifier;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.nbt.NbtCompound;
+import net.minecraft.nbt.NbtElement;
 import net.minecraft.nbt.NbtList;
-import net.minecraft.nbt.NbtString;
 import net.minecraft.network.PacketByteBuf;
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.util.Identifier;
@@ -47,7 +46,7 @@ public final class PlayerDataManager implements PlayerData, AutoSyncedComponent 
 	}
 	
 	private void readModifiersFromNbt(NbtCompound tag, BiFunction<Identifier, Double, Object> function) {
-		NbtList modifiers = tag.getList(KEY_MODIFIERS, NbtType.COMPOUND);
+		NbtList modifiers = tag.getList(KEY_MODIFIERS, NbtElement.COMPOUND_TYPE);
 		
 		for(int i = 0; i < modifiers.size(); i++) {
 			NbtCompound entry = modifiers.getCompound(i);
@@ -134,21 +133,38 @@ public final class PlayerDataManager implements PlayerData, AutoSyncedComponent 
 	}
 	
 	@Override
-	public void reset() {
+	public void reset(int percent) {
+		if(percent == 100) return;
 		NbtList list = new NbtList();
 		
 		for(Iterator<Identifier> iterator = this.data.keySet().iterator(); iterator.hasNext();) {
 			Identifier identifier = iterator.next();
 			
-			if(!this.tryRemove(identifier, id -> iterator.remove())) continue;
-			list.add(NbtString.of(identifier.toString()));
+			if(percent == 0) {
+				if(!this.tryRemove(identifier, id -> iterator.remove())) continue;
+				NbtCompound entry = new NbtCompound();
+				entry.putString("Key", identifier.toString());
+				entry.putDouble("Value", 0.0D);
+				entry.putBoolean("Remove", true);
+				list.add(entry);
+			} else {
+				double value = this.data.getOrDefault(identifier, 0.0D) * 0.01D * percent;
+				if(!this.trySet(identifier, value)) continue;
+				NbtCompound entry = new NbtCompound();
+				entry.putString("Key", identifier.toString());
+				entry.putDouble("Value", value);
+				entry.putBoolean("Remove", false);
+				list.add(entry);
+			}
 		}
 		
-		this.refundPoints = 0;
-		this.skillPoints = 0;
+		this.refundPoints = Math.round((float)this.refundPoints * 0.01F * (float)percent);
+		this.skillPoints = Math.round((float)this.skillPoints * 0.01F * (float)percent);
 		this.sync((buf, player) -> {
 			NbtCompound tag = new NbtCompound();
 			tag.put(KEY_RESET, list);
+			tag.putInt(KEY_SKILL_POINTS, this.skillPoints);
+			tag.putInt(KEY_REFUND_POINTS, this.refundPoints);
 			buf.writeNbt(tag);
 		});
 	}
@@ -216,15 +232,21 @@ public final class PlayerDataManager implements PlayerData, AutoSyncedComponent 
 		}
 		
 		if(tag.contains(KEY_RESET)) {
-			NbtList list = tag.getList(KEY_RESET, NbtType.STRING);
+			NbtList list = tag.getList(KEY_RESET, NbtElement.COMPOUND_TYPE);
 			
 			for(int i = 0; i < list.size(); i++) {
-				Identifier identifier = new Identifier(list.getString(i));
-				this.data.remove(identifier);
+				NbtCompound entry = list.getCompound(i);
+				Identifier identifier = new Identifier(entry.getString("Key"));
+				final boolean remove = entry.getBoolean("Remove");
+
+				if(remove) {
+					this.data.remove(identifier);
+				} else {
+					final double value = entry.getDouble("Value");
+					this.data.put(identifier, value);
+				}
 			}
-			
-			this.refundPoints = 0;
-			this.skillPoints = 0;
+
 			this.hasNotifiedLevelUp = false;
 		}
 		

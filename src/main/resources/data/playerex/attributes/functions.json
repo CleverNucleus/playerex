@@ -33,7 +33,7 @@
             	"behaviour": "MULTIPLY",
             	"value": 0.02
             },
-            "playerex:ranged_damage": {
+            "projectile_damage:generic": {
             	"behaviour": "ADDITION",
             	"value": 0.25
             },
