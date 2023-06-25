@@ -18,13 +18,14 @@ jobs:
       - name: check environment variables
         run: env
       - name: checkout repository
-        uses: actions/checkout@v2
+        uses: actions/checkout@v3
       - name: validate gradle wrapper
         uses: gradle/wrapper-validation-action@v1
       - name: setup jdk ${{ matrix.java }}
-        uses: actions/setup-java@v1
+        uses: actions/setup-java@v3
         with:
           java-version: ${{ matrix.java }}
+          distribution: 'microsoft'
       - name: make gradle wrapper executable
         run: chmod +x ./gradlew
       - name: build
@@ -34,7 +35,7 @@ jobs:
         if: |
           ${{ matrix.java == '17' }}
           github.ref == 'refs/heads/${{ env.BRANCH_PREFIX }}/main'
-        uses: actions/upload-artifact@v2
+        uses: actions/upload-artifact@v3
         with:
           name: Artifacts
           path: build/libs/
@@ -52,22 +53,27 @@ jobs:
           echo "minecraft_version=$minecraft_version_val" >> $GITHUB_OUTPUT
       - name: deploy with mc-publish
         if: github.ref == 'refs/heads/${{ env.BRANCH_PREFIX }}/main'
-        uses: Kir-Antipov/mc-publish@v3.2
+        uses: Kir-Antipov/mc-publish@v3.3
         with:
           curseforge-id: 409221
           curseforge-token: ${{ secrets.CURSEFORGE_TOKEN }}
           curseforge-dependencies: |
-            fabric-api | depends | *
-            data-attributes | depends | *
-            cloth-config | depends | *
+            fabric-api@0.76.0+1.19.2(required){modrinth:P7dR8mSH}{curseforge:306612}#(ignore:github)
+            data-attributes@1.4.6+1.19.2(required){modrinth:wFyCClLQ}{curseforge:514734}#(ignore:github)
+            cloth-config@8.2.88(required){modrinth:9s6osm5g}{curseforge:348521}#(ignore:github)
+            projectile-damage-attribute@3.2.1+1.19-fabric(embedded){modrinth:AOyJhFvl}{curseforge:643780}#(ignore:github)
+            cardinal-components@5.0.2(embedded){modrinth:K01OU20C}{curseforge:318449}#(ignore:github)
           curseforge-files-secondary: build/libs/*-@(sources\|javadoc).jar
 
           modrinth-id: o5GUN4b1
           modrinth-token: "${{ secrets.MODRINTH_TOKEN }}"
           modrinth-dependencies: |
-            fabric-api | depends | *
-            data-attributes | depends | *
-            cloth-config | depends | *
+            fabric-api@0.76.0+1.19.2(required){modrinth:P7dR8mSH}{curseforge:306612}#(ignore:github)
+            data-attributes@1.4.6+1.19.2(required){modrinth:wFyCClLQ}{curseforge:514734}#(ignore:github)
+            cloth-config@8.2.88(required){modrinth:9s6osm5g}{curseforge:348521}#(ignore:github)
+            projectile-damage-attribute@3.2.1+1.19-fabric(embedded){modrinth:AOyJhFvl}{curseforge:643780}#(ignore:github)
+            cardinal-components@5.0.2(embedded){modrinth:K01OU20C}{curseforge:318449}#(ignore:github)
+            offline-player-cache@0.6.4(embedded){modrinth:kD9Vl1lR}#(ignore:curseforge)#(ignore:github)
           # Modrinth has issues accepting javadocs right now
 
           github-tag: "${{ steps.mod_version.outputs.mod_version }}"
