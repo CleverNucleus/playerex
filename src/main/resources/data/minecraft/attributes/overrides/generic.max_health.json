@@ -1,8 +1,0 @@
-{
-    "fallbackValue": 20.0,
-    "minValue": 1.0,
-    "maxValue": 2147483647.0,
-    "incrementValue": 0.0,
-    "translationKey": "attribute.name.generic.max_health",
-    "stackingBehaviour": "FLAT"
-}

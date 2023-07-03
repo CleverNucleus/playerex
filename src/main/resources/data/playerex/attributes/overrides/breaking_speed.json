@@ -1,8 +1,0 @@
-{
-    "fallbackValue": 1.0,
-    "minValue": 0.0,
-    "maxValue": 2147483647.0,
-    "incrementValue": 0.0,
-    "translationKey": "playerex.attribute.name.breaking_speed",
-    "stackingBehaviour": "FLAT"
-}
